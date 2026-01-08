@@ -1,0 +1,57 @@
+name: GeoCountries
+version: '1.0-SNAPSHOT'
+main: me.rntb.geoCountries.GeoCountries
+api-version: '1.21'
+authors: [ rNTB ]
+description: Countries, geopolitics, and more!
+
+commands:
+  gc:
+    description: "The base command for GeoCountries. To see all commands, do /gc help"
+    usage: "/gc"
+    aliases: [ geocountries ]
+
+permissions:
+  # -------------------- ALL --------------------
+  gc.*:
+    description: Gives every single permission.
+    children:
+      gc.group.admin: true
+      gc.group.player: true
+      gc.group.essential: true
+
+  # -------------------- ESSENTIAL --------------------
+  gc.group.essential:
+    description: Gives all the essential commands.
+    children:
+      gc: true
+      gc.help: true
+      gc.country: true
+      gc.country.list: true
+      gc.country.info: true
+      gc.country.citizens: true
+      gc.player: true
+      gc.player.info: true
+
+  # -------------------- PLAYER -------------------
+  gc.group.player:
+    description: Gives all the player commands.
+    children:
+      gc.group.essential: true
+      # all essential commands, plus...
+      gc.confirm: true
+      gc.cancel: true
+      gc.country.create: true
+      gc.country.rename: true
+      gc.country.dissolve: true
+
+  # -------------------- ADMIN --------------------
+  gc.group.admin:
+    description: Gives all admin permissions.
+    children:
+      gc.group.player: true
+      gc.group.essential: true
+      # all player and essential commands, plus...
+      gc.purge: true
+      gc.dump: true
+      gc.save: true
