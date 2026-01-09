@@ -11,10 +11,10 @@ It is intended to work in a similar way to many Factions plugins.
 * Command confirmation / cancellation
 * Permission groups (`gc.group.essential`, `player`, `admin`)
 * Admin persistent storage commands (`/gc purge`, `/gc save`)
+* Config file
 
 ## To-do:
 
-* Config file implementation
 * Requesting and granting citizenship
 * Promoting and demoting players
 * Inheriting leader position of country

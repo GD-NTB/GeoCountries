@@ -13,16 +13,18 @@ public class gcPlayerCommand extends SubCommand {
 
     public gcPlayerCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
-        this.HelpString = "Manage and view information about players.";
-        this.HelpPage   = "§f/gc player [...]§a: Manage and view information about players.§r"; // todo
+        this.HelpString = "Manages and views information about players.";
+        this.HelpPage   = """
+                          §f/gc player [...]§a: Manages and views information about players.
+                          §f> info [username]: §aDisplays info about a particular player.""";
     }
 
     @Override
     void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
         // /gc country
         if (args.length == 0) {
-            ChatUtil.SendPrefixedMessage(sender, "§aManage and view information about players.\n" +
-                                                 "Usage: §f/gc player [info/...]§r");
+            ChatUtil.SendPrefixedMessage(sender, "§aManages and views information about players.\n" +
+                                                 "Usage: §f/gc player [...]");
             return;
         }
 
@@ -42,7 +44,7 @@ public class gcPlayerCommand extends SubCommand {
             // gc player [xxx]
             default:
                 ChatUtil.SendPrefixedMessage(sender, "§c\"§f" + mode + "§c\" is not a valid command for §f/gc player§c!\n" +
-                                                     "Usage: §f/gc player [info/...]§r");
+                                                     "Usage: §f/gc player [...]");
                 return;
         }
     }
@@ -68,42 +70,43 @@ public class gcPlayerCommand extends SubCommand {
     private void gcPlayerInfo(@NotNull CommandSender sender, @NotNull String[] args) {
         // validation check
         if (args.length == 0) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must put the name of the player you want to get info of!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cYou must put the name of the player you want to get info of!");
             return;
         }
 
-        PlayerData player = PlayerData.PlayerDataByUsername.getOrDefault(args[0], null);
+        PlayerData player = PlayerData.PlayerDataByUsername.get(args[0]);
         if (player == null) {
-            ChatUtil.SendPrefixedMessage(sender, "§cPlayer \"§f" + args[0] + "§c\" could not be found!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cPlayer \"§f" + args[0] + "§c\" could not be found!");
             return;
         }
 
-        StringBuilder sb = new StringBuilder("\n§6========== PLAYER INFO ==========§r\n");
-        sb.append("§a").append(player.Username).append("§r\n");
+        StringBuilder sb = new StringBuilder(ChatUtil.NewlineIfPrefixIsEmpty() +
+                                            "§6========== PLAYER INFO ==========\n");
+        sb.append("§a").append(player.Username).append("\n");
 
         // show rank of player in country
         CountryData country = player.getCountry();
 
         if (player.Rank == PlayerData.PlayerRank.NONE) {
-            sb.append("> §Stateless§r");
+            sb.append("§f> §Stateless");
         }
         else {
-            sb.append("> §e").append(player.getRankString()).append("§r of: ").append(country.Name);
+            sb.append("§f> §e").append(player.getRankString()).append("§f of: ").append(country.Name);
         }
         switch (player.Rank) {
             case PlayerData.PlayerRank.LEADER:
-                sb.append("> §eLeader of§r: ").append(country.Name);
+                sb.append("§f> §eLeader of§f: ").append(country.Name);
                 break;
             case PlayerData.PlayerRank.CITIZEN:
-                sb.append("> §eCitizen of§r: ").append(country.Name);
+                sb.append("§f> §eCitizen of§f: ").append(country.Name);
                 break;
             case PlayerData.PlayerRank.NONE:
-                sb.append("> §Stateless§r");
+                sb.append("§f> §Stateless");
                 break;
         }
         sb.append("\n");
 
-        sb.append("§6================================§r");
+        sb.append("§6================================");
         ChatUtil.SendPrefixedMessage(sender, sb.toString());
     }
 }

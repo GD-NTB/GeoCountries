@@ -3,12 +3,12 @@ package me.rntb.geoCountries;
 import me.rntb.geoCountries.command.gcCommand;
 import me.rntb.geoCountries.data.DataCollectionManager;
 import me.rntb.geoCountries.listener.JoinListener;
+import me.rntb.geoCountries.manager.ConfigManager;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
 
-// todo: config (chat util /prefix)
 // todo: request citizenship
 // todo: grant citizenship
 // todo: renounce citizenship
@@ -32,6 +32,9 @@ public class GeoCountries extends JavaPlugin {
     @Override
     public void onEnable() {
         self = this;
+
+        // config
+        ConfigManager.Init();
 
         // register listeners
         getServer().getPluginManager().registerEvents(new JoinListener(), this);

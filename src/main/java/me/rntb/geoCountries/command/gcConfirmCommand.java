@@ -19,8 +19,10 @@ public class gcConfirmCommand extends SubCommand {
 
     public gcConfirmCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
-        this.HelpString = "Confirm a command or action when required.";
-        this.HelpPage   = "§f/gc confirm§a: Confirm a command or action when required.§r";
+        this.HelpString = "Confirms a command or action.";
+        this.HelpPage   = """
+                          §f/gc confirm§a: Confirms the last command/action you were asked to type §f/gc confirm§a for.
+                          """;
     }
 
     // senders (players/console we are waiting to type /gc confirm), and the method to call on confirm
@@ -45,12 +47,12 @@ public class gcConfirmCommand extends SubCommand {
     // add
     public static void WaitForConfirm(UUID uuid, Triple<BiConsumer<CommandSender, String[]>, CommandSender, String[]> methodAfterConfirm) {
         PendingConfirms.put(uuid, methodAfterConfirm);
-        ChatUtil.SendPrefixedMessage(methodAfterConfirm.getMiddle(), "§eType §f/gc confirm§e to confirm, else type §f/gc cancel§e to cancel.§r");
+        ChatUtil.SendPrefixedMessage(methodAfterConfirm.getMiddle(), "§eType §f/gc confirm§e to confirm, else type §f/gc cancel§e to cancel.");
 
         // timeout after 30 seconds
         BukkitTask timeoutTask = Bukkit.getScheduler().runTaskLater(GeoCountries.self, () -> {
                                      StopWaitingForSender(uuid);
-                                     ChatUtil.SendPrefixedMessage(Bukkit.getPlayer(uuid), "§cCommand timed out because you didn't confirm after §f30 seconds§c!§r");
+                                     ChatUtil.SendPrefixedMessage(Bukkit.getPlayer(uuid), "§cCommand timed out because you didn't confirm after §f30 seconds§c!");
                                  }, 30*20); // 30 seconds * 20 ticks
         // add to timeout tasks dict
         TimeoutTasks.put(uuid, timeoutTask);
@@ -80,7 +82,7 @@ public class gcConfirmCommand extends SubCommand {
 
         // if sender not being waited on, escape
         if (!IsWaitingForSender(uuid)) {
-            ChatUtil.SendPrefixedMessage(sender, "§cNo command was waiting to be confirmed.§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cNo command was waiting to be confirmed.");
             return;
         }
 

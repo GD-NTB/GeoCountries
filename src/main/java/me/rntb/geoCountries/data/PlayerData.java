@@ -7,7 +7,7 @@ import java.util.*;
 
 public class PlayerData extends DataCollection {
 
-    private static final String FILE_PATH = "PlayerData";
+    private static final String FILE_PATH = "data/PlayerData";
     private static final String DISPLAY_NAME = "PlayerData"; // for errors and logging
 
     // list of playerdatas of every person to have ever joined the server

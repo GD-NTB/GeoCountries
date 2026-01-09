@@ -12,14 +12,16 @@ public class gcDumpCommand extends SubCommand {
 
     public gcDumpCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
-        this.HelpString = "Dump plugin info.";
-        this.HelpPage   = "§f/gc dump§a: Dump plugin info.§r";
+        this.HelpString = "Dumps plugin info.";
+        this.HelpPage   = """
+                          §f/gc dump§a: Dumps some plugin info into the chat for easier debugging.
+                          """;;
     }
 
     @Override
     void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
         // /gc dump
-        ChatUtil.SendPrefixedMessage(sender, "\n" +
+        ChatUtil.SendPrefixedMessage(sender, ChatUtil.NewlineIfPrefixIsEmpty() +
                                              "PlayerData.All(" + PlayerData.All.toArray().length + ")\n" +
                                              "----------\n" +
                                              "PlayerDataByUsername(" + PlayerData.PlayerDataByUsername.keySet().toArray().length + "), PlayerDataByUUID(" + PlayerData.PlayerDataByUsername.keySet().toArray().length + ")\n" +

@@ -14,8 +14,10 @@ public class gcCancelCommand extends SubCommand {
 
     public gcCancelCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
-        this.HelpString = "Cancel a command or action when required.";
-        this.HelpPage   = "§f/gc confirm§a: Cancel a command or action when required.§r";
+        this.HelpString = "Cancels a command or action.";
+        this.HelpPage   = """
+                          §f/gc cancel§a: Cancels the last command you were asked to type §f/gc confirm§a for.
+                          """;
     }
 
     @Override
@@ -25,11 +27,11 @@ public class gcCancelCommand extends SubCommand {
 
         // if sender not being waited on, escape
         if (!IsWaitingForSender(uuid)) {
-            ChatUtil.SendPrefixedMessage(sender, "§cNo command was waiting to be confirmed.§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cNo command was waiting to be confirmed.");
             return;
         }
 
-        ChatUtil.SendPrefixedMessage(sender, "§eCancelled the command.§r");
+        ChatUtil.SendPrefixedMessage(sender, "§eCancelled the command.");
         // remove sender from waiting list
         gcConfirmCommand.StopWaitingForSender(uuid);
     }

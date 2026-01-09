@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 // all args for /gc are mapped to their respective subcommand through here
-public class gcCommand implements TabExecutor { // TabExecutor includes onCommand method
+public class gcCommand implements TabExecutor { // TabExecutor extends CommandExecutor
 
     public static Map<String, SubCommand> gcSubCommands = new HashMap<>();
 
@@ -33,6 +33,7 @@ public class gcCommand implements TabExecutor { // TabExecutor includes onComman
         registerSubCommand("confirm", new gcConfirmCommand("/gc confirm", "gc.confirm", true));
         registerSubCommand("cancel", new gcCancelCommand("/gc cancel", "gc.cancel", true));
         registerSubCommand("save", new gcSaveCommand("/gc save", "gc.save", true));
+        registerSubCommand("config", new gcConfigCommand("/gc config", "gc.config", true));
     }
 
     public static void registerSubCommand(String name, SubCommand subCommand) {
@@ -45,7 +46,7 @@ public class gcCommand implements TabExecutor { // TabExecutor includes onComman
         UUID senderUuid = UuidUtil.GetUUIDOfCommandSender(sender);
         if (gcConfirmCommand.IsWaitingForSender(senderUuid)) {
             if (!(args.length == 1 && (args[0].equals("confirm") || args[0].equals("cancel")))) {
-                ChatUtil.SendPrefixedMessage(sender, "§6Cancelled the command as you didn't type §f/gc confirm§6.§r");
+                ChatUtil.SendPrefixedMessage(sender, "§6Cancelled the command as you didn't type §f/gc confirm§6.");
                 gcConfirmCommand.StopWaitingForSender(senderUuid);
             }
         }
@@ -71,17 +72,17 @@ public class gcCommand implements TabExecutor { // TabExecutor includes onComman
         }
 
         ChatUtil.SendPrefixedMessage(sender, String.format("§aThis server is running §f%s§a, a plugin developed by §frNTB§a.\n" +
-                                                           "Do §f/gc help§a for a list of commands!§r",
+                                                           "Do §f/gc help§a for a list of commands!",
                                                             GeoCountries.PluginNameAndVersion));
     }
 
     private void doCommandArgs(@NotNull CommandSender sender, @NotNull String[] args) {
         // find subcommand
         String subCommandName = args[0];
-        SubCommand subCommand = gcSubCommands.getOrDefault(subCommandName, null);
+        SubCommand subCommand = gcSubCommands.get(subCommandName);
         // subcommand doesnt exist
         if (subCommand == null) {
-            ChatUtil.SendPrefixedMessage(sender, String.format("§cThe command §f/gc %s§c doesn't exist!§r",
+            ChatUtil.SendPrefixedMessage(sender, String.format("§cThe command §f/gc %s§c doesn't exist!",
                                                                subCommandName));
             return;
         }
@@ -107,7 +108,7 @@ public class gcCommand implements TabExecutor { // TabExecutor includes onComman
 
         // /gc [subcommand] [...]
         // find subcommand
-        SubCommand subCommand = gcSubCommands.getOrDefault(args[0], null);
+        SubCommand subCommand = gcSubCommands.get(args[0]);
         // if not found, escape
         if (subCommand == null) {
             return new ArrayList<>();

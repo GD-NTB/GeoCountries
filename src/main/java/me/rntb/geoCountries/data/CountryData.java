@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 public class CountryData extends DataCollection {
 
-    private static final String FILE_PATH = "CountryData";
+    private static final String FILE_PATH = "data/CountryData";
     private static final String DISPLAY_NAME = "CountryData"; // for errors and logging
 
     // list of countrydatas of every country existing
@@ -64,7 +64,6 @@ public class CountryData extends DataCollection {
     // ---
 
     public String Name;
-    public String getName() { return this.Name; }
     public void setName(String name) {
         CountryDataByName.put(name, CountryDataByName.remove(this.Name));
         this.Name = name;

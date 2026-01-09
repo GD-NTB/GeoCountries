@@ -13,8 +13,9 @@ public class gcSaveCommand extends SubCommand {
 
     public gcSaveCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
-        this.HelpString = "Save all data (data collections, etc).";
-        this.HelpPage   = "§f/gc save§a: Save all data.§r";
+        this.HelpString = "Saves all plugin data.";
+        this.HelpPage   = """
+                          §f/gc save§a: Saves all data collections (PlayerData, etc).""";
     }
 
     @Override
@@ -29,10 +30,10 @@ public class gcSaveCommand extends SubCommand {
 
     static void doCommandConfirmed(CommandSender sender, String[] args) {
         // save data collections
-        ChatUtil.SendPrefixedMessage(sender, "§eSaving all data collections...§r");
+        ChatUtil.SendPrefixedMessage(sender, "§eSaving all data collections...");
         DataCollectionManager.SaveCollections();
 
-        ChatUtil.SendPrefixedMessage(sender, "§aSaved all data!§r");
+        ChatUtil.SendPrefixedMessage(sender, "§aSaved all data!");
     }
 
     @Override

@@ -17,8 +17,15 @@ public class gcCountryCommand extends SubCommand {
 
     public gcCountryCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
-        this.HelpString = "Manage, edit, and view information about all countries.";
-        this.HelpPage   = "§f/gc country [...]§a: Manage, edit, and view information about all countries.§r";
+        this.HelpString = "Manages, edits, and views info about all countries.";
+        this.HelpPage   = """
+                          §f/gc country [...]§a: Manage, edit, and view info about all countries.
+                          §f> list: §aLists all countries on the server.
+                          §f> info: §2(Case-sensitive) §aDisplays info about a particular country.
+                          §f> citizens: §aLists all citizens of a country, their rank, and how many there are.
+                          §f> create: §2(Countryless-only) §aCreates a new country.
+                          §f> rename: §2(Leader-only) §aRenames your country.
+                          §f> dissolve: §2(Leader-only) §aDissolves (deletes) your country.""";
     }
 
     // todo: make a list of subcommands so we can do autocomplete and help page easier
@@ -27,8 +34,8 @@ public class gcCountryCommand extends SubCommand {
     void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
         // /gc country
         if (args.length == 0) {
-            ChatUtil.SendPrefixedMessage(sender, "§aManage, edit, and view information about all countries.\n" +
-                                                 "Usage: §f/gc country [create/...]§r");
+            ChatUtil.SendPrefixedMessage(sender, "§aManages, edits, and views info about all countries\n" +
+                                                 "Usage: §f/gc country [...]");
             return;
         }
 
@@ -107,7 +114,7 @@ public class gcCountryCommand extends SubCommand {
             // gc country [xxx]
             default:
                 ChatUtil.SendPrefixedMessage(sender, "§c\"§f" + mode + "§c\" is not a valid command for §f/gc country§c!\n" +
-                                                     "Usage: §f/gc country [create/...]§r");
+                                                     "Usage: §f/gc country [...]");
                 return;
         }
     }
@@ -134,17 +141,17 @@ public class gcCountryCommand extends SubCommand {
     // ---------- /gc country create ----------
     private void gcCountryCreate(@NotNull CommandSender sender, @NotNull String[] args) {
         UUID playerUUID = ((Player) sender).getUniqueId();
-        PlayerData pd = PlayerData.PlayerDataByUUID.getOrDefault(playerUUID, null);
+        PlayerData pd = PlayerData.PlayerDataByUUID.get(playerUUID);
 
         // already in country
         if (pd.hasCountry()) {
             CountryData country = pd.getCountry();
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must first renounce your citizenship of §f" + country.Name + "§c using §f/gc citizenship renounce§c before creating a country!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cYou must first renounce your citizenship of §f" + country.Name + "§c using §f/gc citizenship renounce§c before creating a country!");
             return;
         }
 
         if (args.length == 0) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must put the name of the country you want to create!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cYou must put the name of the country you want to create!");
             return;
         }
 
@@ -180,24 +187,24 @@ public class gcCountryCommand extends SubCommand {
         // set player country and rank
         playerData.setCountry(newCountry, PlayerData.PlayerRank.LEADER);
 
-        ChatUtil.SendPrefixedMessage(sender, "§aCreated country §f" + countryName + "§a!§r");
+        ChatUtil.SendPrefixedMessage(sender, "§aCreated country §f" + countryName + "§a!");
         ChatUtil.BroadcastPrefixedMessage("§6A new country §f" + countryName + "§6 has just been created!");
     }
 
     // ---------- /gc country dissolve ----------
     private void gcCountryDissolve(@NotNull CommandSender sender, @NotNull String[] args) {
         UUID playerUUID = ((Player) sender).getUniqueId();
-        PlayerData pd = PlayerData.PlayerDataByUUID.getOrDefault(playerUUID, null);
+        PlayerData pd = PlayerData.PlayerDataByUUID.get(playerUUID);
 
         // if not in country, escape
         if (!pd.hasCountry()) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must be the leader of a country to dissolve it!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cYou must be the leader of a country to dissolve it!");
             return;
         }
 
         // if not leader of country, escape
         if (pd.getLeaderOf() == null) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must be the leader of your country to dissolve it!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cYou must be the leader of your country to dissolve it!");
             return;
         }
 
@@ -205,7 +212,7 @@ public class gcCountryCommand extends SubCommand {
         gcConfirmCommand.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
                                         Triple.of(gcCountryCommand::gcCountryDissolveConfirmed,
                                                   sender,
-                                                  new String[] { })); // 0 = name
+                                                  new String[] { }));
     }
 
     private static void gcCountryDissolveConfirmed(CommandSender sender, String[] args) {
@@ -213,8 +220,8 @@ public class gcCountryCommand extends SubCommand {
         PlayerData playerData = PlayerData.PlayerDataByUUID.get(player.getUniqueId());
         CountryData country = playerData.getCountry();
 
-        ChatUtil.SendPrefixedMessage(sender, "§aDissolved country §f" + country.Name + "§a!§r");
-        ChatUtil.BroadcastPrefixedMessage("§6The country §f" + country.Name + "§6 has just been dissolved!§r");
+        ChatUtil.SendPrefixedMessage(sender, "§aDissolved country §f" + country.Name + "§a!");
+        ChatUtil.BroadcastPrefixedMessage("§6The country §f" + country.Name + "§6 has just been dissolved!");
 
         CountryData.Delete(country);
     }
@@ -222,22 +229,22 @@ public class gcCountryCommand extends SubCommand {
     // ---------- /gc country rename ----------
     private void gcCountryRename(@NotNull CommandSender sender, @NotNull String[] args) {
         UUID playerUUID = ((Player) sender).getUniqueId();
-        PlayerData pd = PlayerData.PlayerDataByUUID.getOrDefault(playerUUID, null);
+        PlayerData pd = PlayerData.PlayerDataByUUID.get(playerUUID);
 
         // if not in country, escape
         if (!pd.hasCountry()) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must be the leader of a country to rename it!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cYou must be the leader of a country to rename it!");
             return;
         }
 
         // if not leader of country, escape
         if (pd.getLeaderOf() == null) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must be the leader of your country to change its name!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cYou must be the leader of your country to change its name!");
             return;
         }
 
         if (args.length == 0) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must put the new name of the country!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cYou must put the new name of the country!");
             return;
         }
 
@@ -263,30 +270,31 @@ public class gcCountryCommand extends SubCommand {
         PlayerData playerData = PlayerData.PlayerDataByUUID.get(player.getUniqueId());
         CountryData country = playerData.getCountry();
 
-        ChatUtil.BroadcastPrefixedMessage("§6The country of §f" + country.Name + "§6 has been renamed to §f" + countryName + "§6!§r");
+        ChatUtil.BroadcastPrefixedMessage("§6The country of §f" + country.Name + "§6 has been renamed to §f" + countryName + "§6!");
 
         country.setName(countryName);
 
-        ChatUtil.SendPrefixedMessage(sender, "§aRenamed country to §f" + countryName + "§a!§r");
+        ChatUtil.SendPrefixedMessage(sender, "§aRenamed country to §f" + countryName + "§a!");
     }
 
     // ---------- /gc country list ----------
     private void gcCountryList(@NotNull CommandSender sender, @NotNull String[] args) {
         // todo: pages
-        StringBuilder sb = new StringBuilder("\n§6========== COUNTRY LIST ==========§r\n");
+        StringBuilder sb = new StringBuilder(ChatUtil.NewlineIfPrefixIsEmpty() +
+                                            "§6========== COUNTRY LIST ==========\n");
 
         if (CountryData.All.isEmpty()) {
-            sb.append("§cThere are no countries.§r\n");
+            sb.append("§cThere are no countries.\n");
         }
         else {
             for (CountryData country : CountryData.All) {
                 PlayerData leader = country.getLeader();
                 int citizens = country.CitizenCount();
-                sb.append(String.format("§a%s§r (§eLeader§r: %s, §eCitizens§r: %s§r)\n",
+                sb.append(String.format("§a%s§f (§eLeader§f: %s, §eCitizens§f: %s)\n",
                                         country.Name, leader != null ? country.getLeader().Username : "§cNone", citizens != 0 ? citizens : "§c0"));
             }
         }
-        sb.append("§6=================================§r");
+        sb.append("§6=================================");
         ChatUtil.SendPrefixedMessage(sender, sb.toString());
     }
 
@@ -294,26 +302,27 @@ public class gcCountryCommand extends SubCommand {
     private void gcCountryInfo(@NotNull CommandSender sender, @NotNull String[] args) {
         // validation check
         if (args.length == 0) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must put the name of the country you want to get info of!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cYou must put the name of the country you want to get info of!");
             return;
         }
 
         String countryName = String.join(" ", args);
 
-        CountryData country = CountryData.CountryDataByName.getOrDefault(countryName, null);
+        CountryData country = CountryData.CountryDataByName.get(countryName);
         if (country == null) {
-            ChatUtil.SendPrefixedMessage(sender, "§cCountry \"§f" + countryName + "§c\" could not be found!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cCountry \"§f" + countryName + "§c\" could not be found!");
             return;
         }
 
         PlayerData leader = country.getLeader();
 
-        String sb = "\n§6========== COUNTRY INFO ==========§r\n" +
-                     String.format("§a%s§r\n" +
-                                   "> §eLeader§r: %s§r\n" +
-                                   "> §eCitizens§r: %s§r\n",
-                                   country.Name, leader != null ? leader.Username : "§cNone", country.CitizenCount()) +
-                     "§6=================================§r";
+        String sb = ChatUtil.NewlineIfPrefixIsEmpty() +
+                   "§6========== COUNTRY INFO ==========\n" +
+                    String.format("§a%s§f\n" +
+                                  "> §eLeader§f: %s§f\n" +
+                                  "> §eCitizens§f: %s§f\n",
+                                  country.Name, leader != null ? leader.Username : "§cNone", country.CitizenCount()) +
+                   "§6=================================";
         ChatUtil.SendPrefixedMessage(sender, sb);
     }
 
@@ -322,32 +331,33 @@ public class gcCountryCommand extends SubCommand {
     private void gcCountryCitizens(@NotNull CommandSender sender, @NotNull String[] args) {
         // validation check
         if (args.length == 0) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must put the name of the country you want to get the list of citizens of!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cYou must put the name of the country you want to get the list of citizens of!");
             return;
         }
 
         String countryName = String.join(" ", args);
 
-        CountryData country = CountryData.CountryDataByName.getOrDefault(countryName, null);
+        CountryData country = CountryData.CountryDataByName.get(countryName);
         if (country == null) {
-            ChatUtil.SendPrefixedMessage(sender, "§cCountry \"§f" + countryName + "§c\" could not be found!§r");
+            ChatUtil.SendPrefixedMessage(sender, "§cCountry \"§f" + countryName + "§c\" could not be found!");
             return;
         }
 
-        StringBuilder sb = new StringBuilder("\n§6========== COUNTRY CITIZENS ==========§r\n");
+        StringBuilder sb = new StringBuilder(ChatUtil.NewlineIfPrefixIsEmpty() +
+                                            "§6========== COUNTRY CITIZENS ==========");
 
         int citizenCount = country.CitizenCount();
         if (citizenCount == 0) {
-            sb.append("§cThere are no citizens of this country.§r\n");
+            sb.append("§cThere are no citizens of this country.\n");
         }
         else {
             sb.append("§e").append(citizenCount).append(" §fcitizens:\n");
             for (PlayerData citizen : country.CitizensSortedByRank()) {
-                sb.append(String.format("§f> §a%s§r (§e%s§r)\n",
+                sb.append(String.format("§f> §a%s§f (§e%s§f)\n",
                                         citizen.Username, citizen.getRankString()));
             }
         }
-        sb.append("§6======================================§r");
+        sb.append("§6======================================");
         ChatUtil.SendPrefixedMessage(sender, sb.toString());
     }
 }

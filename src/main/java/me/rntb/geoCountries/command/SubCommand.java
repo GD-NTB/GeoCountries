@@ -24,7 +24,7 @@ public abstract class SubCommand {
     void onCommandEntered(@NotNull CommandSender sender, @NotNull String[] args) {
         // if we are console and console can't use, escape
         if (!(sender instanceof Player) && !this.ConsoleCanUse) {
-            ChatUtil.SendPrefixedMessage(sender, String.format("§cOnly players can run §f%s§c!§r",
+            ChatUtil.SendPrefixedMessage(sender, String.format("§cOnly players can run §f%s§c!",
                                                                this.DisplayName));
             return;
         }

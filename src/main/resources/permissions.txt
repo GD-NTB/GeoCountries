@@ -19,3 +19,5 @@ admin:
 gc.purge
 gc.dump
 gc.save
+gc.config
+gc.config.reload
