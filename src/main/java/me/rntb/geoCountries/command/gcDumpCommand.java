@@ -24,7 +24,7 @@ public class gcDumpCommand extends SubCommand {
         ChatUtil.SendPrefixedMessage(sender, ChatUtil.NewlineIfPrefixIsEmpty() +
                                              "PlayerData.All(" + PlayerData.All.toArray().length + ")\n" +
                                              "----------\n" +
-                                             "PlayerDataByUsername(" + PlayerData.PlayerDataByUsername.keySet().toArray().length + "), PlayerDataByUUID(" + PlayerData.PlayerDataByUsername.keySet().toArray().length + ")\n" +
+                                             "PlayerDataByUsername(" + PlayerData.PlayerDataByUsername.keySet().toArray().length + "), PlayerDataByUUID(" + PlayerData.PlayerDataByUUID.keySet().toArray().length + ")\n" +
                                              "----------\n" +
                                              "CountryData.All(" + CountryData.All.toArray().length + ")");
     }
