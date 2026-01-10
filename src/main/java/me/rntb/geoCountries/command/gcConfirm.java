@@ -15,9 +15,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-public class gcConfirmCommand extends SubCommand {
+public class gcConfirm extends SubCommand {
 
-    public gcConfirmCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
+    public gcConfirm(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
         this.HelpString = "Confirms a command or action.";
         this.HelpPage   = """
@@ -60,23 +60,22 @@ public class gcConfirmCommand extends SubCommand {
 
     // remove
     public static boolean StopWaitingForSender(UUID uuid) {
-        boolean removedConfirm = PendingConfirms.remove(uuid) != null;
-
-        // cancel and remove timeout task
-        if (removedConfirm) {
+        // remove and cancel timeout task
+        if (PendingConfirms.remove(uuid) != null) {
             // since entry existed in pending confirms map, it will exist in timeout tasks map
             BukkitTask timeoutTask = TimeoutTasks.get(uuid);
             timeoutTask.cancel();
             TimeoutTasks.remove(uuid);
 
             ChatUtil.SendPrefixedLogMessage("Stopped waiting for " + uuid.toString() + "to do /gc confirm.");
+            return true;
         }
 
-        return removedConfirm;
+        return false;
     }
 
     @Override
-    void doCommand(CommandSender sender, String[] args) {
+    public void doCommand(CommandSender sender, String[] args) {
         // if console, uuid=0000..., else get player uuid
         UUID uuid = UuidUtil.GetUUIDOfCommandSender(sender);
 
@@ -100,7 +99,7 @@ public class gcConfirmCommand extends SubCommand {
     }
 
     @Override
-    List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
+    public List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
         return List.of();
     }
 }

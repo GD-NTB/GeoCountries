@@ -1,6 +1,6 @@
 package me.rntb.geoCountries.listener;
 
-import me.rntb.geoCountries.command.gcConfirmCommand;
+import me.rntb.geoCountries.command.gcConfirm;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +13,6 @@ public class LeaveListener implements Listener {
         final Player player = event.getPlayer();
 
         // stop pending /gc confirm
-        gcConfirmCommand.StopWaitingForSender(player.getUniqueId());
+        gcConfirm.StopWaitingForSender(player.getUniqueId());
     }
 }

@@ -8,9 +8,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class gcDumpCommand extends SubCommand {
+public class gcDump extends SubCommand {
 
-    public gcDumpCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
+    public gcDump(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
         this.HelpString = "Dumps plugin info.";
         this.HelpPage   = """
@@ -19,7 +19,7 @@ public class gcDumpCommand extends SubCommand {
     }
 
     @Override
-    void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
+    public void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
         // /gc dump
         ChatUtil.SendPrefixedMessage(sender, ChatUtil.NewlineIfPrefixIsEmpty() +
                                              "PlayerData.All(" + PlayerData.All.toArray().length + ")\n" +
@@ -30,7 +30,7 @@ public class gcDumpCommand extends SubCommand {
     }
 
     @Override
-    List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
+    public List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
         return List.of();
     }
 }

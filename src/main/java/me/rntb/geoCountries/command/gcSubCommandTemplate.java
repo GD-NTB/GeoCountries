@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
-public class SubCommandTemplate extends SubCommand {
+public class gcSubCommandTemplate extends SubCommand {
 
-    public SubCommandTemplate(String displayName, String requiredPermission, Boolean consoleCanUse) {
+    public gcSubCommandTemplate(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
         this.HelpString = "Description here.";
         this.HelpPage   = """
@@ -18,7 +18,7 @@ public class SubCommandTemplate extends SubCommand {
     }
 
     @Override
-    void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
+    public void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
         // /gc [...]
         if (args.length == 0) {
             ChatUtil.SendPrefixedMessage(sender, "§aDescription here.\n" +
@@ -36,7 +36,7 @@ public class SubCommandTemplate extends SubCommand {
     }
 
     @Override
-    List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
+    public List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
         return List.of();
     }
 }

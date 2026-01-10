@@ -10,6 +10,7 @@ It is intended to work in a similar way to many Factions plugins.
 * Player ranks within countries
 * Command confirmation / cancellation
 * Permission groups (`gc.group.essential`, `player`, `admin`)
+* Proper command autocomplete
 * Admin persistent storage commands (`/gc purge`, `/gc save`)
 * Config file
 
@@ -19,7 +20,6 @@ It is intended to work in a similar way to many Factions plugins.
 * Promoting and demoting players
 * Inheriting leader position of country
 * Update usernames in persistent storage command
-* Only allowed subcommands (`/gc [command] [subcommand]`) being autocompleted
 * Chunk claiming
 * BlueMap support
 

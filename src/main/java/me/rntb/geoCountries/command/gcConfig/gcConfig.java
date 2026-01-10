@@ -1,16 +1,17 @@
-package me.rntb.geoCountries.command;
+package me.rntb.geoCountries.command.gcConfig;
 
-import me.rntb.geoCountries.manager.ConfigManager;
+import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
-public class gcConfigCommand extends SubCommand {
+public class gcConfig extends SubCommand {
 
-    public gcConfigCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
+    public gcConfig(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
         this.HelpString = "Manages the plugin config.";
         this.HelpPage   = """
@@ -19,7 +20,7 @@ public class gcConfigCommand extends SubCommand {
     }
 
     @Override
-    void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
+    public void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
         // /gc [...]
         if (args.length == 0) {
             ChatUtil.SendPrefixedMessage(sender, "§aManages and reloads the config.\n" +
@@ -36,7 +37,7 @@ public class gcConfigCommand extends SubCommand {
                     ChatUtil.SendNoPermissionMessage(sender, "/gc config reload", "gc.config.reload");
                     return;
                 }
-                gcConfigReload(sender, subArgs);
+                gcConfigReload.doCommand(sender, subArgs);
                 return;
             default:
                 ChatUtil.SendPrefixedMessage(sender, "§c\"§f" + mode + "§c\" is not a valid command for §f/gc config§c!\n" +
@@ -45,19 +46,12 @@ public class gcConfigCommand extends SubCommand {
         }
     }
 
-    // ---------- /gc config reload ----------
-    private void gcConfigReload(@NotNull CommandSender sender, @NotNull String[] args) {
-        ChatUtil.SendPrefixedMessage(sender, "§aReloading config...");
-        ConfigManager.Reload();
-        ChatUtil.SendPrefixedMessage(sender, "§aConfig reloaded!");
-    }
-
     @Override
-    List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
-        // /gc config 1
-        if (args.length == 1) {
-            return List.of("reload");
-        }
-        return List.of();
+    public List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
+        return switch (args.length) {
+            // /gc config 1
+            case 1 -> Stream.of("reload").filter(x -> sender.hasPermission("gc.config." + x)).toList();
+            default -> List.of();
+        };
     }
 }

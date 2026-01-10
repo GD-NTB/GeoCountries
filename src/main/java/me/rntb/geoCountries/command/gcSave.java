@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class gcSaveCommand extends SubCommand {
+public class gcSave extends SubCommand {
 
-    public gcSaveCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
+    public gcSave(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
         this.HelpString = "Saves all plugin data.";
         this.HelpPage   = """
@@ -19,16 +19,16 @@ public class gcSaveCommand extends SubCommand {
     }
 
     @Override
-    void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
+    public void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
         // /gc save
         // start waiting for confirm
-        gcConfirmCommand.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
-                                        Triple.of(gcSaveCommand::doCommandConfirmed,
-                                                  sender,
-                                                  new String[] { }));
+        gcConfirm.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
+                                 Triple.of(gcSave::onConfirm,
+                                           sender,
+                                           new String[] { }));
     }
 
-    static void doCommandConfirmed(CommandSender sender, String[] args) {
+    private static void onConfirm(@NotNull CommandSender sender, @NotNull String[] args) {
         // save data collections
         ChatUtil.SendPrefixedMessage(sender, "§eSaving all data collections...");
         DataCollectionManager.SaveCollections();
@@ -37,7 +37,7 @@ public class gcSaveCommand extends SubCommand {
     }
 
     @Override
-    List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
+    public List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
         return List.of();
     }
 }

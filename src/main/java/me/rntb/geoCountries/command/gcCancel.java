@@ -8,11 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.UUID;
 
-import static me.rntb.geoCountries.command.gcConfirmCommand.IsWaitingForSender;
+import static me.rntb.geoCountries.command.gcConfirm.IsWaitingForSender;
 
-public class gcCancelCommand extends SubCommand {
+public class gcCancel extends SubCommand {
 
-    public gcCancelCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
+    public gcCancel(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
         this.HelpString = "Cancels a command or action.";
         this.HelpPage   = """
@@ -21,7 +21,7 @@ public class gcCancelCommand extends SubCommand {
     }
 
     @Override
-    void doCommand(CommandSender sender, String[] args) {
+    public void doCommand(CommandSender sender, String[] args) {
         // if console, uuid=0000..., else get player uuid
         UUID uuid = UuidUtil.GetUUIDOfCommandSender(sender);
 
@@ -33,11 +33,11 @@ public class gcCancelCommand extends SubCommand {
 
         ChatUtil.SendPrefixedMessage(sender, "§eCancelled the command.");
         // remove sender from waiting list
-        gcConfirmCommand.StopWaitingForSender(uuid);
+        gcConfirm.StopWaitingForSender(uuid);
     }
 
     @Override
-    List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
+    public List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
         return List.of();
     }
 }

@@ -12,8 +12,8 @@ public abstract class SubCommand {
     String DisplayName; // used in error messages and that
     Boolean ConsoleCanUse = true;
     String RequiredPermission = ""; // if no permission required, null
-    String HelpString = ""; // shown in /gc help
-    String HelpPage = ""; // shown in /gc help [...]
+    public String HelpString = ""; // shown in /gc help
+    public String HelpPage = ""; // shown in /gc help [...]
 
     public SubCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
         this.DisplayName = displayName;
@@ -21,7 +21,7 @@ public abstract class SubCommand {
         this.ConsoleCanUse = consoleCanUse;
     }
 
-    void onCommandEntered(@NotNull CommandSender sender, @NotNull String[] args) {
+    public void onCommandEntered(@NotNull CommandSender sender, @NotNull String[] args) {
         // if we are console and console can't use, escape
         if (!(sender instanceof Player) && !this.ConsoleCanUse) {
             ChatUtil.SendPrefixedMessage(sender, String.format("§cOnly players can run §f%s§c!",
@@ -39,7 +39,7 @@ public abstract class SubCommand {
         doCommand(sender, args);
     }
 
-    abstract void doCommand(CommandSender sender, String[] args);
+    public abstract void doCommand(CommandSender sender, String[] args);
 
-    abstract List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args);
+    public abstract List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args);
 }

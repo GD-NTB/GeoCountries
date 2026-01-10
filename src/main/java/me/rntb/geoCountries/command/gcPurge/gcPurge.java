@@ -1,6 +1,7 @@
-package me.rntb.geoCountries.command;
+package me.rntb.geoCountries.command.gcPurge;
 
-import me.rntb.geoCountries.data.CountryData;
+import me.rntb.geoCountries.command.SubCommand;
+import me.rntb.geoCountries.command.gcConfirm;
 import me.rntb.geoCountries.data.PlayerData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
@@ -8,12 +9,12 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
-public class gcPurgeCommand extends SubCommand {
+public class gcPurge extends SubCommand {
 
-    public gcPurgeCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
+    public gcPurge(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
         this.HelpString = "Purges (deletes) plugin data.";
         this.HelpPage   = """
@@ -26,7 +27,7 @@ public class gcPurgeCommand extends SubCommand {
     }
 
     @Override
-    void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
+    public void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
         // /gc purge
         if (args.length == 0) {
             ChatUtil.SendPrefixedMessage(sender, "§aPurges (deletes) plugin data.\n" +
@@ -55,20 +56,20 @@ public class gcPurgeCommand extends SubCommand {
             // /gc purge playerdata
             else if (mode.equalsIgnoreCase("playerdata")) {
                 // start waiting for confirm
-                gcConfirmCommand.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
-                                                Triple.of(gcPurgeCommand::gcPurgePlayerDataConfirmed,
-                                                        sender,
-                                                        new String[] { }));
+                gcConfirm.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
+                                         Triple.of(gcPurgePlayerData::onConfirm,
+                                                 sender,
+                                                 new String[] { }));
                 return;
             }
 
             //gc purge countrydata
             else if (mode.equalsIgnoreCase("countrydata")) {
                 // start waiting for confirm
-                gcConfirmCommand.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
-                                                Triple.of(gcPurgeCommand::gcPurgeCountryDataConfirmed,
-                                                        sender,
-                                                        new String[] { }));
+                gcConfirm.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
+                                         Triple.of(gcPurgeCountryData::onConfirm,
+                                                 sender,
+                                                 new String[] { }));
                 return;
             }
 
@@ -93,10 +94,10 @@ public class gcPurgeCommand extends SubCommand {
             }
 
             // start waiting for confirm
-            gcConfirmCommand.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
-                                            Triple.of(gcPurgeCommand::gcPurgeUsernameConfirmed,
-                                                    sender,
-                                                    new String[] { usernameOrUUID })); // 0 = username
+            gcConfirm.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
+                                     Triple.of(gcPurgeUsername::onConfirm,
+                                             sender,
+                                             new String[] { usernameOrUUID })); // 0 = username
         }
         // /gc purge uuid [...]
         else if (mode.equalsIgnoreCase("uuid")) {
@@ -107,10 +108,10 @@ public class gcPurgeCommand extends SubCommand {
             }
 
             // start waiting for confirm
-            gcConfirmCommand.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
-                                            Triple.of(gcPurgeCommand::gcPurgeUUIDConfirmed,
-                                                    sender,
-                                                    new String[] { usernameOrUUID })); // 0 = uuid
+            gcConfirm.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
+                                     Triple.of(gcPurgeUUID::onConfirm,
+                                             sender,
+                                             new String[] { usernameOrUUID })); // 0 = uuid
         }
         else {
             ChatUtil.SendPrefixedMessage(sender, "§c\"" + mode + "\" is not a valid command for §f/purge§c!\n" +
@@ -119,60 +120,22 @@ public class gcPurgeCommand extends SubCommand {
         }
     }
 
-    // ---------- /gc purge playerdata ----------
-    public static void gcPurgePlayerDataConfirmed(CommandSender sender, String[] args) {
-        int allLength = PlayerData.All.toArray().length;
-        for (PlayerData pd : new ArrayList<>(PlayerData.All)) { // new ArrayList as we are concurrently modifying
-            PlayerData.Delete(pd);
-        }
-        ChatUtil.SendPrefixedMessage(sender, "§aPurged §f" + allLength + "§a PlayerDatas.");
-    }
-
-    // ---------- /gc purge countrydata ----------
-    public static void gcPurgeCountryDataConfirmed(CommandSender sender, String[] args) {
-        int allLength = CountryData.All.toArray().length;
-        for (CountryData cd : new ArrayList<>(CountryData.All)) { // new ArrayList as we are concurrently modifying
-            CountryData.Delete(cd);
-        }
-        ChatUtil.SendPrefixedMessage(sender, "§aPurged §f" + allLength + "§a CountryDatas.");
-    }
-
-    // ---------- /gc purge username ----------
-    public static void gcPurgeUsernameConfirmed(CommandSender sender, String[] args) {
-        PlayerData playerData = PlayerData.PlayerDataByUsername.get(args[0]);
-        PlayerData.Delete(playerData);
-
-        ChatUtil.SendPrefixedMessage(sender, "§aPurged player §f\"" + playerData.Username + "\"§a.");
-    }
-
-
-    // ---------- /gc purge uuid ----------
-    public static void gcPurgeUUIDConfirmed(CommandSender sender, String[] args) {
-        PlayerData playerData = PlayerData.GetPlayerDataByUUIDString(args[0]);
-        PlayerData.Delete(playerData);
-
-        ChatUtil.SendPrefixedMessage(sender, "§aPurged player §f\"" + playerData.Username + "\"§a.");
-    }
-
     @Override
-    List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
-        // /gc purge
-        if (args.length == 1) {
-            return List.of("username", "uuid", "playerdata", "countrydata");
-        }
-
-        // /gc purge 1
-        if (args.length == 2) {
-            return switch (args[0]) {
-                // /gc purge username [usernames]
-                case "username" -> PlayerData.AllAsUsernames();
-                // /gc purge uuid [uuids]
-                case "uuid" -> PlayerData.AllAsUUIDStrings();
-                // /gc purge [...]
-                default -> List.of();
-            };
-        }
-
-        return new ArrayList<>();
+    public List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
+        return switch (args.length) {
+            // /gc purge 1
+            case 1 -> Stream.of("username", "uuid", "playerdata", "countrydata").filter(x -> sender.hasPermission("gc.purge." + x)).toList();
+            // /gc purge [...] 2
+            case 2 ->
+                switch (args[0]) {
+                    // /gc purge username [usernames]
+                    case "username" -> sender.hasPermission("username") ? PlayerData.AllAsUsernames() : List.of();
+                    // /gc purge uuid [uuids]
+                    case "uuid" -> sender.hasPermission("uuid") ? PlayerData.AllAsUUIDStrings() : List.of();
+                    // /gc purge [...]
+                    default -> List.of();
+                };
+            default -> List.of();
+        };
     }
 }

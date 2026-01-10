@@ -8,9 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 // todo: break into pages
-public class gcHelpCommand extends SubCommand {
+public class gcHelp extends SubCommand {
 
-    public gcHelpCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
+    public gcHelp(String displayName, String requiredPermission, Boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
         this.HelpString = "Lists all commands and gives help for any command.";
         this.HelpPage   = """
@@ -19,18 +19,18 @@ public class gcHelpCommand extends SubCommand {
     }
 
     @Override
-    void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
+    public void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
         StringBuilder sb = new StringBuilder(ChatUtil.NewlineIfPrefixIsEmpty() +
                                             "§6========== HELP ==========\n");
 
+        // /gc help
         if (args.length == 0) {
-            // /gc help
             List<SubCommand> subCommands;
             if (sender instanceof Player) {
-                subCommands = gcCommand.GetAllowedSubCommands((Player) sender);
+                subCommands = gc.GetAllowedSubCommands((Player) sender);
             }
             else {
-                subCommands = gcCommand.gcSubCommands.values().stream().toList();
+                subCommands = gc.gcSubCommands.values().stream().toList();
             }
             // append help for each command
             for (SubCommand sc : subCommands) {
@@ -38,9 +38,10 @@ public class gcHelpCommand extends SubCommand {
                 sb.append("\n");
             }
         }
+
+        // /gc help [...]
         else {
-            // /gc help [...]
-            SubCommand sc = gcCommand.gcSubCommands.get(args[0]);
+            SubCommand sc = gc.gcSubCommands.get(args[0]);
             // if command doesnt exist, escape
             if (sc == null) {
                 ChatUtil.SendPrefixedMessage(sender, "§cNo help page found for the command §f/gc " + args[0] + "§c!");
@@ -60,11 +61,11 @@ public class gcHelpCommand extends SubCommand {
     }
 
     @Override
-    List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
-        // /gc help 1
-        if (args.length == 1) {
-            return gcCommand.GetAllowedSubCommandsAsStrings((Player) sender);
-        }
-        return List.of();
+    public List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
+        return switch (args.length) {
+            // /gc help 1
+            case 1 -> gc.GetAllowedSubCommandsAsStrings((Player) sender);
+            default -> List.of();
+        };
     }
 }
