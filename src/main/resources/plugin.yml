@@ -1,5 +1,5 @@
 name: GeoCountries
-version: '1.0-SNAPSHOT'
+version: 'ALPHA'
 main: me.rntb.geoCountries.GeoCountries
 api-version: '1.21'
 authors: [ rNTB ]
@@ -44,14 +44,16 @@ permissions:
       gc.country.create: true
       gc.country.rename: true
       gc.country.dissolve: true
+      gc.citizenship: true
+      gc.citizenship.apply: true
+      gc.citizenship.accept: true
 
   # -------------------- ADMIN --------------------
   gc.group.admin:
     description: Gives all admin permissions.
     children:
       gc.group.player: true
-      gc.group.essential: true
-      # all player and essential commands, plus...
+      # all essential and player commands, plus...
       gc.purge: true
       gc.dump: true
       gc.save: true

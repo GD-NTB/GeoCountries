@@ -1,68 +1,69 @@
 package me.rntb.geoCountries.command.gcCountry;
 
-import me.rntb.geoCountries.command.gcConfirm;
-import me.rntb.geoCountries.data.CountryData;
-import me.rntb.geoCountries.data.PlayerData;
+import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
-import org.apache.commons.lang3.tuple.Triple;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 public class gcCountryCreate {
 
-    public static void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
-        UUID playerUUID = ((Player) sender).getUniqueId();
-        PlayerData pd = PlayerData.PlayerDataByUUID.get(playerUUID);
+    public static void doCommand(CommandSender sender,  String[] args) {
+        Player player = (Player) sender;
+        UUID playerUUID = player.getUniqueId();
+        PlayerProfile pd = PlayerProfile.byUUID.get(playerUUID);
 
-        // already in country
-        if (pd.hasCountry()) {
-            CountryData country = pd.getCountry();
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must first renounce your citizenship of §f" + country.Name + "§c using §f/gc citizenship renounce§c before creating a country!");
+        // already has citizenship
+        if (pd.hasCitizenship()) {
+            Country country = pd.getCitizenship();
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must first renounce your citizenship of §f" + country.name + "§c using §f/gc citizenship renounce§c before creating a country!");
             return;
         }
 
         if (args.length == 0) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must put the name of the country you want to create!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you want to create!");
             return;
         }
 
-        String countryName = String.join(" ", args);
+        String countryName = String.join(" ", args).trim();
 
         // validation check
-        CountryData.NameValidation validation = CountryData.ValidateName(countryName, true);
-        if (validation != CountryData.NameValidation.OK) {
-            ChatUtil.SendPrefixedMessage(sender, CountryData.GetNameValidationString(validation));
+        String validationString = StringUtil.ValidateCountryName(countryName, true);
+        if (validationString != null) { // validation.OK -> null
+            ChatUtil.sendPrefixedMessage(sender, validationString);
             return;
         }
 
         // start waiting for confirm
-        gcConfirm.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
-                                 Triple.of(gcCountryCreate::onConfirm,
-                                         sender,
-                                         new String[] { countryName })); // 0 = name
+        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+                                  new Confirmation(gcCountryCreate::onConfirm,
+                                                   sender,
+                                                   new String[] { countryName }),
+                                  true);
     }
 
-    public static void onConfirm(@NotNull CommandSender sender, @NotNull String[] args) {
+    private static void onConfirm(CommandSender sender,  String[] args) {
         String countryName = args[0];
         Player player = (Player) sender;
-        PlayerData playerData = PlayerData.PlayerDataByUUID.get(player.getUniqueId());
+        PlayerProfile playerProfile = PlayerProfile.byUUID.get(player.getUniqueId());
 
-        CountryData newCountry = new CountryData(countryName,
-                UUID.randomUUID());
-        newCountry.Leader = playerData.Uuid;
-        newCountry.Citizens.add(playerData.Uuid);
+        Country newCountry = new Country(UUID.randomUUID(),
+                                         countryName);
+        newCountry.leader = playerProfile.uuid;
+        newCountry.citizens.add(playerProfile.uuid);
 
         // create country
-        CountryData.AddNew(newCountry);
+        Country.addNew(newCountry);
 
-        // set player country and rank
-        playerData.setCountry(newCountry, PlayerData.PlayerRank.LEADER);
+        // set player citizenship and rank
+        playerProfile.setCitizenship(newCountry, PlayerProfile.PlayerRank.LEADER);
 
-        ChatUtil.SendPrefixedMessage(sender, "§aCreated country §f" + countryName + "§a!");
-        ChatUtil.BroadcastPrefixedMessage("§6A new country §f" + countryName + "§6 has just been created!");
+        ChatUtil.sendPrefixedMessage(sender, "§aCreated country §f" + countryName + "§a!");
+        ChatUtil.broadcastPrefixedMessage("§6A new country §f" + countryName + "§6 has just been created!");
     }
 }

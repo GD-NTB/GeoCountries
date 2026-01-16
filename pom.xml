@@ -6,7 +6,7 @@
 
     <groupId>me.rntb</groupId>
     <artifactId>geocountries</artifactId>
-    <version>1.0-SNAPSHOT-0.01</version>
+    <version>ALPHA-0.02</version>
     <packaging>jar</packaging>
 
     <name>geocountries</name>

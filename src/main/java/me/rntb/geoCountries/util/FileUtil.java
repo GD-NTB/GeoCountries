@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.util;
 
 import me.rntb.geoCountries.GeoCountries;
+import me.rntb.geoCountries.config.ConfigState;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -11,20 +12,20 @@ import java.nio.file.Paths;
 
 public class FileUtil {
 
-    public static Path GetFilePathFromDataFolder(String fileName, String extension) {
-        // set in GeoCountries.onEnable
+    public static Path getFilePathFromDataFolder(String fileName, String extension) {
         return Paths.get(GeoCountries.PluginAbsoluteDataFolderPath + File.separator + fileName + "." + extension);
     }
 
-    public static void CreatePathIfNotExist(Path path, String contents) {
-        if(DoesPathExist(path)) { return; }
+    public static void createPathIfNotExist(Path path, String contents) {
+        if(doesPathExist(path))
+            return;
 
         // create path
         try {
             Files.createDirectories(path.getParent());
             Files.createFile(path);
         } catch (IOException e) {
-            ChatUtil.SendPrefixedLogErrorMessage("Could not create path " + path.toString() + "!");
+            ChatUtil.sendPrefixedLogErrorMessage("Could not create path " + path.toString() + "!");
             return;
         }
 
@@ -34,14 +35,15 @@ public class FileUtil {
             fileWriter.write(contents);
             fileWriter.close();
         } catch (IOException e) {
-            ChatUtil.SendPrefixedLogErrorMessage("Tried to write to " + path.toString() + " but failed! (IOException)");
+            ChatUtil.sendPrefixedLogErrorMessage("Tried to write to " + path.toString() + " but failed! (IOException)");
             return;
         }
 
-        ChatUtil.SendPrefixedLogMessage("Created path " + path.toString() + " and wrote contents!");
+        if (ConfigState.DebugLogging)
+            ChatUtil.sendPrefixedLogMessage("Created path " + path.toString() + " and wrote contents!");
     }
 
-    public static Boolean DoesPathExist(Path path) {
+    public static boolean doesPathExist(Path path) {
         return Files.exists(path);
     }
 }

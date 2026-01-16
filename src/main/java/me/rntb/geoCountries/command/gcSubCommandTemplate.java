@@ -9,20 +9,21 @@ import java.util.List;
 
 public class gcSubCommandTemplate extends SubCommand {
 
-    public gcSubCommandTemplate(String displayName, String requiredPermission, Boolean consoleCanUse) {
+    public gcSubCommandTemplate(String displayName, String requiredPermission, boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
         this.HelpString = "Description here.";
         this.HelpPage   = """
-                          §f/gc [...] [...]§a: Longer description here.
+                          §f/gc [...] [...]: §aLonger description here.
                           §f> subcommand: §2(Countryless-only) §aDoes more things.""";
     }
 
     @Override
-    public void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
+    public void doCommand(CommandSender sender,  String[] args) {
         // /gc [...]
         if (args.length == 0) {
-            ChatUtil.SendPrefixedMessage(sender, "§aDescription here.\n" +
-                                                 "Usage: §f/gc [...]");
+            ChatUtil.sendPrefixedMessage(sender, """
+                                                 §a%s
+                                                 1Usage: §f%s [...]""".formatted(this.HelpString, this.DisplayName));
             return;
         }
 
@@ -31,12 +32,15 @@ public class gcSubCommandTemplate extends SubCommand {
         // find and route to proper method
         switch (mode) {
             default:
+                ChatUtil.sendPrefixedMessage(sender, """
+                                                     §c§f%s§c is not a valid command for §f%s§c!
+                                                     Usage: §f%s [...]""".formatted(mode, this.DisplayName, this.DisplayName));
                 return;
         }
     }
 
     @Override
-    public List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
+    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return List.of();
     }
 }

@@ -1,137 +1,87 @@
 package me.rntb.geoCountries.command.gcPurge;
 
 import me.rntb.geoCountries.command.SubCommand;
-import me.rntb.geoCountries.command.gcConfirm;
-import me.rntb.geoCountries.data.PlayerData;
+import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.UuidUtil;
-import org.apache.commons.lang3.tuple.Triple;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class gcPurge extends SubCommand {
 
-    public gcPurge(String displayName, String requiredPermission, Boolean consoleCanUse) {
+    public gcPurge(String displayName, String requiredPermission, boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
         this.HelpString = "Purges (deletes) plugin data.";
         this.HelpPage   = """
-                          §f/gc purge [...]§a: Purges (deletes) specific data within the plugin's persistent storage, such as data collections, etc.
+                          §f/gc purge [...]: §aPurges (deletes) specific data within the plugin's persistent storage, such as data collections, etc.
                           §cShould be used very very rarely!
-                          §f> playerdata: §aPurges all PlayerData data collections.
-                          §f> countrydata: §aPurges all CountryData data collections.
-                          §f> username [username]: §aPurges a PlayerData by username.
-                          §f> uuid [uuid]: §aPurges a PlayerData by UUID.""";
+                          §f> playerprofile: §aPurges all PlayerProfile data collections.
+                          §f> country: §aPurges all Country data collections.
+                          §f> username [username]: §aPurges a PlayerProfile by username.
+                          §f> uuid [uuid]: §aPurges a PlayerProfile by UUID.""";
     }
 
     @Override
-    public void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
+    public void doCommand(CommandSender sender,  String[] args) {
         // /gc purge
         if (args.length == 0) {
-            ChatUtil.SendPrefixedMessage(sender, "§aPurges (deletes) plugin data.\n" +
-                                                 "Usage: §f/gc purge [...]");
+            ChatUtil.sendPrefixedMessage(sender, """
+                                                 §a%s
+                                                 Usage: §f%s [...]""".formatted(this.HelpString, this.DisplayName));
             return;
         }
 
-        String mode = args[0];
-
-        // /gc purge [username/uuid/playerdata/countrydata]
-        if (args.length == 1) {
+        String mode = args[0].toLowerCase();
+        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+        // find and route to proper method
+        switch (mode) {
             // /gc purge username
-            if (mode.equalsIgnoreCase("username")) {
-                ChatUtil.SendPrefixedMessage(sender, "§cYou need to specify the username of the player as it appears in the data collections.\n" +
-                                                     "Usage: §f/gc purge username [...]");
+            case "username":
+                gcPurgeUsername.doCommand(sender, subArgs);
                 return;
-            }
 
             // /gc purge uuid
-            else if (mode.equalsIgnoreCase("uuid")) {
-                ChatUtil.SendPrefixedMessage(sender, "§cYou need to specify the UUID of the player as it appears in the data collections.\n" +
-                                                     "Usage: §f/gc purge uuid [...]");
+            case "uuid":
+                gcPurgeUUID.doCommand(sender, subArgs);
                 return;
-            }
 
-            // /gc purge playerdata
-            else if (mode.equalsIgnoreCase("playerdata")) {
-                // start waiting for confirm
-                gcConfirm.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
-                                         Triple.of(gcPurgePlayerData::onConfirm,
-                                                 sender,
-                                                 new String[] { }));
+            // /gc purge playerprofile
+            case "playerprofile":
+                gcPurgePlayerProfile.doCommand(sender, subArgs);
                 return;
-            }
 
-            //gc purge countrydata
-            else if (mode.equalsIgnoreCase("countrydata")) {
-                // start waiting for confirm
-                gcConfirm.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
-                                         Triple.of(gcPurgeCountryData::onConfirm,
-                                                 sender,
-                                                 new String[] { }));
+            //gc purge country
+            case "country":
+                gcPurgeCountry.doCommand(sender, subArgs);
                 return;
-            }
 
-            // gc [xxx]
-            else {
-                ChatUtil.SendPrefixedMessage(sender, "§c\"§f" + mode + "§c\" is not a valid command for §f/purge§c!\n" +
-                                                     "Usage: §f/gc purge [...]");
+            //gc purge citizenshipapplication
+            case "citizenshipapplication":
+                gcPurgeCitizenshipApplication.doCommand(sender, subArgs);
+                return;
+
+            // gc purge [xxx]
+            default:
+                ChatUtil.sendPrefixedMessage(sender, """
+                                                     §c§f%s§c is not a valid command for §f%s§c!
+                                                     Usage: §f%s [...]""".formatted(mode, this.DisplayName, this.DisplayName));
                 return;
             }
         }
-
-        // /gc purge [username/uuid] [...]
-        String usernameOrUUID = args[1];
-        PlayerData playerData;
-        // get playerdata from given username / uuid
-        // /gc purge username [...]
-        if (mode.equalsIgnoreCase("username")) {
-            playerData = PlayerData.PlayerDataByUsername.get(usernameOrUUID);
-            if (playerData == null) {
-                ChatUtil.SendPrefixedMessage(sender, "§Username §f\"" + usernameOrUUID + "\"§c is not a player's username!");
-                return;
-            }
-
-            // start waiting for confirm
-            gcConfirm.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
-                                     Triple.of(gcPurgeUsername::onConfirm,
-                                             sender,
-                                             new String[] { usernameOrUUID })); // 0 = username
-        }
-        // /gc purge uuid [...]
-        else if (mode.equalsIgnoreCase("uuid")) {
-            playerData = PlayerData.GetPlayerDataByUUIDString(usernameOrUUID);
-            if (playerData == null) {
-                ChatUtil.SendPrefixedMessage(sender, "§cUUID §f\"" + usernameOrUUID + "\"§c is not a player's UUID!");
-                return;
-            }
-
-            // start waiting for confirm
-            gcConfirm.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
-                                     Triple.of(gcPurgeUUID::onConfirm,
-                                             sender,
-                                             new String[] { usernameOrUUID })); // 0 = uuid
-        }
-        else {
-            ChatUtil.SendPrefixedMessage(sender, "§c\"" + mode + "\" is not a valid command for §f/purge§c!\n" +
-                                                 "Usage: §f/gc purge [...]");
-            return;
-        }
-    }
 
     @Override
-    public List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
+    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc purge 1
-            case 1 -> Stream.of("username", "uuid", "playerdata", "countrydata").filter(x -> sender.hasPermission("gc.purge." + x)).toList();
+            case 1 -> sender.hasPermission("gc.purge") ? List.of("username", "uuid", "playerprofile", "country", "citizenshipapplication") : List.of();
             // /gc purge [...] 2
             case 2 ->
                 switch (args[0]) {
                     // /gc purge username [usernames]
-                    case "username" -> sender.hasPermission("username") ? PlayerData.AllAsUsernames() : List.of();
+                    case "username" -> sender.hasPermission("gc.purge") ? PlayerProfile.allAsUsernames(true) : List.of();
                     // /gc purge uuid [uuids]
-                    case "uuid" -> sender.hasPermission("uuid") ? PlayerData.AllAsUUIDStrings() : List.of();
+                    case "uuid" -> sender.hasPermission("gc.purge") ? PlayerProfile.allAsUUIDStrings() : List.of();
                     // /gc purge [...]
                     default -> List.of();
                 };

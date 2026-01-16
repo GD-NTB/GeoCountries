@@ -6,22 +6,25 @@ It is intended to work in a similar way to many Factions plugins.
 ## Current features:
 
 * Creating, dissolving, renaming countries
-* Country / player info, help commands
-* Player ranks within countries
-* Command confirmation / cancellation
+* Country / player info, help command
+* Citizenship system
+* Applying for citizenship to country
+* Command confirming, cancelling
+* Requesting a player types in chat
 * Permission groups (`gc.group.essential`, `player`, `admin`)
 * Proper command autocomplete
-* Admin persistent storage commands (`/gc purge`, `/gc save`)
-* Config file
+* Persistent storage system
+* Config file (reload command, updating)
 
 ## To-do:
 
-* Requesting and granting citizenship
+* Accepting citizenship application
 * Promoting and demoting players
 * Inheriting leader position of country
 * Update usernames in persistent storage command
 * Chunk claiming
 * BlueMap support
+* And a lot more sh!te
 
 ## Current bugs:
 

@@ -14,10 +14,12 @@ gc.cancel
 gc.country.create
 gc.country.rename
 gc.country.dissolve
+gc.citizenship
+gc.citizenship.request
+gc.citizenship.accept
 
 admin:
 gc.purge
 gc.dump
 gc.save
 gc.config
-gc.config.reload

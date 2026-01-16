@@ -1,1 +1,10 @@
-chat-prefix: '§7GeoCountries: '
+config-version: 0.0201 # do not change
+
+chat-prefix: '§8[GeoCountries] ' # text before every plugin chat and console message
+
+debug-logging: false # more logging in server console for debugging
+
+chat-response-min: 1 # min allowed length of chat message when player asked to type in chat
+chat-response-max: 150  # max allowed length of chat message when player asked to type in chat
+country-name-min: 2 # min allowed length of new country names
+country-name-max: 35 # max allowed length of new country names

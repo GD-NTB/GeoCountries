@@ -9,29 +9,29 @@ import java.util.List;
 
 public abstract class SubCommand {
 
-    String DisplayName; // used in error messages and that
-    Boolean ConsoleCanUse = true;
-    String RequiredPermission = ""; // if no permission required, null
-    public String HelpString = ""; // shown in /gc help
+    public String DisplayName = "/gc command";
+    public String RequiredPermission = "gc";
+    public boolean ConsoleCanUse = true;
+    public String HelpString = "";
     public String HelpPage = ""; // shown in /gc help [...]
 
-    public SubCommand(String displayName, String requiredPermission, Boolean consoleCanUse) {
+    public SubCommand(String displayName, String requiredPermission, boolean consoleCanUse) {
         this.DisplayName = displayName;
         this.RequiredPermission = requiredPermission;
         this.ConsoleCanUse = consoleCanUse;
     }
 
-    public void onCommandEntered(@NotNull CommandSender sender, @NotNull String[] args) {
+    public void onCommandEntered(CommandSender sender,  String[] args) {
         // if we are console and console can't use, escape
         if (!(sender instanceof Player) && !this.ConsoleCanUse) {
-            ChatUtil.SendPrefixedMessage(sender, String.format("§cOnly players can run §f%s§c!",
-                                                               this.DisplayName));
+            ChatUtil.sendPrefixedMessage(sender, "§cOnly players can run §f%s§c!"
+                                                 .formatted(this.DisplayName));
             return;
         }
 
         // if we are player and permission is needed and dont have permission, escape
         if (sender instanceof Player && RequiredPermission != null && !sender.hasPermission(RequiredPermission)) {
-            ChatUtil.SendNoPermissionMessage(sender, this.DisplayName, this.RequiredPermission);
+            ChatUtil.sendNoPermissionMessage(sender, this.DisplayName, this.RequiredPermission);
             return;
         }
 
@@ -41,5 +41,5 @@ public abstract class SubCommand {
 
     public abstract void doCommand(CommandSender sender, String[] args);
 
-    public abstract List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args);
+    public abstract List<String> getTabCompletion(CommandSender sender,  String[] args);
 }

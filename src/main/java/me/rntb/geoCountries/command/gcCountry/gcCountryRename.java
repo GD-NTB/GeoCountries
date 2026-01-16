@@ -1,11 +1,11 @@
 package me.rntb.geoCountries.command.gcCountry;
 
-import me.rntb.geoCountries.command.gcConfirm;
-import me.rntb.geoCountries.data.CountryData;
-import me.rntb.geoCountries.data.PlayerData;
+import me.rntb.geoCountries.types.Confirmation;
+import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
-import org.apache.commons.lang3.tuple.Triple;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -14,53 +14,55 @@ import java.util.UUID;
 
 public class gcCountryRename {
 
-    public static void onCommand(@NotNull CommandSender sender, @NotNull String[] args) {
-        UUID playerUUID = ((Player) sender).getUniqueId();
-        PlayerData pd = PlayerData.PlayerDataByUUID.get(playerUUID);
+    public static void onCommand(CommandSender sender,  String[] args) {
+        Player player = (Player) sender;
+        UUID playerUUID = player.getUniqueId();
+        PlayerProfile pd = PlayerProfile.byUUID.get(playerUUID);
 
-        // if not in country, escape
-        if (!pd.hasCountry()) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must be the leader of a country to rename it!");
+        // if doesnt have citizenship, escape
+        if (!pd.hasCitizenship()) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to rename it!");
             return;
         }
 
         // if not leader of country, escape
         if (pd.getLeaderOf() == null) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must be the leader of your country to change its name!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of your country to change its name!");
             return;
         }
 
         if (args.length == 0) {
-            ChatUtil.SendPrefixedMessage(sender, "§cYou must put the new name of the country!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the new name of the country!");
             return;
         }
 
-        String countryName = String.join(" ", args);
+        String countryName = String.join(" ", args).trim();
 
         // validation check
-        CountryData.NameValidation validation = CountryData.ValidateName(countryName, true);
-        if (validation != CountryData.NameValidation.OK) {
-            ChatUtil.SendPrefixedMessage(sender, CountryData.GetNameValidationString(validation));
+        String validationString = StringUtil.ValidateCountryName(countryName, true);
+        if (validationString != null) {
+            ChatUtil.sendPrefixedMessage(sender, validationString);
             return;
         }
 
         // start waiting for confirm
-        gcConfirm.WaitForConfirm(UuidUtil.GetUUIDOfCommandSender(sender),
-                                 Triple.of(gcCountryRename::onConfirm,
-                                         sender,
-                                         new String[] { countryName })); // 0 = name
+        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+                                  new Confirmation(gcCountryRename::onConfirm,
+                                                   sender,
+                                                   new String[] { countryName }),
+                                  true);
     }
 
-    private static void onConfirm(@NotNull CommandSender sender, @NotNull String[] args) {
+    private static void onConfirm(CommandSender sender,  String[] args) {
         String countryName = args[0];
         Player player = (Player) sender;
-        PlayerData playerData = PlayerData.PlayerDataByUUID.get(player.getUniqueId());
-        CountryData country = playerData.getCountry();
+        PlayerProfile playerProfile = PlayerProfile.byUUID.get(player.getUniqueId());
+        Country country = playerProfile.getCitizenship();
 
-        ChatUtil.BroadcastPrefixedMessage("§6The country of §f" + country.Name + "§6 has been renamed to §f" + countryName + "§6!");
+        ChatUtil.broadcastPrefixedMessage("§6The country of §f" + country.name + "§6 has been renamed to §f" + countryName + "§6!");
 
         country.setName(countryName);
 
-        ChatUtil.SendPrefixedMessage(sender, "§aRenamed country to §f" + countryName + "§a!");
+        ChatUtil.sendPrefixedMessage(sender, "§aRenamed country to §f" + countryName + "§a!");
     }
 }

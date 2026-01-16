@@ -1,6 +1,6 @@
 package me.rntb.geoCountries.listener;
 
-import me.rntb.geoCountries.data.PlayerData;
+import me.rntb.geoCountries.data.PlayerProfile;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,11 +12,16 @@ public class JoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
 
-        // register new player in player list
-        if (PlayerData.PlayerDataByUUID.getOrDefault(player.getUniqueId(), null) == null) {
-            // create and register new PlayerData for this player
-            PlayerData newPlayerData = new PlayerData(player);
-            PlayerData.AddNew(newPlayerData);
+        PlayerProfile playerProfile = PlayerProfile.byUUID.get(player.getUniqueId());
+
+        // if new player, create them a new PlayerProfile
+        if (playerProfile == null) {
+            // create and register new PlayerProfile for this player
+            playerProfile = new PlayerProfile(player);
+            PlayerProfile.addNew(playerProfile);
         }
+
+        // update last known username to their current username
+        playerProfile.username = player.getName();
     }
 }

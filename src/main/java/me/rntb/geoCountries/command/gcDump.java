@@ -1,7 +1,7 @@
 package me.rntb.geoCountries.command;
 
-import me.rntb.geoCountries.data.CountryData;
-import me.rntb.geoCountries.data.PlayerData;
+import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -10,27 +10,26 @@ import java.util.List;
 
 public class gcDump extends SubCommand {
 
-    public gcDump(String displayName, String requiredPermission, Boolean consoleCanUse) {
+    public gcDump(String displayName, String requiredPermission, boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
         this.HelpString = "Dumps plugin info.";
         this.HelpPage   = """
-                          §f/gc dump§a: Dumps some plugin info into the chat for easier debugging.
-                          """;;
+                          §f/gc dump: §aDumps some plugin info into the chat for easier debugging.""";;
     }
 
     @Override
-    public void doCommand(@NotNull CommandSender sender, @NotNull String[] args) {
+    public void doCommand(CommandSender sender,  String[] args) {
         // /gc dump
-        ChatUtil.SendPrefixedMessage(sender, ChatUtil.NewlineIfPrefixIsEmpty() +
-                                             "PlayerData.All(" + PlayerData.All.toArray().length + ")\n" +
+        ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
+                                             "PlayerProfile.All(" + PlayerProfile.all.size() + ")\n" +
                                              "----------\n" +
-                                             "PlayerDataByUsername(" + PlayerData.PlayerDataByUsername.keySet().toArray().length + "), PlayerDataByUUID(" + PlayerData.PlayerDataByUUID.keySet().toArray().length + ")\n" +
+                                             "ByUsername(" + PlayerProfile.byUsername.size() + "), ByUUID(" + PlayerProfile.byUUID.keySet().toArray().length + ")\n" +
                                              "----------\n" +
-                                             "CountryData.All(" + CountryData.All.toArray().length + ")");
+                                             "Country.All(" + Country.all.size() + ")");
     }
 
     @Override
-    public List<String> getTabCompletion(@NotNull CommandSender sender, @NotNull String[] args) {
+    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return List.of();
     }
 }
