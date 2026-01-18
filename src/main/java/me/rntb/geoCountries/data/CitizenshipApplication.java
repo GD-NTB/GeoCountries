@@ -5,10 +5,7 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class CitizenshipApplication extends DataCollection {
 
@@ -18,7 +15,7 @@ public class CitizenshipApplication extends DataCollection {
     // list of sent applications
     public static ArrayList<CitizenshipApplication> sentAll = null;
     public static Map<UUID, CitizenshipApplication> sentByUUID = new HashMap<>();
-    public static Map<UUID, CitizenshipApplication> sentByApplicant = new HashMap<>();
+    public static Map<UUID, ArrayList<CitizenshipApplication>> sentByApplicant = new HashMap<>();
 
     // list of all applications currently being written
     public static ArrayList<CitizenshipApplication> openAll = new ArrayList<>();
@@ -57,18 +54,24 @@ public class CitizenshipApplication extends DataCollection {
         cancel(cApplication, false); // remove open application
 
         addNew(cApplication, sentAll, DISPLAY_NAME);
-        sentByApplicant.put(cApplication.applicant, cApplication);
+
+        List<CitizenshipApplication> cApplicationsSent = sentByApplicant.get(cApplication.applicant);
+        if (cApplicationsSent != null)
+            cApplicationsSent.add(cApplication);
         sentByUUID.put(cApplication.uuid, cApplication);
+
 
         if (ConfigState.DebugLogging)
             ChatUtil.sendPrefixedLogMessage("Sent open CitizenshipApplication");
 
         if (sendMessage)
             ChatUtil.sendPrefixedMessage(cApplication.getApplicant().getOnlinePlayer(), "§aSent citizenship application to country §f%s§a!"
-                                                                                      .formatted(cApplication.getCountry().name));
+                                                                                      .formatted(cApplication.getToCountry().name));
     }
     public static void deleteSent(CitizenshipApplication cApplication) {
-        sentByApplicant.remove(cApplication.applicant, cApplication);
+        List<CitizenshipApplication> cApplicationsSent = sentByApplicant.get(cApplication.applicant);
+        if (cApplicationsSent != null)
+            cApplicationsSent.remove(cApplication);
         sentByUUID.remove(cApplication.uuid, cApplication);
 
         delete(cApplication, sentAll, DISPLAY_NAME);
@@ -88,8 +91,8 @@ public class CitizenshipApplication extends DataCollection {
 
         // populate hashmaps
         for (CitizenshipApplication cApplication : sentAll) {
-            sentByApplicant.put(cApplication.applicant, cApplication);
             sentByUUID.put(cApplication.uuid, cApplication);
+            sentByApplicant.get(cApplication.applicant).add(cApplication);
         }
 
         if (ConfigState.DebugLogging) {
@@ -115,7 +118,7 @@ public class CitizenshipApplication extends DataCollection {
     public PlayerProfile getApplicant() { return PlayerProfile.byUUID.get(this.applicant); }
 
     public UUID toCountry;
-    public Country getCountry() { return Country.byUUID.get(this.toCountry); }
+    public Country getToCountry() { return Country.byUUID.get(this.toCountry); }
 
     public String reason;
 

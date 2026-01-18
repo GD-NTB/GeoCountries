@@ -31,7 +31,7 @@ public class gcPlayerInfo {
             sb.append("§f> §cStateless");
         }
         else {
-            sb.append("§f> §e").append(player.getRankString()).append("§f of a").append(country.name);
+            sb.append("§f> §e").append(player.getRankString()).append("§f of §e").append(country != null ? country.name : "§cNone");
         }
 
         sb.append("\n§6================================");

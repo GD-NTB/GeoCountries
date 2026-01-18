@@ -133,17 +133,15 @@ public class PlayerProfile extends DataCollection {
     public int getRankLevel() {
         return this.rank.ordinal();
     }
+    public void setRank(PlayerRank rank) {
+        this.rank = rank;
+        if (rank == PlayerRank.NONE)
+            this.citizenship = null;
+    }
 
     public UUID getLeaderOf() {
         return rank == PlayerRank.LEADER ? this.citizenship : null;
     }
-
-//    public List<CitizenshipApplication> getSentCitizenshipApplications() {
-//        return CitizenshipApplication.SentAll.stream().filter(ca -> ca.Applicant == this.Uuid).toList();
-//    }
-//    public List<CitizenshipApplication> getReceivedCitizenshipApplications() {
-//        return CitizenshipApplication.SentAll.stream().filter(ca -> ca.Applicant == this.Uuid).toList();
-//    }
 
     public PlayerProfile(Player player) {
         this.username = player.getName();

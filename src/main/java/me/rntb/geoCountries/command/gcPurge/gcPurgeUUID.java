@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 
 public class gcPurgeUUID {
 
-    public static void doCommand(CommandSender sender, String[] args) {
+    public static void onCommand(CommandSender sender, String[] args) {
         if (args.length == 1) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou need to specify the UUID of the player as it appears in the data collections.");
             return;

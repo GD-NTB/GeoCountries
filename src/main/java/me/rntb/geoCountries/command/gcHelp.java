@@ -18,7 +18,7 @@ public class gcHelp extends SubCommand {
     }
 
     @Override
-    public void doCommand(CommandSender sender,  String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
         StringBuilder sb = new StringBuilder(ChatUtil.newlineIfPrefixIsEmpty() +
                                             "§6========== HELP ==========\n");
         // /gc help

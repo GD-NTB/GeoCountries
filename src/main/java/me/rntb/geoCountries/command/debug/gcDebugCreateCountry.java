@@ -1,30 +1,17 @@
-package me.rntb.geoCountries.command.gcCountry;
+package me.rntb.geoCountries.command.debug;
 
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
-import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class gcCountryCreate {
+public class gcDebugCreateCountry {
 
-    public static void onCommand(CommandSender sender,  String[] args) {
-        Player player = (Player) sender;
-        UUID playerUUID = player.getUniqueId();
-        PlayerProfile pd = PlayerProfile.byUUID.get(playerUUID);
-
-        // already has citizenship
-        if (pd.hasCitizenship()) {
-            Country country = pd.getCitizenship();
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must first renounce your citizenship of §f" + country.name + "§c using §f/gc citizenship renounce§c before creating a country!");
-            return;
-        }
-
+    public static void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you want to create!");
             return;
@@ -39,16 +26,6 @@ public class gcCountryCreate {
             return;
         }
 
-        // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
-                                  new Confirmation(gcCountryCreate::onConfirm,
-                                                   sender,
-                                                   new String[] { countryName }),
-                                  true);
-    }
-
-    private static void onConfirm(CommandSender sender,  String[] args) {
-        String countryName = args[0];
         Player player = (Player) sender;
         PlayerProfile playerProfile = PlayerProfile.byUUID.get(player.getUniqueId());
 

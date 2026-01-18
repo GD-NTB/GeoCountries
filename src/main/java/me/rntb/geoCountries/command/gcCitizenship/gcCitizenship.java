@@ -16,12 +16,12 @@ public class gcCitizenship extends SubCommand {
         this.HelpString = "Manages your citizenship and your country's citizens.";
         this.HelpPage   = """
                           §f/gc citizenship [...]§a: Manages your citizenship and your country's citizens.
-                          §f> apply: §2(Countryless-only) §Applies for citizenship to a country.
-                          §f> accept: §2(Leader-only) §Accepts a citizenship application to your country.""";
+                          §f> apply: §2(Countryless-only) §aApplies for citizenship to a country.
+                          §f> accept: §2(Leader-only) §aAccepts a citizenship application to your country.""";
     }
 
     @Override
-    public void doCommand(CommandSender sender,  String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
         // /gc citizenship
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, """
@@ -40,7 +40,7 @@ public class gcCitizenship extends SubCommand {
                     ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship apply", "gc.citizenship.apply");
                     return;
                 }
-                gcCitizenshipApply.doCommand(sender, subArgs);
+                gcCitizenshipApply.onCommand(sender, subArgs);
                 return;
             // gc citizenship [xxx]
             default:
@@ -56,14 +56,14 @@ public class gcCitizenship extends SubCommand {
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc citizen 1
-            case 1 -> Stream.of("apply", "accept").filter(x -> sender.hasPermission("gc.citizenship." + x)).toList();
+            case 1 -> Stream.of("accept", "apply").filter(x -> sender.hasPermission("gc.citizenship." + x)).toList();
             // gc citizen [...] 2
             case 2 ->
                 switch (args[0]) {
-                    // /gc citizenship apply [countries]
-                    case "apply" -> sender.hasPermission("gc.citizenship.apply") ? Country.allAsNames(true) : List.of();
                     // /gc citizenship accept [countries]
                     case "accept" -> sender.hasPermission("gc.citizenship.accept") ? Country.allAsNames(true) : List.of();
+                    // /gc citizenship apply [countries]
+                    case "apply" -> sender.hasPermission("gc.citizenship.apply") ? Country.allAsNames(true) : List.of();
                     // /gc citizenship [...]
                     default -> List.of();
                 };

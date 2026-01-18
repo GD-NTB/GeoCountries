@@ -1,12 +1,14 @@
 package me.rntb.geoCountries.command;
 
 import me.rntb.geoCountries.GeoCountries;
+import me.rntb.geoCountries.command.admin.gcAdmin;
+import me.rntb.geoCountries.command.debug.gcDebug;
 import me.rntb.geoCountries.command.gcCitizenship.gcCitizenship;
 import me.rntb.geoCountries.command.gcConfig.gcConfig;
-import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.command.gcCountry.gcCountry;
 import me.rntb.geoCountries.command.gcPlayer.gcPlayer;
 import me.rntb.geoCountries.command.gcPurge.gcPurge;
+import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.Command;
@@ -41,6 +43,8 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
         registerSubCommand("save", new gcSave("/gc save", "gc.save", true));
         registerSubCommand("config", new gcConfig("/gc config", "gc.config", true));
         registerSubCommand("citizenship", new gcCitizenship("/gc citizenship", "gc.citizenship", false));
+        registerSubCommand("debug", new gcDebug("/gc debug", "gc.debug", true));
+        registerSubCommand("admin", new gcAdmin("/gc admin", "gc.admin", true));
     }
 
     public static void registerSubCommand(String name, SubCommand subCommand) {
@@ -51,14 +55,14 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args)  {
         // do the command
         if (args.length == 0)
-            doCommandNoArgs(sender); // /gc
+            onCommandNoArgs(sender); // /gc
         else
-            doCommandArgs(sender, args); // /gc [...]
+            onCommandArgs(sender, args); // /gc [...]
 
         return true;
     }
 
-    private void doCommandNoArgs(@NotNull CommandSender sender) {
+    private void onCommandNoArgs(@NotNull CommandSender sender) {
         // perms need checking if we are player
         if (sender instanceof Player && !sender.hasPermission("gc")) {
             ChatUtil.sendNoPermissionMessage(sender, "/gc", "gc");
@@ -71,7 +75,7 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
                                              .formatted(GeoCountries.PluginNameAndVersion));
     }
 
-    private void doCommandArgs(@NotNull CommandSender sender, @NotNull String[] args) {
+    private void onCommandArgs(@NotNull CommandSender sender, @NotNull String[] args) {
         // find subcommand
         String subCommandName = args[0].toLowerCase();
         SubCommand subCommand = gcSubCommands.get(subCommandName);
@@ -93,7 +97,7 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
         // get subargs (the [...] in /gc subcommand [...])
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length); // get the [...] in /gc ... [...]
 
-        // call subcommand.doCommandArgs(subArgs) with perms and console check
+        // call subcommand.onCommandArgs(subArgs) with perms and console check
         subCommand.onCommandEntered(sender, subArgs);
     }
 

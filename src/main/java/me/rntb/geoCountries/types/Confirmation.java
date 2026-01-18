@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-// when using a confirmaton, make sure whatever uses it gets cancelled by updating stopWaiting method
+// when using a confirmation, make sure whatever uses it gets cancelled by updating stopWaiting method
 public class Confirmation {
 
     private static final Map<UUID, Confirmation> pendingConfirmations = new HashMap<>();
@@ -106,7 +106,7 @@ public class Confirmation {
 
         this.startMessage = "§6Do §f/gc confirm§6 to confirm, or do §f/gc cancel§6 to cancel.";
         this.confirmMessage = "§6Confirmed!";
-        this.cancelMessage = "§6Cancelled the action!";
+        this.cancelMessage = "§6Cancelled!";
         this.timeoutMessage = "§cTimed out because you didn't confirm after §f%d second%s§c!"
                               .formatted(this.timeoutAfterSeconds, StringUtil.LeadingS(this.timeoutAfterSeconds));
     }

@@ -4,7 +4,6 @@ import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +20,7 @@ public class gcPlayer extends SubCommand {
     }
 
     @Override
-    public void doCommand(CommandSender sender,  String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
         // /gc country
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, """
@@ -62,7 +61,7 @@ public class gcPlayer extends SubCommand {
             case 2 ->
                 switch (args[0]) {
                     // /gc player info [players]
-                    case "info" -> sender.hasPermission("info") ? PlayerProfile.allAsUsernames(true) : List.of();
+                    case "info" -> sender.hasPermission("gc.player.info") ? PlayerProfile.allAsUsernames(true) : List.of();
                     // /gc player [...]
                     default -> List.of();
                 };

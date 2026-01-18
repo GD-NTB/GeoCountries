@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class gcPurgeCountry {
 
-    public static void doCommand(CommandSender sender, String[] args) {
+    public static void onCommand(CommandSender sender, String[] args) {
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
                                   new Confirmation(gcPurgeCountry::onConfirm,

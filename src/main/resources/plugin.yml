@@ -58,4 +58,5 @@ permissions:
       gc.dump: true
       gc.save: true
       gc.config: true
-      gc.config.reload: true
+      gc.debug: true
+      gc.admin: true

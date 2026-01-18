@@ -19,7 +19,7 @@ public class gcCancel extends SubCommand {
     }
 
     @Override
-    public void doCommand(CommandSender sender, String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
         // if console, uuid=0000..., else get player uuid
         UUID uuid = UuidUtil.GetUUIDOfCommandSender(sender);
 

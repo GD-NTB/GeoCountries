@@ -11,11 +11,12 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class gcCitizenshipApply {
 
-    public static void doCommand(CommandSender sender, String[] args) {
+    public static void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you want to apply to!");
             return;
@@ -25,10 +26,10 @@ public class gcCitizenshipApply {
         PlayerProfile playerProfile = PlayerProfile.byUUID.get(player.getUniqueId());
 
         // if already has citizenship, escape
-        if (playerProfile.hasCitizenship()) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou can't apply for citizenship of country whilst being a citizen of another!");
-            return;
-        }
+//        if (playerProfile.hasCitizenship()) {
+//            ChatUtil.sendPrefixedMessage(sender, "§cYou can't apply for citizenship of country whilst being a citizen of another!");
+//            return;
+//        }
 
         String countryName = String.join(" ", args);
         Country toCountry = Country.byName.get(countryName);
@@ -42,14 +43,14 @@ public class gcCitizenshipApply {
         // if already has open application, escape
         CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(playerProfile.uuid);
         if (cApplication != null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou're already writing a citizenship application to §f" + cApplication.getCountry().name + "§c!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou're already writing a citizenship application to §f" + cApplication.getToCountry().name + "§c!");
             return;
         }
 
         // if sent application to this country before, escape
-        cApplication = CitizenshipApplication.sentByApplicant.get(playerProfile.uuid); // reuse variable
-        if (cApplication != null && cApplication.toCountry.equals(toCountry.uuid)) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou already have a pending citizenship application for §f" + countryName + "§c!");
+        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.uuid); // reuse variable
+        if (cApplications != null && cApplications.stream().anyMatch(ca -> ca.toCountry.equals(toCountry.uuid))) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou already have a pending citizenship application to §f" + countryName + "§c!");
             return;
         }
 
@@ -62,7 +63,7 @@ public class gcCitizenshipApply {
 
 
 
-        ChatUtil.sendPrefixedMessage(sender, "§6Why are you applying to have citizenship of §f" + countryName + "§6?");
+        ChatUtil.sendPrefixedMessage(sender, "§6What is your reason for applying for citizenship of §f" + countryName + "§6?");
 
         // start waiting for response
         Response.startWaiting(playerUUID,

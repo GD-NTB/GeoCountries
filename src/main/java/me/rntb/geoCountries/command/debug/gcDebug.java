@@ -1,4 +1,4 @@
-package me.rntb.geoCountries.command.gcConfig;
+package me.rntb.geoCountries.command.debug;
 
 import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -6,21 +6,20 @@ import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
-public class gcConfig extends SubCommand {
+public class gcDebug extends SubCommand {
 
-    public gcConfig(String displayName, String requiredPermission, boolean consoleCanUse) {
+    public gcDebug(String displayName, String requiredPermission, boolean consoleCanUse) {
         super(displayName, requiredPermission, consoleCanUse);
-        this.HelpString = "Manages the plugin config.";
+        this.HelpString = "Debug commands for development.";
         this.HelpPage   = """
-                          §f/gc config [...]: §aManages the plugin config file at config.yml.
-                          §f> reload: §aReloads the config and updates the plugin's state.""";
+                          §f/gc debug [...]: §aUseful debug commands for plugin development.
+                          §f> createcountry [name]: §aCreates a test country.""";
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // /gc config
+        // /gc debug
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, """
                                                  §a%s
@@ -33,15 +32,16 @@ public class gcConfig extends SubCommand {
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
         // find and route to proper method
         switch (mode) {
-            case "reload":
-                gcConfigReload.onCommand(sender, subArgs);
+            // gc debug createcountry
+            case "createcountry":
+                gcDebugCreateCountry.onCommand(sender, subArgs);
                 return;
-            // gc config [xxx]
+
+            // gc debug [xxx]
             default:
                 ChatUtil.sendPrefixedMessage(sender, """
                                                      §c§f%s§c is not a valid command for §f%s§c!
-                                                     Usage: §f%s [...]"""
-                                                     .formatted(mode, this.DisplayName, this.DisplayName));
+                                                     Usage: §f%s [...]""".formatted(mode, this.DisplayName, this.DisplayName));
                 return;
         }
     }
@@ -49,8 +49,8 @@ public class gcConfig extends SubCommand {
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
-            // /gc config 1
-            case 1 -> Stream.of("reload").filter(x -> sender.hasPermission("gc.config." + x)).toList();
+            // /gc debug 1
+            case 1 -> sender.hasPermission("gc.debug") ? List.of("createcountry") : List.of();
             default -> List.of();
         };
     }

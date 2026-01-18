@@ -18,7 +18,7 @@ public class gcDump extends SubCommand {
     }
 
     @Override
-    public void doCommand(CommandSender sender,  String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
         // /gc dump
         ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
                                              "PlayerProfile.All(" + PlayerProfile.all.size() + ")\n" +

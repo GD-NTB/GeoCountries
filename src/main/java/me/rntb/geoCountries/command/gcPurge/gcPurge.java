@@ -16,14 +16,15 @@ public class gcPurge extends SubCommand {
         this.HelpPage   = """
                           §f/gc purge [...]: §aPurges (deletes) specific data within the plugin's persistent storage, such as data collections, etc.
                           §cShould be used very very rarely!
-                          §f> playerprofile: §aPurges all PlayerProfile data collections.
+                          §f> citizenshipapplication: §aPurges all citizenship applications in memory.
                           §f> country: §aPurges all Country data collections.
-                          §f> username [username]: §aPurges a PlayerProfile by username.
-                          §f> uuid [uuid]: §aPurges a PlayerProfile by UUID.""";
+                          §f> playerprofile: §aPurges all PlayerProfile data collections.
+                          §f> uuid [uuid]: §aPurges a PlayerProfile by UUID.;
+                          §f> username [username]: §aPurges a PlayerProfile by username.""";
     }
 
     @Override
-    public void doCommand(CommandSender sender,  String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
         // /gc purge
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, """
@@ -38,27 +39,27 @@ public class gcPurge extends SubCommand {
         switch (mode) {
             // /gc purge username
             case "username":
-                gcPurgeUsername.doCommand(sender, subArgs);
+                gcPurgeUsername.onCommand(sender, subArgs);
                 return;
 
             // /gc purge uuid
             case "uuid":
-                gcPurgeUUID.doCommand(sender, subArgs);
+                gcPurgeUUID.onCommand(sender, subArgs);
                 return;
 
             // /gc purge playerprofile
             case "playerprofile":
-                gcPurgePlayerProfile.doCommand(sender, subArgs);
+                gcPurgePlayerProfile.onCommand(sender, subArgs);
                 return;
 
             //gc purge country
             case "country":
-                gcPurgeCountry.doCommand(sender, subArgs);
+                gcPurgeCountry.onCommand(sender, subArgs);
                 return;
 
             //gc purge citizenshipapplication
             case "citizenshipapplication":
-                gcPurgeCitizenshipApplication.doCommand(sender, subArgs);
+                gcPurgeCitizenshipApplication.onCommand(sender, subArgs);
                 return;
 
             // gc purge [xxx]
@@ -74,7 +75,7 @@ public class gcPurge extends SubCommand {
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc purge 1
-            case 1 -> sender.hasPermission("gc.purge") ? List.of("username", "uuid", "playerprofile", "country", "citizenshipapplication") : List.of();
+            case 1 -> sender.hasPermission("gc.purge") ? List.of("citizenshipapplication", "country", "playerprofile", "uuid", "username") : List.of();
             // /gc purge [...] 2
             case 2 ->
                 switch (args[0]) {

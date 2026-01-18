@@ -3,7 +3,6 @@ package me.rntb.geoCountries.command;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -35,11 +34,11 @@ public abstract class SubCommand {
             return;
         }
 
-        // else doCommand
-        doCommand(sender, args);
+        // else onCommand
+        onCommand(sender, args);
     }
 
-    public abstract void doCommand(CommandSender sender, String[] args);
+    public abstract void onCommand(CommandSender sender, String[] args);
 
     public abstract List<String> getTabCompletion(CommandSender sender,  String[] args);
 }

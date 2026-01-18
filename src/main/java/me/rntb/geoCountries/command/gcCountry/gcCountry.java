@@ -17,16 +17,16 @@ public class gcCountry extends SubCommand {
         this.HelpString = "Manages, edits, and views info about all countries.";
         this.HelpPage   = """
                           §f/gc country [...]: §aManage, edit, and view info about all countries.
-                          §f> list: §aLists all countries on the server.
-                          §f> info [country]: §2(Case-sensitive) §aDisplays info about a particular country.
                           §f> citizens [country]: §aLists all citizens of a country, their rank, and how many there are.
                           §f> create [name]: §2(Countryless-only) §aCreates a new country.
-                          §f> rename [name]: §2(Leader-only) §aRenames your country.
-                          §f> dissolve: §2(Leader-only) §aDissolves (deletes) your country.""";
-    }
+                          §f> dissolve: §2(Leader-only) §aDissolves (deletes) your country.;
+                          §f> info [country]: §2(Case-sensitive) §aDisplays info about a particular country.
+                          §f> list: §aLists all countries on the server.
+                          §f> rename [name]: §2(Leader-only) §aRenames your country.""";
+                }
 
     @Override
-    public void doCommand(CommandSender sender,  String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
         // /gc country
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, """
@@ -51,7 +51,7 @@ public class gcCountry extends SubCommand {
                     ChatUtil.sendNoPermissionMessage(sender, "/gc country create", "gc.country.create");
                     return;
                 }
-                gcCountryCreate.doCommand(sender, subArgs);
+                gcCountryCreate.onCommand(sender, subArgs);
                 return;
 
             // gc country dissolve
@@ -122,14 +122,14 @@ public class gcCountry extends SubCommand {
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch(args.length) {
             // /gc country 1
-            case 1 -> Stream.of("create", "dissolve", "rename", "list", "info", "citizens").filter(x -> sender.hasPermission("gc.country." + x)).toList();
+            case 1 -> Stream.of("citizens", "create", "dissolve", "info", "list", "rename").filter(x -> sender.hasPermission("gc.country." + x)).toList();
             // gc country [...] 2
             case 2 ->
                 switch (args[0]) {
-                    // /gc country info [countries]
-                    case "info" -> sender.hasPermission("gc.country.info") ? Country.allAsNames(false) : List.of();
                     // /gc country citizens [countries]
-                    case "citizens" -> sender.hasPermission("gc.country.citizens") ? Country.allAsNames(false) : List.of();
+                    case "citizens" -> sender.hasPermission("gc.country.citizens") ? Country.allAsNames(true) : List.of();
+                    // /gc country info [countries]
+                    case "info" -> sender.hasPermission("gc.country.info") ? Country.allAsNames(true) : List.of();
                     // /gc country [...]
                     default -> List.of();
                 };

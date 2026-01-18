@@ -19,7 +19,7 @@ public class gcSave extends SubCommand {
     }
 
     @Override
-    public void doCommand(CommandSender sender,  String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
         // /gc save
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),

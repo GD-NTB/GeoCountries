@@ -49,7 +49,7 @@ public class ConfigManager {
 
         readStateFromFile();
 
-        ChatUtil.sendPrefixedLogMessage("§aConfig reloaded!");
+        ChatUtil.sendPrefixedLogMessage("Config reloaded!");
     }
 
     private static void readStateFromFile() {
