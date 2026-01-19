@@ -35,6 +35,6 @@ public class gcPlayerInfo {
         }
 
         sb.append("\n§6================================");
-        ChatUtil.sendPrefixedMessage(sender, sb.toString());
+        ChatUtil.sendPrefixedMessage(sender, String.valueOf(sb));
     }
 }

@@ -1,4 +1,4 @@
-package me.rntb.geoCountries.command.admin;
+package me.rntb.geoCountries.command.gcAdmin;
 
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -17,10 +17,10 @@ public class gcAdminSetPlayerRank {
             return;
         }
 
-        // get player
         String playerName = args[0];
-        PlayerProfile playerProfile = PlayerProfile.byUsername.get(playerName);
-        if (playerProfile == null) {
+        PlayerProfile player = PlayerProfile.byUsername.get(playerName);
+
+        if (player == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + playerName + "§c could not be found!");
             return;
         }
@@ -35,7 +35,7 @@ public class gcAdminSetPlayerRank {
         }
 
         // set rank
-        playerProfile.setRank(rank);
+        player.setRank(rank);
 
         ChatUtil.sendPrefixedMessage(sender, "§aSet player rank!");
     }

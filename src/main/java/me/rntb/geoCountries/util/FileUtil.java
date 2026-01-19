@@ -25,22 +25,22 @@ public class FileUtil {
             Files.createDirectories(path.getParent());
             Files.createFile(path);
         } catch (IOException e) {
-            ChatUtil.sendPrefixedLogErrorMessage("Could not create path " + path.toString() + "!");
+            ChatUtil.sendPrefixedLogErrorMessage("Could not create path " + String.valueOf(path) + "!");
             return;
         }
 
         // write to path
         try {
-            FileWriter fileWriter = new FileWriter(path.toString());
+            FileWriter fileWriter = new FileWriter(String.valueOf(path));
             fileWriter.write(contents);
             fileWriter.close();
         } catch (IOException e) {
-            ChatUtil.sendPrefixedLogErrorMessage("Tried to write to " + path.toString() + " but failed! (IOException)");
+            ChatUtil.sendPrefixedLogErrorMessage("Tried to write to " + String.valueOf(path) + " but failed! (IOException)");
             return;
         }
 
         if (ConfigState.DebugLogging)
-            ChatUtil.sendPrefixedLogMessage("Created path " + path.toString() + " and wrote contents!");
+            ChatUtil.sendPrefixedLogMessage("Created path " + String.valueOf(path) + " and wrote contents!");
     }
 
     public static boolean doesPathExist(Path path) {

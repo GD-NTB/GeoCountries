@@ -1,4 +1,4 @@
-package me.rntb.geoCountries.command.gcCountry;
+package me.rntb.geoCountries.command.gcCitizenship;
 
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
@@ -8,27 +8,27 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class gcCountryDissolve {
+public class gcCitizenshipRenounce {
 
-    public static void onCommand(CommandSender sender,  String[] args) {
+    public static void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         PlayerProfile pd = PlayerProfile.get(player);
 
         // if doesnt have citizenship, escape
         if (!pd.hasCitizenship()) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to dissolve it!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must be have citizenship of a country in order to renounce it!");
             return;
         }
 
-        // if not leader of country, escape
+        // if leader of country, escape
         if (pd.getLeaderOf() == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of your country to dissolve it!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou can't renounce your citizenship if you are the leader of the country, you must either promote another player to leader (§f/gc country promote [player]§a) or dissolve the country (§f/gc country dissolve§a)!");
             return;
         }
 
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
-                                  new Confirmation(gcCountryDissolve::onConfirm,
+                                  new Confirmation(gcCitizenshipRenounce::onConfirm,
                                                    sender,
                                                    new String[] { }),
                                   true);
@@ -37,11 +37,10 @@ public class gcCountryDissolve {
     private static void onConfirm(CommandSender sender,  String[] args) {
         Player player = (Player) sender;
         PlayerProfile playerProfile = PlayerProfile.get(player);
+
         Country country = playerProfile.getCitizenship();
+        ChatUtil.sendPrefixedMessage(sender, "§aRenounced your citizenship of §f" + country.name + "§a!");
 
-        ChatUtil.sendPrefixedMessage(sender, "§aDissolved country §f" + country.name + "§a!");
-        ChatUtil.broadcastPrefixedMessage("§6The country §f" + country.name + "§6 has just been dissolved!");
-
-        Country.delete(country);
+        playerProfile.clearCitizenship();
     }
 }

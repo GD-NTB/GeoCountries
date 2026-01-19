@@ -1,10 +1,10 @@
 package me.rntb.geoCountries.command;
 
+import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -24,6 +24,8 @@ public class gcDump extends SubCommand {
                                              "PlayerProfile.All(" + PlayerProfile.all.size() + ")\n" +
                                              "----------\n" +
                                              "ByUsername(" + PlayerProfile.byUsername.size() + "), ByUUID(" + PlayerProfile.byUUID.keySet().toArray().length + ")\n" +
+                                             "----------\n" +
+                                             "CitizenshipApplication.sentByApplicant(" + CitizenshipApplication.sentByApplicant.size() + ")\n" +
                                              "----------\n" +
                                              "Country.All(" + Country.all.size() + ")");
     }

@@ -1,9 +1,11 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
 import me.rntb.geoCountries.command.SubCommand;
+import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,8 +18,8 @@ public class gcCitizenship extends SubCommand {
         this.HelpString = "Manages your citizenship and your country's citizens.";
         this.HelpPage   = """
                           §f/gc citizenship [...]§a: Manages your citizenship and your country's citizens.
-                          §f> apply: §2(Countryless-only) §aApplies for citizenship to a country.
-                          §f> accept: §2(Leader-only) §aAccepts a citizenship application to your country.""";
+                          §f> apply: §aApplies for citizenship to a country.
+                          §f> accept: §aAccepts a citizenship application to your country.""";
     }
 
     @Override
@@ -35,6 +37,7 @@ public class gcCitizenship extends SubCommand {
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
         // find and route to proper method
         switch (mode) {
+            // /gc citizenship apply
             case "apply":
                 if (!sender.hasPermission("gc.citizenship.apply")) {
                     ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship apply", "gc.citizenship.apply");
@@ -42,6 +45,34 @@ public class gcCitizenship extends SubCommand {
                 }
                 gcCitizenshipApply.onCommand(sender, subArgs);
                 return;
+
+            // /gc citizenship sent
+            case "sent":
+                if (!sender.hasPermission("gc.citizenship.sent")) {
+                    ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship sent", "gc.citizenship.sent");
+                    return;
+                }
+                gcCitizenshipSent.onCommand(sender, subArgs);
+                return;
+
+            // /gc citizenship unsend
+            case "unsend":
+                if (!sender.hasPermission("gc.citizenship.unsend")) {
+                    ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship unsend", "gc.citizenship.unsend");
+                    return;
+                }
+                gcCitizenshipUnsend.onCommand(sender, subArgs);
+                return;
+
+            // /gc citizenship renounce
+            case "renounce":
+                if (!sender.hasPermission("gc.citizenship.renounce")) {
+                    ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship renounce", "gc.citizenship.renounce");
+                    return;
+                }
+                gcCitizenshipRenounce.onCommand(sender, subArgs);
+                return;
+
             // gc citizenship [xxx]
             default:
                 ChatUtil.sendPrefixedMessage(sender, """
@@ -56,14 +87,22 @@ public class gcCitizenship extends SubCommand {
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc citizen 1
-            case 1 -> Stream.of("accept", "apply").filter(x -> sender.hasPermission("gc.citizenship." + x)).toList();
+            case 1 -> Stream.of("apply", "renounce", "sent", "unsend").filter(x -> sender.hasPermission("gc.citizenship." + x)).toList();
             // gc citizen [...] 2
             case 2 ->
                 switch (args[0]) {
-                    // /gc citizenship accept [countries]
-                    case "accept" -> sender.hasPermission("gc.citizenship.accept") ? Country.allAsNames(true) : List.of();
                     // /gc citizenship apply [countries]
                     case "apply" -> sender.hasPermission("gc.citizenship.apply") ? Country.allAsNames(true) : List.of();
+                    // /gc citizenship unsend [countries]
+                    case "unsend" -> {
+                        if (!sender.hasPermission("gc.citizenship.unsend"))
+                            yield List.of();
+                        Player player = (Player) sender;
+                        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.getUniqueId());
+                        if (cApplications == null)
+                            yield List.of();
+                        yield cApplications.stream().map(ca -> ca.getToCountry().name).toList();
+                    }
                     // /gc citizenship [...]
                     default -> List.of();
                 };

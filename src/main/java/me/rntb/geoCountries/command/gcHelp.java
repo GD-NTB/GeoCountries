@@ -55,7 +55,7 @@ public class gcHelp extends SubCommand {
         }
 
         sb.append("§6=========================");
-        ChatUtil.sendPrefixedMessage(sender, sb.toString());
+        ChatUtil.sendPrefixedMessage(sender, String.valueOf(sb));
     }
 
     @Override

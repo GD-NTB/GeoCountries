@@ -36,7 +36,7 @@ public abstract class DataCollection {
             return data != null ? data : new ArrayList<>();
 
         } catch (IOException e) {
-            ChatUtil.sendPrefixedLogErrorMessage("Tried to deserialise/read " + displayName + "from " + path.toString() + " but failed! (IOException)");
+            ChatUtil.sendPrefixedLogErrorMessage("Tried to deserialise/read " + displayName + "from " + String.valueOf(path) + " but failed! (IOException)");
             //noinspection CallToPrintStackTrace
             e.printStackTrace();
             return new ArrayList<>();
@@ -60,10 +60,10 @@ public abstract class DataCollection {
             writer.close();
 
 //            if (ConfigState.DebugLogging)
-//                ChatUtil.sendPrefixedLogMessage("Serialised and wrote " + displayName + " to " + path.toString() + ".");
+//                ChatUtil.sendPrefixedLogMessage("Serialised and wrote " + displayName + " to " + String.valueOf(path) + ".");
 
         } catch (IOException e) {
-            ChatUtil.sendPrefixedLogErrorMessage("Tried to serialise/write " + displayName + " to " + path.toString() + " but failed! (IOException)");
+            ChatUtil.sendPrefixedLogErrorMessage("Tried to serialise/write " + displayName + " to " + String.valueOf(path) + " but failed! (IOException)");
             //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }

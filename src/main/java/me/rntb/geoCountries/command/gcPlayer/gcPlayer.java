@@ -47,7 +47,8 @@ public class gcPlayer extends SubCommand {
             default:
                 ChatUtil.sendPrefixedMessage(sender, """
                                                      §c§f%s§c is not a valid command for §f%s§c!
-                                                     Usage: §f%s [...]""".formatted(mode, this.DisplayName, this.DisplayName));
+                                                     Usage: §f%s [...]"""
+                                                     .formatted(mode, this.DisplayName, this.DisplayName));
                 return;
         }
     }
@@ -56,7 +57,7 @@ public class gcPlayer extends SubCommand {
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc player 1
-            case 1 -> Stream.of("info").filter(x -> sender.hasPermission("gc.citizenship." + x)).toList();
+            case 1 -> Stream.of("info").filter(x -> sender.hasPermission("gc.player." + x)).toList();
             // /gc player [...] 2
             case 2 ->
                 switch (args[0]) {

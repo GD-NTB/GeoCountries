@@ -51,17 +51,20 @@ public class Country extends DataCollection {
         addNew(country, all, DISPLAY_NAME);
         byName.put(country.name, country);
         byUUID.put(country.uuid, country);
+
+        country.timeCreated = System.currentTimeMillis();
     }
 
     public static void delete(Country country) {
-        // remove all mentions of this country from all playerprofiles
-        for (PlayerProfile p : PlayerProfile.all) {
-            if (p.hasCitizenship() && p.citizenship.equals(country.uuid))
-                p.clearCitizenship();
+        // clear all citizen's citizenships
+        for (UUID uuid : new ArrayList<>(country.citizens)) { // new arraylist while we're modifying
+            PlayerProfile player = PlayerProfile.byUUID.get(uuid);
+            if (player != null)
+                player.clearCitizenship();
         }
 
-        byName.remove(country.name, country);
-        byUUID.remove(country.uuid, country);
+        byName.remove(country.name);
+        byUUID.remove(country.uuid);
 
         delete(country, all, DISPLAY_NAME);
     }
@@ -77,13 +80,56 @@ public class Country extends DataCollection {
     }
 
     public UUID leader = null;
-    public PlayerProfile getLeader() { return PlayerProfile.byUUID.get(leader); }
+    public PlayerProfile getLeader() {
+        return PlayerProfile.byUUID.get(leader);
+    }
+    public void setLeader(PlayerProfile player) {
+        // if clearing leader, set to null and escape
+        if (player == null) {
+            this.leader = null;
+            return;
+        }
+
+        // if has leader
+        if (this.leader != null) {
+            // if player is already leader, escape
+            if (this.leader.equals(player.uuid)) {
+                return;
+            }
+
+            // demote old
+            PlayerProfile old = PlayerProfile.byUUID.get(this.leader);
+            old.setRank(PlayerProfile.PlayerRank.CITIZEN);
+        }
+
+        // set player to leader and add as citizen if not already
+        this.leader = player.uuid;
+        addCitizen(player);
+        player.rank = PlayerProfile.PlayerRank.LEADER; // re-set rank
+    }
 
     public ArrayList<UUID> citizens = new ArrayList<>();
     public List<PlayerProfile> citizensSortedByRank() {
-        return this.citizens.stream().map(uuid -> PlayerProfile.byUUID.get(uuid)).sorted(Comparator.comparing(PlayerProfile::getRankLevel)).toList();
+        return this.citizens.stream().map(uuid -> PlayerProfile.byUUID.get(uuid)).sorted(Comparator.comparing(PlayerProfile::getRankLevel)).toList().reversed();
     }
-    public int citizenCount() { return citizens.size(); }
+    public int citizenCount() {
+        return citizens.size();
+    }
+    public void addCitizen(PlayerProfile player) {
+        if (!this.citizens.contains(player.uuid)) {
+            this.citizens.add(player.uuid);
+            player.citizenship = this.uuid;
+        }
+    }
+
+    public void removeCitizen(PlayerProfile player) {
+        this.citizens.remove(player.uuid);
+        if (player.citizenship != null && player.citizenship.equals(this.uuid)) {
+            player.citizenship = null;
+        }
+    }
+
+    public long timeCreated = 0;
     
     public Country(UUID uuid, String name) {
         this.uuid = uuid;
@@ -93,9 +139,7 @@ public class Country extends DataCollection {
     @Override
     public String toString() {
         return "Country(name=%s, leader=%s, citizens=%d)"
-                .formatted(this.name,
-                           this.getLeader().username,
-                           this.citizenCount());
+                .formatted(this.name, this.getLeader().username, this.citizenCount());
     }
 
 }

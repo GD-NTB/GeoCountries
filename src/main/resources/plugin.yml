@@ -30,6 +30,7 @@ permissions:
       gc.country.list: true
       gc.country.info: true
       gc.country.citizens: true
+      gc.country.renounce: true
       gc.player: true
       gc.player.info: true
 
@@ -46,7 +47,9 @@ permissions:
       gc.country.dissolve: true
       gc.citizenship: true
       gc.citizenship.apply: true
-      gc.citizenship.accept: true
+      gc.citizenship.sent: true
+      gc.citizenship.unsend: true
+      gc.citizenship.renounce: true
 
   # -------------------- ADMIN --------------------
   gc.group.admin:
@@ -60,3 +63,4 @@ permissions:
       gc.config: true
       gc.debug: true
       gc.admin: true
+      gc.load: true

@@ -1,8 +1,8 @@
 package me.rntb.geoCountries.command;
 
 import me.rntb.geoCountries.GeoCountries;
-import me.rntb.geoCountries.command.admin.gcAdmin;
-import me.rntb.geoCountries.command.debug.gcDebug;
+import me.rntb.geoCountries.command.gcAdmin.gcAdmin;
+import me.rntb.geoCountries.command.gcDebug.gcDebug;
 import me.rntb.geoCountries.command.gcCitizenship.gcCitizenship;
 import me.rntb.geoCountries.command.gcConfig.gcConfig;
 import me.rntb.geoCountries.command.gcCountry.gcCountry;
@@ -45,6 +45,7 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
         registerSubCommand("citizenship", new gcCitizenship("/gc citizenship", "gc.citizenship", false));
         registerSubCommand("debug", new gcDebug("/gc debug", "gc.debug", true));
         registerSubCommand("admin", new gcAdmin("/gc admin", "gc.admin", true));
+        registerSubCommand("load", new gcLoad("/gc load", "gc.load", true));
     }
 
     public static void registerSubCommand(String name, SubCommand subCommand) {
@@ -70,7 +71,7 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
         }
 
         ChatUtil.sendPrefixedMessage(sender, """
-                                             §aThis server is running §f%s§a, a plugin developed by §frNTB§a
+                                             §aThis server is running §f%s§a, a plugin developed by §frNTB§a.
                                              Do §f/gc help§a for a list of commands!"""
                                              .formatted(GeoCountries.PluginNameAndVersion));
     }

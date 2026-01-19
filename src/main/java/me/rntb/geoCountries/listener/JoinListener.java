@@ -12,7 +12,7 @@ public class JoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
 
-        PlayerProfile playerProfile = PlayerProfile.byUUID.get(player.getUniqueId());
+        PlayerProfile playerProfile = PlayerProfile.get(player);
 
         // if new player, create them a new PlayerProfile
         if (playerProfile == null) {

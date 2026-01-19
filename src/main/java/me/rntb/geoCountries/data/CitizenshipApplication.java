@@ -40,8 +40,8 @@ public class CitizenshipApplication extends DataCollection {
             return;
 
         openAll.remove(cApplication);
-        openByUUID.remove(cApplication.uuid, cApplication);
-        openByApplicant.remove(cApplication.applicant, cApplication);
+        openByUUID.remove(cApplication.uuid);
+        openByApplicant.remove(cApplication.applicant);
 
         if (ConfigState.DebugLogging)
             ChatUtil.sendPrefixedLogMessage("Cancelled open CitizenshipApplication");
@@ -55,30 +55,41 @@ public class CitizenshipApplication extends DataCollection {
 
         addNew(cApplication, sentAll, DISPLAY_NAME);
 
-        List<CitizenshipApplication> cApplicationsSent = sentByApplicant.get(cApplication.applicant);
-        if (cApplicationsSent != null)
-            cApplicationsSent.add(cApplication);
+        // add to sentByUUID
         sentByUUID.put(cApplication.uuid, cApplication);
+        // add to sentByApplicant
+        sentByApplicant.computeIfAbsent(cApplication.applicant, v -> new ArrayList<>()).add(cApplication);
 
+        cApplication.timeCreated = System.currentTimeMillis();
 
         if (ConfigState.DebugLogging)
             ChatUtil.sendPrefixedLogMessage("Sent open CitizenshipApplication");
 
         if (sendMessage)
             ChatUtil.sendPrefixedMessage(cApplication.getApplicant().getOnlinePlayer(), "§aSent citizenship application to country §f%s§a!"
-                                                                                      .formatted(cApplication.getToCountry().name));
+                                                                                        .formatted(cApplication.getToCountry().name));
     }
     public static void deleteSent(CitizenshipApplication cApplication) {
         List<CitizenshipApplication> cApplicationsSent = sentByApplicant.get(cApplication.applicant);
-        if (cApplicationsSent != null)
+        if (cApplicationsSent != null) {
             cApplicationsSent.remove(cApplication);
-        sentByUUID.remove(cApplication.uuid, cApplication);
+            if (cApplicationsSent.isEmpty())
+                sentByApplicant.remove(cApplication.applicant);
+        }
+        sentByUUID.remove(cApplication.uuid);
 
         delete(cApplication, sentAll, DISPLAY_NAME);
 
         if (ConfigState.DebugLogging)
             ChatUtil.sendPrefixedLogMessage("Deleted sent CitizenshipApplication");
     }
+    public static void deleteAllSentByApplicant(PlayerProfile player) {
+        List<CitizenshipApplication> cApplicationsSent = sentByApplicant.get(player.uuid);
+        if (cApplicationsSent == null)
+            return;
+        for (CitizenshipApplication cApplication : new ArrayList<>(cApplicationsSent)) {
+            CitizenshipApplication.deleteSent(cApplication);
+        }}
     // todo: Accept()/Reject()
 
     public static void init() {
@@ -91,8 +102,10 @@ public class CitizenshipApplication extends DataCollection {
 
         // populate hashmaps
         for (CitizenshipApplication cApplication : sentAll) {
+            // add to sentByUUID
             sentByUUID.put(cApplication.uuid, cApplication);
-            sentByApplicant.get(cApplication.applicant).add(cApplication);
+            // add to sentByApplicant
+            sentByApplicant.computeIfAbsent(cApplication.applicant, v -> new ArrayList<>()).add(cApplication);
         }
 
         if (ConfigState.DebugLogging) {
@@ -122,6 +135,8 @@ public class CitizenshipApplication extends DataCollection {
 
     public String reason;
 
+    public long timeCreated = 0; // set in sent method
+
     public CitizenshipApplication(UUID uuid, UUID applicant, UUID toCountry) {
         this.uuid = uuid;
         this.applicant = applicant;
@@ -132,7 +147,6 @@ public class CitizenshipApplication extends DataCollection {
     public String toString() {
         PlayerProfile applicant = PlayerProfile.byUUID.get(this.applicant);
         return "CitizenApplication(%s, %s)"
-                .formatted(applicant != null ? applicant.username : null,
-                           this.uuid.toString());
+                .formatted(applicant != null ? applicant.username : null, String.valueOf(this.uuid));
     }
 }

@@ -27,7 +27,7 @@ public class ChatUtil {
     }
 
     public static void sendNoPermissionMessage(CommandSender sender, String command, String permission) {
-        sendPrefixedMessage(sender, "§cYou do not have permission to run §f" + command + "§c! §8(" + permission + ")");
+        sendPrefixedMessage(sender, "§cYou do not have permission to do §f" + command + "§c! §8(" + permission + ")");
     }
 
     // console
@@ -40,6 +40,6 @@ public class ChatUtil {
     }
 
     public static void sendPrefixedPlayerOnlyErrorMessage(String command) {
-        ChatUtil.sendPrefixedLogErrorMessage("§cOnly players can run §f" + command + "§c!");
+        ChatUtil.sendPrefixedLogErrorMessage("§cOnly players can do §f" + command + "§c!");
     }
 }

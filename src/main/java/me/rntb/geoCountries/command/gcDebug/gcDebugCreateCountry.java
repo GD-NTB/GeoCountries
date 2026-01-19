@@ -1,11 +1,9 @@
-package me.rntb.geoCountries.command.debug;
+package me.rntb.geoCountries.command.gcDebug;
 
 import me.rntb.geoCountries.data.Country;
-import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -26,18 +24,11 @@ public class gcDebugCreateCountry {
             return;
         }
 
-        Player player = (Player) sender;
-        PlayerProfile playerProfile = PlayerProfile.byUUID.get(player.getUniqueId());
-
         Country newCountry = new Country(UUID.randomUUID(), countryName);
-        newCountry.leader = playerProfile.uuid;
-        newCountry.citizens.add(playerProfile.uuid);
+        newCountry.leader = null;
 
         // create country
         Country.addNew(newCountry);
-
-        // set player citizenship and rank
-        playerProfile.setCitizenship(newCountry, PlayerProfile.PlayerRank.LEADER);
 
         ChatUtil.sendPrefixedMessage(sender, "§aCreated country §f" + countryName + "§a!");
         ChatUtil.broadcastPrefixedMessage("§6A new country §f" + countryName + "§6 has just been created!");

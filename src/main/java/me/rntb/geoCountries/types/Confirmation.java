@@ -2,7 +2,6 @@ package me.rntb.geoCountries.types;
 
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.config.ConfigState;
-import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
@@ -61,9 +60,7 @@ public class Confirmation {
         timeoutTasks.remove(uuid);
 
         // cancel whatever was going to use the confirmation
-        if (stopWaitingEvent != StopWaitingEvent.CONFIRMED) {
-            CitizenshipApplication.cancel(CitizenshipApplication.openByApplicant.get(uuid), true);
-        }
+        // ---
 
         // send appropriate message
         Player player = Bukkit.getPlayer(uuid);

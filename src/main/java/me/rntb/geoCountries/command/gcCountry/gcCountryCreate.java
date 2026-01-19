@@ -15,8 +15,7 @@ public class gcCountryCreate {
 
     public static void onCommand(CommandSender sender,  String[] args) {
         Player player = (Player) sender;
-        UUID playerUUID = player.getUniqueId();
-        PlayerProfile pd = PlayerProfile.byUUID.get(playerUUID);
+        PlayerProfile pd = PlayerProfile.get(player);
 
         // already has citizenship
         if (pd.hasCitizenship()) {
@@ -50,7 +49,7 @@ public class gcCountryCreate {
     private static void onConfirm(CommandSender sender,  String[] args) {
         String countryName = args[0];
         Player player = (Player) sender;
-        PlayerProfile playerProfile = PlayerProfile.byUUID.get(player.getUniqueId());
+        PlayerProfile playerProfile = PlayerProfile.get(player);
 
         Country newCountry = new Country(UUID.randomUUID(), countryName);
         newCountry.leader = playerProfile.uuid;

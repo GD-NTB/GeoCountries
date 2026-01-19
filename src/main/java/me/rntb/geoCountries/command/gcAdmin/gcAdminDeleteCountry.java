@@ -1,9 +1,12 @@
-package me.rntb.geoCountries.command.admin;
+package me.rntb.geoCountries.command.gcAdmin;
 
 import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 
+// todo: confirm
 public class gcAdminDeleteCountry {
 
     public static void onCommand(CommandSender sender, String[] args) {
@@ -19,6 +22,16 @@ public class gcAdminDeleteCountry {
             return;
         }
 
+        // start waiting for confirm
+        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+                                  new Confirmation(gcAdminDeleteCountry::onConfirm,
+                                          sender,
+                                          new String[] { countryName }),
+                                  true);
+    }
+
+    private static void onConfirm(CommandSender sender, String[] args) {
+        Country country = Country.byName.get(args[0]);
         Country.delete(country);
 
         ChatUtil.sendPrefixedMessage(sender, "§aDeleted country!");

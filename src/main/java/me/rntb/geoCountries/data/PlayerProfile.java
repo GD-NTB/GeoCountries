@@ -38,6 +38,10 @@ public class PlayerProfile extends DataCollection {
         }
     }
 
+    public static PlayerProfile get(Player player) {
+        return byUUID.get(player.getUniqueId());
+    }
+
     public static void init() {
         all = readFromFile(FILE_PATH, DISPLAY_NAME, new TypeToken<ArrayList<PlayerProfile>>() {}.getType());
         if (all == null) {
@@ -72,6 +76,8 @@ public class PlayerProfile extends DataCollection {
 
         byUsername.put(player.username, player);
         byUUID.put(player.uuid, player);
+
+        player.timeCreated = System.currentTimeMillis();
     }
 
     public static void delete(PlayerProfile player) {
@@ -81,8 +87,8 @@ public class PlayerProfile extends DataCollection {
             c.citizens.remove(player.uuid);
         }
 
-        byUsername.remove(player.username, player);
-        byUUID.remove(player.uuid, player);
+        byUsername.remove(player.username);
+        byUUID.remove(player.uuid);
 
         delete(player, all, DISPLAY_NAME);
     }
@@ -98,13 +104,14 @@ public class PlayerProfile extends DataCollection {
         return me.rntb.geoCountries.data.Country.byUUID.get(this.citizenship);
     }
     public void setCitizenship(UUID country, PlayerRank rank) {
-        this.citizenship = country; this.rank = rank;
+        this.citizenship = country;
+        setRank(rank);
     }
     public void setCitizenship(Country country, PlayerRank rank) {
-        this.setCitizenship(country.uuid, rank);
+        setCitizenship(country.uuid, rank);
     }
     public void clearCitizenship() {
-        this.setCitizenship((UUID) null, PlayerRank.NONE);
+        setCitizenship((UUID) null, PlayerRank.NONE);
     }
     public boolean hasCitizenship() {
         return this.citizenship != null;
@@ -133,11 +140,58 @@ public class PlayerProfile extends DataCollection {
     public int getRankLevel() {
         return this.rank.ordinal();
     }
-    public void setRank(PlayerRank rank) {
-        this.rank = rank;
-        if (rank == PlayerRank.NONE)
+    public void setRank(PlayerRank newRank) {
+        // if no change, escape
+        if (this.rank == newRank)
+            return;
+
+        Country country = Country.byUUID.get(this.citizenship);
+        // if not part of country, dont do anything except set to NONE
+        if (country == null) {
+            this.rank = PlayerRank.NONE;
+            return;
+        }
+
+        // if demoting completely, remove rank and escape
+        if (newRank == PlayerRank.NONE) {
+            // remove from citizens list if needed
+            if (this.uuid.equals(country.leader)) {
+                country.setLeader(null);
+            }
+
+            country.removeCitizen(this);
+
             this.citizenship = null;
+            this.rank = PlayerRank.NONE;
+            return;
+        }
+
+        // upon gaining any kind of citizenship, cancel all previous applications
+        CitizenshipApplication.deleteAllSentByApplicant(this);
+
+        // set rank in country
+        if (newRank == PlayerRank.LEADER) {
+            country.setLeader(this);
+            this.rank = PlayerRank.LEADER;
+            return;
+        }
+
+        if (newRank == PlayerRank.CITIZEN) {
+            // if was leader, remove leadership
+            if (this.uuid.equals(country.leader)) {
+                country.setLeader(null); // or country.removeLeader()
+            }
+
+            country.addCitizen(this);
+            this.rank = PlayerRank.CITIZEN;
+            return;
+        }
+
+        // finally set rank property if didnt get set
+        this.rank = newRank;
     }
+
+    public long timeCreated = 0;
 
     public UUID getLeaderOf() {
         return rank == PlayerRank.LEADER ? this.citizenship : null;
@@ -151,6 +205,6 @@ public class PlayerProfile extends DataCollection {
     @Override
     public String toString() {
         return "PlayerProfile(%s, %s)"
-                .formatted(this.username, this.uuid.toString());
+                .formatted(this.username, String.valueOf(this.uuid));
     }
 }

@@ -1,4 +1,4 @@
-package me.rntb.geoCountries.command.debug;
+package me.rntb.geoCountries.command.gcDebug;
 
 import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -41,7 +41,8 @@ public class gcDebug extends SubCommand {
             default:
                 ChatUtil.sendPrefixedMessage(sender, """
                                                      §c§f%s§c is not a valid command for §f%s§c!
-                                                     Usage: §f%s [...]""".formatted(mode, this.DisplayName, this.DisplayName));
+                                                     Usage: §f%s [...]"""
+                                                     .formatted(mode, this.DisplayName, this.DisplayName));
                 return;
         }
     }

@@ -11,17 +11,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
 
-// todo: sent citizenship applications list
 // todo: received citizenship application list
 // todo: accept citizenship application
-// todo: you can only apply to one country at a time! make it not like that!!!
+// todo: use timeCreated fields in stuff
 // todo: sent citizenship application limit (config specified)
 // todo: a lot of autocompletes need better optimisation!!
 // todo: auto accept citizenship applications (/gc country settings [...])/
 // todo: applications should expire after a config defined amount of time
-// todo: renounce citizenship
 // todo: promote command
-// todo: if leader loses citizenship, next in command should inherit?
 // todo: update command (usernames)
 // todo: claiming (max chunks in config)
 public class GeoCountries extends JavaPlugin {

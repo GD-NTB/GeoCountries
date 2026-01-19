@@ -29,7 +29,8 @@ public class gcPurge extends SubCommand {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, """
                                                  §a%s
-                                                 Usage: §f%s [...]""".formatted(this.HelpString, this.DisplayName));
+                                                 Usage: §f%s [...]"""
+                                                 .formatted(this.HelpString, this.DisplayName));
             return;
         }
 
@@ -66,7 +67,8 @@ public class gcPurge extends SubCommand {
             default:
                 ChatUtil.sendPrefixedMessage(sender, """
                                                      §c§f%s§c is not a valid command for §f%s§c!
-                                                     Usage: §f%s [...]""".formatted(mode, this.DisplayName, this.DisplayName));
+                                                     Usage: §f%s [...]"""
+                                                     .formatted(mode, this.DisplayName, this.DisplayName));
                 return;
             }
         }

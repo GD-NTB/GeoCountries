@@ -16,7 +16,9 @@ gc.country.rename
 gc.country.dissolve
 gc.citizenship
 gc.citizenship.apply
-gc.citizenship.accept
+gc.citizenship.sent
+gc.citizenship.unsend
+gc.citizenship.renounce
 
 admin:
 gc.purge
@@ -25,3 +27,4 @@ gc.save
 gc.config
 gc.debug
 gc.admin
+gc.load

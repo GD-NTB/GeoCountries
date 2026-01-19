@@ -14,7 +14,7 @@ public class gcSubCommandTemplate extends SubCommand {
         this.HelpString = "Description here.";
         this.HelpPage   = """
                           §f/gc [...] [...]: §aLonger description here.
-                          §f> subcommand: §2(Countryless-only) §aDoes more things.""";
+                          §f> subcommand: §aDoes more things.""";
     }
 
     @Override
@@ -23,7 +23,8 @@ public class gcSubCommandTemplate extends SubCommand {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, """
                                                  §a%s
-                                                 1Usage: §f%s [...]""".formatted(this.HelpString, this.DisplayName));
+                                                 Usage: §f%s [...]"""
+                                                 .formatted(this.HelpString, this.DisplayName));
             return;
         }
 
@@ -34,7 +35,8 @@ public class gcSubCommandTemplate extends SubCommand {
             default:
                 ChatUtil.sendPrefixedMessage(sender, """
                                                      §c§f%s§c is not a valid command for §f%s§c!
-                                                     Usage: §f%s [...]""".formatted(mode, this.DisplayName, this.DisplayName));
+                                                     Usage: §f%s [...]"""
+                                                     .formatted(mode, this.DisplayName, this.DisplayName));
                 return;
         }
     }

@@ -32,14 +32,17 @@ public class gcCountryCitizens {
             sb.append("§cThere are no citizens of this country.\n");
         }
         else {
-            sb.append("§e%s§f has §e%d§f citizen:%s\n"
+            sb.append("§e%s§f has §e%d§f citizen%s:\n"
                       .formatted(country.name, citizenCount, StringUtil.LeadingS(citizenCount)));
             for (PlayerProfile citizen : country.citizensSortedByRank()) {
-                sb.append("§f> §a%s§f (§e%s§f)"
-                          .formatted(citizen.username, citizen.getRankString()));
+                if (citizen != null)
+                    sb.append("§f> §a%s§f (§e%s§f)\n"
+                              .formatted(citizen.username, citizen.getRankString()));
+                else
+                    sb.append("§f> §cNone\n");
             }
         }
-        sb.append("\n§6======================================");
-        ChatUtil.sendPrefixedMessage(sender, sb.toString());
+        sb.append("§6======================================");
+        ChatUtil.sendPrefixedMessage(sender, String.valueOf(sb));
     }
 }

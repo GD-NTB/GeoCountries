@@ -3,11 +3,9 @@ package me.rntb.geoCountries.command.gcCitizenship;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.types.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
-import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -23,13 +21,13 @@ public class gcCitizenshipApply {
         }
 
         Player player = (Player) sender;
-        PlayerProfile playerProfile = PlayerProfile.byUUID.get(player.getUniqueId());
+        PlayerProfile playerProfile = PlayerProfile.get(player);
 
         // if already has citizenship, escape
-//        if (playerProfile.hasCitizenship()) {
-//            ChatUtil.sendPrefixedMessage(sender, "§cYou can't apply for citizenship of country whilst being a citizen of another!");
-//            return;
-//        }
+        if (playerProfile.hasCitizenship()) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou can't apply for citizenship of country whilst being a citizen of another!");
+            return;
+        }
 
         String countryName = String.join(" ", args);
         Country toCountry = Country.byName.get(countryName);
@@ -47,8 +45,8 @@ public class gcCitizenshipApply {
             return;
         }
 
-        // if sent application to this country before, escape
-        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.uuid); // reuse variable
+        // if has pending application to this country, escape
+        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.uuid);
         if (cApplications != null && cApplications.stream().anyMatch(ca -> ca.toCountry.equals(toCountry.uuid))) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou already have a pending citizenship application to §f" + countryName + "§c!");
             return;
@@ -88,20 +86,7 @@ public class gcCitizenshipApply {
 
         cApplication.reason = responseClean;
 
-        ChatUtil.sendPrefixedMessage(sender, "§6Are you sure you want to send this citizenship application?");
-        // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
-                                  new Confirmation(gcCitizenshipApply::onConfirm,
-                                                   sender,
-                                                   new String[] { }),
-                                  true);
-    }
-
-    private static void onConfirm(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
-        UUID uuid = player.getUniqueId();
-        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(uuid);
-
+        // send application
         CitizenshipApplication.send(cApplication, true);
     }
 }
