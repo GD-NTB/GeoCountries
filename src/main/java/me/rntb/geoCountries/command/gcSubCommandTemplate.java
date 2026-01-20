@@ -14,7 +14,7 @@ public class gcSubCommandTemplate extends SubCommand {
         this.HelpString = "Description here.";
         this.HelpPage   = """
                           §f/gc [...] [...]: §aLonger description here.
-                          §f> subcommand: §aDoes more things.""";
+                          §f> subcommand: §2Does more things.""";
     }
 
     @Override

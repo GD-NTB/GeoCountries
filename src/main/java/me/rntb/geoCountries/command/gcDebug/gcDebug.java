@@ -14,7 +14,7 @@ public class gcDebug extends SubCommand {
         this.HelpString = "Debug commands for development.";
         this.HelpPage   = """
                           §f/gc debug [...]: §aUseful debug commands for plugin development.
-                          §f> createcountry [name]: §aCreates a test country.""";
+                          §f> createcountry [name]: §2Creates a test country.""";
     }
 
     @Override

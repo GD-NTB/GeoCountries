@@ -17,12 +17,12 @@ public class gcCountry extends SubCommand {
         this.HelpString = "Manages, edits, and views info about all countries.";
         this.HelpPage   = """
                           §f/gc country [...]: §aManage, edit, and view info about all countries.
-                          §f> citizens [country]: §aLists all citizens of a country, their rank, and how many there are.
-                          §f> create [name]: §aCreates a new country.
-                          §f> dissolve: §aDissolves (deletes) your country.;
-                          §f> info [country]: §aDisplays info about a particular country.
-                          §f> list: §aLists all countries on the server.
-                          §f> rename [name]: §aRenames your country.""";
+                          §f> citizens [country]: §2Lists all citizens of a country, their rank, and how many there are.
+                          §f> create [name]: §2Creates a new country.
+                          §f> dissolve: §2Dissolves (deletes) your country.;
+                          §f> info [country]: §2Displays info about a particular country.
+                          §f> list: §2Lists all countries on the server.
+                          §f> rename [name]: §2Renames your country.""";
                 }
 
     @Override

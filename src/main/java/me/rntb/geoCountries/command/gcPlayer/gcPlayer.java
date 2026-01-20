@@ -16,7 +16,7 @@ public class gcPlayer extends SubCommand {
         this.HelpString = "Manages and views information about players.";
         this.HelpPage   = """
                           §f/gc player [...]: §aManages and views information about players.
-                          §f> info [username]: §aDisplays info about a particular player.""";
+                          §f> info [username]: §2Displays info about a particular player.""";
     }
 
     @Override

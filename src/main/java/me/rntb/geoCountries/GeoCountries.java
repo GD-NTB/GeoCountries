@@ -11,7 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
 
-// todo: received citizenship application list
 // todo: accept citizenship application
 // todo: use timeCreated fields in stuff
 // todo: sent citizenship application limit (config specified)

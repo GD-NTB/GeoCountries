@@ -104,7 +104,24 @@ public class PlayerProfile extends DataCollection {
         return me.rntb.geoCountries.data.Country.byUUID.get(this.citizenship);
     }
     public void setCitizenship(UUID country, PlayerRank rank) {
+        UUID prevCountryUUID = this.citizenship;
+
+        // if removing player country
+        if (prevCountryUUID != null && !prevCountryUUID.equals(country)) {
+            Country prevCountry = Country.byUUID.get(prevCountryUUID);
+
+            if (prevCountry != null) {
+                prevCountry.removeCitizen(this);
+
+                if (this.uuid.equals(prevCountry.leader))
+                    prevCountry.setLeader(null);
+            }
+        }
+
+        // set citizenship
         this.citizenship = country;
+
+        // update rank
         setRank(rank);
     }
     public void setCitizenship(Country country, PlayerRank rank) {

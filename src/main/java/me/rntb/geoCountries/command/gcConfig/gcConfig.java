@@ -15,7 +15,7 @@ public class gcConfig extends SubCommand {
         this.HelpString = "Manages the plugin config.";
         this.HelpPage   = """
                           §f/gc config [...]: §aManages the plugin config file at config.yml.
-                          §f> reload: §aReloads the config and updates the plugin's state.""";
+                          §f> reload: §2Reloads the config and updates the plugin's state.""";
     }
 
     @Override

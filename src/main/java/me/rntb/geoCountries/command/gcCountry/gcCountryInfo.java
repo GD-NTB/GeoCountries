@@ -4,22 +4,35 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class gcCountryInfo {
 
     public static void onCommand(CommandSender sender,  String[] args) {
-        // validation check
+        Country country;
+        // if no args, get player country
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you want to get info of!");
-            return;
+            Player player = (Player) sender;
+            PlayerProfile playerProfile = PlayerProfile.get(player);
+            country = playerProfile.getCitizenship();
+            if (country == null) {
+                ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
+                                                     """
+                                                     §6========== COUNTRY INFO ==========
+                                                     §cYou do not have citizenship of any country.
+                                                     §cDo §f/gc country info [country]§c to get country info.
+                                                     §6=================================""");
+                return;
+            }
         }
-
-        String countryName = String.join(" ", args);
-
-        Country country = Country.byName.get(countryName);
-        if (country == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c does not exist!");
-            return;
+        // else get specific country
+        else {
+            String countryName = String.join(" ", args);
+            country = Country.byName.get(countryName);
+            if (country == null) {
+                ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c does not exist!");
+                return;
+            }
         }
 
         PlayerProfile leader = country.getLeader();

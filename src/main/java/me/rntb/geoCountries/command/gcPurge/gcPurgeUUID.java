@@ -9,15 +9,15 @@ import org.bukkit.command.CommandSender;
 public class gcPurgeUUID {
 
     public static void onCommand(CommandSender sender, String[] args) {
-        if (args.length == 1) {
+        if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou need to specify the UUID of the player as it appears in the data collections.");
             return;
         }
 
-        String uuid = args[1];
+        String uuid = args[0];
         PlayerProfile player = PlayerProfile.byUUIDString(uuid);
         if (player == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cUUID §f" + uuid + "§ is not a player's UUID!");
+            ChatUtil.sendPrefixedMessage(sender, "§UUID §f" + uuid + "§c could not be found!");
             return;
         }
 

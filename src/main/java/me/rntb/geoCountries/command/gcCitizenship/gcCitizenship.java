@@ -18,8 +18,11 @@ public class gcCitizenship extends SubCommand {
         this.HelpString = "Manages your citizenship and your country's citizens.";
         this.HelpPage   = """
                           §f/gc citizenship [...]§a: Manages your citizenship and your country's citizens.
-                          §f> apply: §aApplies for citizenship to a country.
-                          §f> accept: §aAccepts a citizenship application to your country.""";
+                          §f> apply: §2Applies for citizenship to a country.
+                          §f> received: §2Lists received citizenship applications to your country.
+                          §f> renounce: §2Renounces (gives up) citizenship of your country.
+                          §f> sent: §2Lists citizenship applications that you have sent.
+                          §f> unsend: §2Unsends a citizenship application that you previously sent.""";
     }
 
     @Override
@@ -73,6 +76,15 @@ public class gcCitizenship extends SubCommand {
                 gcCitizenshipRenounce.onCommand(sender, subArgs);
                 return;
 
+            // /gc citizenship received
+            case "received":
+                if (!sender.hasPermission("gc.citizenship.received")) {
+                    ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship received", "gc.citizenship.received");
+                    return;
+                }
+                gcCitizenshipReceived.onCommand(sender, subArgs);
+                return;
+
             // gc citizenship [xxx]
             default:
                 ChatUtil.sendPrefixedMessage(sender, """
@@ -87,7 +99,7 @@ public class gcCitizenship extends SubCommand {
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc citizen 1
-            case 1 -> Stream.of("apply", "renounce", "sent", "unsend").filter(x -> sender.hasPermission("gc.citizenship." + x)).toList();
+            case 1 -> Stream.of("apply", "received", "renounce", "sent", "unsend").filter(x -> sender.hasPermission("gc.citizenship." + x)).toList();
             // gc citizen [...] 2
             case 2 ->
                 switch (args[0]) {

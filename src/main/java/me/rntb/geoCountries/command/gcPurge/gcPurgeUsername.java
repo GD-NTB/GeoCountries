@@ -9,15 +9,15 @@ import org.bukkit.command.CommandSender;
 public class gcPurgeUsername {
 
     public static void onCommand(CommandSender sender, String[] args) {
-        if (args.length == 1) {
+        if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou need to specify the username of the player as it appears in the data collections.");
             return;
         }
 
-        String username = args[1];
+        String username = args[0];
         PlayerProfile player = PlayerProfile.byUsername.get(username);
         if (player == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cUsername §f" + username + "§c is not a player's username!");
+            ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + username + "§c could not be found!");
             return;
         }
 

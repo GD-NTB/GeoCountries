@@ -16,6 +16,7 @@ public class CitizenshipApplication extends DataCollection {
     public static ArrayList<CitizenshipApplication> sentAll = null;
     public static Map<UUID, CitizenshipApplication> sentByUUID = new HashMap<>();
     public static Map<UUID, ArrayList<CitizenshipApplication>> sentByApplicant = new HashMap<>();
+    public static Map<UUID, ArrayList<CitizenshipApplication>> sentByToCountry = new HashMap<>();
 
     // list of all applications currently being written
     public static ArrayList<CitizenshipApplication> openAll = new ArrayList<>();
@@ -59,6 +60,8 @@ public class CitizenshipApplication extends DataCollection {
         sentByUUID.put(cApplication.uuid, cApplication);
         // add to sentByApplicant
         sentByApplicant.computeIfAbsent(cApplication.applicant, v -> new ArrayList<>()).add(cApplication);
+        // add to sentByToCountry
+        sentByToCountry.computeIfAbsent(cApplication.toCountry, v -> new ArrayList<>()).add(cApplication);
 
         cApplication.timeCreated = System.currentTimeMillis();
 
@@ -69,14 +72,26 @@ public class CitizenshipApplication extends DataCollection {
             ChatUtil.sendPrefixedMessage(cApplication.getApplicant().getOnlinePlayer(), "§aSent citizenship application to country §f%s§a!"
                                                                                         .formatted(cApplication.getToCountry().name));
     }
+    // delete a sent application
     public static void deleteSent(CitizenshipApplication cApplication) {
+        // remove from sentByUUID
+        sentByUUID.remove(cApplication.uuid);
+        // remove from sentByApplicant
         List<CitizenshipApplication> cApplicationsSent = sentByApplicant.get(cApplication.applicant);
         if (cApplicationsSent != null) {
             cApplicationsSent.remove(cApplication);
+            // delete entry if list is now empty
             if (cApplicationsSent.isEmpty())
                 sentByApplicant.remove(cApplication.applicant);
         }
-        sentByUUID.remove(cApplication.uuid);
+        // remove from sentByToCountry
+        cApplicationsSent = sentByToCountry.get(cApplication.toCountry);
+        if (cApplicationsSent != null) {
+            cApplicationsSent.remove(cApplication);
+            // delete entry if list is now empty
+            if (cApplicationsSent.isEmpty())
+                sentByApplicant.remove(cApplication.toCountry);
+        }
 
         delete(cApplication, sentAll, DISPLAY_NAME);
 
@@ -89,7 +104,8 @@ public class CitizenshipApplication extends DataCollection {
             return;
         for (CitizenshipApplication cApplication : new ArrayList<>(cApplicationsSent)) {
             CitizenshipApplication.deleteSent(cApplication);
-        }}
+        }
+    }
     // todo: Accept()/Reject()
 
     public static void init() {
@@ -106,6 +122,9 @@ public class CitizenshipApplication extends DataCollection {
             sentByUUID.put(cApplication.uuid, cApplication);
             // add to sentByApplicant
             sentByApplicant.computeIfAbsent(cApplication.applicant, v -> new ArrayList<>()).add(cApplication);
+            // add to sentByToCountry
+            sentByToCountry.computeIfAbsent(cApplication.toCountry, v -> new ArrayList<>()).add(cApplication);
+
         }
 
         if (ConfigState.DebugLogging) {

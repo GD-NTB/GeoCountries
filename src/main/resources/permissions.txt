@@ -19,6 +19,7 @@ gc.citizenship.apply
 gc.citizenship.sent
 gc.citizenship.unsend
 gc.citizenship.renounce
+gc.citizenship.received
 
 admin:
 gc.purge

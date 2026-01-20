@@ -18,9 +18,9 @@ public class gcAdmin extends SubCommand {
         this.HelpString = "Useful admin commands.";
         this.HelpPage   = """
                           §f/gc debug [...]: §aUseful admin commands for managing the server.
-                          §f> deletecountry [name]: §aDelete a country from the server.
-                          §f> setplayercountry [country] §aSet a player's country.
-                          §f> setplayerrank [username] [rank]: §aSet a player's rank.""";
+                          §f> deletecountry [name]: §2Delete a country from the server.
+                          §f> setplayercountry [country] §2Set a player's country.
+                          §f> setplayerrank [username] [rank]: §2Set a player's rank.""";
     }
 
     @Override

@@ -20,7 +20,7 @@ public class gcHelp extends SubCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         StringBuilder sb = new StringBuilder(ChatUtil.newlineIfPrefixIsEmpty() +
-                                            "§6========== HELP ==========\n");
+                                             "§6========== HELP ==========\n");
         // /gc help
         if (args.length == 0) {
             List<SubCommand> subCommands;

@@ -16,11 +16,11 @@ public class gcPurge extends SubCommand {
         this.HelpPage   = """
                           §f/gc purge [...]: §aPurges (deletes) specific data within the plugin's persistent storage, such as data collections, etc.
                           §cShould be used very very rarely!
-                          §f> citizenshipapplication: §aPurges all citizenship applications in memory.
-                          §f> country: §aPurges all Country data collections.
-                          §f> playerprofile: §aPurges all PlayerProfile data collections.
-                          §f> uuid [uuid]: §aPurges a PlayerProfile by UUID.;
-                          §f> username [username]: §aPurges a PlayerProfile by username.""";
+                          §f> citizenshipapplication: §2Purges all citizenship applications in memory.
+                          §f> country: §2Purges all Country data collections.
+                          §f> playerprofile: §2aPurges all PlayerProfile data collections.
+                          §f> uuid [uuid]: §2Purges a PlayerProfile by UUID.;
+                          §f> username [username]: §2Purges a PlayerProfile by username.""";
     }
 
     @Override

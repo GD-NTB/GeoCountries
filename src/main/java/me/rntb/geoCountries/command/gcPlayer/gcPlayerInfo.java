@@ -4,34 +4,38 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class gcPlayerInfo {
 
     public static void onCommand(CommandSender sender,  String[] args) {
-        // validation check
+        PlayerProfile playerProfile;
+        // if no args, get player profile
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the player you want to get info of!");
-            return;
+            Player player = (Player) sender;
+            playerProfile = PlayerProfile.get(player);
         }
-
-        PlayerProfile player = PlayerProfile.byUsername.get(args[0]);
-        if (player == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + args[0] + "§c could not be found!");
-            return;
+        // else get specific player info
+        else {
+            playerProfile = PlayerProfile.byUsername.get(args[0]);
+            if (playerProfile == null) {
+                ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + args[0] + "§c could not be found!");
+                return;
+            }
         }
 
         StringBuilder sb = new StringBuilder(ChatUtil.newlineIfPrefixIsEmpty() +
-                "§6========== PLAYER INFO ==========\n");
-        sb.append("§a").append(player.username).append("\n");
+                                             "§6========== PLAYER INFO ==========\n");
+        sb.append("§a").append(playerProfile.username).append("\n");
 
         // show rank of player in country
-        Country country = player.getCitizenship();
+        Country country = playerProfile.getCitizenship();
 
-        if (player.rank == PlayerProfile.PlayerRank.NONE) {
+        if (playerProfile.rank == PlayerProfile.PlayerRank.NONE) {
             sb.append("§f> §cStateless");
         }
         else {
-            sb.append("§f> §e").append(player.getRankString()).append("§f of §e").append(country != null ? country.name : "§cNone");
+            sb.append("§f> §e").append(playerProfile.getRankString()).append("§f of §e").append(country != null ? country.name : "§cNone");
         }
 
         sb.append("\n§6================================");
