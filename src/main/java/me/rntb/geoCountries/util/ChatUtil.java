@@ -1,16 +1,21 @@
 package me.rntb.geoCountries.util;
 
 import me.rntb.geoCountries.config.ConfigState;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static org.bukkit.Bukkit.getServer;
 
+// todo: broadcast in country
 public class ChatUtil {
 
     public static String newlineIfPrefixIsEmpty() {
         return ConfigState.ChatPrefix.length() <= 2 ? "" : "\n"; // empty = '', so length = 2
+    }
+    public static Component newlineIfPrefixIsEmptyComponent() {
+        return ChatUtil.newlineIfPrefixIsEmpty().isEmpty() ? Component.empty() : Component.text(ChatUtil.newlineIfPrefixIsEmpty());
     }
 
     // all
@@ -19,11 +24,17 @@ public class ChatUtil {
             sendPrefixedMessage(player, message);
     }
 
+
     // player
     public static void sendPrefixedMessage(CommandSender sender, String message) {
         if (sender == null)
             return;
         sender.sendMessage(ConfigState.ChatPrefix + message);
+    }
+    public static void sendPrefixedMessage(CommandSender sender, Component message) {
+        if (sender == null)
+            return;
+        sender.sendMessage(ConfigState.ChatPrefixComponent.append(message));
     }
 
     public static void sendNoPermissionMessage(CommandSender sender, String command, String permission) {

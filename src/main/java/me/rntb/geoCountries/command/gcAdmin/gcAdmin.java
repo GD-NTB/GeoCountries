@@ -73,10 +73,9 @@ public class gcAdmin extends SubCommand {
                 switch (args[0]) {
                     // /gc admin deletecountry [country]
                     case "deletecountry" -> sender.hasPermission("gc.admin") ? Country.allAsNames(true) : List.of();
-                    // /gc admin setplayercountry [players]
-                    case "setplayercountry" -> sender.hasPermission("gc.admin") ? PlayerProfile.allAsUsernames(true) : List.of();
                     // /gc admin setplayerrank [players]
-                    case "setplayerrank" -> sender.hasPermission("gc.admin") ? PlayerProfile.allAsUsernames(true) : List.of();
+                    // /gc admin setplayercountry [players]
+                    case "setplayerrank", "setplayercountry" -> sender.hasPermission("gc.admin") ? PlayerProfile.allAsUsernames(true) : List.of();
                     // /gc admin [...]
                     default -> List.of();
                 };

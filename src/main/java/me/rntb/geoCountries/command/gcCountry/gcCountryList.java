@@ -25,7 +25,7 @@ public class gcCountryList {
                                      citizens != 0 ? citizens : "§c0"));
             }
         }
-        sb.append("§6===============================");
+        sb.append("§6================================");
         ChatUtil.sendPrefixedMessage(sender, String.valueOf(sb));
     }
 }

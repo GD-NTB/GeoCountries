@@ -6,7 +6,6 @@ import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 
-// todo: confirm
 public class gcAdminDeleteCountry {
 
     public static void onCommand(CommandSender sender, String[] args) {

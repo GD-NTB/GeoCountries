@@ -30,10 +30,12 @@ public class Country extends DataCollection {
             return;
         }
 
-        // populate hashmaps
+        // reset and populate hashmaps
+        byUUID.clear();
+        byName.clear();
         for (Country country : all) {
-            byName.put(country.name, country);
             byUUID.put(country.uuid, country);
+            byName.put(country.name, country);
         }
 
         if (ConfigState.DebugLogging)
@@ -110,7 +112,10 @@ public class Country extends DataCollection {
 
     public ArrayList<UUID> citizens = new ArrayList<>();
     public List<PlayerProfile> citizensSortedByRank() {
-        return this.citizens.stream().map(uuid -> PlayerProfile.byUUID.get(uuid)).sorted(Comparator.comparing(PlayerProfile::getRankLevel)).toList().reversed();
+        return this.citizens.stream()
+                            .map(uuid -> PlayerProfile.byUUID.get(uuid))
+                            .sorted(Comparator.comparing(PlayerProfile::getRankLevel))
+                            .toList().reversed();
     }
     public int citizenCount() {
         return citizens.size();

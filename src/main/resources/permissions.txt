@@ -20,6 +20,8 @@ gc.citizenship.sent
 gc.citizenship.unsend
 gc.citizenship.renounce
 gc.citizenship.received
+gc.citizenship.accept
+gc.citizenship.reject
 
 admin:
 gc.purge

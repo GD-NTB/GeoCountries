@@ -50,7 +50,9 @@ public class gcConfig extends SubCommand {
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc config 1
-            case 1 -> Stream.of("reload").filter(x -> sender.hasPermission("gc.config." + x)).toList();
+            case 1 -> Stream.of("reload")
+                      .filter(x -> sender.hasPermission("gc.config." + x))
+                      .toList();
             default -> List.of();
         };
     }

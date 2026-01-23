@@ -1,8 +1,10 @@
-config-version: 0.0201 # do not change
+config-version: 0.0202 # do not change
+
+debug-logging: false # more logging in server console for debugging
 
 chat-prefix: '§8[GeoCountries] ' # text before every plugin chat and console message
 
-debug-logging: false # more logging in server console for debugging
+sound-effects: true # play notification sound effects (on war declared, chat notif, etc)
 
 chat-response-min: 1 # min allowed length of chat message when player asked to type in chat
 chat-response-max: 150  # max allowed length of chat message when player asked to type in chat

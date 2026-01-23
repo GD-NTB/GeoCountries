@@ -29,10 +29,12 @@ public class gcCountry extends SubCommand {
     public void onCommand(CommandSender sender, String[] args) {
         // /gc country
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, """
-                                                 §a%s
-                                                 Usage: §f%s [...]"""
-                                                 .formatted(this.HelpString, this.DisplayName));
+            // do /gc country info
+                if (!sender.hasPermission("gc.country.info")) {
+                    ChatUtil.sendNoPermissionMessage(sender, "/gc country info", "gc.country.info");
+                    return;
+                }
+                gcCountryInfo.onCommand(sender, args);
             return;
         }
 
@@ -40,7 +42,7 @@ public class gcCountry extends SubCommand {
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
         // find and route to proper method
         switch (mode) {
-            // gc country create
+            // /gc country create
             case "create":
                 // console cant run
                 if (!(sender instanceof Player)) {
@@ -54,7 +56,7 @@ public class gcCountry extends SubCommand {
                 gcCountryCreate.onCommand(sender, subArgs);
                 return;
 
-            // gc country dissolve
+            // /gc country dissolve
             case "dissolve":
                 // console cant run
                 if (!(sender instanceof Player)) {
@@ -68,6 +70,7 @@ public class gcCountry extends SubCommand {
                 gcCountryDissolve.onCommand(sender, subArgs);
                 return;
 
+            // /gc country rename
             case "rename":
                 // console cant run
                 if (!(sender instanceof Player)) {
@@ -81,7 +84,7 @@ public class gcCountry extends SubCommand {
                 gcCountryRename.onCommand(sender, subArgs);
                 return;
 
-            // gc country list
+            // /gc country list
             case "list":
                 if (!sender.hasPermission("gc.country.list")) {
                     ChatUtil.sendNoPermissionMessage(sender, "/gc country list", "gc.country.list");
@@ -90,7 +93,7 @@ public class gcCountry extends SubCommand {
                 gcCountryList.onCommand(sender, subArgs);
                 return;
 
-            // gc country info
+            // /gc country info
             case "info":
                 if (!sender.hasPermission("gc.country.info")) {
                     ChatUtil.sendNoPermissionMessage(sender, "/gc country info", "gc.country.info");
@@ -99,7 +102,7 @@ public class gcCountry extends SubCommand {
                 gcCountryInfo.onCommand(sender, subArgs);
                 return;
 
-            // gc country citizens
+            // /gc country citizens
             case "citizens":
                 if (!sender.hasPermission("gc.country.citizens")) {
                     ChatUtil.sendNoPermissionMessage(sender, "/gc country citizens", "gc.country.citizens");
@@ -108,7 +111,7 @@ public class gcCountry extends SubCommand {
                 gcCountryCitizens.onCommand(sender, subArgs);
                 return;
 
-            // gc country [xxx]
+            // /gc country [xxx]
             default:
                 ChatUtil.sendPrefixedMessage(sender, """
                                                      §c§f%s§c is not a valid command for §f%s§c!
@@ -122,7 +125,9 @@ public class gcCountry extends SubCommand {
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch(args.length) {
             // /gc country 1
-            case 1 -> Stream.of("citizens", "create", "dissolve", "info", "list", "rename").filter(x -> sender.hasPermission("gc.country." + x)).toList();
+            case 1 -> Stream.of("citizens", "create", "dissolve", "info", "list", "rename")
+                      .filter(x -> sender.hasPermission("gc.country." + x))
+                      .toList();
             // gc country [...] 2
             case 2 ->
                 switch (args[0]) {

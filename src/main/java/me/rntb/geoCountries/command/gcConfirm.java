@@ -14,7 +14,7 @@ public class gcConfirm extends SubCommand {
         super(displayName, requiredPermission, consoleCanUse);
         this.HelpString = "Confirms a command or action.";
         this.HelpPage   = """
-                          §f/gc confirm: §aConfirms the last command/action you were asked to type §f/gc confirm§a for.""";
+                          §f/gc confirm: §aConfirms the last command/action you were asked to confirm.""";
     }
 
     @Override

@@ -51,6 +51,8 @@ permissions:
       gc.citizenship.unsend: true
       gc.citizenship.renounce: true
       gc.citizenship.received: true
+      gc.citizenship.accept: true
+      gc.citizenship.reject: true
 
   # -------------------- ADMIN --------------------
   gc.group.admin:

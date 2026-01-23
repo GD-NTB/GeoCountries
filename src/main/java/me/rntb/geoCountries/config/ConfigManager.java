@@ -2,6 +2,7 @@ package me.rntb.geoCountries.config;
 
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.util.ChatUtil;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 
 // when editing config options, update readStateFromFile and writeStateToFile methods
@@ -9,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class ConfigManager {
 
     private static FileConfiguration config;
+    private static final LegacyComponentSerializer legacySerialisation = LegacyComponentSerializer.legacySection();
 
     public static void init() {
         GeoCountries.self.saveResource("config.yml", false); // create from resources/config.yml if not exist
@@ -53,8 +55,10 @@ public class ConfigManager {
     }
 
     private static void readStateFromFile() {
-        ConfigState.ChatPrefix = config.getString("chat-prefix") + "§r";
         ConfigState.DebugLogging = config.getBoolean("debug-logging");
+        ConfigState.ChatPrefix = config.getString("chat-prefix") + "§r";
+        ConfigState.ChatPrefixComponent = legacySerialisation.deserialize(ConfigState.ChatPrefix);
+        ConfigState.SoundEffects = config.getBoolean("sound-effects");
         ConfigState.ChatResponseMin = config.getInt("chat-response-min");
         ConfigState.ChatResponseMax = config.getInt("chat-response-max");
         ConfigState.CountryNameMin = config.getInt("country-name-min");
@@ -62,8 +66,9 @@ public class ConfigManager {
     }
 
     private static void writeStateToFile() {
-        config.set("chat-prefix", ConfigState.ChatPrefix.replace("§r", ""));
         config.set("debug-logging", ConfigState.DebugLogging);
+        config.set("chat-prefix", ConfigState.ChatPrefix.replace("§r", ""));
+        config.set("sound-effects", ConfigState.SoundEffects);
         config.set("chat-response-min", ConfigState.ChatResponseMin);
         config.set("chat-response-max", ConfigState.ChatResponseMax);
         config.set("country-name-min", ConfigState.CountryNameMin);

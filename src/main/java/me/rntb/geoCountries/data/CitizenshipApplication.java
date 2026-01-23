@@ -3,7 +3,9 @@ package me.rntb.geoCountries.data;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -106,7 +108,58 @@ public class CitizenshipApplication extends DataCollection {
             CitizenshipApplication.deleteSent(cApplication);
         }
     }
-    // todo: Accept()/Reject()
+    // accept a sent application
+    public static void accept(CitizenshipApplication cApplication, boolean sendMessageToApplicant) {
+        // give citizenship to applicant
+        PlayerProfile playerProfile = cApplication.getApplicant();
+        // just in case
+        if (playerProfile.rank != PlayerProfile.PlayerRank.NONE) {
+            deleteSent(cApplication);
+            return;
+        }
+        playerProfile.setCitizenship(cApplication.toCountry, PlayerProfile.PlayerRank.CITIZEN);
+
+        // delete sent application
+        deleteSent(cApplication);
+
+        if (ConfigState.DebugLogging)
+            ChatUtil.sendPrefixedLogMessage("Accepted sent CitizenshipApplication");
+
+        if (sendMessageToApplicant) {
+            Country country = Country.byUUID.get(cApplication.toCountry);
+            Player player = playerProfile.getOnlinePlayer();
+            ChatUtil.sendPrefixedMessage(player, """
+                                                 §6Your citizenship application was §aaccepted§6.
+                                                 You are now a citizen of §f""" + country.name + "§6!");
+            // play sound effect
+            SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        }
+    }
+    // reject a sent application
+    public static void reject(CitizenshipApplication cApplication, boolean sendMessageToApplicant) {
+        // give citizenship to applicant
+        PlayerProfile playerProfile = cApplication.getApplicant();
+        // just in case
+        if (playerProfile.rank != PlayerProfile.PlayerRank.NONE) {
+            deleteSent(cApplication);
+            return;
+        }
+        playerProfile.setCitizenship(cApplication.toCountry, PlayerProfile.PlayerRank.CITIZEN);
+
+        // delete sent application
+        deleteSent(cApplication);
+
+        if (ConfigState.DebugLogging)
+            ChatUtil.sendPrefixedLogMessage("Rejected sent CitizenshipApplication");
+
+        if (sendMessageToApplicant) {
+            Country country = Country.byUUID.get(cApplication.toCountry);
+            Player player = playerProfile.getOnlinePlayer();
+            ChatUtil.sendPrefixedMessage(player, "§6Your citizenship application to §f" + country.name + "§6 was §crejected§6.");
+            // play sound effect
+            SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        }
+    }
 
     public static void init() {
         sentAll = readFromFile(FILE_PATH, DISPLAY_NAME, new TypeToken<ArrayList<CitizenshipApplication>>() {}.getType());
@@ -115,8 +168,14 @@ public class CitizenshipApplication extends DataCollection {
                                             .formatted(FILE_PATH));
             return;
         }
+        openAll.clear();
 
-        // populate hashmaps
+        // reset and populate hashmaps
+        sentByUUID.clear();
+        sentByApplicant.clear();
+        sentByToCountry.clear();
+        openByUUID.clear();
+        openByApplicant.clear();
         for (CitizenshipApplication cApplication : sentAll) {
             // add to sentByUUID
             sentByUUID.put(cApplication.uuid, cApplication);

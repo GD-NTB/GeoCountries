@@ -37,7 +37,9 @@ public class gcCitizenshipUnsend {
             return;
         }
 
-        CitizenshipApplication cApplication = cApplications.stream().filter(ca -> ca.toCountry.equals(toCountry.uuid)).findFirst().orElse(null);
+        CitizenshipApplication cApplication = cApplications.stream()
+                                                           .filter(ca -> ca.toCountry.equals(toCountry.uuid))
+                                                           .findFirst().orElse(null);
 
         // if havent sent application to this country, escape
         if (cApplication == null) {

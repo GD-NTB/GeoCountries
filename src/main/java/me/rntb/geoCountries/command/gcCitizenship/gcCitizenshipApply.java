@@ -9,7 +9,6 @@ import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class gcCitizenshipApply {
@@ -23,11 +22,11 @@ public class gcCitizenshipApply {
         Player player = (Player) sender;
         PlayerProfile playerProfile = PlayerProfile.get(player);
 
-        // if already has citizenship, escape
-        if (playerProfile.hasCitizenship()) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou can't apply for citizenship of country whilst being a citizen of another!");
-            return;
-        }
+//        // if already has citizenship, escape
+//        if (playerProfile.hasCitizenship()) {
+//            ChatUtil.sendPrefixedMessage(sender, "§cYou can't apply for citizenship of country whilst being a citizen of another!");
+//            return;
+//        }
 
         String countryName = String.join(" ", args);
         Country toCountry = Country.byName.get(countryName);
@@ -46,11 +45,11 @@ public class gcCitizenshipApply {
         }
 
         // if has pending application to this country, escape
-        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.uuid);
-        if (cApplications != null && cApplications.stream().anyMatch(ca -> ca.toCountry.equals(toCountry.uuid))) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou already have a pending citizenship application to §f" + countryName + "§c!");
-            return;
-        }
+//        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.uuid);
+//        if (cApplications != null && cApplications.stream().anyMatch(ca -> ca.toCountry.equals(toCountry.uuid))) {
+//            ChatUtil.sendPrefixedMessage(sender, "§cYou already have a pending citizenship application to §f" + countryName + "§c!");
+//            return;
+//        }
 
         // create new application
         UUID playerUUID = playerProfile.uuid;

@@ -14,7 +14,8 @@ public class gcDebug extends SubCommand {
         this.HelpString = "Debug commands for development.";
         this.HelpPage   = """
                           §f/gc debug [...]: §aUseful debug commands for plugin development.
-                          §f> createcountry [name]: §2Creates a test country.""";
+                          §f> createcountry [name]: §2Creates a test country.
+                          §f> soundtest: §2Plays a sound effect.""";
     }
 
     @Override
@@ -37,6 +38,11 @@ public class gcDebug extends SubCommand {
                 gcDebugCreateCountry.onCommand(sender, subArgs);
                 return;
 
+            // gc debug soundtest
+            case "soundtest":
+                gcDebugSoundTest.onCommand(sender, subArgs);
+                return;
+
             // gc debug [xxx]
             default:
                 ChatUtil.sendPrefixedMessage(sender, """
@@ -51,7 +57,7 @@ public class gcDebug extends SubCommand {
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc debug 1
-            case 1 -> sender.hasPermission("gc.debug") ? List.of("createcountry") : List.of();
+            case 1 -> sender.hasPermission("gc.debug") ? List.of("createcountry", "soundtest") : List.of();
             default -> List.of();
         };
     }

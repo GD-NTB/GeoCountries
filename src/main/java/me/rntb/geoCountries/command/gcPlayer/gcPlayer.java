@@ -21,12 +21,14 @@ public class gcPlayer extends SubCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // /gc country
+        // /gc player
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, """
-                                                 §a%s
-                                                 Usage: §f%s [...]"""
-                                                 .formatted(this.HelpString, this.DisplayName));
+            // go /gc player info
+            if (!sender.hasPermission("gc.player.info")) {
+                ChatUtil.sendNoPermissionMessage(sender, "/gc player info", "gc.player.info");
+                return;
+            }
+            gcPlayerInfo.onCommand(sender, args);
             return;
         }
 
@@ -57,7 +59,9 @@ public class gcPlayer extends SubCommand {
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc player 1
-            case 1 -> Stream.of("info").filter(x -> sender.hasPermission("gc.player." + x)).toList();
+            case 1 -> Stream.of("info")
+                      .filter(x -> sender.hasPermission("gc.player." + x))
+                      .toList();
             // /gc player [...] 2
             case 2 ->
                 switch (args[0]) {

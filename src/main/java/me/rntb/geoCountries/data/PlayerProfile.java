@@ -19,7 +19,8 @@ public class PlayerProfile extends DataCollection {
     // list of every player to have ever joined the server
     public static ArrayList<PlayerProfile> all = null;
     public static List<String> allAsUUIDStrings() {
-        return byUUID.keySet().stream().map(UUID::toString).toList();
+        return byUUID.keySet().stream()
+                              .map(UUID::toString).toList();
     }
     public static List<String> allAsUsernames(boolean alphabetical) {
         Stream<String> usernames = byUsername.keySet().stream();
@@ -50,7 +51,9 @@ public class PlayerProfile extends DataCollection {
             return;
         }
 
-        // populate hashmaps
+        // reset and populate hashmaps
+        byUUID.clear();
+        byUsername.clear();
         for (PlayerProfile player : all) {
             byUsername.put(player.username, player);
             byUUID.put(player.uuid, player);
@@ -183,8 +186,9 @@ public class PlayerProfile extends DataCollection {
             return;
         }
 
-        // upon gaining any kind of citizenship, cancel all previous applications
-        CitizenshipApplication.deleteAllSentByApplicant(this);
+        // upon gaining any kind of citizenship, cancel all previous citizenship applications
+        if (CitizenshipApplication.sentByApplicant.get(this.uuid) != null)
+            CitizenshipApplication.deleteAllSentByApplicant(this);
 
         // set rank in country
         if (newRank == PlayerRank.LEADER) {

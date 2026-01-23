@@ -21,8 +21,8 @@ public class gcCitizenshipRenounce {
         }
 
         // if leader of country, escape
-        if (pd.getLeaderOf() == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou can't renounce your citizenship if you are the leader of the country, you must either promote another player to leader (§f/gc country promote [player]§a) or dissolve the country (§f/gc country dissolve§a)!");
+        if (pd.rank == PlayerProfile.PlayerRank.LEADER) { // todo: this will eventually be replaced by a system where there is a chosen leader inheritor
+            ChatUtil.sendPrefixedMessage(sender, "§cYou can't renounce your citizenship if you are the leader of the country, you must either promote another player to leader (§f/gc country promote [player]§c) or dissolve the country (§f/gc country dissolve§c)!");
             return;
         }
 

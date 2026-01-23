@@ -25,11 +25,15 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
     public static Map<String, SubCommand> gcSubCommands = new HashMap<>();
 
     public static List<SubCommand> GetAllowedSubCommands(Player player) {
-        return gcSubCommands.values().stream().filter(sc -> player.hasPermission(sc.RequiredPermission)).toList();
+        return gcSubCommands.values().stream()
+                                     .filter(sc -> player.hasPermission(sc.RequiredPermission))
+                                     .toList();
     }
     public static List<String> GetAllowedSubCommandsAsStrings(Player player) {
-        return gcSubCommands.entrySet().stream().filter(sc -> player.hasPermission(sc.getValue().RequiredPermission))
-                                                .map(Map.Entry::getKey).sorted().toList();
+        return gcSubCommands.entrySet().stream()
+                                       .filter(sc -> player.hasPermission(sc.getValue().RequiredPermission))
+                                       .map(Map.Entry::getKey)
+                                       .sorted().toList();
     }
 
     public static void registerSubCommands() {
@@ -43,7 +47,7 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
         registerSubCommand("save", new gcSave("/gc save", "gc.save", true));
         registerSubCommand("config", new gcConfig("/gc config", "gc.config", true));
         registerSubCommand("citizenship", new gcCitizenship("/gc citizenship", "gc.citizenship", false));
-        registerSubCommand("debug", new gcDebug("/gc debug", "gc.debug", true));
+        registerSubCommand("debug", new gcDebug("/gc debug", "gc.debug", false));
         registerSubCommand("admin", new gcAdmin("/gc admin", "gc.admin", true));
         registerSubCommand("load", new gcLoad("/gc load", "gc.load", true));
     }
