@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 
 public class ConfigState {
 
+    public static boolean DebugMode = false;
     public static boolean DebugLogging = false;
 
     public static String ChatPrefix = "§8[GeoCountries] ";

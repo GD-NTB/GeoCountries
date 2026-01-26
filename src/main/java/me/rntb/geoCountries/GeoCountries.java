@@ -19,7 +19,6 @@ import java.nio.file.Path;
 // todo: auto accept citizenship applications (/gc country settings [...])/
 // todo: applications should expire after a config defined amount of time
 // todo: promote command
-// todo: update command (usernames)
 // todo: claiming (max chunks in config)
 public class GeoCountries extends JavaPlugin {
 

@@ -18,7 +18,7 @@ public class gcPurge extends SubCommand {
                           §cShould be used very very rarely!
                           §f> citizenshipapplication: §2Purges all citizenship applications in memory.
                           §f> country: §2Purges all Country data collections.
-                          §f> playerprofile: §2aPurges all PlayerProfile data collections.
+                          §f> playerprofile: §2Purges all PlayerProfile data collections.
                           §f> uuid [uuid]: §2Purges a PlayerProfile by UUID.;
                           §f> username [username]: §2Purges a PlayerProfile by username.""";
     }

@@ -32,7 +32,7 @@ public class gcHelp extends SubCommand {
             }
             // append help for each command
             for (SubCommand sc : subCommands) {
-                sb.append("§f").append(sc.DisplayName).append("§a: ").append(sc.HelpString).append("§f");
+                sb.append("§f").append(sc.DisplayName).append(": §a").append(sc.HelpString).append("§f");
                 sb.append("\n");
             }
         }

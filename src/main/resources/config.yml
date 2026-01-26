@@ -1,6 +1,7 @@
-config-version: 0.0202 # do not change
+config-version: 0.0204 # do not change
 
 debug-logging: false # more logging in server console for debugging
+debug-mode: false # disables several checks and features for easier plugin development
 
 chat-prefix: '§8[GeoCountries] ' # text before every plugin chat and console message
 

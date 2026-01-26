@@ -14,7 +14,7 @@ It is intended to work in a similar way to many Factions plugins.
 * Basic country management (`/gc country create`, `dissolve`, `rename`, etc)
 * Help command + subcommand help pages
 * Debug and admin commands
-* Citizenship system applications (2/3 done)
+* Citizenship system (applications, etc)
 * Command confirmation and player-plugin chat response system
 * Permission groups (`gc.group.essential`, `player`, `admin`)
 * Proper command autocomplete
@@ -39,7 +39,6 @@ It is intended to work in a similar way to many Factions plugins.
 // todo: auto accept citizenship applications (/gc country settings [...])/
 // todo: applications should expire after a config defined amount of time
 // todo: promote command
-// todo: update command (usernames)
 // todo: claiming (max chunks in config)
 ```
 

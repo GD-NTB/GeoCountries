@@ -16,7 +16,7 @@ public class ConfigManager {
         GeoCountries.self.saveResource("config.yml", false); // create from resources/config.yml if not exist
         config = GeoCountries.self.getConfig();
 
-        if (config.getDouble("config-version", 0) < 0.201)
+        if (config.getDouble("config-version", 0) < 0.204)
             updateConfig();
 
         readStateFromFile();
@@ -55,6 +55,7 @@ public class ConfigManager {
     }
 
     private static void readStateFromFile() {
+        ConfigState.DebugMode = config.getBoolean("debug-mode");
         ConfigState.DebugLogging = config.getBoolean("debug-logging");
         ConfigState.ChatPrefix = config.getString("chat-prefix") + "§r";
         ConfigState.ChatPrefixComponent = legacySerialisation.deserialize(ConfigState.ChatPrefix);
@@ -66,6 +67,7 @@ public class ConfigManager {
     }
 
     private static void writeStateToFile() {
+        config.set("debug-mode", ConfigState.DebugMode);
         config.set("debug-logging", ConfigState.DebugLogging);
         config.set("chat-prefix", ConfigState.ChatPrefix.replace("§r", ""));
         config.set("sound-effects", ConfigState.SoundEffects);
