@@ -4,7 +4,7 @@ A Minecraft plugin for Paper servers built from the ground-up which, helps playe
 It is intended to work in a similar way to many Factions plugins.
 \
 \
-![](https://cdn.discordapp.com/attachments/356394705447288832/1464122404115583111/reverse.gif?ex=697451bf&is=6973003f&hm=8d84891da65a4743cef970737934ca4acbb62635c16a021354c5334afcb177fd&)
+![](readme-stuff/globe.webp)
 
 ### Tested on Minecraft Versions:
 - 1.21.11 (LATEST)
@@ -31,7 +31,6 @@ It is intended to work in a similar way to many Factions plugins.
 
 ... Specifically:
 ```
-// todo: player renouncing citizenship needs owner to get notif, etc
 // todo: revoke citizenship command
 // todo: use timeCreated fields in stuff
 // todo: sent citizenship application limit (config specified)
