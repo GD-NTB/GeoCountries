@@ -4,6 +4,7 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -63,5 +64,8 @@ public class gcCountryCreate {
 
         ChatUtil.sendPrefixedMessage(sender, "§aCreated country §f" + countryName + "§a!");
         ChatUtil.broadcastPrefixedMessage("§6A new country §f" + countryName + "§6 has just been created!");
+
+        // play sound to creator
+        SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
     }
 }

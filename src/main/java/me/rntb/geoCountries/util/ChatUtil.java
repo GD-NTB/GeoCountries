@@ -1,10 +1,14 @@
 package me.rntb.geoCountries.util;
 
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.PlayerProfile;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 import static org.bukkit.Bukkit.getServer;
 
@@ -24,6 +28,23 @@ public class ChatUtil {
             sendPrefixedMessage(player, message);
     }
 
+    // country
+    public static void broadcastPrefixedMessageToCountry(Country country, String message, boolean playSound) {
+        for (UUID uuid : country.citizens) {
+            PlayerProfile playerProfile = PlayerProfile.byUUID.get(uuid);
+            if (ConfigState.DebugLogging && playerProfile == null) {
+                sendPrefixedLogMessage("Tried to broadcast message to UUID " + uuid + " without PlayerProfile.");
+                return;
+            }
+            Player player = playerProfile.getOnlinePlayer();
+
+            sendPrefixedMessage(playerProfile.getOnlinePlayer(), message);
+
+            // play sound
+            if (playSound)
+                SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        }
+    }
 
     // player
     public static void sendPrefixedMessage(CommandSender sender, String message) {

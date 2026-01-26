@@ -5,6 +5,9 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -70,9 +73,42 @@ public class CitizenshipApplication extends DataCollection {
         if (ConfigState.DebugLogging)
             ChatUtil.sendPrefixedLogMessage("Sent open CitizenshipApplication");
 
-        if (sendMessage)
-            ChatUtil.sendPrefixedMessage(cApplication.getApplicant().getOnlinePlayer(), "§aSent citizenship application to country §f%s§a!"
-                                                                                        .formatted(cApplication.getToCountry().name));
+        if (sendMessage) {
+            PlayerProfile applicant = cApplication.getApplicant();
+            ChatUtil.sendPrefixedMessage(applicant.getOnlinePlayer(), "§aSent citizenship application to country §f" + cApplication.getToCountry().name + "§a!");
+
+            // send notif to leader
+            Player leader = cApplication.getToCountry().getLeader().getOnlinePlayer();
+            // build message
+            TextComponent.Builder message = Component.text();
+            MiniMessage mm = MiniMessage.miniMessage();
+
+            message.append(mm.deserialize("<gold>Your country has received a citizenship application from <white>" + applicant.username + "<gold>!"))
+                   .append(Component.newline())
+                    // [Accept] button
+                    .append(mm.deserialize("<click:run_command:'/gc citizenship accept " + applicant.username + "'>" +
+                                           "<hover:show_text:'<gray>Click to accept <white>" + applicant.username + "</white><gray>\\'s application.</gray>'>" +
+                                           "<green><bold>[Accept]</bold></green>" +
+                                           "</hover></click>"
+                    ))
+                    .append(Component.text("  "))
+                    // [View] button
+                    .append(mm.deserialize("<click:run_command:'/gc citizenship received " + applicant.username + "'>" +
+                                           "<hover:show_text:'<dark_gray>Click to view <white>" + applicant.username + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                           "<white><bold>[View]</bold></white>" +
+                                           "</hover></click>"
+                    ))
+                    .append(Component.text("  "))
+                    // [Reject] button
+                    .append(mm.deserialize("<click:run_command:'/gc citizenship reject " + applicant.username + "'>" +
+                                           "<hover:show_text:'<gray>Click to reject <white>" + applicant.username + "</white><gray>\\'s application.</gray>'>" +
+                                           "<red><bold>[Reject]</bold></red>" +
+                                           "</hover></click>"));
+            // send message to leader
+            ChatUtil.sendPrefixedMessage(leader, message.build());
+            // play sound to leader
+            SoundUtil.PlaySound(leader, SoundUtil.SoundEffect.CHAT_NOTIF);
+        }
     }
     // delete a sent application
     public static void deleteSent(CitizenshipApplication cApplication) {
@@ -137,14 +173,13 @@ public class CitizenshipApplication extends DataCollection {
     }
     // reject a sent application
     public static void reject(CitizenshipApplication cApplication, boolean sendMessageToApplicant) {
-        // give citizenship to applicant
+        // get applicant
         PlayerProfile playerProfile = cApplication.getApplicant();
         // just in case
         if (playerProfile.rank != PlayerProfile.PlayerRank.NONE) {
             deleteSent(cApplication);
             return;
         }
-        playerProfile.setCitizenship(cApplication.toCountry, PlayerProfile.PlayerRank.CITIZEN);
 
         // delete sent application
         deleteSent(cApplication);

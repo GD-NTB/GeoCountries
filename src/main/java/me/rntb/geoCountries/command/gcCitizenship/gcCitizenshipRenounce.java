@@ -4,6 +4,7 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -42,5 +43,11 @@ public class gcCitizenshipRenounce {
         ChatUtil.sendPrefixedMessage(sender, "§aRenounced your citizenship of §f" + country.name + "§a!");
 
         playerProfile.clearCitizenship();
+
+        // play sound to renouncer
+        SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+
+        // broadcast notif to country (todo: settings)
+        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.username + "§6 is no longer a citizen of §f" + country.name + "§6!", true);
     }
 }

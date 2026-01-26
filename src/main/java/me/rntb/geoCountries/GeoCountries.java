@@ -11,7 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
 
-// todo: player renouncing citizenship needs owner to get notif, etc
 // todo: revoke citizenship command
 // todo: use timeCreated fields in stuff
 // todo: sent citizenship application limit (config specified)

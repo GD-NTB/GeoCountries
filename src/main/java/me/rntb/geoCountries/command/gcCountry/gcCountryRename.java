@@ -1,14 +1,14 @@
 package me.rntb.geoCountries.command.gcCountry;
 
-import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -59,10 +59,16 @@ public class gcCountryRename {
         PlayerProfile playerProfile = PlayerProfile.byUUID.get(player.getUniqueId());
         Country country = playerProfile.getCitizenship();
 
-        ChatUtil.broadcastPrefixedMessage("§6The country of §f" + country.name + "§6 has been renamed to §f" + countryName + "§6!");
-
         country.setName(countryName);
 
         ChatUtil.sendPrefixedMessage(sender, "§aRenamed country to §f" + countryName + "§a!");
+
+        ChatUtil.broadcastPrefixedMessage("§6The country of §f" + country.name + "§6 has been renamed to §f" + countryName + "§6!");
+
+        // play sound to renamer
+        SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+
+        // broadcast notif to country (todo: settings)
+        ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has now been renamed to §f" + countryName + "§6!", true);
     }
 }

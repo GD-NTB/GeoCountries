@@ -4,6 +4,7 @@ import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.SoundUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -60,8 +61,12 @@ public class gcCitizenshipAccept {
         // accept the application
         CitizenshipApplication.accept(cApplication, true);
 
-        ChatUtil.sendPrefixedMessage(sender, """
-                                             §aAccepted the citizenship application!
-                                             §f""" + otherPlayerName + "§a is now a citizen of §f" + country.name + "§a!");
+        ChatUtil.sendPrefixedMessage(sender, "§aAccepted the citizenship application!");
+
+        // play sound to acceptor
+        SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+
+        // broadcast notif to country (todo: settings)
+        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.username + "§6 is now a citizen of §f" + country.name + "§6!", true);
     }
 }

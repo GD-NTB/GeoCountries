@@ -96,23 +96,23 @@ public class gcCitizenshipReceived {
                         .append(Component.newline())
                         // [Accept] button
                         .append(mm.deserialize("<click:run_command:'/gc citizenship accept " + applicantName + "'>" +
-                                "<hover:show_text:'<gray>Click to accept <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
-                                "<green><bold>[Accept]</bold></green>" +
-                                "</hover></click>"
+                                               "<hover:show_text:'<gray>Click to accept <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
+                                               "<green><bold>[Accept]</bold></green>" +
+                                               "</hover></click>"
                         ))
                         .append(Component.text("  "))
                         // [View] button
                         .append(mm.deserialize("<click:run_command:'/gc citizenship received " + applicantName + "'>" +
-                                "<hover:show_text:'<dark_gray>Click to view <white>" + applicantName + "</white><dark_gray>\\'s application.</dark_gray>'>" +
-                                "<dark_gray><bold>[View All]</bold></dark_gray>" +
-                                "</hover></click>"
+                                               "<hover:show_text:'<dark_gray>Click to view <white>" + applicantName + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                               "<white><bold>[View]</bold></white>" +
+                                               "</hover></click>"
                         ))
                         .append(Component.text("  "))
                         // [Reject] button
                         .append(mm.deserialize("<click:run_command:'/gc citizenship reject " + applicantName + "'>" +
-                                "<hover:show_text:'<gray>Click to reject <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
-                                "<red><bold>[Reject]</bold></red>" +
-                                "</hover></click>"
+                                               "<hover:show_text:'<gray>Click to reject <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
+                                               "<red><bold>[Reject]</bold></red>" +
+                                               "</hover></click>"
                         ))
                         .append(Component.newline());
             }
@@ -123,7 +123,7 @@ public class gcCitizenshipReceived {
         return message;
     }
 
-    private static TextComponent.Builder doCommandSpecific(CitizenshipApplication cApplication) {
+    public static TextComponent.Builder doCommandSpecific(CitizenshipApplication cApplication) {
         TextComponent.Builder message = Component.text();
         MiniMessage mm = MiniMessage.miniMessage();
 

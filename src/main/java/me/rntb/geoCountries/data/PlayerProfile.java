@@ -137,10 +137,10 @@ public class PlayerProfile extends DataCollection {
         return this.citizenship != null;
     }
 
-    public Player getOnlinePlayer() { //
+    public Player getOnlinePlayer() {
         return Bukkit.getPlayer(this.uuid);
     }
-    public OfflinePlayer getOfflinePlayer() { //
+    public OfflinePlayer getOfflinePlayer() {
         return Bukkit.getOfflinePlayer(this.uuid);
     }
 
