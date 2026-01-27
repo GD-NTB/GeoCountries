@@ -87,7 +87,7 @@ public class CitizenshipApplication extends DataCollection {
                    .append(Component.newline())
                     // [Accept] button
                     .append(mm.deserialize("<click:run_command:'/gc citizenship accept " + applicant.username + "'>" +
-                                           "<hover:show_text:'<gray>Click to accept <white>" + applicant.username + "</white><gray>\\'s application.</gray>'>" +
+                                           "<hover:show_text:'<dark_gray>Click to accept <white>" + applicant.username + "</white><dark_gray>\\'s application.</dark_gray>'>" +
                                            "<green><bold>[Accept]</bold></green>" +
                                            "</hover></click>"
                     ))
@@ -101,7 +101,7 @@ public class CitizenshipApplication extends DataCollection {
                     .append(Component.text("  "))
                     // [Reject] button
                     .append(mm.deserialize("<click:run_command:'/gc citizenship reject " + applicant.username + "'>" +
-                                           "<hover:show_text:'<gray>Click to reject <white>" + applicant.username + "</white><gray>\\'s application.</gray>'>" +
+                                           "<hover:show_text:'<dark_gray>Click to reject <white>" + applicant.username + "</white><dark_gray>\\'s application.</dark_gray>'>" +
                                            "<red><bold>[Reject]</bold></red>" +
                                            "</hover></click>"));
             // send message to leader
