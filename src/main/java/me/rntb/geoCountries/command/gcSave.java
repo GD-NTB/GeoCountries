@@ -5,7 +5,6 @@ import me.rntb.geoCountries.data.DataCollectionManager;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class gcSave extends SubCommand {
     public void onCommand(CommandSender sender, String[] args) {
         // /gc save
         // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+        Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcSave::onConfirm,
                                                   sender,
                                                   new String[] { }),

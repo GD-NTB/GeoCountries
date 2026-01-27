@@ -10,7 +10,7 @@ public class SoundUtil {
         CHAT_NOTIF
     }
 
-    public static void PlaySound(Player player, SoundEffect soundEffect) {;
+    public static void playSound(Player player, SoundEffect soundEffect) {;
         if (player == null || !ConfigState.SoundEffects) {
             return;
         }

@@ -105,6 +105,6 @@ public class Confirmation {
         this.confirmMessage = "§aConfirmed!";
         this.cancelMessage = "§aCancelled!";
         this.timeoutMessage = "§cTimed out because you didn't confirm after §f%d second%s§c!"
-                              .formatted(this.timeoutAfterSeconds, StringUtil.LeadingS(this.timeoutAfterSeconds));
+                              .formatted(this.timeoutAfterSeconds, StringUtil.leadingS(this.timeoutAfterSeconds));
     }
 }

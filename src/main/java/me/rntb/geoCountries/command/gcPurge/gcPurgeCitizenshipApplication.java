@@ -13,7 +13,7 @@ public class gcPurgeCitizenshipApplication {
 
     public static void onCommand(CommandSender sender, String[] args) {
         // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+        Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcPurgeCitizenshipApplication::onConfirm,
                                                    sender,
                                                    new String[] { }),
@@ -26,6 +26,6 @@ public class gcPurgeCitizenshipApplication {
         for (CitizenshipApplication ca : new ArrayList<>(CitizenshipApplication.sentAll)) // new ArrayList as we are concurrently modifying
             CitizenshipApplication.deleteSent(ca);
 
-        ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a CitizenshipApplication" + StringUtil.LeadingS(count) + ".");
+        ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a CitizenshipApplication" + StringUtil.leadingS(count) + ".");
     }
 }

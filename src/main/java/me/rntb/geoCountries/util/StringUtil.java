@@ -13,11 +13,10 @@ public class StringUtil {
 
     public static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
 
-    public static String LeadingS(long count) {
+    public static String leadingS(long count) {
         return count == 1 ? "" : "s";
     }
-
-    public static String UppercaseLeadingS(long count) {
+    public static String uppercaseLeadingS(long count) {
         return count == 1 ? "" : "S";
     }
 
@@ -25,7 +24,7 @@ public class StringUtil {
 
     // ----- country -----
     // country name should be trimmed beforehand
-    public static String ValidateCountryName(String countryName, boolean alreadyExistsInvalid) {
+    public static String validateCountryName(String countryName, boolean alreadyExistsInvalid) {
         if (!(ConfigState.CountryNameMin <= countryName.length() && countryName.length() <= ConfigState.CountryNameMax))
             return "§cCountry name must be between §f%d-%d§c characters!§r"
                     .formatted(ConfigState.CountryNameMin, ConfigState.CountryNameMax);
@@ -48,7 +47,7 @@ public class StringUtil {
 
     // ----- response -----
     // response should be trimmed beforehand
-    public static String ValidateResponse(String response) {
+    public static String validateResponse(String response) {
         if (!(ConfigState.ChatResponseMin <= response.length() && response.length() <= ConfigState.ChatResponseMax))
             return "§cChat message must be between §f%d-%d§c characters!§r"
                     .formatted(ConfigState.ChatResponseMin, ConfigState.ChatResponseMax);

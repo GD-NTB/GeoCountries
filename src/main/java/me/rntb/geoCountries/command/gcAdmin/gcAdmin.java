@@ -91,7 +91,7 @@ public class gcAdmin extends SubCommand {
                         yield countryNames;
                     }
                     // /gc admin setplayerrank [...] [ranks]
-                    case "setplayerrank" -> sender.hasPermission("gc.admin") ? EnumUtil.EnumToStringArray(PlayerProfile.PlayerRank.class) : List.of();
+                    case "setplayerrank" -> sender.hasPermission("gc.admin") ? EnumUtil.enumToStringArray(PlayerProfile.PlayerRank.class) : List.of();
                     // /gc admin [...]
                     default -> List.of();
                 };

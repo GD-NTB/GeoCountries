@@ -46,7 +46,7 @@ public class gcCountryCitizens {
         }
         else {
             sb.append("§e%s§f has §e%d§f citizen%s:\n"
-                      .formatted(country.name, citizenCount, StringUtil.LeadingS(citizenCount)));
+                      .formatted(country.name, citizenCount, StringUtil.leadingS(citizenCount)));
             for (PlayerProfile citizen : country.citizensSortedByRank()) {
                 if (citizen != null)
                     sb.append("§f> §a%s§f (§e%s§f)\n"

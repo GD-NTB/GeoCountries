@@ -92,7 +92,7 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
         }
 
         // if we are waiting for sender to confirm a command, but they sent a different command, cancel waiting
-        UUID senderUuid = UuidUtil.GetUUIDOfCommandSender(sender);
+        UUID senderUuid = UuidUtil.getUUIDOfCommandSender(sender);
         if (Confirmation.isWaiting(senderUuid)) {
             if (!(args.length == 1 && (args[0].equalsIgnoreCase("confirm") || args[0].equalsIgnoreCase("cancel")))) {
                 Confirmation.stopWaiting(senderUuid, Confirmation.StopWaitingEvent.CANCELLED, true);

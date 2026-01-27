@@ -39,14 +39,14 @@ public class gcCountryRename {
         String countryName = String.join(" ", args).trim();
 
         // validation check
-        String validationString = StringUtil.ValidateCountryName(countryName, true);
+        String validationString = StringUtil.validateCountryName(countryName, true);
         if (validationString != null) {
             ChatUtil.sendPrefixedMessage(sender, validationString);
             return;
         }
 
         // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+        Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcCountryRename::onConfirm,
                                                    sender,
                                                    new String[] { countryName }),
@@ -66,7 +66,7 @@ public class gcCountryRename {
         ChatUtil.broadcastPrefixedMessage("§6The country of §f" + country.name + "§6 has been renamed to §f" + countryName + "§6!");
 
         // play sound to renamer
-        SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
 
         // broadcast notif to country (todo: settings)
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has now been renamed to §f" + countryName + "§6!", true);

@@ -18,7 +18,7 @@ public class gcDebugCreateCountry {
         String countryName = String.join(" ", args).trim();
 
         // validation check
-        String validationString = StringUtil.ValidateCountryName(countryName, true);
+        String validationString = StringUtil.validateCountryName(countryName, true);
         if (validationString != null) { // validation.OK -> null
             ChatUtil.sendPrefixedMessage(sender, validationString);
             return;

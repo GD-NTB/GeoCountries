@@ -131,7 +131,7 @@ public class gcCitizenship extends SubCommand {
                 switch (args[0]) {
                     // /gc citizenship accept [players]
                     case "accept" -> {
-                        PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.GetUUIDOfCommandSender(sender));
+                        PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
                         if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission("gc.citizenship.accept"))
                             yield List.of();
                         yield getReceivedCitizenshipApplicationsAsStrings(player.citizenship);
@@ -139,7 +139,7 @@ public class gcCitizenship extends SubCommand {
 
                     // /gc citizenship reject [players]
                     case "reject" -> {
-                        PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.GetUUIDOfCommandSender(sender));
+                        PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
                         if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission("gc.citizenship.reject"))
                             yield List.of();
                         yield getReceivedCitizenshipApplicationsAsStrings(player.citizenship);
@@ -158,7 +158,7 @@ public class gcCitizenship extends SubCommand {
 
                     // /gc citizenship received [players]
                     case "received" -> {
-                        PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.GetUUIDOfCommandSender(sender));
+                        PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
                         if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission("gc.citizenship.received"))
                             yield List.of();
                         yield getReceivedCitizenshipApplicationsAsStrings(player.citizenship);

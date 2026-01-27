@@ -107,7 +107,7 @@ public class CitizenshipApplication extends DataCollection {
             // send message to leader
             ChatUtil.sendPrefixedMessage(leader, message.build());
             // play sound to leader
-            SoundUtil.PlaySound(leader, SoundUtil.SoundEffect.CHAT_NOTIF);
+            SoundUtil.playSound(leader, SoundUtil.SoundEffect.CHAT_NOTIF);
         }
     }
     // delete a sent application
@@ -168,7 +168,7 @@ public class CitizenshipApplication extends DataCollection {
                                                  §6Your citizenship application was §aaccepted§6.
                                                  You are now a citizen of §f""" + country.name + "§6!");
             // play sound effect
-            SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+            SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
         }
     }
     // reject a sent application
@@ -192,7 +192,7 @@ public class CitizenshipApplication extends DataCollection {
             Player player = playerProfile.getOnlinePlayer();
             ChatUtil.sendPrefixedMessage(player, "§6Your citizenship application to §f" + country.name + "§6 was §crejected§6.");
             // play sound effect
-            SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+            SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
         }
     }
 
@@ -223,7 +223,7 @@ public class CitizenshipApplication extends DataCollection {
 
         if (ConfigState.DebugLogging) {
             int count = sentAll.size();
-            ChatUtil.sendPrefixedLogMessage("Loaded " + count + " CitizenApplication" + StringUtil.LeadingS(count) + ".");
+            ChatUtil.sendPrefixedLogMessage("Loaded " + count + " CitizenApplication" + StringUtil.leadingS(count) + ".");
         }
     }
 
@@ -232,7 +232,7 @@ public class CitizenshipApplication extends DataCollection {
 
         if (ConfigState.DebugLogging) {
             int count = sentAll.size();
-            ChatUtil.sendPrefixedLogMessage("Saved " + count + " CitizenApplication" + StringUtil.LeadingS(count) + ".");
+            ChatUtil.sendPrefixedLogMessage("Saved " + count + " CitizenApplication" + StringUtil.leadingS(count) + ".");
         }
     }
 

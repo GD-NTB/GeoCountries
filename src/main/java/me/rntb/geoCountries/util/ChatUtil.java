@@ -42,7 +42,7 @@ public class ChatUtil {
 
             // play sound
             if (playSound)
-                SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+                SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
         }
     }
 

@@ -22,7 +22,7 @@ public class gcAdminDeleteCountry {
         }
 
         // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+        Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcAdminDeleteCountry::onConfirm,
                                           sender,
                                           new String[] { countryName }),

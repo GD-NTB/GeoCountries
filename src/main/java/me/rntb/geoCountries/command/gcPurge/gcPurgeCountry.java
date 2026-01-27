@@ -5,7 +5,6 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -13,7 +12,7 @@ public class gcPurgeCountry {
 
     public static void onCommand(CommandSender sender, String[] args) {
         // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+        Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcPurgeCountry::onConfirm,
                                                    sender,
                                                    new String[] { }),

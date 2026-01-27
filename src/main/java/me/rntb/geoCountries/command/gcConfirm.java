@@ -19,7 +19,7 @@ public class gcConfirm extends SubCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        UUID uuid = UuidUtil.GetUUIDOfCommandSender(sender);
+        UUID uuid = UuidUtil.getUUIDOfCommandSender(sender);
 
         // if sender not being waited on, escape
         if (!Confirmation.isWaiting(uuid)) {

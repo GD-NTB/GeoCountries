@@ -1,11 +1,7 @@
-# GeoCountries (ALPHA 0.03)
+# GeoCountries (ALPHA 0.04)
 
 A Minecraft plugin for Paper servers built from the ground-up which, helps players to simulate diplomacy, trade, wars, and more.
 It is intended to work in a similar way to many Factions plugins.
-\
-\
-<img src="readme-stuff/globe.webp" width="150" height="150"/>
-
 
 ### Tested on Minecraft Versions:
 - 1.21.11 (LATEST)
@@ -13,9 +9,18 @@ It is intended to work in a similar way to many Factions plugins.
 ## Current features:
 
 * Country management (`/gc country create`, `dissolve`, `rename`, etc)
-* Help command + subcommand help pages
-* Debug and admin commands
+
+<img src="readme-stuff/commands-1.gif" width="250" alt="GIF showcasing /gc country commands">
+
 * Citizenship system (applications, etc)
+
+<img src="readme-stuff/commands-2.gif" width="250" alt="GIF showcasing /gc country commands">
+
+* Help command + subcommand help pages
+
+<img src="readme-stuff/commands-3.gif" width="250" alt="GIF showcasing /gc country commands">
+
+* Debug and admin commands
 * Command confirmation and player-plugin chat response system
 * Permission groups (`gc.group.essential`, `player`, `admin`)
 * Proper command autocomplete
@@ -32,7 +37,7 @@ It is intended to work in a similar way to many Factions plugins.
 
 ... Specifically:
 ```
-// todo: break help and other long text blocks into pages
+// todo: do todo's
 // todo: revoke citizenship command
 // todo: sent citizenship application limit (config specified)
 // todo: a lot of autocompletes need better optimisation!!
@@ -45,3 +50,6 @@ It is intended to work in a similar way to many Factions plugins.
 ## Current bugs:
 
 * N/A - that I know of B)
+\
+\
+<img src="readme-stuff/globe.webp" width="150" height="150"/><img src="readme-stuff/globe.webp" width="150" height="150"/><img src="readme-stuff/globe.webp" width="150" height="150"/>

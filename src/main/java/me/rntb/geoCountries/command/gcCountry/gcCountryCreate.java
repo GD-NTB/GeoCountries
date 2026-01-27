@@ -33,14 +33,14 @@ public class gcCountryCreate {
         String countryName = String.join(" ", args).trim();
 
         // validation check
-        String validationString = StringUtil.ValidateCountryName(countryName, true);
+        String validationString = StringUtil.validateCountryName(countryName, true);
         if (validationString != null) { // validation.OK -> null
             ChatUtil.sendPrefixedMessage(sender, validationString);
             return;
         }
 
         // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+        Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcCountryCreate::onConfirm,
                                                    sender,
                                                    new String[] { countryName }),
@@ -66,6 +66,6 @@ public class gcCountryCreate {
         ChatUtil.broadcastPrefixedMessage("§6A new country §f" + countryName + "§6 has just been created!");
 
         // play sound to creator
-        SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
     }
 }

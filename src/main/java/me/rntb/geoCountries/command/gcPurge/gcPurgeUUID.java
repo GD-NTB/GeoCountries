@@ -22,7 +22,7 @@ public class gcPurgeUUID {
         }
 
         // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+        Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcPurgeUUID::onConfirm,
                                                    sender,
                                                    new String[] { uuid }),

@@ -21,7 +21,7 @@ public class gcCancel extends SubCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         // if console, uuid=0000..., else get player uuid
-        UUID uuid = UuidUtil.GetUUIDOfCommandSender(sender);
+        UUID uuid = UuidUtil.getUUIDOfCommandSender(sender);
 
         // cancel command
         if (!Confirmation.isWaiting(uuid) && !Response.isWaiting(uuid)) {

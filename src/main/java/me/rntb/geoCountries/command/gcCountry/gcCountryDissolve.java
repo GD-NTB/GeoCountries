@@ -27,7 +27,7 @@ public class gcCountryDissolve {
         }
 
         // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+        Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcCountryDissolve::onConfirm,
                                                    sender,
                                                    new String[] { }),
@@ -43,7 +43,7 @@ public class gcCountryDissolve {
         ChatUtil.broadcastPrefixedMessage("§6The country §f" + country.name + "§6 has just been dissolved!");
 
         // broadcast notif to country (todo: settings)
-        ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has just been dissolved! You are no longer a citizen of any country.", true);
+        ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has just been dissolved! §cYou are no longer a citizen of any country.", true);
 
         Country.delete(country);
     }

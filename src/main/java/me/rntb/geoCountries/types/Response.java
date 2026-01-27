@@ -103,7 +103,7 @@ public class Response {
         this.startWaitingMessage = "§6Type in chat, or do §f/gc cancel§6 to cancel.";
         this.playerSentMessageMessage = null;
         this.timeoutMessage = "§cTimed out because you didn't type anything in chat after §f%d second%s§c!"
-                              .formatted(this.timeoutAfterSeconds, StringUtil.LeadingS(this.timeoutAfterSeconds));
+                              .formatted(this.timeoutAfterSeconds, StringUtil.leadingS(this.timeoutAfterSeconds));
     }
 }
 

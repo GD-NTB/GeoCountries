@@ -13,7 +13,7 @@ public class gcPurgePlayerProfile {
 
     public static void onCommand(CommandSender sender, String[] args) {
         // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+        Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcPurgePlayerProfile::onConfirm,
                                                    sender,
                                                    new String[] { }),
@@ -26,6 +26,6 @@ public class gcPurgePlayerProfile {
         for (PlayerProfile pd : new ArrayList<>(PlayerProfile.all)) // new ArrayList as we are concurrently modifying
             PlayerProfile.delete(pd);
 
-        ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a PlayerProfile" + StringUtil.LeadingS(count) + ".");
+        ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a PlayerProfile" + StringUtil.leadingS(count) + ".");
     }
 }

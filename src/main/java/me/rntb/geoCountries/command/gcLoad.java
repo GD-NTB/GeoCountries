@@ -21,7 +21,7 @@ public class gcLoad extends SubCommand {
     public void onCommand(CommandSender sender, String[] args) {
         // /gc load
         // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+        Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcLoad::onConfirm,
                                                   sender,
                                                   new String[] { }),

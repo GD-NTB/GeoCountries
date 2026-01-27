@@ -64,7 +64,7 @@ public class gcCitizenshipAccept {
         ChatUtil.sendPrefixedMessage(sender, "§aAccepted the citizenship application!");
 
         // play sound to acceptor
-        SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
 
         // broadcast notif to country (todo: settings)
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.username + "§6 is now a citizen of §f" + country.name + "§6!", true);

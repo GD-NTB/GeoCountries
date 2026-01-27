@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class UuidUtil {
-    public static UUID GetUUIDOfCommandSender(CommandSender sender) {
+    public static UUID getUUIDOfCommandSender(CommandSender sender) {
         return sender instanceof ConsoleCommandSender ? java.util.UUID.fromString("00000000-0000-0000-0000-000000000000") :
                                                         ((Player) sender).getUniqueId();
     }

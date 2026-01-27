@@ -79,7 +79,7 @@ public class gcCitizenshipApply {
         String responseClean = response.trim();
 
         // validate response
-        String validation = StringUtil.ValidateResponse(responseClean);
+        String validation = StringUtil.validateResponse(responseClean);
         if (validation != null) {
             ChatUtil.sendPrefixedMessage(sender, validation);
             return;

@@ -72,14 +72,14 @@ public class gcCitizenshipReceived {
         TextComponent.Builder message = Component.text();
         MiniMessage mm = MiniMessage.miniMessage();
 
-        message.append(ChatUtil.newlineIfPrefixIsEmptyComponent());
-        message.append(mm.deserialize("<gold>========== CITIZENSHIP APPLICATIONS =========="))
-                .append(Component.newline());
+        message.append(ChatUtil.newlineIfPrefixIsEmptyComponent())
+               .append(mm.deserialize("<gold>========== CITIZENSHIP APPLICATIONS =========="))
+               .append(Component.newline());
 
         List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(senderProfile.citizenship);
         if (cApplications == null || cApplications.isEmpty()) {
             message.append(mm.deserialize("<red>You have not received any citizenship applications."))
-                    .append(Component.newline());
+                   .append(Component.newline());
         }
         else {
             for (CitizenshipApplication cApplication : cApplications) {
@@ -91,30 +91,27 @@ public class gcCitizenshipReceived {
                 String applicantName = PlayerProfile.byUUID.get(cApplication.applicant).username;
 
                 message.append(mm.deserialize("<white>> <green>From</green>: <yellow>" + applicantName))
-                        .append(Component.newline())
-                        .append(mm.deserialize("<white>> <green>Reason</green>: <white>" + reason))
-                        .append(Component.newline())
-                        // [Accept] button
-                        .append(mm.deserialize("<click:run_command:'/gc citizenship accept " + applicantName + "'>" +
-                                               "<hover:show_text:'<gray>Click to accept <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
-                                               "<green><bold>[Accept]</bold></green>" +
-                                               "</hover></click>"
-                        ))
-                        .append(Component.text("  "))
-                        // [View] button
-                        .append(mm.deserialize("<click:run_command:'/gc citizenship received " + applicantName + "'>" +
+                       .append(Component.newline())
+                       .append(mm.deserialize("<white>> <green>Reason</green>: <white>" + reason))
+                       .append(Component.newline())
+                       // [Accept] button
+                       .append(mm.deserialize("<click:run_command:'/gc citizenship accept " + applicantName + "'>" +
+                                              "<hover:show_text:'<gray>Click to accept <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
+                                              "<green><bold>[Accept]</bold></green>" +
+                                              "</hover></click>"))
+                       .append(Component.text("  "))
+                       // [View] button
+                       .append(mm.deserialize("<click:run_command:'/gc citizenship received " + applicantName + "'>" +
                                                "<hover:show_text:'<dark_gray>Click to view <white>" + applicantName + "</white><dark_gray>\\'s application.</dark_gray>'>" +
-                                               "<white><bold>[View]</bold></white>" +
-                                               "</hover></click>"
-                        ))
-                        .append(Component.text("  "))
-                        // [Reject] button
-                        .append(mm.deserialize("<click:run_command:'/gc citizenship reject " + applicantName + "'>" +
-                                               "<hover:show_text:'<gray>Click to reject <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
-                                               "<red><bold>[Reject]</bold></red>" +
-                                               "</hover></click>"
-                        ))
-                        .append(Component.newline());
+                                              "<white><bold>[View]</bold></white>" +
+                                              "</hover></click>"))
+                       .append(Component.text("  "))
+                       // [Reject] button
+                       .append(mm.deserialize("<click:run_command:'/gc citizenship reject " + applicantName + "'>" +
+                                              "<hover:show_text:'<gray>Click to reject <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
+                                              "<red><bold>[Reject]</bold></red>" +
+                                              "</hover></click>"))
+                       .append(Component.newline());
             }
         }
 

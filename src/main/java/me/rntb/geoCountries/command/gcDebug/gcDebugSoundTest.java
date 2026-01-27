@@ -13,7 +13,7 @@ public class gcDebugSoundTest {
             return;
         }
 
-        SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
 
         ChatUtil.sendPrefixedMessage(sender, "§aDing!");
     }

@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
 
-// todo: break help and other long text blocks into pages
+// todo: do todo's
 // todo: revoke citizenship command
 // todo: sent citizenship application limit (config specified)
 // todo: a lot of autocompletes need better optimisation!!

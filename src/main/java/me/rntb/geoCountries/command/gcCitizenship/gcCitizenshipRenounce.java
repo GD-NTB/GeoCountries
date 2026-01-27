@@ -28,7 +28,7 @@ public class gcCitizenshipRenounce {
         }
 
         // start waiting for confirm
-        Confirmation.startWaiting(UuidUtil.GetUUIDOfCommandSender(sender),
+        Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcCitizenshipRenounce::onConfirm,
                                                    sender,
                                                    new String[] { }),
@@ -45,7 +45,7 @@ public class gcCitizenshipRenounce {
         playerProfile.clearCitizenship();
 
         // play sound to renouncer
-        SoundUtil.PlaySound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
 
         // broadcast notif to country (todo: settings)
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.username + "§6 is no longer a citizen of §f" + country.name + "§6!", true);

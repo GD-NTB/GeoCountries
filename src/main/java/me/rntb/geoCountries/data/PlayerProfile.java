@@ -64,7 +64,7 @@ public class PlayerProfile extends DataCollection {
 
         if (ConfigState.DebugLogging) {
             int count = all.size();
-            ChatUtil.sendPrefixedLogMessage("Loaded " + count + " PlayerProfile" + StringUtil.LeadingS(count) + ".");
+            ChatUtil.sendPrefixedLogMessage("Loaded " + count + " PlayerProfile" + StringUtil.leadingS(count) + ".");
         }
     }
 
@@ -73,7 +73,7 @@ public class PlayerProfile extends DataCollection {
 
         if (ConfigState.DebugLogging) {
             int count = all.size();
-            ChatUtil.sendPrefixedLogMessage("Saved " + count + " PlayerProfile" + StringUtil.LeadingS(count) + ".");
+            ChatUtil.sendPrefixedLogMessage("Saved " + count + " PlayerProfile" + StringUtil.leadingS(count) + ".");
         }
     }
 
