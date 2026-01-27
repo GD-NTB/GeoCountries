@@ -24,21 +24,22 @@ public class gcPlayerInfo {
             }
         }
 
-        StringBuilder sb = new StringBuilder(ChatUtil.newlineIfPrefixIsEmpty() +
-                                             "§6========== PLAYER INFO ==========\n");
-        sb.append("§a").append(playerProfile.username).append("\n");
-
-        // show rank of player in country
-        Country country = playerProfile.getCitizenship();
-
-        if (playerProfile.rank == PlayerProfile.PlayerRank.NONE) {
-            sb.append("§f> §cStateless");
+        String rankAndCountryString = "§cStateless";
+        if (playerProfile.hasCitizenship()) {
+            Country country = playerProfile.getCitizenship();
+            rankAndCountryString = "§e%s§f of §e%s"
+                             .formatted(playerProfile.getRankString(), country != null ? country.name : "§cNone");
         }
-        else {
-            sb.append("§f> §e").append(playerProfile.getRankString()).append("§f of §e").append(country != null ? country.name : "§cNone");
-        }
-
-        sb.append("\n§6================================");
-        ChatUtil.sendPrefixedMessage(sender, String.valueOf(sb));
+        String message = ChatUtil.newlineIfPrefixIsEmpty() +
+                         """
+                         §6========== PLAYER INFO ==========
+                         §a%s§f
+                         §f> %s
+                         §f> Joined on §2%s
+                         §6================================="""
+                        .formatted(playerProfile.username,
+                                   rankAndCountryString,
+                                   playerProfile.timeFirstJoinedAsString());
+        ChatUtil.sendPrefixedMessage(sender, message);
     }
 }

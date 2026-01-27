@@ -3,12 +3,15 @@ package me.rntb.geoCountries.util;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
 
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtil {
+
+    public static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
 
     public static String LeadingS(long count) {
         return count == 1 ? "" : "s";

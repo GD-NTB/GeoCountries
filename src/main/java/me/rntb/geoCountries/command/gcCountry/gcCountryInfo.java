@@ -37,14 +37,18 @@ public class gcCountryInfo {
 
         PlayerProfile leader = country.getLeader();
 
-        String sb = ChatUtil.newlineIfPrefixIsEmpty() +
-                """
-                §6========== COUNTRY INFO ==========
-                §a%s§f
-                > §eLeader§f: %s§f
-                > §eCitizens§f: %s§f
-                §6================================="""
-                .formatted(country.name, leader != null ? leader.username : "§cNone", country.citizenCount());
-        ChatUtil.sendPrefixedMessage(sender, sb);
+        String message = ChatUtil.newlineIfPrefixIsEmpty() +
+                         """
+                         §6========== COUNTRY INFO ==========
+                         §a%s§f
+                         §f> §eLeader§f: %s
+                         §f> §eCitizens§f: %s
+                         §f> Created on §2%s
+                         §6================================="""
+                         .formatted(country.name,
+                                    leader != null ? leader.username : "§cNone",
+                                    country.citizenCount(),
+                                    country.timeCreatedAsString());
+        ChatUtil.sendPrefixedMessage(sender, message);
     }
 }

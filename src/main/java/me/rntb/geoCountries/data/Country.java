@@ -3,7 +3,11 @@ package me.rntb.geoCountries.data;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.StringUtil;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -135,6 +139,11 @@ public class Country extends DataCollection {
     }
 
     public long timeCreated = 0;
+    public String timeCreatedAsString() {
+        Instant instant = Instant.ofEpochMilli(this.timeCreated);
+        LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        return dateTime.format(StringUtil.timeFormatter);
+    }
     
     public Country(UUID uuid, String name) {
         this.uuid = uuid;

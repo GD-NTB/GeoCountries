@@ -8,6 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -80,7 +83,7 @@ public class PlayerProfile extends DataCollection {
         byUsername.put(player.username, player);
         byUUID.put(player.uuid, player);
 
-        player.timeCreated = System.currentTimeMillis();
+        player.timeFirstJoined = System.currentTimeMillis();
     }
 
     public static void delete(PlayerProfile player) {
@@ -212,7 +215,12 @@ public class PlayerProfile extends DataCollection {
         this.rank = newRank;
     }
 
-    public long timeCreated = 0;
+    public long timeFirstJoined = 0;
+    public String timeFirstJoinedAsString() {
+        Instant instant = Instant.ofEpochMilli(this.timeFirstJoined);
+        LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        return dateTime.format(StringUtil.timeFormatter);
+    }
 
     public UUID getLeaderOf() {
         return rank == PlayerRank.LEADER ? this.citizenship : null;

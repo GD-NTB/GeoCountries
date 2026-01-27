@@ -32,8 +32,8 @@ It is intended to work in a similar way to many Factions plugins.
 
 ... Specifically:
 ```
+// todo: break help and other long text blocks into pages
 // todo: revoke citizenship command
-// todo: use timeCreated fields in stuff
 // todo: sent citizenship application limit (config specified)
 // todo: a lot of autocompletes need better optimisation!!
 // todo: auto accept citizenship applications (/gc country settings [...])/
