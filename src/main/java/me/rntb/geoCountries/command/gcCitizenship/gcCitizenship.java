@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 public class gcCitizenship extends SubCommand {
@@ -124,6 +125,7 @@ public class gcCitizenship extends SubCommand {
             case 1 -> Stream.of("accept", "apply", "received", "reject", "renounce", "sent", "unsend")
                       .filter(x -> sender.hasPermission("gc.citizenship." + x))
                       .toList();
+
             // gc citizen [...] 2
             case 2 ->
                 switch (args[0]) {
@@ -132,46 +134,58 @@ public class gcCitizenship extends SubCommand {
                         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.GetUUIDOfCommandSender(sender));
                         if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission("gc.citizenship.accept"))
                             yield List.of();
-                        yield CitizenshipApplication.sentByToCountry.get(player.citizenship).stream()
-                                                                                            .map(ca -> ca.getApplicant().username)
-                                                                                            .toList();
+                        yield getReceivedCitizenshipApplicationsAsStrings(player.citizenship);
                     }
+
                     // /gc citizenship reject [players]
                     case "reject" -> {
                         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.GetUUIDOfCommandSender(sender));
                         if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission("gc.citizenship.reject"))
                             yield List.of();
-                        yield CitizenshipApplication.sentByToCountry.get(player.citizenship).stream()
-                                                                                            .map(ca -> ca.getApplicant().username)
-                                                                                            .toList();
+                        yield getReceivedCitizenshipApplicationsAsStrings(player.citizenship);
                     }
+
                     // /gc citizenship apply [countries]
                     case "apply" -> sender.hasPermission("gc.citizenship.apply") ? Country.allAsNames(true) : List.of();
+
                     // /gc citizenship unsend [countries]
                     case "unsend" -> {
                         if (!sender.hasPermission("gc.citizenship.unsend"))
                             yield List.of();
                         Player player = (Player) sender;
-                        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.getUniqueId());
-                        if (cApplications == null)
-                            yield List.of();
-                        yield cApplications.stream()
-                                           .map(ca -> ca.getToCountry().name)
-                                           .toList();
+                        yield getSentCitizenshipApplicationsAsStrings(player.getUniqueId());
                     }
+
                     // /gc citizenship received [players]
                     case "received" -> {
                         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.GetUUIDOfCommandSender(sender));
                         if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission("gc.citizenship.received"))
                             yield List.of();
-                        yield CitizenshipApplication.sentByToCountry.get(player.citizenship).stream()
-                                                                                            .map(ca -> ca.getApplicant().username)
-                                                                                            .toList();
+                        yield getReceivedCitizenshipApplicationsAsStrings(player.citizenship);
                     }
+
                     // /gc citizenship [...]
                     default -> List.of();
                 };
             default -> List.of();
         };
+    }
+
+    private static List<String> getSentCitizenshipApplicationsAsStrings(UUID fromPlayer) {
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(fromPlayer);
+        if (cApplications == null)
+            return List.of();
+        return cApplications.stream()
+                            .map(ca -> ca.getToCountry().name)
+                            .toList();
+    }
+
+    private static List<String> getReceivedCitizenshipApplicationsAsStrings(UUID toCountry) {
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(toCountry);
+        if (cApplications == null)
+            return List.of();
+        return cApplications.stream()
+                            .map(ca -> ca.getApplicant().username)
+                            .toList();
     }
 }
