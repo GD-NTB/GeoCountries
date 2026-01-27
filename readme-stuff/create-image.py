@@ -29,9 +29,9 @@ def create_image(size, bg_colour, message, font_colour, font_size):
     draw.text((text_x, text_y), message, font=font, fill=font_colour, anchor="mm")
     return image
 
-text = 'lines of code:\n\n' + str(loc)
+text = 'lines of code:\n\n     ' + str(loc)
 font_size = 25
-image = create_image((200, 200), 'black', text, 'white', font_size)
+image = create_image((200, 200), (43, 45, 48), text, 'white', font_size)
 # save image
 dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), SAVE_TO_FILE)
 image.save(dir)

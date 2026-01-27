@@ -4,14 +4,15 @@ A Minecraft plugin for Paper servers built from the ground-up which, helps playe
 It is intended to work in a similar way to many Factions plugins.
 \
 \
-![](readme-stuff/globe.webp)
+<img src="readme-stuff/globe.webp" width="150" height="150"/>
+
 
 ### Tested on Minecraft Versions:
 - 1.21.11 (LATEST)
 
 ## Current features:
 
-* Basic country management (`/gc country create`, `dissolve`, `rename`, etc)
+* Country management (`/gc country create`, `dissolve`, `rename`, etc)
 * Help command + subcommand help pages
 * Debug and admin commands
 * Citizenship system (applications, etc)

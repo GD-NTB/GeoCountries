@@ -1,4 +1,4 @@
-# this code is literally all chatgpt i cant lie
+# this code is literally all chatgpt
 
 import numpy as np
 from PIL import Image, ImagePalette
@@ -23,7 +23,6 @@ view_dir = np.array([0.0, 0.0, 1.0])     # camera looking down +Z
 img = Image.open(input_path).convert("RGB")
 texture = np.array(img.resize((size, size)))
 h, w, _ = texture.shape
-
 
 r = size // 2
 yy, xx = np.indices((size, size))
@@ -114,7 +113,7 @@ frames = result[::-1]
 result[0].save(
     output_path,
     save_all=True,
-    append_images=result[1:],
+    append_images=frames[1:],
     duration=40,
     lossless=True,
     loop=0
