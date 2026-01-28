@@ -25,11 +25,9 @@ public class gcCitizenshipApply {
         PlayerProfile playerProfile = PlayerProfile.get(player);
 
         // if already has citizenship, escape
-        if (!ConfigState.DebugMode) {
-            if (playerProfile.hasCitizenship()) {
-                ChatUtil.sendPrefixedMessage(sender, "§cYou can't apply for citizenship of country whilst being a citizen of another!");
-                return;
-            }
+        if (!ConfigState.DebugMode && playerProfile.hasCitizenship()) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou can't apply for citizenship of country whilst being a citizen of another!");
+            return;
         }
 
         String countryName = String.join(" ", args);
@@ -48,10 +46,16 @@ public class gcCitizenshipApply {
             return;
         }
 
-        // if has pending application to this country, escape
-        if (!ConfigState.DebugMode) {
-            ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.uuid);
-            if (cApplications != null && cApplications.stream().anyMatch(ca -> ca.toCountry.equals(toCountry.uuid))) {
+        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.uuid);
+        if (cApplications != null) {
+            // if sent too many applications, escape
+            int cApplicationsCount = cApplications.size();
+            if (cApplicationsCount >= ConfigState.MaxCitizenshipApplications) {
+                ChatUtil.sendPrefixedMessage(sender, "§cYou've already sent too many §f(" + cApplicationsCount + "/" + ConfigState.MaxCitizenshipApplications + ")§c citizenship applications! Unsend one by doing §f/gc citizenship unsend [country]");
+                return;
+            }
+            // if already sent application to this country, escape
+            if (!ConfigState.DebugMode && cApplications.stream().anyMatch(ca -> ca.toCountry.equals(toCountry.uuid))) {
                 ChatUtil.sendPrefixedMessage(sender, "§cYou already have a pending citizenship application to §f" + countryName + "§c!");
                 return;
             }

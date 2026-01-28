@@ -78,7 +78,11 @@ public class CitizenshipApplication extends DataCollection {
             ChatUtil.sendPrefixedMessage(applicant.getOnlinePlayer(), "§aSent citizenship application to country §f" + cApplication.getToCountry().name + "§a!");
 
             // send notif to leader
-            Player leader = cApplication.getToCountry().getLeader().getOnlinePlayer();
+            PlayerProfile leaderProfile = cApplication.getToCountry().getLeader();
+            if (leaderProfile == null)
+                return;
+            Player leader = leaderProfile.getOnlinePlayer();
+
             // build message
             TextComponent.Builder message = Component.text();
             MiniMessage mm = MiniMessage.miniMessage();

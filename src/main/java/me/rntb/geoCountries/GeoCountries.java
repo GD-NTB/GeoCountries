@@ -13,7 +13,6 @@ import java.nio.file.Path;
 
 // todo: do todo's
 // todo: revoke citizenship command
-// todo: sent citizenship application limit (config specified)
 // todo: a lot of autocompletes need better optimisation!!
 // todo: auto accept citizenship applications (/gc country settings [...])/
 // todo: applications should expire after a config defined amount of time

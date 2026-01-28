@@ -1,4 +1,4 @@
-config-version: 0.0204 # do not change
+config-version: 0.0205 # do not change
 
 debug-logging: false # more logging in server console for debugging
 debug-mode: false # disables several checks and features for easier plugin development
@@ -6,6 +6,8 @@ debug-mode: false # disables several checks and features for easier plugin devel
 chat-prefix: '§8[GeoCountries] ' # text before every plugin chat and console message
 
 sound-effects: true # play notification sound effects (on war declared, chat notif, etc)
+
+max-citizenship-applications: 5 # max number of sent citizenship applications allowed per person, -1=infinite
 
 chat-response-min: 1 # min allowed length of chat message when player asked to type in chat
 chat-response-max: 150  # max allowed length of chat message when player asked to type in chat

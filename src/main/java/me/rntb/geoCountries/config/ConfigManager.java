@@ -16,7 +16,7 @@ public class ConfigManager {
         GeoCountries.self.saveResource("config.yml", false); // create from resources/config.yml if not exist
         config = GeoCountries.self.getConfig();
 
-        if (config.getDouble("config-version", 0) < 0.204)
+        if (config.getDouble("config-version", 0) < 0.205)
             updateConfig();
 
         readStateFromFile();
@@ -60,6 +60,7 @@ public class ConfigManager {
         ConfigState.ChatPrefix = config.getString("chat-prefix") + "§r";
         ConfigState.ChatPrefixComponent = legacySerialisation.deserialize(ConfigState.ChatPrefix);
         ConfigState.SoundEffects = config.getBoolean("sound-effects");
+        ConfigState.MaxCitizenshipApplications = config.getInt("max-citizenship-applications");
         ConfigState.ChatResponseMin = config.getInt("chat-response-min");
         ConfigState.ChatResponseMax = config.getInt("chat-response-max");
         ConfigState.CountryNameMin = config.getInt("country-name-min");
@@ -71,6 +72,7 @@ public class ConfigManager {
         config.set("debug-logging", ConfigState.DebugLogging);
         config.set("chat-prefix", ConfigState.ChatPrefix.replace("§r", ""));
         config.set("sound-effects", ConfigState.SoundEffects);
+        config.set("max-citizenship-applications", ConfigState.MaxCitizenshipApplications);
         config.set("chat-response-min", ConfigState.ChatResponseMin);
         config.set("chat-response-max", ConfigState.ChatResponseMax);
         config.set("country-name-min", ConfigState.CountryNameMin);
