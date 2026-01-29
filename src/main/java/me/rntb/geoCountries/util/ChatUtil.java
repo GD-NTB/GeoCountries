@@ -12,7 +12,6 @@ import java.util.UUID;
 
 import static org.bukkit.Bukkit.getServer;
 
-// todo: broadcast in country
 public class ChatUtil {
 
     public static String newlineIfPrefixIsEmpty() {

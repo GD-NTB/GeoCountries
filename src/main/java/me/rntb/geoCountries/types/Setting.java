@@ -89,7 +89,7 @@ public class Setting {
                 """
                 .formatted(this.name,
                            this.key,
-                           this.description,
-                           valueColour+this.value);
+                           valueColour+this.value,
+                           this.description);
     }
 }
