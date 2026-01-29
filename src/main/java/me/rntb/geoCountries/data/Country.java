@@ -5,6 +5,7 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.types.Setting;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import org.bukkit.command.CommandSender;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -27,6 +28,15 @@ public class Country extends DataCollection {
 
     public static Map<UUID, Country> byUUID = new HashMap<>();
     public static Map<String, Country> byName = new HashMap<>();
+
+    public static Country byCommandSender(CommandSender sender) {
+        // get playerprofile of player
+        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        if (playerProfile == null)
+            return null;
+        // get country of sender, returns null on none
+        return playerProfile.getCitizenship();
+    }
 
     public static void init() {
         all = readFromFile(FILE_PATH, DISPLAY_NAME, new TypeToken<ArrayList<Country>>() {}.getType());
@@ -176,7 +186,7 @@ public class Country extends DataCollection {
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         return dateTime.format(StringUtil.timeFormatter);
     }
-    
+
     public Country(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;

@@ -12,8 +12,7 @@ public class gcPlayerInfo {
         PlayerProfile playerProfile;
         // if no args, get player profile
         if (args.length == 0) {
-            Player player = (Player) sender;
-            playerProfile = PlayerProfile.get(player);
+            playerProfile = PlayerProfile.byCommandSender(sender);
         }
         // else get specific player info
         else {

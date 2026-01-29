@@ -2,7 +2,6 @@ package me.rntb.geoCountries.command.gcCountry;
 
 import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.data.Country;
-import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Setting;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
@@ -153,13 +152,7 @@ public class gcCountry extends SubCommand {
                     case "settings" -> {
                         if (!sender.hasPermission("gc.country.settings"))
                             yield List.of();
-                        // get playerprofile of player
-                        Player player = (Player) sender;
-                        PlayerProfile playerProfile = PlayerProfile.get(player);
-                        if (playerProfile == null)
-                            yield List.of();
-                        // get country of sender
-                        Country playerCountry = playerProfile.getCitizenship();
+                        Country playerCountry = Country.byCommandSender(sender);
                         if (playerCountry == null)
                             yield List.of();
                         // return all settings as strings
@@ -179,13 +172,7 @@ public class gcCountry extends SubCommand {
                     case "settings" -> {
                         if (!sender.hasPermission("gc.country.settings"))
                             yield List.of();
-                        // get playerprofile of player
-                        Player player = (Player) sender;
-                        PlayerProfile playerProfile = PlayerProfile.get(player);
-                        if (playerProfile == null)
-                            yield List.of();
-                        // get country of sender
-                        Country playerCountry = playerProfile.getCitizenship();
+                        Country playerCountry = Country.byCommandSender(sender);
                         if (playerCountry == null)
                             yield List.of();
                         // get setting typed before

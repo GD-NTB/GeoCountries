@@ -21,8 +21,7 @@ public class gcCitizenshipApply {
             return;
         }
 
-        Player player = (Player) sender;
-        PlayerProfile playerProfile = PlayerProfile.get(player);
+        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if already has citizenship, escape
         if (!ConfigState.DebugMode && playerProfile.hasCitizenship()) {
@@ -90,8 +89,7 @@ public class gcCitizenshipApply {
         }
 
         Player player = (Player) sender;
-        UUID uuid = player.getUniqueId();
-        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(uuid);
+        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(player.getUniqueId());
 
         cApplication.reason = responseClean;
 

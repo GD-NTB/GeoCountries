@@ -6,6 +6,7 @@ import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.time.Instant;
@@ -40,6 +41,12 @@ public class PlayerProfile extends DataCollection {
         } catch (IllegalArgumentException e) {
             return null;
         }
+    }
+
+    public static PlayerProfile byCommandSender(CommandSender sender) {
+        if (!(sender instanceof Player player))
+            return null;
+        return get(player);
     }
 
     public static PlayerProfile get(Player player) {

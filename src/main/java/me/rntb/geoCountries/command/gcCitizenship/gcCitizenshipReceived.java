@@ -15,8 +15,7 @@ import java.util.List;
 public class gcCitizenshipReceived {
 
     public static void onCommand(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
-        PlayerProfile senderProfile = PlayerProfile.get(player);
+        PlayerProfile senderProfile = PlayerProfile.byCommandSender(sender);
 
         // if not leader, escape
         if (!senderProfile.hasCitizenship() || senderProfile.rank != PlayerProfile.PlayerRank.LEADER) {

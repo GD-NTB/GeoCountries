@@ -26,8 +26,7 @@ public class gcCitizenshipUnsend {
             return;
         }
 
-        Player player = (Player) sender;
-        PlayerProfile playerProfile = PlayerProfile.get(player);
+        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.uuid);
 

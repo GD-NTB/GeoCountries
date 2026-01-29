@@ -17,8 +17,7 @@ public class gcCitizenshipReject {
             return;
         }
 
-        Player player = (Player) sender;
-        PlayerProfile playerProfile = PlayerProfile.get(player);
+        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if not leader, escape
         if (playerProfile.rank != PlayerProfile.PlayerRank.LEADER && playerProfile.hasCitizenship()) {

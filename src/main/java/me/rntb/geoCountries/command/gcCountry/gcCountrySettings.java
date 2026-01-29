@@ -13,9 +13,7 @@ import java.util.UUID;
 public class gcCountrySettings {
 
     public static void onCommand(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
-        UUID playerUUID = player.getUniqueId();
-        PlayerProfile playerProfile = PlayerProfile.byUUID.get(playerUUID);
+        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if doesnt have citizenship, escape
         if (!playerProfile.hasCitizenship()) {

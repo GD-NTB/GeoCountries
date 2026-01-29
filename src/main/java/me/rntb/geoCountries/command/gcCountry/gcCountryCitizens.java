@@ -14,8 +14,7 @@ public class gcCountryCitizens {
         Country country;
         // if no args, country = player's country
         if (args.length == 0) {
-            Player player = (Player) sender;
-            PlayerProfile playerProfile = PlayerProfile.get(player);
+            PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
             country = playerProfile.getCitizenship();
             if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +

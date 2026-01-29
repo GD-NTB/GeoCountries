@@ -14,10 +14,8 @@ import java.util.UUID;
 
 public class gcCountryRename {
 
-    public static void onCommand(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
-        UUID playerUUID = player.getUniqueId();
-        PlayerProfile playerProfile = PlayerProfile.byUUID.get(playerUUID);
+    public static void onCommand(CommandSender sender, String[] args) {;
+        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if doesnt have citizenship, escape
         if (!playerProfile.hasCitizenship()) {
@@ -56,7 +54,7 @@ public class gcCountryRename {
     private static void onConfirm(CommandSender sender,  String[] args) {
         String countryName = args[0];
         Player player = (Player) sender;
-        PlayerProfile playerProfile = PlayerProfile.byUUID.get(player.getUniqueId());
+        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
         Country country = playerProfile.getCitizenship();
 
         country.setName(countryName);

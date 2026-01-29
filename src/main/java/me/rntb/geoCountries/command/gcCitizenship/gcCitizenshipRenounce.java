@@ -12,8 +12,7 @@ import org.bukkit.entity.Player;
 public class gcCitizenshipRenounce {
 
     public static void onCommand(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
-        PlayerProfile playerProfile = PlayerProfile.get(player);
+        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if doesnt have citizenship, escape
         if (!playerProfile.hasCitizenship()) {
@@ -37,7 +36,7 @@ public class gcCitizenshipRenounce {
 
     private static void onConfirm(CommandSender sender,  String[] args) {
         Player player = (Player) sender;
-        PlayerProfile playerProfile = PlayerProfile.get(player);
+        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         Country country = playerProfile.getCitizenship();
         ChatUtil.sendPrefixedMessage(sender, "§aRenounced your citizenship of §f" + country.name + "§a!");
