@@ -1,33 +1,34 @@
-essential:
-gc
-gc.help
-gc.country
-gc.country.list
-gc.country.info
-gc.country.citizens
-gc.player
-gc.player.info
+gc.group.essential:
+    gc
+    gc.help
+    gc.country
+    gc.country.list
+    gc.country.info
+    gc.country.citizens
+    gc.player
+    gc.player.info
 
-player:
-gc.confirm
-gc.cancel
-gc.country.create
-gc.country.rename
-gc.country.dissolve
-gc.citizenship
-gc.citizenship.apply
-gc.citizenship.sent
-gc.citizenship.unsend
-gc.citizenship.renounce
-gc.citizenship.received
-gc.citizenship.accept
-gc.citizenship.reject
+gc.group.player:
+    gc.confirm
+    gc.cancel
+    gc.country.create
+    gc.country.rename
+    gc.country.dissolve
+    gc.country.settings
+    gc.citizenship
+    gc.citizenship.apply
+    gc.citizenship.sent
+    gc.citizenship.unsend
+    gc.citizenship.renounce
+    gc.citizenship.received
+    gc.citizenship.accept
+    gc.citizenship.reject
 
-admin:
-gc.purge
-gc.dump
-gc.save
-gc.config
-gc.debug
-gc.admin
-gc.load
+gc.group.admin:
+    gc.purge
+    gc.dump
+    gc.save
+    gc.config
+    gc.debug
+    gc.admin
+    gc.load

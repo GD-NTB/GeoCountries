@@ -69,13 +69,13 @@ public class Response {
         Player player = Bukkit.getPlayer(uuid);
         if (sendMessage && player != null) {
             switch (stopWaitingEvent) {
-                case StopWaitingEvent.PLAYER_SENT_MESSAGE:
+                case PLAYER_SENT_MESSAGE:
                     if (response.playerSentMessageMessage != null)
                         ChatUtil.sendPrefixedMessage(player, response.playerSentMessageMessage);
                     break;
                 case CANCELLED:
                     break;
-                case StopWaitingEvent.TIMED_OUT:
+                case TIMED_OUT:
                     if (response.timeoutMessage != null)
                         ChatUtil.sendPrefixedMessage(player, response.timeoutMessage);
                     break;

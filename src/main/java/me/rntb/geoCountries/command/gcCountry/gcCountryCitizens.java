@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class gcCountryCitizens {
 
     // todo: break into pages (page number as arg)
-    public static void onCommand(CommandSender sender,  String[] args) {
+    public static void onCommand(CommandSender sender, String[] args) {
         Country country;
         // if no args, country = player's country
         if (args.length == 0) {

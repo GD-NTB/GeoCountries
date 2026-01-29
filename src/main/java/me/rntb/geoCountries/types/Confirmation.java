@@ -66,15 +66,15 @@ public class Confirmation {
         Player player = Bukkit.getPlayer(uuid);
         if (sendMessage && player != null) {
             switch (stopWaitingEvent) {
-                case StopWaitingEvent.CONFIRMED:
+                case CONFIRMED:
                     if (confirmation.confirmMessage != null)
                         ChatUtil.sendPrefixedMessage(player, confirmation.confirmMessage);
                     break;
-                case StopWaitingEvent.CANCELLED:
+                case CANCELLED:
                     if (confirmation.cancelMessage != null)
                         ChatUtil.sendPrefixedMessage(player, confirmation.cancelMessage);
                     break;
-                case StopWaitingEvent.TIMED_OUT:
+                case TIMED_OUT:
                     if (confirmation.timeoutMessage != null)
                         ChatUtil.sendPrefixedMessage(player, confirmation.timeoutMessage);
                     break;

@@ -7,7 +7,7 @@ chat-prefix: '§8[GeoCountries] ' # text before every plugin chat and console me
 
 sound-effects: true # play notification sound effects (on war declared, chat notif, etc)
 
-max-citizenship-applications: 5 # max number of sent citizenship applications allowed per person, -1=infinite
+max-citizenship-applications: 10 # max number of sent citizenship applications allowed per person, -1=infinite
 
 chat-response-min: 1 # min allowed length of chat message when player asked to type in chat
 chat-response-max: 150  # max allowed length of chat message when player asked to type in chat

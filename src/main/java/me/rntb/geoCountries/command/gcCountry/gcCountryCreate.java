@@ -14,13 +14,13 @@ import java.util.UUID;
 
 public class gcCountryCreate {
 
-    public static void onCommand(CommandSender sender,  String[] args) {
+    public static void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        PlayerProfile pd = PlayerProfile.get(player);
+        PlayerProfile playerProfile = PlayerProfile.get(player);
 
         // already has citizenship
-        if (pd.hasCitizenship()) {
-            Country country = pd.getCitizenship();
+        if (playerProfile.hasCitizenship()) {
+            Country country = playerProfile.getCitizenship();
             ChatUtil.sendPrefixedMessage(sender, "§cYou must first renounce your citizenship of §f" + country.name + "§c using §f/gc citizenship renounce§c before creating a country!");
             return;
         }

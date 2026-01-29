@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public class gcCountryInfo {
 
-    public static void onCommand(CommandSender sender,  String[] args) {
+    public static void onCommand(CommandSender sender, String[] args) {
         Country country;
         // if no args, get player country
         if (args.length == 0) {

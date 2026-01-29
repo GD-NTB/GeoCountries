@@ -44,7 +44,7 @@ public abstract class DataCollection {
     }
 
     static <T> void writeToFile(String filePath, String displayName, List<T> all) {
-        if (GeoCountries.PluginAbsoluteDataFolderPath == null)
+        if (all == null || GeoCountries.PluginAbsoluteDataFolderPath == null)
             return;
 
         Path path = FileUtil.getFilePathFromDataFolder(filePath, "json");

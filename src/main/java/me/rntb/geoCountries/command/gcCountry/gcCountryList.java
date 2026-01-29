@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 
 public class gcCountryList {
 
-    public static void onCommand(CommandSender sender,  String[] args) {
+    public static void onCommand(CommandSender sender, String[] args) {
         // todo: pages
         StringBuilder sb = new StringBuilder(ChatUtil.newlineIfPrefixIsEmpty() +
                                              "§6========== COUNTRY LIST ==========\n");

@@ -2,6 +2,7 @@ package me.rntb.geoCountries.data;
 
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.types.Setting;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 
@@ -34,12 +35,14 @@ public class Country extends DataCollection {
             return;
         }
 
-        // reset and populate hashmaps
+        // reset and populate hashmaps, load settings shite
         byUUID.clear();
         byName.clear();
         for (Country country : all) {
             byUUID.put(country.uuid, country);
             byName.put(country.name, country);
+
+            country.purgeBrokenSettingsAndLoadMetaData();
         }
 
         if (ConfigState.DebugLogging)
@@ -49,7 +52,7 @@ public class Country extends DataCollection {
     public static void save() {
         writeToFile(FILE_PATH, DISPLAY_NAME, all);
 
-        if (ConfigState.DebugLogging)
+        if (all != null && ConfigState.DebugLogging)
             ChatUtil.sendPrefixedLogMessage("Saved " + all.size() + " Countries");
     }
 
@@ -59,6 +62,8 @@ public class Country extends DataCollection {
         byUUID.put(country.uuid, country);
 
         country.timeCreated = System.currentTimeMillis();
+
+        country.purgeBrokenSettingsAndLoadMetaData();
     }
 
     public static void delete(Country country) {
@@ -130,12 +135,39 @@ public class Country extends DataCollection {
             player.citizenship = this.uuid;
         }
     }
-
     public void removeCitizen(PlayerProfile player) {
         this.citizens.remove(player.uuid);
         if (player.citizenship != null && player.citizenship.equals(this.uuid)) {
             player.citizenship = null;
         }
+    }
+
+    public Setting[] settings = new Setting[] { new Setting("autoacceptcitizenshipapplications", "false"),
+                                                new Setting("testint", "6"),
+                                                new Setting("teststring", "value")
+                                              };
+    public Setting getSetting(String key) {
+        return Arrays.stream(this.settings)
+                     .filter(s -> s.key.equals(key))
+                     .findFirst().orElse(null);
+    }
+    public void purgeBrokenSettingsAndLoadMetaData() {
+        ArrayList<Setting> newSettings = new ArrayList<>();
+        for (Setting setting : this.settings) {
+            // if null, setting is broken, so purge
+            if (setting == null) {
+                continue;
+            }
+            setting.loadMetadata();
+            // if name is null, setting is broken, so purge
+            if (setting.name == null)
+                continue;
+
+            newSettings.add(setting);
+        }
+        // convert list to array
+        Setting[] newSettingsArray = new Setting[newSettings.size()];
+        this.settings = newSettings.toArray(newSettingsArray);
     }
 
     public long timeCreated = 0;

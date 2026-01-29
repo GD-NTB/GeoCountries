@@ -10,18 +10,18 @@ import org.bukkit.entity.Player;
 
 public class gcCountryDissolve {
 
-    public static void onCommand(CommandSender sender,  String[] args) {
+    public static void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        PlayerProfile pd = PlayerProfile.get(player);
+        PlayerProfile playerProfile = PlayerProfile.get(player);
 
         // if doesnt have citizenship, escape
-        if (!pd.hasCitizenship()) {
+        if (!playerProfile.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to dissolve it!");
             return;
         }
 
         // if not leader of country, escape
-        if (pd.getLeaderOf() == null) {
+        if (playerProfile.getLeaderOf() == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of your country to dissolve it!");
             return;
         }

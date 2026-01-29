@@ -14,20 +14,20 @@ import java.util.UUID;
 
 public class gcCountryRename {
 
-    public static void onCommand(CommandSender sender,  String[] args) {
+    public static void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         UUID playerUUID = player.getUniqueId();
-        PlayerProfile pd = PlayerProfile.byUUID.get(playerUUID);
+        PlayerProfile playerProfile = PlayerProfile.byUUID.get(playerUUID);
 
         // if doesnt have citizenship, escape
-        if (!pd.hasCitizenship()) {
+        if (!playerProfile.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to rename it!");
             return;
         }
 
         // if not leader of country, escape
-        if (pd.getLeaderOf() == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of your country to change its name!");
+        if (playerProfile.getLeaderOf() == null) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to change its name!");
             return;
         }
 

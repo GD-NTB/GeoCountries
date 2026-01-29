@@ -13,10 +13,11 @@ import java.nio.file.Path;
 
 // todo: do todo's
 // todo: revoke citizenship command
-// todo: a lot of autocompletes need better optimisation!!
 // todo: auto accept citizenship applications (/gc country settings [...])/
 // todo: applications should expire after a config defined amount of time
+// todo: in-country ranks
 // todo: promote command
+// todo: gui
 // todo: claiming (max chunks in config)
 public class GeoCountries extends JavaPlugin {
 

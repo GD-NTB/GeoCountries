@@ -12,7 +12,7 @@ public class ConfigState {
 
     public static boolean SoundEffects = true;
 
-    public static int MaxCitizenshipApplications = 5;
+    public static int MaxCitizenshipApplications = 10;
 
     public static int ChatResponseMin = 1;
     public static int ChatResponseMax = 150;

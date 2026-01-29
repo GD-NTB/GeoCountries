@@ -14,6 +14,7 @@ public class gcDebug extends SubCommand {
         this.HelpString = "Debug commands for development.";
         this.HelpPage   = """
                           §f/gc debug [...]: §aUseful debug commands for plugin development.
+                          §f> cleansettings: §2Cleans all broken settings.
                           §f> createcountry [name]: §2Creates a test country.
                           §f> soundtest: §2Plays a sound effect.""";
     }
@@ -43,6 +44,11 @@ public class gcDebug extends SubCommand {
                 gcDebugSoundTest.onCommand(sender, subArgs);
                 return;
 
+            // gc debug cleansettings
+            case "cleansettings":
+                gcDebugCleanSettings.onCommand(sender, subArgs);
+                return;
+
             // gc debug [xxx]
             default:
                 ChatUtil.sendPrefixedMessage(sender, """
@@ -57,7 +63,7 @@ public class gcDebug extends SubCommand {
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc debug 1
-            case 1 -> sender.hasPermission("gc.debug") ? List.of("createcountry", "soundtest") : List.of();
+            case 1 -> sender.hasPermission("gc.debug") ? List.of("cleansettings", "createcountry", "soundtest") : List.of();
             default -> List.of();
         };
     }

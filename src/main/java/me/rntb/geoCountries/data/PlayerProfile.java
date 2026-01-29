@@ -71,7 +71,7 @@ public class PlayerProfile extends DataCollection {
     public static void save() {
         writeToFile(FILE_PATH, DISPLAY_NAME, all);
 
-        if (ConfigState.DebugLogging) {
+        if (all != null && ConfigState.DebugLogging) {
             int count = all.size();
             ChatUtil.sendPrefixedLogMessage("Saved " + count + " PlayerProfile" + StringUtil.leadingS(count) + ".");
         }

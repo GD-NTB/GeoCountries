@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public class gcPlayerInfo {
 
-    public static void onCommand(CommandSender sender,  String[] args) {
+    public static void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile;
         // if no args, get player profile
         if (args.length == 0) {

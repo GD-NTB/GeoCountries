@@ -1,5 +1,5 @@
 name: GeoCountries
-version: 'ALPHA'
+version: 'ALPHA-0.04'
 main: me.rntb.geoCountries.GeoCountries
 api-version: '1.21'
 authors: [ rNTB ]
@@ -45,6 +45,7 @@ permissions:
       gc.country.create: true
       gc.country.rename: true
       gc.country.dissolve: true
+      gc.country.settings: true
       gc.citizenship: true
       gc.citizenship.apply: true
       gc.citizenship.sent: true

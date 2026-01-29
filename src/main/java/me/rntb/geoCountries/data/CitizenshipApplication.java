@@ -234,7 +234,7 @@ public class CitizenshipApplication extends DataCollection {
     public static void save() {
         writeToFile(FILE_PATH, DISPLAY_NAME, sentAll);
 
-        if (ConfigState.DebugLogging) {
+        if (sentAll != null && ConfigState.DebugLogging) {
             int count = sentAll.size();
             ChatUtil.sendPrefixedLogMessage("Saved " + count + " CitizenApplication" + StringUtil.leadingS(count) + ".");
         }

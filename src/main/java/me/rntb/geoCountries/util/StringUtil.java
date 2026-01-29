@@ -26,7 +26,7 @@ public class StringUtil {
     // country name should be trimmed beforehand
     public static String validateCountryName(String countryName, boolean alreadyExistsInvalid) {
         if (!(ConfigState.CountryNameMin <= countryName.length() && countryName.length() <= ConfigState.CountryNameMax))
-            return "§cCountry name must be between §f%d-%d§c characters!§r"
+            return "§cCountry name must be between §f%d and %d§c characters!§r"
                     .formatted(ConfigState.CountryNameMin, ConfigState.CountryNameMax);
         if (alreadyExistsInvalid && Country.byName.get(countryName) != null)
             return "§cA country with that name already exists!§r";
@@ -49,7 +49,7 @@ public class StringUtil {
     // response should be trimmed beforehand
     public static String validateResponse(String response) {
         if (!(ConfigState.ChatResponseMin <= response.length() && response.length() <= ConfigState.ChatResponseMax))
-            return "§cChat message must be between §f%d-%d§c characters!§r"
+            return "§cChat message must be between §f%d and %d§c characters!§r"
                     .formatted(ConfigState.ChatResponseMin, ConfigState.ChatResponseMax);
 
         // illegal characters

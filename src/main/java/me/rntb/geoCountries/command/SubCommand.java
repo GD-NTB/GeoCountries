@@ -20,7 +20,7 @@ public abstract class SubCommand {
         this.ConsoleCanUse = consoleCanUse;
     }
 
-    public void onCommandEntered(CommandSender sender,  String[] args) {
+    public void onCommandEntered(CommandSender sender, String[] args) {
         // if we are console and console can't use, escape
         if (!(sender instanceof Player) && !this.ConsoleCanUse) {
             ChatUtil.sendPrefixedPlayerOnlyErrorMessage(this.DisplayName);
