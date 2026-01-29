@@ -155,6 +155,7 @@ public class gcHelp extends SubCommand {
         return switch (args.length) {
             // /gc help 1
             case 1 -> gc.GetAllowedSubCommandsAsStrings(player);
+
             default -> List.of();
         };
     }

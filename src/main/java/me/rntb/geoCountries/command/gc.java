@@ -22,54 +22,45 @@ import java.util.*;
 // all args for /gc are mapped to their respective subcommand through here
 public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
 
-    public static Map<String, SubCommand> gcSubCommands = new HashMap<>();
+    public static Map<String, SubCommand> gcSubCommands = Map.ofEntries(
+            Map.entry("help", new gcHelp("/gc help", "gc.help", true)),
+            Map.entry("purge", new gcPurge("/gc purge", "gc.purge", true)),
+            Map.entry("dump", new gcDump("/gc dump", "gc.dump", true)),
+            Map.entry("country", new gcCountry("/gc country", "gc.country", true)),
+            Map.entry("player", new gcPlayer("/gc player", "gc.player", true)),
+            Map.entry("confirm", new gcConfirm("/gc confirm", "gc.confirm", true)),
+            Map.entry("cancel", new gcCancel("/gc cancel", "gc.cancel", true)),
+            Map.entry("save", new gcSave("/gc save", "gc.save", true)),
+            Map.entry("config", new gcConfig("/gc config", "gc.config", true)),
+            Map.entry("citizenship", new gcCitizenship("/gc citizenship", "gc.citizenship", false)),
+            Map.entry("debug", new gcDebug("/gc debug", "gc.debug", false)),
+            Map.entry("admin", new gcAdmin("/gc admin", "gc.admin", true)),
+            Map.entry("load", new gcLoad("/gc load", "gc.load", true))
+    );
 
-    public static List<SubCommand> GetAllowedSubCommands(Player player) {
+    public static List<SubCommand> GetAllowedSubCommands(CommandSender sender) {
         return gcSubCommands.values().stream()
-                                     .filter(sc -> player.hasPermission(sc.RequiredPermission))
+                                     .filter(sc -> sender.hasPermission(sc.RequiredPermission))
                                      .toList();
     }
-    public static List<String> GetAllowedSubCommandsAsStrings(Player player) {
+    public static List<String> GetAllowedSubCommandsAsStrings(CommandSender sender) {
         return gcSubCommands.entrySet().stream()
-                                       .filter(sc -> player.hasPermission(sc.getValue().RequiredPermission))
+                                       .filter(sc -> sender.hasPermission(sc.getValue().RequiredPermission))
                                        .map(Map.Entry::getKey)
                                        .sorted().toList();
     }
 
-    public static void registerSubCommands() {
-        registerSubCommand("help", new gcHelp("/gc help", "gc.help", true));
-        registerSubCommand("purge", new gcPurge("/gc purge", "gc.purge", true));
-        registerSubCommand("dump", new gcDump("/gc dump", "gc.dump", true));
-        registerSubCommand("country", new gcCountry("/gc country", "gc.country", true));
-        registerSubCommand("player", new gcPlayer("/gc player", "gc.player", true));
-        registerSubCommand("confirm", new gcConfirm("/gc confirm", "gc.confirm", true));
-        registerSubCommand("cancel", new gcCancel("/gc cancel", "gc.cancel", true));
-        registerSubCommand("save", new gcSave("/gc save", "gc.save", true));
-        registerSubCommand("config", new gcConfig("/gc config", "gc.config", true));
-        registerSubCommand("citizenship", new gcCitizenship("/gc citizenship", "gc.citizenship", false));
-        registerSubCommand("debug", new gcDebug("/gc debug", "gc.debug", false));
-        registerSubCommand("admin", new gcAdmin("/gc admin", "gc.admin", true));
-        registerSubCommand("load", new gcLoad("/gc load", "gc.load", true));
-    }
-
-    public static void registerSubCommand(String name, SubCommand subCommand) {
-        gcSubCommands.put(name, subCommand);
-    }
-
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args)  {
-        // do the command
         if (args.length == 0)
             onCommandNoArgs(sender); // /gc
         else
             onCommandArgs(sender, args); // /gc [...]
-
         return true;
     }
 
     private void onCommandNoArgs(@NotNull CommandSender sender) {
-        // perms need checking if we are player
-        if (sender instanceof Player && !sender.hasPermission("gc")) {
+        if (!sender.hasPermission("gc")) {
             ChatUtil.sendNoPermissionMessage(sender, "/gc", "gc");
             return;
         }
@@ -84,7 +75,6 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
         // find subcommand
         String subCommandName = args[0].toLowerCase();
         SubCommand subCommand = gcSubCommands.get(subCommandName);
-        // subcommand doesnt exist
         if (subCommand == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cThe command §f/gc %s§c doesn't exist!"
                                                  .formatted(subCommandName));
@@ -99,31 +89,33 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
             }
         }
 
-        // get subargs (the [...] in /gc subcommand [...])
-        String[] subArgs = Arrays.copyOfRange(args, 1, args.length); // get the [...] in /gc ... [...]
+        // get subargs (the [...] in /gc [subcommand] [...])
+        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
 
-        // call subcommand.onCommandArgs(subArgs) with perms and console check
+        // do perms and console check then subcommand.onCommandArgs
         subCommand.onCommandEntered(sender, subArgs);
     }
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
-        switch (args.length) {
+        return switch (args.length) {
             // /gc
-            case 0: return List.of();
+            case 0 -> List.of();
+
             // /gc [...]
-            case 1: return GetAllowedSubCommandsAsStrings(player);
+            case 1 -> GetAllowedSubCommandsAsStrings(player);
+
+            // /gc [subcommand] [...]
+            default -> {
+                // find subcommand
+                SubCommand subCommand = gcSubCommands.get(args[0]);
+                if (subCommand == null || !sender.hasPermission(subCommand.RequiredPermission))
+                    yield List.of();
+
+                // get tab completion of subcommand
+                yield subCommand.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));
+            }
         };
-
-        // /gc [subcommand] [...]
-        // find subcommand
-        SubCommand subCommand = gcSubCommands.get(args[0]);
-        // if not found, escape
-        if (subCommand == null)
-            return List.of();
-
-        // get tab completion of subcommand
-        return subCommand.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));
     }
 }

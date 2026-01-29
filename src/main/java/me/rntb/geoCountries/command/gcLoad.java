@@ -19,7 +19,6 @@ public class gcLoad extends SubCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // /gc load
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcLoad::onConfirm,
@@ -32,7 +31,6 @@ public class gcLoad extends SubCommand {
         // load data collections
         ChatUtil.sendPrefixedMessage(sender, "§eLoading all data collections...");
         DataCollectionManager.init();
-
         ChatUtil.sendPrefixedMessage(sender, "§aLoaded all data!");
     }
 

@@ -9,10 +9,10 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Stream;
+import java.util.function.BiConsumer;
 
 public class gcCitizenship extends SubCommand {
 
@@ -30,9 +30,18 @@ public class gcCitizenship extends SubCommand {
                           §f> unsend: §2Unsends a citizenship application that you previously sent.""";
     }
 
+    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
+            Map.entry("accept", gcCitizenshipAccept::onCommand),
+            Map.entry("apply", gcCitizenshipApply::onCommand),
+            Map.entry("received", gcCitizenshipReceived::onCommand),
+            Map.entry("reject", gcCitizenshipReject::onCommand),
+            Map.entry("renounce", gcCitizenshipRenounce::onCommand),
+            Map.entry("sent", gcCitizenshipSent::onCommand),
+            Map.entry("unsend", gcCitizenshipUnsend::onCommand)
+    );
+
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // /gc citizenship
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, """
                                                  §a%s
@@ -40,99 +49,24 @@ public class gcCitizenship extends SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-
-        String mode = args[0].toLowerCase();
-        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-        // find and route to proper method
-        switch (mode) {
-            // /gc citizenship apply
-            case "apply":
-                if (!sender.hasPermission("gc.citizenship.apply")) {
-                    ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship apply", "gc.citizenship.apply");
-                    return;
-                }
-                gcCitizenshipApply.onCommand(sender, subArgs);
-                return;
-
-            // /gc citizenship sent
-            case "sent":
-                if (!sender.hasPermission("gc.citizenship.sent")) {
-                    ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship sent", "gc.citizenship.sent");
-                    return;
-                }
-                gcCitizenshipSent.onCommand(sender, subArgs);
-                return;
-
-            // /gc citizenship unsend
-            case "unsend":
-                if (!sender.hasPermission("gc.citizenship.unsend")) {
-                    ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship unsend", "gc.citizenship.unsend");
-                    return;
-                }
-                gcCitizenshipUnsend.onCommand(sender, subArgs);
-                return;
-
-            // /gc citizenship renounce
-            case "renounce":
-                if (!sender.hasPermission("gc.citizenship.renounce")) {
-                    ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship renounce", "gc.citizenship.renounce");
-                    return;
-                }
-                gcCitizenshipRenounce.onCommand(sender, subArgs);
-                return;
-
-            // /gc citizenship received
-            case "received":
-                if (!sender.hasPermission("gc.citizenship.received")) {
-                    ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship received", "gc.citizenship.received");
-                    return;
-                }
-                gcCitizenshipReceived.onCommand(sender, subArgs);
-                return;
-
-            // /gc citizenship accept
-            case "accept":
-                if (!sender.hasPermission("gc.citizenship.accept")) {
-                    ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship accept", "gc.citizenship.accept");
-                    return;
-                }
-                gcCitizenshipAccept.onCommand(sender, subArgs);
-                return;
-
-            // /gc citizenship reject
-            case "reject":
-                if (!sender.hasPermission("gc.citizenship.reject")) {
-                    ChatUtil.sendNoPermissionMessage(sender, "/gc citizenship reject", "gc.citizenship.reject");
-                    return;
-                }
-                gcCitizenshipReject.onCommand(sender, subArgs);
-                return;
-
-            // gc citizenship [xxx]
-            default:
-                ChatUtil.sendPrefixedMessage(sender, """
-                                                     §c§f%s§c is not a valid command for §f%s§c!
-                                                     Usage: §f%s [...]"""
-                                                     .formatted(mode, this.DisplayName, this.DisplayName));
-                return;
-        }
+        findAndExecuteSubCommand(sender, args, subCommands);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         return switch (args.length) {
-            // /gc citizen 1
-            case 1 -> Stream.of("accept", "apply", "received", "reject", "renounce", "sent", "unsend")
-                      .filter(x -> sender.hasPermission("gc.citizenship." + x))
-                      .toList();
+            // /gc citizen [commands]
+            case 1 -> subCommands.keySet().stream()
+                                          .filter(x -> sender.hasPermission(this.RequiredPermission + "." + x))
+                                          .toList();
 
-            // gc citizen [...] 2
+            // gc citizen [command] [...]
             case 2 ->
                 switch (args[0]) {
                     // /gc citizenship accept [players]
                     case "accept" -> {
                         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
-                        if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission("gc.citizenship.accept"))
+                        if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission(this.RequiredPermission + ".accept"))
                             yield List.of();
                         yield getReceivedCitizenshipApplicationsAsStrings(player.citizenship);
                     }
@@ -140,17 +74,17 @@ public class gcCitizenship extends SubCommand {
                     // /gc citizenship reject [players]
                     case "reject" -> {
                         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
-                        if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission("gc.citizenship.reject"))
+                        if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission(this.RequiredPermission + ".reject"))
                             yield List.of();
                         yield getReceivedCitizenshipApplicationsAsStrings(player.citizenship);
                     }
 
                     // /gc citizenship apply [countries]
-                    case "apply" -> sender.hasPermission("gc.citizenship.apply") ? Country.allAsNames(true) : List.of();
+                    case "apply" -> sender.hasPermission(this.RequiredPermission + ".apply") ? Country.allAsNames(true) : List.of();
 
                     // /gc citizenship unsend [countries]
                     case "unsend" -> {
-                        if (!sender.hasPermission("gc.citizenship.unsend"))
+                        if (!sender.hasPermission(this.RequiredPermission + ".unsend"))
                             yield List.of();
                         Player player = (Player) sender;
                         yield getSentCitizenshipApplicationsAsStrings(player.getUniqueId());
@@ -159,14 +93,14 @@ public class gcCitizenship extends SubCommand {
                     // /gc citizenship received [players]
                     case "received" -> {
                         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
-                        if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission("gc.citizenship.received"))
+                        if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission(this.RequiredPermission + ".received"))
                             yield List.of();
                         yield getReceivedCitizenshipApplicationsAsStrings(player.citizenship);
                     }
 
-                    // /gc citizenship [...]
                     default -> List.of();
                 };
+
             default -> List.of();
         };
     }

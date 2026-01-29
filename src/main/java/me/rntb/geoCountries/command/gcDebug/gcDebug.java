@@ -4,8 +4,9 @@ import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class gcDebug extends SubCommand {
 
@@ -19,9 +20,14 @@ public class gcDebug extends SubCommand {
                           §f> soundtest: §2Plays a sound effect.""";
     }
 
+    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
+            Map.entry("cleansettings", gcDebugCleanSettings::onCommand),
+            Map.entry("createcountry", gcDebugCreateCountry::onCommand),
+            Map.entry("soundtest", gcDebugSoundTest::onCommand)
+    );
+
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // /gc debug
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, """
                                                  §a%s
@@ -29,41 +35,15 @@ public class gcDebug extends SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-
-        String mode = args[0].toLowerCase();
-        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-        // find and route to proper method
-        switch (mode) {
-            // gc debug createcountry
-            case "createcountry":
-                gcDebugCreateCountry.onCommand(sender, subArgs);
-                return;
-
-            // gc debug soundtest
-            case "soundtest":
-                gcDebugSoundTest.onCommand(sender, subArgs);
-                return;
-
-            // gc debug cleansettings
-            case "cleansettings":
-                gcDebugCleanSettings.onCommand(sender, subArgs);
-                return;
-
-            // gc debug [xxx]
-            default:
-                ChatUtil.sendPrefixedMessage(sender, """
-                                                     §c§f%s§c is not a valid command for §f%s§c!
-                                                     Usage: §f%s [...]"""
-                                                     .formatted(mode, this.DisplayName, this.DisplayName));
-                return;
-        }
+        findAndExecuteSubCommand(sender, args, subCommands);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
-            // /gc debug 1
-            case 1 -> sender.hasPermission("gc.debug") ? List.of("cleansettings", "createcountry", "soundtest") : List.of();
+            // /gc debug [commands]
+            case 1 -> subCommands.keySet().stream().toList();
+
             default -> List.of();
         };
     }

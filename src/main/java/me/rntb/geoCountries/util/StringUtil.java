@@ -16,9 +16,6 @@ public class StringUtil {
     public static String leadingS(long count) {
         return count == 1 ? "" : "s";
     }
-    public static String uppercaseLeadingS(long count) {
-        return count == 1 ? "" : "S";
-    }
 
     // ---------- string validation ----------
 

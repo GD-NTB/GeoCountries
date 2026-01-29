@@ -4,7 +4,10 @@ import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 public abstract class SubCommand {
 
@@ -35,6 +38,26 @@ public abstract class SubCommand {
 
         // else onCommand
         onCommand(sender, args);
+    }
+
+    public void findAndExecuteSubCommand(CommandSender sender, String[] args, Map<String, BiConsumer<CommandSender, String[]>> subCommands) {
+        String mode = args[0].toLowerCase();
+        BiConsumer<CommandSender, String[]> method = subCommands.get(mode);
+        if (method != null) {
+            String permission = this.RequiredPermission + "." + mode;
+            if (!sender.hasPermission(permission)) {
+                ChatUtil.sendNoPermissionMessage(sender, this.DisplayName + " " + mode, permission);
+                return;
+            }
+            String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+            method.accept(sender, subArgs);
+        }
+        else {
+            ChatUtil.sendPrefixedMessage(sender, """
+                                                 §c§f%s§c is not a valid command for §f%s§c!
+                                                 Usage: §f%s [...]"""
+                                                 .formatted(mode, this.DisplayName, this.DisplayName));
+        }
     }
 
     public abstract void onCommand(CommandSender sender, String[] args);

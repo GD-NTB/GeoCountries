@@ -252,7 +252,7 @@ public class CitizenshipApplication extends DataCollection {
 
     public String reason;
 
-    public long timeCreated = 0; // set in sent method
+    public long timeCreated = 0;
 
     public CitizenshipApplication(UUID uuid, UUID applicant, UUID toCountry) {
         this.uuid = uuid;

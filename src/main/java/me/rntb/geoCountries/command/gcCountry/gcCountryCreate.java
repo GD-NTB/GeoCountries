@@ -48,6 +48,7 @@ public class gcCountryCreate {
 
     private static void onConfirm(CommandSender sender,  String[] args) {
         String countryName = args[0];
+        Player player = (Player) sender;
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         Country newCountry = new Country(UUID.randomUUID(), countryName);

@@ -11,10 +11,9 @@ public class SoundUtil {
     }
 
     public static void playSound(Player player, SoundEffect soundEffect) {;
-        if (player == null || !ConfigState.SoundEffects) {
+        if (!ConfigState.SoundEffects || player == null) {
             return;
         }
-
         Sound sound;
         switch (soundEffect) {
             case CHAT_NOTIF: sound = Sound.BLOCK_NOTE_BLOCK_HARP; break;

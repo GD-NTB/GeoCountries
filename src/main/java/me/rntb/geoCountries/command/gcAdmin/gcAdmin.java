@@ -8,8 +8,9 @@ import me.rntb.geoCountries.util.EnumUtil;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class gcAdmin extends SubCommand {
 
@@ -23,6 +24,12 @@ public class gcAdmin extends SubCommand {
                           §f> setplayerrank [username] [rank]: §2Set a player's rank.""";
     }
 
+    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
+            Map.entry("deletecountry", gcAdminDeleteCountry::onCommand),
+            Map.entry("setplayercountry", gcAdminSetPlayerCountry::onCommand),
+            Map.entry("setplayerrank", gcAdminSetPlayerRank::onCommand)
+    );
+
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         // /gc admin
@@ -33,68 +40,44 @@ public class gcAdmin extends SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-
-        String mode = args[0].toLowerCase();
-        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-        // find and route to proper method
-        switch (mode) {
-            // gc admin deletecountry
-            case "deletecountry":
-                gcAdminDeleteCountry.onCommand(sender, subArgs);
-                return;
-
-            // gc admin setplayercountry
-            case "setplayercountry":
-                gcAdminSetPlayerCountry.onCommand(sender, subArgs);
-                return;
-
-            // gc admin setplayerrank
-            case "setplayerrank":
-                gcAdminSetPlayerRank.onCommand(sender, subArgs);
-                return;
-
-            // gc admin [xxx]
-            default:
-                ChatUtil.sendPrefixedMessage(sender, """
-                                                     §c§f%s§c is not a valid command for §f%s§c!
-                                                     Usage: §f%s [...]"""
-                                                     .formatted(mode, this.DisplayName, this.DisplayName));
-                return;
-        }
+        findAndExecuteSubCommand(sender, args, subCommands);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
-            // /gc admin 1
-            case 1 -> sender.hasPermission("gc.admin") ? List.of("deletecountry", "setplayercountry", "setplayerrank") : List.of();
-            // gc admin [...] 2
+            // /gc admin [commands]
+            case 1 -> subCommands.keySet().stream().toList();
+
+            // gc admin [command] [...]
             case 2 ->
                 switch (args[0]) {
                     // /gc admin deletecountry [country]
-                    case "deletecountry" -> sender.hasPermission("gc.admin") ? Country.allAsNames(true) : List.of();
+                    case "deletecountry" -> Country.allAsNames(true);
+
                     // /gc admin setplayerrank [players]
                     // /gc admin setplayercountry [players]
-                    case "setplayerrank", "setplayercountry" -> sender.hasPermission("gc.admin") ? PlayerProfile.allAsUsernames(true) : List.of();
-                    // /gc admin [...]
+                    case "setplayerrank", "setplayercountry" -> PlayerProfile.allAsUsernames(true);
+
                     default -> List.of();
                 };
-            // gc admin [...] 2
+
+            // gc admin [command] [...] [...]
             case 3 ->
                 switch (args[0]) {
                     // /gc admin setplayercountry [...] [countries]
                     case "setplayercountry" -> {
-                        if (!sender.hasPermission("gc.admin"))
-                            yield List.of();
                         List<String> countryNames = new ArrayList<>(Country.allAsNames(true));
                         countryNames.add("null");
                         yield countryNames;
                     }
-                    // /gc admin setplayerrank [...] [ranks]
-                    case "setplayerrank" -> sender.hasPermission("gc.admin") ? EnumUtil.enumToStringArray(PlayerProfile.PlayerRank.class) : List.of();
-                    // /gc admin [...]
+
+                    // /gc admin setplayerrank [player] [ranks]
+                    case "setplayerrank" -> EnumUtil.enumToStringArray(PlayerProfile.PlayerRank.class);
+
                     default -> List.of();
                 };
+
             default -> List.of();
         };
     }

@@ -46,7 +46,6 @@ public class GeoCountries extends JavaPlugin {
 
         // initialise commands
         getCommand("gc").setExecutor(new gc());
-        gc.registerSubCommands();
 
         // initialise globals
         PluginName = this.getDescription().getName();

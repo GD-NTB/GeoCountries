@@ -19,7 +19,6 @@ public class gcSave extends SubCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // /gc save
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(gcSave::onConfirm,
@@ -32,7 +31,6 @@ public class gcSave extends SubCommand {
         // save data collections
         ChatUtil.sendPrefixedMessage(sender, "§eSaving all data collections...");
         DataCollectionManager.save();
-
         ChatUtil.sendPrefixedMessage(sender, "§aSaved all data!");
     }
 

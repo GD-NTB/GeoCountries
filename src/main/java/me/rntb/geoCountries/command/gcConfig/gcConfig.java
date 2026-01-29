@@ -4,9 +4,9 @@ import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class gcConfig extends SubCommand {
 
@@ -18,9 +18,12 @@ public class gcConfig extends SubCommand {
                           §f> reload: §2Reloads the config and updates the plugin's state.""";
     }
 
+    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
+            Map.entry("reload", gcConfigReload::onCommand)
+    );
+
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // /gc config
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, """
                                                  §a%s
@@ -28,31 +31,17 @@ public class gcConfig extends SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-
-        String mode = args[0].toLowerCase();
-        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-        // find and route to proper method
-        switch (mode) {
-            case "reload":
-                gcConfigReload.onCommand(sender, subArgs);
-                return;
-            // gc config [xxx]
-            default:
-                ChatUtil.sendPrefixedMessage(sender, """
-                                                     §c§f%s§c is not a valid command for §f%s§c!
-                                                     Usage: §f%s [...]"""
-                                                     .formatted(mode, this.DisplayName, this.DisplayName));
-                return;
-        }
+        findAndExecuteSubCommand(sender, args, subCommands);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
-            // /gc config 1
-            case 1 -> Stream.of("reload")
-                      .filter(x -> sender.hasPermission("gc.config." + x))
-                      .toList();
+            // /gc config [commands]
+            case 1 -> subCommands.keySet().stream()
+                                          .filter(x -> sender.hasPermission(this.RequiredPermission + "." + x))
+                                          .toList();
+
             default -> List.of();
         };
     }

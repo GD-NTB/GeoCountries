@@ -20,15 +20,15 @@ public class gcCancel extends SubCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // if console, uuid=0000..., else get player uuid
         UUID uuid = UuidUtil.getUUIDOfCommandSender(sender);
 
-        // cancel command
+        // if sender not being waited on, escape
         if (!Confirmation.isWaiting(uuid) && !Response.isWaiting(uuid)) {
             ChatUtil.sendPrefixedMessage(sender, "§cNo command was there to be cancelled.");
             return;
         }
 
+        // cancel
         Confirmation.stopWaiting(uuid, Confirmation.StopWaitingEvent.CANCELLED, true);
         Response.stopWaiting(uuid, Response.StopWaitingEvent.CANCELLED, true);
     }

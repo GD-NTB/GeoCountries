@@ -5,8 +5,9 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class gcPurge extends SubCommand {
 
@@ -23,9 +24,16 @@ public class gcPurge extends SubCommand {
                           §f> username [username]: §2Purges a PlayerProfile by username.""";
     }
 
+    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
+            Map.entry("citizenshipapplication", gcPurgeCitizenshipApplication::onCommand),
+            Map.entry("country", gcPurgeCountry::onCommand),
+            Map.entry("playerprofile", gcPurgePlayerProfile::onCommand),
+            Map.entry("uuid", gcPurgeUUID::onCommand),
+            Map.entry("username", gcPurgeUsername::onCommand)
+    );
+
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // /gc purge
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, """
                                                  §a%s
@@ -33,61 +41,23 @@ public class gcPurge extends SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-
-        String mode = args[0].toLowerCase();
-        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-        // find and route to proper method
-        switch (mode) {
-            // /gc purge username
-            case "username":
-                gcPurgeUsername.onCommand(sender, subArgs);
-                return;
-
-            // /gc purge uuid
-            case "uuid":
-                gcPurgeUUID.onCommand(sender, subArgs);
-                return;
-
-            // /gc purge playerprofile
-            case "playerprofile":
-                gcPurgePlayerProfile.onCommand(sender, subArgs);
-                return;
-
-            //gc purge country
-            case "country":
-                gcPurgeCountry.onCommand(sender, subArgs);
-                return;
-
-            //gc purge citizenshipapplication
-            case "citizenshipapplication":
-                gcPurgeCitizenshipApplication.onCommand(sender, subArgs);
-                return;
-
-            // gc purge [xxx]
-            default:
-                ChatUtil.sendPrefixedMessage(sender, """
-                                                     §c§f%s§c is not a valid command for §f%s§c!
-                                                     Usage: §f%s [...]"""
-                                                     .formatted(mode, this.DisplayName, this.DisplayName));
-                return;
-            }
-        }
+        findAndExecuteSubCommand(sender, args, subCommands);
+    }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
-            // /gc purge 1
-            case 1 -> sender.hasPermission("gc.purge") ? List.of("citizenshipapplication", "country", "playerprofile", "uuid", "username") : List.of();
+            // /gc purge [commands]
+            case 1 -> subCommands.keySet().stream().toList();
+
             // /gc purge [...] 2
             case 2 ->
                 switch (args[0]) {
-                    // /gc purge username [usernames]
-                    case "username" -> sender.hasPermission("gc.purge") ? PlayerProfile.allAsUsernames(true) : List.of();
-                    // /gc purge uuid [uuids]
-                    case "uuid" -> sender.hasPermission("gc.purge") ? PlayerProfile.allAsUUIDStrings() : List.of();
-                    // /gc purge [...]
+                    case "username" -> PlayerProfile.allAsUsernames(true);
+                    case "uuid" -> PlayerProfile.allAsUUIDStrings();
                     default -> List.of();
                 };
+
             default -> List.of();
         };
     }

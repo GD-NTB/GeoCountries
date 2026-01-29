@@ -19,15 +19,20 @@ public class gcDump extends SubCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // /gc dump
-        ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
-                                             "PlayerProfile.All(" + PlayerProfile.all.size() + ")\n" +
-                                             "----------\n" +
-                                             "ByUsername(" + PlayerProfile.byUsername.size() + "), ByUUID(" + PlayerProfile.byUUID.keySet().toArray().length + ")\n" +
-                                             "----------\n" +
-                                             "CitizenshipApplication.sentByApplicant(" + CitizenshipApplication.sentByApplicant.size() + ")\n" +
-                                             "----------\n" +
-                                             "Country.All(" + Country.all.size() + ")");
+        ChatUtil.sendPrefixedMessage(sender, """
+                                             %sPlayerProfile.all(%s)
+                                             ----------
+                                             byUsername(%s), byUUID(%s)
+                                             ----------
+                                             CitizenshipApplication.sendByApplicant(%s)
+                                             ----------
+                                             Country.all(%s)
+                                             """
+                                             .formatted(ChatUtil.newlineIfPrefixIsEmpty(),
+                                                        PlayerProfile.all.size(),
+                                                        PlayerProfile.byUsername.size(), PlayerProfile.byUUID.size(),
+                                                        CitizenshipApplication.sentByApplicant.size(),
+                                                        Country.all.size()));
     }
 
     @Override

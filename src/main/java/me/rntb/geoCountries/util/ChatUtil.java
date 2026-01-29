@@ -52,6 +52,7 @@ public class ChatUtil {
             return;
         sender.sendMessage(ConfigState.ChatPrefix + message);
     }
+
     public static void sendPrefixedMessage(CommandSender sender, Component message) {
         if (sender == null)
             return;

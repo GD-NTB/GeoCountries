@@ -11,7 +11,6 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-
         PlayerProfile playerProfile = PlayerProfile.get(player);
 
         // if new player, create them a new PlayerProfile

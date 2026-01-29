@@ -33,7 +33,6 @@ public class gcConfirm extends SubCommand {
 
         // remove sender from waiting list
         Confirmation.stopWaiting(uuid, Confirmation.StopWaitingEvent.CONFIRMED, false);
-
     }
 
     @Override

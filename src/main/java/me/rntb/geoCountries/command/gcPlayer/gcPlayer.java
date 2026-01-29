@@ -5,9 +5,9 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class gcPlayer extends SubCommand {
 
@@ -19,57 +19,43 @@ public class gcPlayer extends SubCommand {
                           §f> info [username]: §2Displays info about a particular player.""";
     }
 
+    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
+            Map.entry("info", gcPlayerInfo::onCommand)
+    );
+
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // /gc player
         if (args.length == 0) {
-            // go /gc player info
-            if (!sender.hasPermission("gc.player.info")) {
-                ChatUtil.sendNoPermissionMessage(sender, "/gc player info", "gc.player.info");
+            // do /gc player info
+            String permission = this.RequiredPermission + ".info";
+            if (!sender.hasPermission(permission)) {
+                ChatUtil.sendNoPermissionMessage(sender, this.DisplayName + " info", permission);
                 return;
             }
             gcPlayerInfo.onCommand(sender, args);
             return;
         }
-
-        String mode = args[0].toLowerCase();
-        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-        // find and route to proper method
-        switch (mode) {
-            // gc player info
-            case "info":
-                if (!sender.hasPermission("gc.player.info")) {
-                    ChatUtil.sendNoPermissionMessage(sender, "/gc player info", "gc.player.info");
-                    return;
-                }
-                gcPlayerInfo.onCommand(sender, subArgs);
-                return;
-
-            // gc player [xxx]
-            default:
-                ChatUtil.sendPrefixedMessage(sender, """
-                                                     §c§f%s§c is not a valid command for §f%s§c!
-                                                     Usage: §f%s [...]"""
-                                                     .formatted(mode, this.DisplayName, this.DisplayName));
-                return;
-        }
+        findAndExecuteSubCommand(sender, args, subCommands);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
-            // /gc player 1
-            case 1 -> Stream.of("info")
-                      .filter(x -> sender.hasPermission("gc.player." + x))
-                      .toList();
-            // /gc player [...] 2
+            // /gc player [commands]
+            case 1 -> subCommands.keySet().stream()
+                                          .filter(x -> sender.hasPermission(this.RequiredPermission + "." + x))
+                                          .toList();
+
+            // /gc player [command] [...]
             case 2 ->
                 switch (args[0]) {
                     // /gc player info [players]
-                    case "info" -> sender.hasPermission("gc.player.info") ? PlayerProfile.allAsUsernames(true) : List.of();
+                    case "info" -> sender.hasPermission(this.RequiredPermission + ".info") ? PlayerProfile.allAsUsernames(true) : List.of();
+
                     // /gc player [...]
                     default -> List.of();
                 };
+
             default -> List.of();
         };
     }
