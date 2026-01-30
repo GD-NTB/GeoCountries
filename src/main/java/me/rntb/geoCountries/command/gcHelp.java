@@ -120,10 +120,10 @@ public class gcHelp extends SubCommand {
         StringBuilder sb = new StringBuilder();
         List<SubCommand> subCommands;
         if (sender instanceof Player player) {
-            subCommands = gc.GetAllowedSubCommands(player);
+            subCommands = gc.allowedSubCommands(player);
         }
         else {
-            subCommands = gc.gcSubCommands.values().stream().toList();
+            subCommands = gc.subCommands.values().stream().toList();
         }
         // append help for each command
         for (SubCommand sc : subCommands) {
@@ -137,7 +137,11 @@ public class gcHelp extends SubCommand {
 
     private static Pagination getHelpSpecific(CommandSender sender, String commandName, int index) {
         StringBuilder sb = new StringBuilder();
-        SubCommand sc = gc.gcSubCommands.get(commandName);
+        // replace with alias if needed
+        String subCommandNameAlias = gc.subCommandsAliases.get(commandName);
+        if (subCommandNameAlias != null)
+            commandName = subCommandNameAlias;
+        SubCommand sc = gc.subCommands.get(commandName);
         // if command doesnt exist or no permission, escape
         if (sc == null || !sender.hasPermission(sc.RequiredPermission)) {
             return null;
@@ -154,7 +158,7 @@ public class gcHelp extends SubCommand {
         Player player = (Player) sender;
         return switch (args.length) {
             // /gc help 1
-            case 1 -> gc.GetAllowedSubCommandsAsStrings(player);
+            case 1 -> gc.subCommandsTabAutoCompleteList(player);
 
             default -> List.of();
         };

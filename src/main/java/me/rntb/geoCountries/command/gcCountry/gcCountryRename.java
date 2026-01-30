@@ -66,7 +66,7 @@ public class gcCountryRename {
         // play sound to renamer
         SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
 
-        // broadcast notif to country (todo: settings)
+        // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has now been renamed to §f" + countryName + "§6!", true);
     }
 }

@@ -40,7 +40,7 @@ public class gcCountryDissolve {
         ChatUtil.sendPrefixedMessage(sender, "§aDissolved country §f" + country.name + "§a!");
         ChatUtil.broadcastPrefixedMessage("§6The country §f" + country.name + "§6 has just been dissolved!");
 
-        // broadcast notif to country (todo: settings)
+        // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has just been dissolved! §cYou are no longer a citizen of any country.", true);
 
         Country.delete(country);

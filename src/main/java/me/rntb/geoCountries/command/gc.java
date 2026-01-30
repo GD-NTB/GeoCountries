@@ -19,10 +19,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-// all args for /gc are mapped to their respective subcommand through here
-public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
+public class gc implements TabExecutor {
 
-    public static Map<String, SubCommand> gcSubCommands = Map.ofEntries(
+    public static Map<String, SubCommand> subCommands = Map.ofEntries(
             Map.entry("help", new gcHelp("/gc help", "gc.help", true)),
             Map.entry("purge", new gcPurge("/gc purge", "gc.purge", true)),
             Map.entry("dump", new gcDump("/gc dump", "gc.dump", true)),
@@ -37,17 +36,29 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
             Map.entry("admin", new gcAdmin("/gc admin", "gc.admin", true)),
             Map.entry("load", new gcLoad("/gc load", "gc.load", true))
     );
+    public static Map<String, String> subCommandsAliases = Map.ofEntries(
+            Map.entry("c", "country"),
+            Map.entry("p", "player"),
+            Map.entry("citizen", "citizenship")
+    );
 
-    public static List<SubCommand> GetAllowedSubCommands(CommandSender sender) {
-        return gcSubCommands.values().stream()
-                                     .filter(sc -> sender.hasPermission(sc.RequiredPermission))
-                                     .toList();
+    public static List<SubCommand> allowedSubCommands(CommandSender sender) {
+        return subCommands.values().stream()
+                                   .filter(sc -> sender.hasPermission(sc.RequiredPermission))
+                                   .toList();
     }
-    public static List<String> GetAllowedSubCommandsAsStrings(CommandSender sender) {
-        return gcSubCommands.entrySet().stream()
-                                       .filter(sc -> sender.hasPermission(sc.getValue().RequiredPermission))
-                                       .map(Map.Entry::getKey)
-                                       .sorted().toList();
+    public static List<String> allowedSubCommandsAsStrings(CommandSender sender) {
+        return subCommands.entrySet().stream()
+                                     .filter(sc -> sender.hasPermission(sc.getValue().RequiredPermission))
+                                     .map(Map.Entry::getKey)
+                                     .sorted().toList();
+    }
+    public static List<String> subCommandsTabAutoCompleteList(CommandSender sender) {
+        List<String> subCommandsStrings = new ArrayList<>(allowedSubCommandsAsStrings(sender));
+        subCommandsStrings.addAll(subCommandsAliases.keySet());
+        // yeah the list is gonna have been sorted twice, and what mate?
+        return subCommandsStrings.stream()
+                                 .sorted().toList();
     }
 
     @Override
@@ -74,7 +85,12 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
     private void onCommandArgs(@NotNull CommandSender sender, @NotNull String[] args) {
         // find subcommand
         String subCommandName = args[0].toLowerCase();
-        SubCommand subCommand = gcSubCommands.get(subCommandName);
+        // replace with alias if needed
+        String subCommandNameAlias = subCommandsAliases.get(subCommandName);
+        if (subCommandNameAlias != null)
+            subCommandName = subCommandNameAlias;
+
+        SubCommand subCommand = subCommands.get(subCommandName);
         if (subCommand == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cThe command §f/gc %s§c doesn't exist!"
                                                  .formatted(subCommandName));
@@ -105,12 +121,12 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
             case 0 -> List.of();
 
             // /gc [...]
-            case 1 -> GetAllowedSubCommandsAsStrings(player);
+            case 1 -> subCommandsTabAutoCompleteList(player);
 
             // /gc [subcommand] [...]
             default -> {
                 // find subcommand
-                SubCommand subCommand = gcSubCommands.get(args[0]);
+                SubCommand subCommand = subCommands.get(args[0]);
                 if (subCommand == null || !sender.hasPermission(subCommand.RequiredPermission))
                     yield List.of();
 
