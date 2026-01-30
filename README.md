@@ -23,14 +23,13 @@ It is intended to work in a similar way to many Factions plugins.
 * Debug and admin commands
 * Command confirmation and player-plugin chat response system
 * Permission groups (`gc.group.essential`, `player`, `admin`)
-* Proper command autocomplete
+* Country settings
 * Config file (reload command, updating)
 
 ## To-do:
 
-* Country and player settings
+* Player settings
 * Promoting and demoting players
-* Some optimisations
 * Chunk claiming
 * Pl3xMap support
 * And a lot more sh!te
@@ -39,11 +38,11 @@ It is intended to work in a similar way to many Factions plugins.
 ```
 // todo: do todo's
 // todo: revoke citizenship command
-// todo: sent citizenship application limit (config specified)
-// todo: a lot of autocompletes need better optimisation!!
-// todo: auto accept citizenship applications (/gc country settings [...])/
+// todo: player settings
 // todo: applications should expire after a config defined amount of time
+// todo: in-country ranks
 // todo: promote command
+// todo: gui
 // todo: claiming (max chunks in config)
 ```
 
