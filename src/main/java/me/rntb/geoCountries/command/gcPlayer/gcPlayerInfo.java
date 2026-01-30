@@ -3,8 +3,10 @@ package me.rntb.geoCountries.command.gcPlayer;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.DateUtil;
+import me.rntb.geoCountries.util.StringUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class gcPlayerInfo {
 
@@ -29,16 +31,26 @@ public class gcPlayerInfo {
             rankAndCountryString = "§e%s§f of §e%s"
                              .formatted(playerProfile.getRankString(), country != null ? country.name : "§cNone");
         }
+
+        String onlineString = "§aOnline";
+        if (Bukkit.getPlayer(playerProfile.username) == null) {
+            long daysAgo = DateUtil.daysAgo(playerProfile.getOfflinePlayer().getLastSeen());
+            onlineString = "§cLast seen §8" + daysAgo + "§c days ago";
+        }
+
+        long daysAgo = DateUtil.daysAgo(playerProfile.timeFirstJoined);
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
                          """
                          §6========== PLAYER INFO ==========
-                         §a%s§f
+                         §a%s§f (%s§f)
                          §f> %s
-                         §f> Joined on §2%s
+                         §f> Joined on §2%s §8(%s day%s ago)
                          §6================================="""
                         .formatted(playerProfile.username,
+                                   onlineString,
                                    rankAndCountryString,
-                                   playerProfile.timeFirstJoinedAsString());
+                                   playerProfile.timeFirstJoinedAsString(),
+                                daysAgo, StringUtil.leadingS(daysAgo));
         ChatUtil.sendPrefixedMessage(sender, message);
     }
 }

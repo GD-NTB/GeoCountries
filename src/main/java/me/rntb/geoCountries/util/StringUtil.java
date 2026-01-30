@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class StringUtil {
 
-    public static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+    public static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     public static String leadingS(long count) {
         return count == 1 ? "" : "s";

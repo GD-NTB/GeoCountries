@@ -229,6 +229,7 @@ public class PlayerProfile extends DataCollection {
         return dateTime.format(StringUtil.timeFormatter);
     }
 
+
     public UUID getLeaderOf() {
         return rank == PlayerRank.LEADER ? this.citizenship : null;
     }

@@ -26,14 +26,14 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
             Map.entry("help", new gcHelp("/gc help", "gc.help", true)),
             Map.entry("purge", new gcPurge("/gc purge", "gc.purge", true)),
             Map.entry("dump", new gcDump("/gc dump", "gc.dump", true)),
-            Map.entry("country", new gcCountry("/gc country", "gc.country", true)),
-            Map.entry("player", new gcPlayer("/gc player", "gc.player", true)),
+            Map.entry("country", new gcCountry("/gc country", "gc.country", false)),
+            Map.entry("player", new gcPlayer("/gc player", "gc.player", false)),
             Map.entry("confirm", new gcConfirm("/gc confirm", "gc.confirm", true)),
             Map.entry("cancel", new gcCancel("/gc cancel", "gc.cancel", true)),
             Map.entry("save", new gcSave("/gc save", "gc.save", true)),
             Map.entry("config", new gcConfig("/gc config", "gc.config", true)),
             Map.entry("citizenship", new gcCitizenship("/gc citizenship", "gc.citizenship", false)),
-            Map.entry("debug", new gcDebug("/gc debug", "gc.debug", false)),
+            Map.entry("debug", new gcDebug("/gc debug", "gc.debug", true)),
             Map.entry("admin", new gcAdmin("/gc admin", "gc.admin", true)),
             Map.entry("load", new gcLoad("/gc load", "gc.load", true))
     );
@@ -98,7 +98,8 @@ public class gc implements TabExecutor { // TabExecutor extends CommandExecutor
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Player player = (Player) sender;
+        if (!(sender instanceof Player player)) // tab autocomplete disabled for console
+            return List.of();
         return switch (args.length) {
             // /gc
             case 0 -> List.of();
