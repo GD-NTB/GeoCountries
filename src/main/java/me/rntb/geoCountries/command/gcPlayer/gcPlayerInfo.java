@@ -50,7 +50,7 @@ public class gcPlayerInfo {
                                    onlineString,
                                    rankAndCountryString,
                                    playerProfile.timeFirstJoinedAsString(),
-                                daysAgo, StringUtil.leadingS(daysAgo));
+                                   daysAgo, StringUtil.leadingS(daysAgo));
         ChatUtil.sendPrefixedMessage(sender, message);
     }
 }

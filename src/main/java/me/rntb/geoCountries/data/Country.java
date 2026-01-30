@@ -152,9 +152,7 @@ public class Country extends DataCollection {
         }
     }
 
-    public Setting[] settings = new Setting[] { new Setting("autoacceptcitizenshipapplications", "false"),
-                                                new Setting("testint", "6"),
-                                                new Setting("teststring", "value")
+    public Setting[] settings = new Setting[] { new Setting("autoacceptcitizenshipapplications", "false")
                                               };
     public Setting getSetting(String key) {
         return Arrays.stream(this.settings)

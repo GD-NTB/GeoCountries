@@ -35,22 +35,6 @@ public class Setting {
                 this.name = "Auto-Accept Citizenship Applications";
                 this.description = "Automatically accept citizenship applications when received.";
                 break;
-            case "testint":
-                this.defaultValue = "6";
-                this.type = Setting.Type.INT;
-                this.intMinValue = -2;
-                this.intMaxValue = 7;
-                this.name = "Test int";
-                this.description = "Does fuck all.";
-                break;
-            case "teststring":
-                this.defaultValue = "value";
-                this.type = Setting.Type.STRING;
-                this.stringMinLength = 4;
-                this.stringMaxLength = 10;
-                this.name = "Test string";
-                this.description = "Also does fuck all.";
-                break;
         }
     }
 

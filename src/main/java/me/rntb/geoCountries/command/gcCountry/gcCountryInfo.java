@@ -3,8 +3,9 @@ package me.rntb.geoCountries.command.gcCountry;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.DateUtil;
+import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class gcCountryInfo {
 
@@ -35,19 +36,20 @@ public class gcCountryInfo {
         }
 
         PlayerProfile leader = country.getLeader();
-
+        long daysAgo = DateUtil.daysAgo(country.timeCreated);
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
                          """
                          §6========== COUNTRY INFO ==========
                          §a%s§f
                          §f> §eLeader§f: %s
                          §f> §eCitizens§f: %s
-                         §f> Created on §2%s
+                         §f> Created on §2%s §8(%s day%s ago)
                          §6================================="""
                          .formatted(country.name,
                                     leader != null ? leader.username : "§cNone",
                                     country.citizenCount(),
-                                    country.timeCreatedAsString());
+                                    country.timeCreatedAsString(),
+                                    daysAgo, StringUtil.leadingS(daysAgo));
         ChatUtil.sendPrefixedMessage(sender, message);
     }
 }
