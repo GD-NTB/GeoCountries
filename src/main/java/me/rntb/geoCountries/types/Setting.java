@@ -33,7 +33,7 @@ public class Setting {
                 this.defaultValue = "false";
                 this.type = Setting.Type.BOOL;
                 this.name = "Auto-Accept Citizenship Applications";
-                this.description = "Automatically accept citizenship applications when received.";
+                this.description = "Automatically accept citizenship applications when received";
                 break;
         }
     }
@@ -52,9 +52,8 @@ public class Setting {
             else if (this.value.equals("false"))
                 valueColour = "§c";
         }
-        return "§a%s §8(%s)§f: %s"
+        return "§e%s: %s"
                .formatted(this.name,
-                          this.key,
                           valueColour+this.value);
     }
 
@@ -66,14 +65,9 @@ public class Setting {
             else if (this.value.equals("false"))
                 valueColour = "§c";
         }
-        return """
-                §a%s
-                §8(%s)§f: %s
-                §e%s
-                """
+        return "§e%s§f - %s: %s"
                 .formatted(this.name,
-                           this.key,
-                           valueColour+this.value,
-                           this.description);
+                           this.description,
+                           valueColour+this.value);
     }
 }

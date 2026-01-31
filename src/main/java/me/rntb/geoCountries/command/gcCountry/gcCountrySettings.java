@@ -4,11 +4,11 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Setting;
 import me.rntb.geoCountries.util.ChatUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.UUID;
 
 public class gcCountrySettings {
 
@@ -35,27 +35,30 @@ public class gcCountrySettings {
             return;
         }
         // else list all/specific setting
-        StringBuilder sb = new StringBuilder(ChatUtil.newlineIfPrefixIsEmpty() +
-                                             "§6========== SETTINGS ==========\n");
+        // create and build component
+        TextComponent.Builder message = Component.text();
+        message.append(ChatUtil.newlineIfPrefixIsEmptyComponent())
+               .append(Component.text("§6========== SETTINGS =========="))
+               .append(Component.newline());
 
         // if no args, list all settings
         if (args.length == 0)
-            sb.append(getMessageAll(country)).append("\n");
+            message.append(getMessageAll(country));
         // else list specific setting
         else {
             String commandKey = args[0];
-            String message = getMessageSpecific(commandKey, country);
-            if (message == null)
-                sb.append("§cSetting §f").append(commandKey).append("§c could not be found!");
+            TextComponent.Builder messageSpecificComponent = getMessageSpecific(commandKey, country);
+            if (messageSpecificComponent == null)
+                message.append(Component.text("§cSetting §f" + commandKey + "§c could not be found!"));
             else
-                sb.append(message).append("\n");
+                message.append(messageSpecificComponent);
+            message.append(Component.newline());
         }
 
-        sb.append("§6==========================");
-        ChatUtil.sendPrefixedMessage(sender, String.valueOf(sb));
+        message.append(Component.text("§6=========================="));
+        ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 
-    // todo: set to default option
     private static void setSetting(CommandSender sender, String command, String toValue, Country country) {
         Setting setting = country.getSetting(command);
         if (setting == null) {
@@ -109,19 +112,40 @@ public class gcCountrySettings {
     }
 
     // todo: paginate
-    private static String getMessageAll(Country country) {
-        StringBuilder message = new StringBuilder();
-        // todo: buttons to type command to change setting in chat but not send
+    private static TextComponent.Builder getMessageAll(Country country) {
+        TextComponent.Builder message = Component.text();
         for (Setting setting : country.settings) {
-            message.append("§f> ").append(setting.toString()).append("\n");
+            message.append(Component.text("§f> " + setting + " "))
+                   .append(getEditButtonComponents(setting))
+                   .append(Component.newline());
         }
-        return String.valueOf(message);
+        return message;
     }
 
-    private static String getMessageSpecific(String command, Country country) {
+    private static TextComponent.Builder getMessageSpecific(String command, Country country) {
         Setting setting = country.getSetting(command);
         if (setting == null)
             return null;
-        return setting.toStringFull();
+        return Component.text().append(Component.text(setting.toStringFull() + " "))
+                               .append(getEditButtonComponents(setting));
+    }
+
+    private static TextComponent.Builder getEditButtonComponents(Setting setting) {
+        return Component.text()
+                        // [Edit] button
+                        .append(ChatUtil.mm.deserialize(
+                                "<click:suggest_command:'/gc country settings " + setting.key + " '>" +
+                                "<hover:show_text:\"<dark_gray>Click to edit the setting's value.</dark_gray>\">" +
+                                "<dark_gray><bold>[Edit]</bold></dark_gray>" +
+                                "</hover></click>"
+                        ))
+                        .append(Component.text(" "))
+                        // [Default] button
+                        .append(ChatUtil.mm.deserialize(
+                                "<click:suggest_command:'/gc country settings " + setting.key + " " + setting.defaultValue + "'>" +
+                                "<hover:show_text:\"<dark_gray>Click to set to default value.</dark_gray>\">" +
+                                "<dark_gray><bold>[Default]</bold></dark_gray>" +
+                                "</hover></click>"
+                        ));
     }
 }

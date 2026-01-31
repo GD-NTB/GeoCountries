@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
+// todo: unsend button
 public class gcCitizenshipSent {
 
     public static void onCommand(CommandSender sender, String[] args) {

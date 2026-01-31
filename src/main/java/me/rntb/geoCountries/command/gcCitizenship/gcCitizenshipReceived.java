@@ -8,7 +8,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -72,12 +71,12 @@ public class gcCitizenshipReceived {
         MiniMessage mm = MiniMessage.miniMessage();
 
         message.append(ChatUtil.newlineIfPrefixIsEmptyComponent())
-               .append(mm.deserialize("<gold>========== CITIZENSHIP APPLICATIONS =========="))
+               .append(Component.text("§6========== CITIZENSHIP APPLICATIONS =========="))
                .append(Component.newline());
 
         List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(senderProfile.citizenship);
         if (cApplications == null || cApplications.isEmpty()) {
-            message.append(mm.deserialize("<red>You have not received any citizenship applications."))
+            message.append(Component.text("§cYou have not received any citizenship applications."))
                    .append(Component.newline());
         }
         else {
@@ -89,68 +88,65 @@ public class gcCitizenshipReceived {
 
                 String applicantName = PlayerProfile.byUUID.get(cApplication.applicant).username;
 
-                message.append(mm.deserialize("<white>> <green>From</green>: <yellow>" + applicantName))
+                message.append(Component.text("§f> §aFrom§f: §e" + applicantName))
                        .append(Component.newline())
-                       .append(mm.deserialize("<white>> <green>Reason</green>: <white>" + reason))
+                       .append(Component.text("§f> §aReason§f: " + reason))
                        .append(Component.newline())
                        // [Accept] button
                        .append(mm.deserialize("<click:run_command:'/gc citizenship accept " + applicantName + "'>" +
-                                              "<hover:show_text:'<gray>Click to accept <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
+                                              "<hover:show_text:'<gray>Click to accept</gray> <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
                                               "<green><bold>[Accept]</bold></green>" +
                                               "</hover></click>"))
                        .append(Component.text("  "))
-                       // [View] button
+                       // [View] button todo: only need this button if truncated
                        .append(mm.deserialize("<click:run_command:'/gc citizenship received " + applicantName + "'>" +
-                                               "<hover:show_text:'<dark_gray>Click to view <white>" + applicantName + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                               "<hover:show_text:'<dark_gray>Click to view</gray> <white>" + applicantName + "</white><dark_gray>\\'s application.</dark_gray>'>" +
                                               "<white><bold>[View]</bold></white>" +
                                               "</hover></click>"))
                        .append(Component.text("  "))
                        // [Reject] button
                        .append(mm.deserialize("<click:run_command:'/gc citizenship reject " + applicantName + "'>" +
-                                              "<hover:show_text:'<gray>Click to reject <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
+                                              "<hover:show_text:'<gray>Click to reject</gray> <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
                                               "<red><bold>[Reject]</bold></red>" +
                                               "</hover></click>"))
                        .append(Component.newline());
             }
         }
 
-        message.append(mm.deserialize("<gold>==========================================="));
+        message.append(Component.text("§6==========================================="));
 
         return message;
     }
 
     public static TextComponent.Builder doCommandSpecific(CitizenshipApplication cApplication) {
         TextComponent.Builder message = Component.text();
-        MiniMessage mm = MiniMessage.miniMessage();
-
-        message.append(ChatUtil.newlineIfPrefixIsEmptyComponent());
-        message.append(mm.deserialize("<gold>========== CITIZENSHIP APPLICATION =========="))
-                .append(Component.newline());
 
         String reason = cApplication.reason;
-
         String applicantName = PlayerProfile.byUUID.get(cApplication.applicant).username;
 
-        message.append(mm.deserialize("<white>> <green>From</green>: <yellow>" + applicantName))
-                .append(Component.newline())
-                .append(mm.deserialize("<white>> <green>Reason</green>: <white>" + reason))
-                .append(Component.newline())
-                // [Accept] button
-                .append(mm.deserialize("<click:run_command:'/gc citizenship accept " + applicantName + "'>" +
-                        "<hover:show_text:'<gray>Click to accept <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
-                        "<green><bold>[Accept]</bold></green>" +
-                        "</hover></click>"
-                ))
-                .append(Component.text("  "))
-                // [Reject] button
-                .append(mm.deserialize("<click:run_command:'/gc citizenship reject " + applicantName + "'>" +
-                        "<hover:show_text:'<gray>Click to reject <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
-                        "<red><bold>[Reject]</bold></red>" +
-                        "</hover></click>"
-                ))
-                .append(Component.newline());
+        message.append(ChatUtil.newlineIfPrefixIsEmptyComponent())
+               .append(Component.text("§6========== CITIZENSHIP APPLICATION =========="))
+               .append(Component.newline())
 
-        message.append(mm.deserialize("<gold>==========================================="));
+               .append(Component.text("§f> §aFrom§f: §e" + applicantName))
+               .append(Component.newline())
+               .append(Component.text("§f> §aReason§f: " + reason))
+               .append(Component.newline())
+               // [Accept] button
+               .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship accept " + applicantName + "'>" +
+                                               "<hover:show_text:'<dark_gray>Click to accept</dark_gray> <white>" + applicantName + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                               "<green><bold>[Accept]</bold></green>" +
+                                               "</hover></click>"
+               ))
+               .append(Component.text("  "))
+               // [Reject] button
+               .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship reject " + applicantName + "'>" +
+                                               "<hover:show_text:'<dark_gray>Click to reject</dark_gray> <white>" + applicantName + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                               "<red><bold>[Reject]</bold></red>" +
+                                               "</hover></click>"
+               ))
+               .append(Component.newline())
+               .append(Component.text("§6==========================================="));
 
         return message;
     }

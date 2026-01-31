@@ -4,6 +4,7 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,6 +14,8 @@ import java.util.UUID;
 import static org.bukkit.Bukkit.getServer;
 
 public class ChatUtil {
+
+    public static final MiniMessage mm = MiniMessage.miniMessage();
 
     public static String newlineIfPrefixIsEmpty() {
         return ConfigState.ChatPrefix.length() <= 2 ? "" : "\n"; // empty = '', so length = 2

@@ -35,7 +35,7 @@ public class gcPlayerInfo {
         String onlineString = "§aOnline";
         if (Bukkit.getPlayer(playerProfile.username) == null) {
             long daysAgo = DateUtil.daysAgo(playerProfile.getOfflinePlayer().getLastSeen());
-            onlineString = "§cLast seen §8" + daysAgo + "§c days ago";
+            onlineString = "§cLast seen §f" + daysAgo + "§c days ago";
         }
 
         long daysAgo = DateUtil.daysAgo(playerProfile.timeFirstJoined);
