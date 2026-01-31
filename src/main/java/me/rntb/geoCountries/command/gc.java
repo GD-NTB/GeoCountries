@@ -116,6 +116,7 @@ public class gc implements TabExecutor {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) // tab autocomplete disabled for console
             return List.of();
+
         return switch (args.length) {
             // /gc
             case 0 -> List.of();
@@ -125,8 +126,13 @@ public class gc implements TabExecutor {
 
             // /gc [subcommand] [...]
             default -> {
+                String commandName = args[0];
+                // convert alias to subcommand
+                String subCommandNameAlias = gc.subCommandsAliases.get(commandName);
+                if (subCommandNameAlias != null)
+                    commandName = subCommandNameAlias;
                 // find subcommand
-                SubCommand subCommand = subCommands.get(args[0]);
+                SubCommand subCommand = subCommands.get(commandName);
                 if (subCommand == null || !sender.hasPermission(subCommand.RequiredPermission))
                     yield List.of();
 
