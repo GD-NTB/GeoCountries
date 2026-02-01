@@ -96,23 +96,32 @@ public class gcHelp extends SubCommand {
             }
         }
 
-        message.append(mm.deserialize("<gold>========================="))
+        message.append(Component.text("§6========================="))
                 .append(Component.newline())
-                // [<<<] button
-                .append(mm.deserialize("<click:run_command:'" + commandForPrevious + "'>" +
-                                      "<hover:show_text:'<dark_gray>Click to go to previous page.</dark_gray>'>" +
-                                      "<dark_gray><bold>[<<<]</bold></dark_gray>" +
-                                      "</hover></click>"))
-               .append(Component.text("  "))
-               // (page/pages) text
-               .append(Component.text("§8(%d/%d)"
-                                             .formatted(effectiveIndex, pageCount)))
-               .append(Component.text("  "))
-               // [>>>] button
-               .append(mm.deserialize("<click:run_command:'" + commandForNext + "'>" +
-                                      "<hover:show_text:'<dark_gray>Click to go to next page.</dark_gray>'>" +
-                                      "<dark_gray><bold>[>>>]</bold></dark_gray>" +
-                                      "</hover></click>"));
+                .append(Component.text("      "));
+
+        if (effectiveIndex > 1) {
+            // [<<<] button
+            message.append(mm.deserialize("<click:run_command:'" + commandForPrevious + "'>" +
+                                          "<hover:show_text:'<dark_gray>Click to go to previous page.</dark_gray>'>" +
+                                          "<dark_gray><bold>[<<<]</bold></dark_gray>" +
+                                          "</hover></click>"))
+                   .append(Component.text("  "));
+        }
+        else {
+            message.append(Component.text("         "));
+        }
+        // (page/pages) text
+        message.append(Component.text("§8(%d/%d)"
+                                      .formatted(effectiveIndex, pageCount)))
+               .append(Component.text("  "));
+        if (effectiveIndex < pageCount) {
+            // [>>>] button
+            message.append(mm.deserialize("<click:run_command:'" + commandForNext + "'>" +
+                                          "<hover:show_text:'<dark_gray>Click to go to next page.</dark_gray>'>" +
+                                          "<dark_gray><bold>[>>>]</bold></dark_gray>" +
+                                          "</hover></click>"));
+        }
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 
