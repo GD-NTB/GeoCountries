@@ -111,7 +111,6 @@ public class gcCountrySettings {
         ChatUtil.sendPrefixedMessage(sender, "§aSet §f" + command + "§a to §f" + toValue + "§a!");
     }
 
-    // todo: paginate
     private static TextComponent.Builder getMessageAll(Country country) {
         TextComponent.Builder message = Component.text();
         for (Setting setting : country.settings) {

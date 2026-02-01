@@ -34,7 +34,7 @@ public class gcCountryCitizens {
         }
         else {
             // if greater than 2, we have a page number and country name
-            // /gc country citizens [number] [countryname]
+            // /gc country citizens [pagenumber] [countryname]
             String[] countryNameArgs;
             if (args.length >= 2) {
                 try {

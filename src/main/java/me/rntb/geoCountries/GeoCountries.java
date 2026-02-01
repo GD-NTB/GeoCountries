@@ -11,10 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
 
-// todo: do todo's
 // todo: revoke citizenship command
 // todo: player settings
-// todo: applications should expire after a config defined amount of time
 // todo: in-country ranks
 // todo: promote command
 // todo: gui
