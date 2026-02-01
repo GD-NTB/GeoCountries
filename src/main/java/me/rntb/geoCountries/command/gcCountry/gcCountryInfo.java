@@ -20,7 +20,7 @@ public class gcCountryInfo {
                                                      """
                                                      §6========== COUNTRY INFO ==========
                                                      §cYou do not have citizenship of any country.
-                                                     §cDo §f/gc country info [country]§c to get country info.
+                                                     §cDo §f/gc citizenship apply [country]§c to apply to be a citizen of a country.
                                                      §6=================================""");
                 return;
             }

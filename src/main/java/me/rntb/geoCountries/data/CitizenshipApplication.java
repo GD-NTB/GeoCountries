@@ -7,7 +7,6 @@ import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -85,29 +84,28 @@ public class CitizenshipApplication extends DataCollection {
 
             // build message
             TextComponent.Builder message = Component.text();
-            MiniMessage mm = MiniMessage.miniMessage();
 
-            message.append(mm.deserialize("<gold>Your country has received a citizenship application from <white>" + applicant.username + "<gold>!"))
+            message.append(ChatUtil.mm.deserialize("<gold>Your country has received a citizenship application from <white>" + applicant.username + "<gold>!"))
                    .append(Component.newline())
                     // [Accept] button
-                    .append(mm.deserialize("<click:run_command:'/gc citizenship accept " + applicant.username + "'>" +
-                                           "<hover:show_text:'<dark_gray>Click to accept <white>" + applicant.username + "</white><dark_gray>\\'s application.</dark_gray>'>" +
-                                           "<green><bold>[Accept]</bold></green>" +
-                                           "</hover></click>"
+                    .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship accept " + applicant.username + "'>" +
+                                                    "<hover:show_text:'<dark_gray>Click to accept <white>" + applicant.username + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                                    "<green><bold>[Accept]</bold></green>" +
+                                                    "</hover></click>"
                     ))
                     .append(Component.text("  "))
                     // [View] button
-                    .append(mm.deserialize("<click:run_command:'/gc citizenship received " + applicant.username + "'>" +
-                                           "<hover:show_text:'<dark_gray>Click to view <white>" + applicant.username + "</white><dark_gray>\\'s application.</dark_gray>'>" +
-                                           "<white><bold>[View]</bold></white>" +
-                                           "</hover></click>"
+                    .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship received " + applicant.username + "'>" +
+                                                    "<hover:show_text:'<dark_gray>Click to view <white>" + applicant.username + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                                    "<white><bold>[View]</bold></white>" +
+                                                    "</hover></click>"
                     ))
                     .append(Component.text("  "))
                     // [Reject] button
-                    .append(mm.deserialize("<click:run_command:'/gc citizenship reject " + applicant.username + "'>" +
-                                           "<hover:show_text:'<dark_gray>Click to reject <white>" + applicant.username + "</white><dark_gray>\\'s application.</dark_gray>'>" +
-                                           "<red><bold>[Reject]</bold></red>" +
-                                           "</hover></click>"));
+                    .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship reject " + applicant.username + "'>" +
+                                                    "<hover:show_text:'<dark_gray>Click to reject <white>" + applicant.username + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                                    "<red><bold>[Reject]</bold></red>" +
+                                                    "</hover></click>"));
             // send message to leader
             ChatUtil.sendPrefixedMessage(leader, message.build());
             // play sound to leader

@@ -4,6 +4,7 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -16,6 +17,36 @@ import static org.bukkit.Bukkit.getServer;
 public class ChatUtil {
 
     public static final MiniMessage mm = MiniMessage.miniMessage();
+
+    // not centred automatically, you will need to append whitespace before appending these buttons
+    public static TextComponent.Builder chatPageControlButtons(String commandForPrevious, String commandForNext, int effectiveIndex, int pageCount) {
+        TextComponent.Builder message = Component.text();
+
+        if (effectiveIndex > 1) {
+            // [<<<] button
+            message.append(mm.deserialize("<click:run_command:'" + commandForPrevious + "'>" +
+                                          "<hover:show_text:'<dark_gray>Click to go to previous page.</dark_gray>'>" +
+                                          "<dark_gray><bold>[<<<]</bold></dark_gray>" +
+                                          "</hover></click>"))
+                   .append(Component.text("  "));
+        }
+        else {
+            message.append(Component.text("         "));
+        }
+        // (page/pages) text
+        message.append(Component.text("§8(%d/%d)"
+                                      .formatted(effectiveIndex, pageCount)))
+               .append(Component.text("  "));
+        if (effectiveIndex < pageCount) {
+            // [>>>] button
+            message.append(mm.deserialize("<click:run_command:'" + commandForNext + "'>" +
+                                          "<hover:show_text:'<dark_gray>Click to go to next page.</dark_gray>'>" +
+                                          "<dark_gray><bold>[>>>]</bold></dark_gray>" +
+                                          "</hover></click>"));
+        }
+
+        return message;
+    }
 
     public static String newlineIfPrefixIsEmpty() {
         return ConfigState.ChatPrefix.length() <= 2 ? "" : "\n"; // empty = '', so length = 2

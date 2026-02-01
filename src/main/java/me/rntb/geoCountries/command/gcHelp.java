@@ -4,7 +4,6 @@ import me.rntb.geoCountries.types.Pagination;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -23,10 +22,9 @@ public class gcHelp extends SubCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         TextComponent.Builder message = Component.text();
-        MiniMessage mm = MiniMessage.miniMessage();
 
         message.append(ChatUtil.newlineIfPrefixIsEmptyComponent())
-               .append(mm.deserialize("<gold>========== HELP =========="))
+               .append(Component.text("§6========== HELP =========="))
                .append(Component.newline());
 
         int effectiveIndex = 0;
@@ -97,31 +95,12 @@ public class gcHelp extends SubCommand {
         }
 
         message.append(Component.text("§6========================="))
-                .append(Component.newline())
-                .append(Component.text("      "));
+               .append(Component.newline())
+               .append(Component.text("      "));
 
-        if (effectiveIndex > 1) {
-            // [<<<] button
-            message.append(mm.deserialize("<click:run_command:'" + commandForPrevious + "'>" +
-                                          "<hover:show_text:'<dark_gray>Click to go to previous page.</dark_gray>'>" +
-                                          "<dark_gray><bold>[<<<]</bold></dark_gray>" +
-                                          "</hover></click>"))
-                   .append(Component.text("  "));
-        }
-        else {
-            message.append(Component.text("         "));
-        }
-        // (page/pages) text
-        message.append(Component.text("§8(%d/%d)"
-                                      .formatted(effectiveIndex, pageCount)))
-               .append(Component.text("  "));
-        if (effectiveIndex < pageCount) {
-            // [>>>] button
-            message.append(mm.deserialize("<click:run_command:'" + commandForNext + "'>" +
-                                          "<hover:show_text:'<dark_gray>Click to go to next page.</dark_gray>'>" +
-                                          "<dark_gray><bold>[>>>]</bold></dark_gray>" +
-                                          "</hover></click>"));
-        }
+        // append chat page control buttons
+        message.append(ChatUtil.chatPageControlButtons(commandForPrevious, commandForNext, effectiveIndex, pageCount));
+
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 

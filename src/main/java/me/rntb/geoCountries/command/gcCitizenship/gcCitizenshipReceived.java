@@ -6,7 +6,6 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -68,7 +67,6 @@ public class gcCitizenshipReceived {
 
     private static TextComponent.Builder doCommandList(PlayerProfile senderProfile) {
         TextComponent.Builder message = Component.text();
-        MiniMessage mm = MiniMessage.miniMessage();
 
         message.append(ChatUtil.newlineIfPrefixIsEmptyComponent())
                .append(Component.text("§6========== CITIZENSHIP APPLICATIONS =========="))
@@ -96,24 +94,24 @@ public class gcCitizenshipReceived {
                        .append(Component.text("§f> §aReason§f: " + reason))
                        .append(Component.newline())
                        // [Accept] button
-                       .append(mm.deserialize("<click:run_command:'/gc citizenship accept " + applicantName + "'>" +
-                                              "<hover:show_text:'<gray>Click to accept</gray> <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
-                                              "<green><bold>[Accept]</bold></green>" +
-                                              "</hover></click>"))
+                       .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship accept " + applicantName + "'>" +
+                                                       "<hover:show_text:'<gray>Click to accept</gray> <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
+                                                       "<green><bold>[Accept]</bold></green>" +
+                                                       "</hover></click>"))
                        .append(Component.text("  "));
                 // [View All] button
                 if (wasTruncated) {
-                    message.append(mm.deserialize("<click:run_command:'/gc citizenship received " + applicantName + "'>" +
-                                                   "<hover:show_text:'<dark_gray>Click to view</gray> <white>" + applicantName + "</white><dark_gray>\\'s application.</dark_gray>'>" +
-                                                  "<white><bold>[View All]</bold></white>" +
-                                                  "</hover></click>"))
+                    message.append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship received " + applicantName + "'>" +
+                                                           "<hover:show_text:'<dark_gray>Click to view</gray> <white>" + applicantName + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                                           "<white><bold>[View All]</bold></white>" +
+                                                           "</hover></click>"))
                            .append(Component.text("  "));
                 }
                 // [Reject] button
-                message.append(mm.deserialize("<click:run_command:'/gc citizenship reject " + applicantName + "'>" +
-                                              "<hover:show_text:'<gray>Click to reject</gray> <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
-                                              "<red><bold>[Reject]</bold></red>" +
-                                              "</hover></click>"))
+                message.append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship reject " + applicantName + "'>" +
+                                                       "<hover:show_text:'<gray>Click to reject</gray> <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
+                                                       "<red><bold>[Reject]</bold></red>" +
+                                                       "</hover></click>"))
                        .append(Component.newline());
             }
         }
