@@ -52,7 +52,10 @@ public class Country extends DataCollection {
             byUUID.put(country.uuid, country);
             byName.put(country.name, country);
 
-            country.purgeBrokenSettingsAndLoadMetaData();
+            if (country.settings == null)
+                country.settings = Arrays.copyOf(Country.defaultSettings,
+                                                 Country.defaultSettings.length);
+            country.settings = Setting.loadMetadataAndPurgeBroken(country.settings);
         }
 
         if (ConfigState.DebugLogging)
@@ -73,7 +76,10 @@ public class Country extends DataCollection {
 
         country.timeCreated = System.currentTimeMillis();
 
-        country.purgeBrokenSettingsAndLoadMetaData();
+        if (country.settings == null)
+            country.settings = Arrays.copyOf(Country.defaultSettings,
+                                             Country.defaultSettings.length);
+        country.settings = Setting.loadMetadataAndPurgeBroken(country.settings);
     }
 
     public static void delete(Country country) {
@@ -152,30 +158,13 @@ public class Country extends DataCollection {
         }
     }
 
-    public Setting[] settings = new Setting[] { new Setting("autoacceptcitizenshipapplications", "false")
-                                              };
+    public Setting[] settings;
+    private static final Setting[] defaultSettings = new Setting[] { new Setting("autoacceptcitizenshipapplications", "false"),
+                                                                   };
     public Setting getSetting(String key) {
         return Arrays.stream(this.settings)
                      .filter(s -> s.key.equals(key))
                      .findFirst().orElse(null);
-    }
-    public void purgeBrokenSettingsAndLoadMetaData() {
-        ArrayList<Setting> newSettings = new ArrayList<>();
-        for (Setting setting : this.settings) {
-            // if null, setting is broken, so purge
-            if (setting == null) {
-                continue;
-            }
-            setting.loadMetadata();
-            // if name is null, setting is broken, so purge
-            if (setting.name == null)
-                continue;
-
-            newSettings.add(setting);
-        }
-        // convert list to array
-        Setting[] newSettingsArray = new Setting[newSettings.size()];
-        this.settings = newSettings.toArray(newSettingsArray);
     }
 
     public long timeCreated = 0;

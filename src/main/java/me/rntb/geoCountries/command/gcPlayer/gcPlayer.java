@@ -2,9 +2,11 @@ package me.rntb.geoCountries.command.gcPlayer;
 
 import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.types.Setting;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -16,11 +18,13 @@ public class gcPlayer extends SubCommand {
         this.HelpString = "Manages and views information about players.";
         this.HelpPage   = """
                           §f/gc player [...]: §aManages and views information about players.
-                          §f> info [username]: §2Displays info about a particular player.""";
+                          §f> info [username]: §2Displays info about a particular player.
+                          §f> settings [setting?] [value?]: §2Sets/lists of your settings""";
     }
 
     private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
-            Map.entry("info", gcPlayerInfo::onCommand)
+            Map.entry("info", gcPlayerInfo::onCommand),
+            Map.entry("settings", gcPlayerSettings::onCommand)
     );
 
     @Override
@@ -52,7 +56,40 @@ public class gcPlayer extends SubCommand {
                     // /gc player info [players]
                     case "info" -> sender.hasPermission(this.RequiredPermission + ".info") ? PlayerProfile.allAsUsernames(true) : List.of();
 
-                    // /gc player [...]
+                    // /gc player settings [settings]
+                    case "settings" -> {
+                        if (!sender.hasPermission(this.RequiredPermission + ".settings"))
+                            yield List.of();
+                        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+                        if (playerProfile == null)
+                            yield List.of();
+                        // return all settings as strings
+                        yield Arrays.stream(playerProfile.settings)
+                                    .map(s -> s.key)
+                                    .toList();
+                    }
+
+                    default -> List.of();
+                };
+
+            // gc player [command] [...] [...]
+            case 3 ->
+                switch (args[0]) {
+                    // /gc player settings [setting] [value]
+                    case "settings" -> {
+                        if (!sender.hasPermission(this.RequiredPermission + ".settings"))
+                            yield List.of();
+                        PlayerProfile playerCountry = PlayerProfile.byCommandSender(sender);
+                        if (playerCountry == null)
+                            yield List.of();
+                        // get setting typed before
+                        Setting setting = playerCountry.getSetting(args[1]);
+                        if (setting == null)
+                            yield List.of();
+                        // return possible values for this setting
+                        yield setting.type == Setting.Type.BOOL ? List.of("true", "false") : List.of();
+                    }
+
                     default -> List.of();
                 };
 

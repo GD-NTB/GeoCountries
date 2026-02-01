@@ -2,6 +2,7 @@ package me.rntb.geoCountries.data;
 
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.types.Setting;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
@@ -61,12 +62,17 @@ public class PlayerProfile extends DataCollection {
             return;
         }
 
-        // reset and populate hashmaps
+        // reset and populate hashmaps, load settings shite
         byUUID.clear();
         byUsername.clear();
         for (PlayerProfile player : all) {
             byUsername.put(player.username, player);
             byUUID.put(player.uuid, player);
+
+            if (player.settings == null)
+                player.settings = Arrays.copyOf(PlayerProfile.defaultSettings,
+                                                PlayerProfile.defaultSettings.length);
+            player.settings = Setting.loadMetadataAndPurgeBroken(player.settings);
         }
 
         if (ConfigState.DebugLogging) {
@@ -91,6 +97,11 @@ public class PlayerProfile extends DataCollection {
         byUUID.put(player.uuid, player);
 
         player.timeFirstJoined = System.currentTimeMillis();
+
+        if (player.settings == null)
+            player.settings = Arrays.copyOf(PlayerProfile.defaultSettings,
+                                            PlayerProfile.defaultSettings.length);
+        player.settings = Setting.loadMetadataAndPurgeBroken(player.settings);
     }
 
     public static void delete(PlayerProfile player) {
@@ -222,6 +233,16 @@ public class PlayerProfile extends DataCollection {
         this.rank = newRank;
     }
 
+    public Setting[] settings;
+    private static final Setting[] defaultSettings = new Setting[] { new Setting("chatnotificationsounds", "true"),
+                                                                   };
+    public Setting getSetting(String key) {
+        return Arrays.stream(this.settings)
+                     .filter(s -> s.key.equals(key))
+                     .findFirst().orElse(null);
+    }
+
+
     public long timeFirstJoined = 0;
     public String timeFirstJoinedAsString() {
         Instant instant = Instant.ofEpochMilli(this.timeFirstJoined);
@@ -242,6 +263,6 @@ public class PlayerProfile extends DataCollection {
     @Override
     public String toString() {
         return "PlayerProfile(%s, %s)"
-                .formatted(this.username, String.valueOf(this.uuid));
+               .formatted(this.username, String.valueOf(this.uuid));
     }
 }

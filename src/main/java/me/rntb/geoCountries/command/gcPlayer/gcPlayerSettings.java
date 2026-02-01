@@ -1,6 +1,5 @@
-package me.rntb.geoCountries.command.gcCountry;
+package me.rntb.geoCountries.command.gcPlayer;
 
-import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Setting;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -10,28 +9,15 @@ import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
 
-public class gcCountrySettings {
+public class gcPlayerSettings {
 
     public static void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
-        // if doesnt have citizenship, escape
-        if (!playerProfile.hasCitizenship()) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the citizen of a country to see/change its settings!");
-            return;
-        }
-
-        Country country = playerProfile.getCitizenship();
-
         // if setting a setting, set and escape
         if (args.length >= 2) {
-            // if not leader, escape
-            if (playerProfile.rank != PlayerProfile.PlayerRank.LEADER) {
-                ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to change its settings!");
-                return;
-            }
             String toValue = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-            setSetting(sender, args[0], toValue, country);
+            setSetting(sender, args[0], toValue, playerProfile);
             return;
         }
         // else list all/specific setting
@@ -43,11 +29,11 @@ public class gcCountrySettings {
 
         // if no args, list all settings
         if (args.length == 0)
-            message.append(getMessageAll(country));
+            message.append(getMessageAll(playerProfile));
         // else list specific setting
         else {
             String commandKey = args[0];
-            TextComponent.Builder messageSpecificComponent = getMessageSpecific(commandKey, country);
+            TextComponent.Builder messageSpecificComponent = getMessageSpecific(commandKey, playerProfile);
             if (messageSpecificComponent == null)
                 message.append(Component.text("§cSetting §f" + commandKey + "§c could not be found!"));
             else
@@ -59,8 +45,8 @@ public class gcCountrySettings {
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 
-    private static void setSetting(CommandSender sender, String command, String toValue, Country country) {
-        Setting setting = country.getSetting(command);
+    private static void setSetting(CommandSender sender, String command, String toValue, PlayerProfile playerProfile) {
+        Setting setting = playerProfile.getSetting(command);
         if (setting == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cSetting §f" + command + "§c could not be found!");
             return;
@@ -111,23 +97,23 @@ public class gcCountrySettings {
         ChatUtil.sendPrefixedMessage(sender, "§aSet §e" + command + "§a to §f" + toValue + "§a!");
     }
 
-    private static TextComponent.Builder getMessageAll(Country country) {
+    private static TextComponent.Builder getMessageAll(PlayerProfile playerProfile) {
         TextComponent.Builder message = Component.text();
-        for (Setting setting : country.settings) {
+        for (Setting setting : playerProfile.settings) {
             message.append(Component.text("§f> " + setting + " "))
-                   .append(Setting.getEditButtonComponents("/gc country settings " + setting.key + " ",
-                                                           "/gc country settings " + setting.key + " " + setting.defaultValue))
+                   .append(Setting.getEditButtonComponents("/gc player settings " + setting.key + " ",
+                                                           "/gc player settings " + setting.key + " " + setting.defaultValue))
                    .append(Component.newline());
         }
         return message;
     }
 
-    private static TextComponent.Builder getMessageSpecific(String command, Country country) {
-        Setting setting = country.getSetting(command);
+    private static TextComponent.Builder getMessageSpecific(String command, PlayerProfile playerProfile) {
+        Setting setting = playerProfile.getSetting(command);
         if (setting == null)
             return null;
         return Component.text().append(Component.text(setting.toStringFull() + " "))
-                               .append(Setting.getEditButtonComponents("/gc country settings " + setting.key + " ",
-                                                                       "/gc country settings " + setting.key + " " + setting.defaultValue));
+                               .append(Setting.getEditButtonComponents("/gc player settings " + setting.key + " ",
+                                                                       "/gc player settings " + setting.key + " " + setting.defaultValue));
     }
 }

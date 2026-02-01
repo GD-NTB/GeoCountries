@@ -24,7 +24,7 @@ public class gcCountry extends SubCommand {
                           §f> info [country?]: §2Displays info about your/any particular country.
                           §f> list: §2Lists all countries on the server.
                           §f> rename [name]: §2Renames your country.
-                          §f> settings [setting?] [value?]: §2Sets/lists one of/all of your country's settings""";
+                          §f> settings [setting?] [value?]: §2Sets/lists your country's settings""";
     }
 
     private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(

@@ -12,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Path;
 
 // todo: revoke citizenship command
-// todo: player settings
 // todo: in-country ranks
 // todo: promote command
 // todo: gui

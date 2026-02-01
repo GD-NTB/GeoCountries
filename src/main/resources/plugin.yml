@@ -54,6 +54,7 @@ permissions:
       gc.citizenship.received: true
       gc.citizenship.accept: true
       gc.citizenship.reject: true
+      gc.player.settings: true
 
   # -------------------- ADMIN --------------------
   gc.group.admin:
