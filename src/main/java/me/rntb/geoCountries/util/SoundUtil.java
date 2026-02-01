@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.util;
 
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.data.PlayerProfile;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -11,9 +12,11 @@ public class SoundUtil {
     }
 
     public static void playSound(Player player, SoundEffect soundEffect) {;
-        if (!ConfigState.SoundEffects || player == null) {
+        if (!ConfigState.SoundEffects || player == null)
             return;
-        }
+        PlayerProfile toPlayerProfile = PlayerProfile.get(player);
+        if (toPlayerProfile == null || toPlayerProfile.getSetting("chatnotificationsounds").value.equals("false"))
+            return;
         Sound sound;
         switch (soundEffect) {
             case CHAT_NOTIF: sound = Sound.BLOCK_NOTE_BLOCK_HARP; break;
