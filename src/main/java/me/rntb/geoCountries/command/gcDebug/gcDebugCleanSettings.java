@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.command.gcDebug;
 
 import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 
 public class gcDebugCleanSettings {
@@ -10,5 +11,7 @@ public class gcDebugCleanSettings {
         for (Country country : Country.all) {
             country.purgeBrokenSettingsAndLoadMetaData();
         }
+
+        ChatUtil.sendPrefixedMessage(sender, "§aCleaned settings!");
     }
 }

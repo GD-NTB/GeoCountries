@@ -89,15 +89,16 @@ public class gcCitizenshipApply {
     private static void onResponse(CommandSender sender, String response) {
         String responseClean = response.trim();
 
+        Player player = (Player) sender;
+        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(player.getUniqueId());
+
         // validate response
         String validation = StringUtil.validateResponse(responseClean);
         if (validation != null) {
+            CitizenshipApplication.cancel(cApplication, true);
             ChatUtil.sendPrefixedMessage(sender, validation);
             return;
         }
-
-        Player player = (Player) sender;
-        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(player.getUniqueId());
 
         cApplication.reason = responseClean;
 
