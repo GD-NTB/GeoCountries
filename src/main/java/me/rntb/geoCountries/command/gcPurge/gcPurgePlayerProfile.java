@@ -20,7 +20,7 @@ public class gcPurgePlayerProfile {
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender,  String[] args) {
+    private static void onConfirm(CommandSender sender, String[] args) {
         int count = PlayerProfile.all.size();
         for (PlayerProfile playerProfile : new ArrayList<>(PlayerProfile.all)) // new ArrayList as we are concurrently modifying
             PlayerProfile.delete(playerProfile);

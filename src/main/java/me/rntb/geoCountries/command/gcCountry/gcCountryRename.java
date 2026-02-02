@@ -51,7 +51,7 @@ public class gcCountryRename {
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender,  String[] args) {
+    private static void onConfirm(CommandSender sender, String[] args) {
         String countryName = args[0];
         Player player = (Player) sender;
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);

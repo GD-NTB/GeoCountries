@@ -29,7 +29,7 @@ public class gcPlayerInfo {
         if (playerProfile.hasCitizenship()) {
             Country country = playerProfile.getCitizenship();
             rankAndCountryString = "§e%s§f of §e%s"
-                             .formatted(playerProfile.getRankString(), country != null ? country.name : "§cNone");
+                                   .formatted(playerProfile.getRankString(), country != null ? country.name : "§cNone");
         }
 
         String onlineString = "§aOnline";

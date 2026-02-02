@@ -27,7 +27,7 @@ public class gcSave extends SubCommand {
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender,  String[] args) {
+    private static void onConfirm(CommandSender sender, String[] args) {
         // save data collections
         ChatUtil.sendPrefixedMessage(sender, "§eSaving all data collections...");
         DataCollectionManager.save();

@@ -20,7 +20,7 @@ public class gcPurgeCitizenshipApplication {
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender,  String[] args) {
+    private static void onConfirm(CommandSender sender, String[] args) {
         int count = CitizenshipApplication.sentAll.size();
 
         for (CitizenshipApplication ca : new ArrayList<>(CitizenshipApplication.sentAll)) // new ArrayList as we are concurrently modifying

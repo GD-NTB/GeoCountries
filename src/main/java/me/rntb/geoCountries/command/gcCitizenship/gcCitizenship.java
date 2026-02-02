@@ -26,6 +26,7 @@ public class gcCitizenship extends SubCommand {
                           §f> received: §2Lists received citizenship applications to your country.
                           §f> reject: §2Rejects a player's citizenship application to your country.
                           §f> renounce: §2Renounces (gives up) citizenship of your country.
+                          §f> revoke: §2Revoke's the citizenship of a player of your country.
                           §f> sent: §2Lists citizenship applications that you have sent.
                           §f> unsend: §2Unsends a citizenship application that you previously sent.""";
     }
@@ -36,6 +37,7 @@ public class gcCitizenship extends SubCommand {
             Map.entry("received", gcCitizenshipReceived::onCommand),
             Map.entry("reject", gcCitizenshipReject::onCommand),
             Map.entry("renounce", gcCitizenshipRenounce::onCommand),
+            Map.entry("revoke", gcCitizenshipRevoke::onCommand),
             Map.entry("sent", gcCitizenshipSent::onCommand),
             Map.entry("unsend", gcCitizenshipUnsend::onCommand)
     );
@@ -96,6 +98,16 @@ public class gcCitizenship extends SubCommand {
                         if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission(this.RequiredPermission + ".received"))
                             yield List.of();
                         yield getReceivedCitizenshipApplicationsAsStrings(player.citizenship);
+                    }
+
+                    // /gc citizenship revoke [players]
+                    case "revoke" -> {
+                        PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
+                        if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission(this.RequiredPermission + ".revoke"))
+                            yield List.of();
+                        yield player.getCitizenship().citizens.stream()
+                                                              .map(c -> PlayerProfile.byUUID.get(c).username)
+                                                              .toList();
                     }
 
                     default -> List.of();

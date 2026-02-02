@@ -27,7 +27,7 @@ public class gcLoad extends SubCommand {
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender,  String[] args) {
+    private static void onConfirm(CommandSender sender, String[] args) {
         // load data collections
         ChatUtil.sendPrefixedMessage(sender, "§eLoading all data collections...");
         DataCollectionManager.init();

@@ -33,7 +33,7 @@ public class gcCountryDissolve {
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender,  String[] args) {
+    private static void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
         Country country = playerProfile.getCitizenship();
 

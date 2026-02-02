@@ -34,7 +34,7 @@ public class gcCitizenshipRenounce {
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender,  String[] args) {
+    private static void onConfirm(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 

@@ -184,5 +184,4 @@ public class Country extends DataCollection {
         return "Country(name=%s, leader=%s, citizens=%d)"
                 .formatted(this.name, this.getLeader().username, this.citizenCount());
     }
-
 }

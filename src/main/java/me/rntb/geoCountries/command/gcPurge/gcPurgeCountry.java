@@ -19,7 +19,7 @@ public class gcPurgeCountry {
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender,  String[] args) {
+    private static void onConfirm(CommandSender sender, String[] args) {
         int count = Country.all.size();
         for (Country cd : new ArrayList<>(Country.all)) // new ArrayList as we are concurrently modifying
             Country.delete(cd);
