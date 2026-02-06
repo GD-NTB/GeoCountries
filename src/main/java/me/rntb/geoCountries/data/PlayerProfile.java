@@ -2,7 +2,6 @@ package me.rntb.geoCountries.data;
 
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
-import me.rntb.geoCountries.types.Setting;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
@@ -68,14 +67,9 @@ public class PlayerProfile extends DataCollection {
         for (PlayerProfile player : all) {
             byUsername.put(player.username, player);
             byUUID.put(player.uuid, player);
-
-            if (player.settings == null)
-                player.settings = Arrays.copyOf(PlayerProfile.defaultSettings,
-                                                PlayerProfile.defaultSettings.length);
-            player.settings = Setting.loadMetadataAndPurgeBroken(player.settings);
         }
 
-        if (ConfigState.DebugLogging) {
+        if (ConfigState.debugLogging) {
             int count = all.size();
             ChatUtil.sendPrefixedLogMessage("Loaded " + count + " PlayerProfile" + StringUtil.leadingS(count) + ".");
         }
@@ -84,7 +78,7 @@ public class PlayerProfile extends DataCollection {
     public static void save() {
         writeToFile(FILE_PATH, DISPLAY_NAME, all);
 
-        if (all != null && ConfigState.DebugLogging) {
+        if (all != null && ConfigState.debugLogging) {
             int count = all.size();
             ChatUtil.sendPrefixedLogMessage("Saved " + count + " PlayerProfile" + StringUtil.leadingS(count) + ".");
         }
@@ -97,11 +91,6 @@ public class PlayerProfile extends DataCollection {
         byUUID.put(player.uuid, player);
 
         player.timeFirstJoined = System.currentTimeMillis();
-
-        if (player.settings == null)
-            player.settings = Arrays.copyOf(PlayerProfile.defaultSettings,
-                                            PlayerProfile.defaultSettings.length);
-        player.settings = Setting.loadMetadataAndPurgeBroken(player.settings);
     }
 
     public static void delete(PlayerProfile player) {
@@ -233,15 +222,12 @@ public class PlayerProfile extends DataCollection {
         this.rank = newRank;
     }
 
-    public Setting[] settings;
-    private static final Setting[] defaultSettings = new Setting[] { new Setting("chatnotificationsounds", "true"),
-                                                                   };
-    public Setting getSetting(String key) {
-        return Arrays.stream(this.settings)
-                     .filter(s -> s.key.equals(key))
-                     .findFirst().orElse(null);
-    }
-
+    // settings
+    public Map<String, String> settings = new HashMap<>(
+            Map.ofEntries(
+                    Map.entry("chatnotificationsounds", "true")
+            )
+    );
 
     public long timeFirstJoined = 0;
     public String timeFirstJoinedAsString() {
@@ -250,10 +236,11 @@ public class PlayerProfile extends DataCollection {
         return dateTime.format(StringUtil.timeFormatter);
     }
 
-
     public UUID getLeaderOf() {
         return rank == PlayerRank.LEADER ? this.citizenship : null;
     }
+
+    public PlayerProfile() { }
 
     public PlayerProfile(Player player) {
         this.username = player.getName();

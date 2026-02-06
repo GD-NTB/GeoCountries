@@ -2,7 +2,7 @@ package me.rntb.geoCountries.command.gcCountry;
 
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.types.Setting;
+import me.rntb.geoCountries.types.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -31,7 +31,7 @@ public class gcCountrySettings {
                 return;
             }
             String toValue = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-            setSetting(sender, args[0], toValue, country);
+            SettingData.setSetting(sender, args[0], toValue, country.settings);
             return;
         }
         // else list all/specific setting
@@ -59,75 +59,26 @@ public class gcCountrySettings {
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 
-    private static void setSetting(CommandSender sender, String command, String toValue, Country country) {
-        Setting setting = country.getSetting(command);
-        if (setting == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cSetting §f" + command + "§c could not be found!");
-            return;
-        }
-        // validate and set value
-        switch (setting.type) {
-            case BOOL:
-                if (toValue.equalsIgnoreCase("true"))
-                    setting.value = "true";
-                else if (toValue.equalsIgnoreCase("false"))
-                    setting.value = "false";
-                else {
-                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (boolean) must either be §ftrue§c or §ffalse§c");
-                    return;
-                }
-                break;
-
-            case INT:
-                int toValueInt;
-                try {
-                    toValueInt = Integer.parseInt(toValue);
-                } catch (NumberFormatException e) {
-                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (integer) must be a whole number!");
-                    return;
-                }
-                if (!(setting.intMinValue <= toValueInt && toValueInt <= setting.intMaxValue)) {
-                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (integer) must be between §f%d and %d§c!"
-                                                         .formatted(setting.intMinValue, setting.intMaxValue));
-                    return;
-                }
-                setting.value = toValue;
-                break;
-
-            case STRING:
-                int toValueLength = toValue.length();
-                if (!(setting.stringMinLength <= toValueLength && toValueLength <= setting.stringMaxLength)) {
-                    ChatUtil.sendPrefixedMessage(sender, "§cThe length of the value for this setting (string) must be between §f%d and %d§c!"
-                            .formatted(setting.stringMinLength, setting.stringMaxLength));
-                    return;
-                }
-                break;
-
-            default:
-                setting.value = toValue;
-                break;
-        }
-
-        ChatUtil.sendPrefixedMessage(sender, "§aSet §e" + command + "§a to §f" + toValue + "§a!");
-    }
-
     private static TextComponent.Builder getMessageAll(Country country) {
         TextComponent.Builder message = Component.text();
-        for (Setting setting : country.settings) {
-            message.append(Component.text("§f> " + setting + " "))
-                   .append(Setting.getEditButtonComponents("/gc country settings " + setting.key + " ",
-                                                           "/gc country settings " + setting.key + " " + setting.defaultValue))
+        for (String key : country.settings.keySet()) {
+            SettingData settingData = SettingData.get(key);
+            if (settingData == null)
+                continue;
+            message.append(Component.text("§f> " + settingData.toString(country.settings.get(key)) + " "))
+                   .append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
+                                                               "/gc country settings " + key + " " + settingData.defaultValue))
                    .append(Component.newline());
         }
         return message;
     }
 
-    private static TextComponent.Builder getMessageSpecific(String command, Country country) {
-        Setting setting = country.getSetting(command);
-        if (setting == null)
+    private static TextComponent.Builder getMessageSpecific(String key, Country country) {
+        SettingData settingData = SettingData.get(key);
+        if (settingData == null)
             return null;
-        return Component.text().append(Component.text(setting.toStringFull() + " "))
-                               .append(Setting.getEditButtonComponents("/gc country settings " + setting.key + " ",
-                                                                       "/gc country settings " + setting.key + " " + setting.defaultValue));
+        return Component.text().append(Component.text(settingData.toStringFull(key, country.settings.get(key)) + " "))
+                               .append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
+                                                                           "/gc country settings " + key + " " + settingData.defaultValue));
     }
 }

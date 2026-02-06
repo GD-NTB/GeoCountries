@@ -73,7 +73,7 @@ public class gcAdmin extends SubCommand {
                     }
 
                     // /gc admin setplayerrank [player] [ranks]
-                    case "setplayerrank" -> EnumUtil.enumToStringArray(PlayerProfile.PlayerRank.class);
+                    case "setplayerrank" -> EnumUtil.enumToStringList(PlayerProfile.PlayerRank.class);
 
                     default -> List.of();
                 };

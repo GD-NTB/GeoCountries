@@ -83,7 +83,7 @@ public class Response {
             }
         }
 
-        if (ConfigState.DebugLogging)
+        if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Stopped waiting for " + uuid + " to type in chat.");
     }
 

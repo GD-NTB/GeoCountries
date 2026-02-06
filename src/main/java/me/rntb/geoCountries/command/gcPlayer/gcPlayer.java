@@ -2,11 +2,10 @@ package me.rntb.geoCountries.command.gcPlayer;
 
 import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.types.Setting;
+import me.rntb.geoCountries.types.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -19,7 +18,7 @@ public class gcPlayer extends SubCommand {
         this.HelpPage   = """
                           §f/gc player [...]: §aManages and views information about players.
                           §f> info [username]: §2Displays info about a particular player.
-                          §f> settings [setting?] [value?]: §2Sets/lists of your settings""";
+                          §f> settings [setting?] [value?]: §2Sets/lists your settings""";
     }
 
     private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
@@ -64,9 +63,7 @@ public class gcPlayer extends SubCommand {
                         if (playerProfile == null)
                             yield List.of();
                         // return all settings as strings
-                        yield Arrays.stream(playerProfile.settings)
-                                    .map(s -> s.key)
-                                    .toList();
+                        yield playerProfile.settings.keySet().stream().toList();
                     }
 
                     default -> List.of();
@@ -82,12 +79,12 @@ public class gcPlayer extends SubCommand {
                         PlayerProfile playerCountry = PlayerProfile.byCommandSender(sender);
                         if (playerCountry == null)
                             yield List.of();
-                        // get setting typed before
-                        Setting setting = playerCountry.getSetting(args[1]);
-                        if (setting == null)
+                        // get settings typed before
+                        SettingData settingData = SettingData.get(args[1]);
+                        if (settingData == null)
                             yield List.of();
                         // return possible values for this setting
-                        yield setting.type == Setting.Type.BOOL ? List.of("true", "false") : List.of();
+                        yield settingData.getTabAutoCompleteOptions();
                     }
 
                     default -> List.of();

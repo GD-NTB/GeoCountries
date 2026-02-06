@@ -19,12 +19,12 @@ public class StringUtil {
 
     // ---------- string validation ----------
 
-    // ----- country -----
+    // ----- country name -----
     // country name should be trimmed beforehand
     public static String validateCountryName(String countryName, boolean alreadyExistsInvalid) {
-        if (!(ConfigState.CountryNameMin <= countryName.length() && countryName.length() <= ConfigState.CountryNameMax))
+        if (!(ConfigState.countryNameMin <= countryName.length() && countryName.length() <= ConfigState.countryNameMax))
             return "§cCountry name must be between §f%d and %d§c characters!§r"
-                    .formatted(ConfigState.CountryNameMin, ConfigState.CountryNameMax);
+                   .formatted(ConfigState.countryNameMin, ConfigState.countryNameMax);
         if (alreadyExistsInvalid && Country.byName.get(countryName) != null)
             return "§cA country with that name already exists!§r";
 
@@ -45,9 +45,9 @@ public class StringUtil {
     // ----- response -----
     // response should be trimmed beforehand
     public static String validateResponse(String response) {
-        if (!(ConfigState.ChatResponseMin <= response.length() && response.length() <= ConfigState.ChatResponseMax))
+        if (!(ConfigState.chatResponseMin <= response.length() && response.length() <= ConfigState.chatResponseMax))
             return "§cChat message must be between §f%d and %d§c characters!§r"
-                    .formatted(ConfigState.ChatResponseMin, ConfigState.ChatResponseMax);
+                   .formatted(ConfigState.chatResponseMin, ConfigState.chatResponseMax);
 
         // illegal characters
         Matcher m = Pattern.compile("[^\\p{L}\\p{N} ,.?!;:£$%^&*'()=+_#\\[\\]/\\-]").matcher(response);
@@ -55,11 +55,32 @@ public class StringUtil {
         while (m.find())
             illegalChars.add(m.group());
         if (!illegalChars.isEmpty())
-            return "§cThe following character(s) you typed are not allowed: §r" + String.join("", illegalChars);
+            return "§cThe following character(s) are not allowed: §r" + String.join("", illegalChars);
         if (response.chars().anyMatch(ch -> ch < 32))
             return "§cChat message must not contain any control characters!";
 
         // response is valid
+        return null;
+    }
+
+    // ----- country prefix -----
+    // country prefix should be trimmed beforehand
+    public static String validateCountryPrefix(String prefix) {
+        if (!(ConfigState.countryPrefixMin <= prefix.length() && prefix.length() <= ConfigState.countryPrefixMax))
+            return "§cCountry prefix must be between §f%d and %d§c characters!§r"
+                   .formatted(ConfigState.countryPrefixMin, ConfigState.countryPrefixMax);
+
+        // illegal characters
+        Matcher m = Pattern.compile("[^\\p{L}0-9',()./_-]").matcher(prefix);
+        Set<String> illegalChars = new LinkedHashSet<>();
+        while (m.find())
+            illegalChars.add(m.group());
+        if (!illegalChars.isEmpty())
+            return "§cThe following character(s) are not allowed in a country prefix: §r" + String.join("", illegalChars);
+        if (prefix.chars().anyMatch(ch -> ch < 32))
+            return "§cChat message must not contain any control characters!";
+
+        // country prefix is valid
         return null;
     }
 }

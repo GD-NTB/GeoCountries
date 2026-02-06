@@ -15,13 +15,11 @@ public class gcDebug extends SubCommand {
         this.HelpString = "Debug commands for development.";
         this.HelpPage   = """
                           §f/gc debug [...]: §aUseful debug commands for plugin development.
-                          §f> cleansettings: §2Cleans all broken settings.
                           §f> createcountry [name]: §2Creates a test country.
                           §f> soundtest: §2Plays a sound effect.""";
     }
 
     private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
-            Map.entry("cleansettings", gcDebugCleanSettings::onCommand),
             Map.entry("createcountry", gcDebugCreateCountry::onCommand),
             Map.entry("soundtest", gcDebugSoundTest::onCommand)
     );

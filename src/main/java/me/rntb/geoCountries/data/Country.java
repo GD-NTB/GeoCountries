@@ -2,7 +2,6 @@ package me.rntb.geoCountries.data;
 
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
-import me.rntb.geoCountries.types.Setting;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.command.CommandSender;
@@ -51,21 +50,16 @@ public class Country extends DataCollection {
         for (Country country : all) {
             byUUID.put(country.uuid, country);
             byName.put(country.name, country);
-
-            if (country.settings == null)
-                country.settings = Arrays.copyOf(Country.defaultSettings,
-                                                 Country.defaultSettings.length);
-            country.settings = Setting.loadMetadataAndPurgeBroken(country.settings);
         }
 
-        if (ConfigState.DebugLogging)
+        if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Loaded " + all.size() + " Countries");
     }
 
     public static void save() {
         writeToFile(FILE_PATH, DISPLAY_NAME, all);
 
-        if (all != null && ConfigState.DebugLogging)
+        if (all != null && ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Saved " + all.size() + " Countries");
     }
 
@@ -75,11 +69,6 @@ public class Country extends DataCollection {
         byUUID.put(country.uuid, country);
 
         country.timeCreated = System.currentTimeMillis();
-
-        if (country.settings == null)
-            country.settings = Arrays.copyOf(Country.defaultSettings,
-                                             Country.defaultSettings.length);
-        country.settings = Setting.loadMetadataAndPurgeBroken(country.settings);
     }
 
     public static void delete(Country country) {
@@ -158,14 +147,18 @@ public class Country extends DataCollection {
         }
     }
 
-    public Setting[] settings;
-    private static final Setting[] defaultSettings = new Setting[] { new Setting("autoacceptcitizenshipapplications", "false"),
-                                                                   };
-    public Setting getSetting(String key) {
-        return Arrays.stream(this.settings)
-                     .filter(s -> s.key.equals(key))
-                     .findFirst().orElse(null);
-    }
+    // settings
+    // todo: adding a new setting requires the country to be recreated, fix somehow
+    // todo: also these are unordered for some reason, prob because we use .keyset which is a set which is unordered mate
+    public final Map<String, String> settings = new HashMap<>(
+            Map.ofEntries(
+                Map.entry("autoacceptcitizenshipapplications", "false"),
+                Map.entry("countryprefixenabled", "true"),
+                Map.entry("countryprefix", "null"),
+                Map.entry("countryprefixcolour", "DARK_GRAY")
+            )
+    );
+
 
     public long timeCreated = 0;
     public String timeCreatedAsString() {
@@ -173,6 +166,8 @@ public class Country extends DataCollection {
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         return dateTime.format(StringUtil.timeFormatter);
     }
+
+    public Country() { }
 
     public Country(UUID uuid, String name) {
         this.uuid = uuid;

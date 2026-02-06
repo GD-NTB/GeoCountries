@@ -1,0 +1,205 @@
+package me.rntb.geoCountries.types;
+
+import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.EnumUtil;
+import me.rntb.geoCountries.util.StringUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import org.bukkit.command.CommandSender;
+
+import java.util.List;
+import java.util.Map;
+
+// essentially a struct for the "metadata" of a setting
+// i dont like how i've implemented this, but it works...
+public class SettingData {
+
+    public String defaultValue;
+    public enum Type {
+        BOOL,
+        INT,
+        STRING,
+        COUNTRY_PREFIX,
+        CHAT_COLOUR
+    }
+    public Type type;
+    public String name;
+    public String description;
+
+    // value for numbers, length for strings
+    public int min;
+    public int max;
+
+    public static SettingData get(String key) {
+        return switch (key) {
+            // country
+            case "autoacceptcitizenshipapplications" -> new SettingData("false",
+                                                                        Type.BOOL,
+                                                                        "Auto-Accept Citizenship Applications",
+                                                                        "Automatically accept citizenship applications when received");
+            case "countryprefixenabled" -> new SettingData("true",
+                                                           Type.BOOL,
+                                                           "Country Prefix Enabled",
+                                                           "Whether or not to show the country prefix in chat messages");
+            case "countryprefix" -> new SettingData("null",
+                                                    Type.COUNTRY_PREFIX,
+                                                    "Country Prefix",
+                                                    "The prefix to show in its citizens' chat messages",
+                                                    ConfigState.countryPrefixMin, ConfigState.countryPrefixMax);
+            case "countryprefixcolour" -> new SettingData("DARK_GRAY",
+                                                          Type.CHAT_COLOUR,
+                                                          "Country Prefix Colour",
+                                                          "The colour of the prefix to show in its citizens' chat messages");
+            // player
+            case "chatnotificationsounds" -> new SettingData("true",
+                                                             Type.BOOL,
+                                                             "Chat Notification Sounds",
+                                                             "Play a ding sound effect when receiving important chat messages");
+
+            default -> null;
+        };
+    }
+
+    public static void setSetting(CommandSender sender, String key, String toValue, Map<String, String> settingsMap) {
+        SettingData settingData = get(key);
+        if (settingData == null) {
+            ChatUtil.sendPrefixedMessage(sender, "§cSetting §f" + key + "§c could not be found!");
+            return;
+        }
+
+        String toValueTrimmed = toValue.trim();
+
+        // validate value
+        switch (settingData.type) {
+            case BOOL:
+                if (!toValueTrimmed.equals("true") && !toValueTrimmed.equals("false")) {
+                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (boolean) must either be §ftrue§c or §ffalse§c");
+                    return;
+                }
+                break;
+
+            case INT:
+                int toValueInt;
+                try {
+                    toValueInt = Integer.parseInt(toValueTrimmed);
+                } catch (NumberFormatException e) {
+                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (integer) must be a whole number!");
+                    return;
+                }
+                if (!(settingData.min <= toValueInt && toValueInt <= settingData.max)) {
+                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (integer) must be between §f%d and %d§c!"
+                                                         .formatted(settingData.min, settingData.max));
+                    return;
+                }
+                break;
+
+            case STRING:
+                int toValueLength = toValueTrimmed.length();
+                if (!(settingData.min <= toValueLength && toValueLength <= settingData.max)) {
+                    ChatUtil.sendPrefixedMessage(sender, "§cThe length of the value for this setting (string) must be between §f%d and %d§c!"
+                                                         .formatted(settingData.min, settingData.max));
+                    return;
+                }
+                break;
+
+            case COUNTRY_PREFIX:
+                String validationString = StringUtil.validateCountryPrefix(toValueTrimmed);
+                if (validationString != null) {
+                    ChatUtil.sendPrefixedMessage(sender, validationString);
+                    return;
+                }
+                break;
+
+            case CHAT_COLOUR:
+                if (!EnumUtil.enumToStringList(ChatUtil.ChatColour.class).contains(toValueTrimmed)) {
+                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (chat colour) must be one of the available chat colours (look at tab the autocomplete options)!");
+                    return;
+                }
+                break;
+        }
+
+        settingsMap.put(key, toValueTrimmed);
+
+        ChatUtil.sendPrefixedMessage(sender, "§aSet §e" + key + "§a to §f" + toValueTrimmed + "§a!");
+    }
+
+    public SettingData(String defaultValue, Type type, String name, String description) {
+        this.defaultValue = defaultValue;
+        this.type = type;
+        this.name = name;
+        this.description = description;
+    }
+
+    public SettingData(String defaultValue, Type type, String name, String description, int min, int max) {
+        this(defaultValue, type, name, description);
+        this.min = min;
+        this.max = max;
+    }
+
+    public String toString(String value) {
+        return "§e%s: %s"
+               .formatted(this.name,
+                          getValueColour(value) + value);
+    }
+
+    // todo: chat colour type should be coloured when is value
+    public String toStringFull(String key, String value) {
+        return "§e%s §6(%s)§f - %s: %s"
+               .formatted(this.name,
+                          key,
+                          this.description,
+                          getValueColour(value) + value);
+    }
+
+    public String getValueColour(String value) {
+        return switch (this.type) {
+            case Type.BOOL -> {
+                if (value.equals("true"))
+                    yield "§a";
+                else if (value.equals("false"))
+                    yield "§c";
+                else
+                    yield "§r";
+            }
+            case INT, STRING, COUNTRY_PREFIX -> "§r";
+            case CHAT_COLOUR -> {
+                ChatUtil.ChatColour chatColour;
+                try {
+                    chatColour = ChatUtil.ChatColour.valueOf(value);
+                } catch (IllegalArgumentException e) {
+                    yield "§r";
+                }
+                yield ChatUtil.getChatColourByEnum(chatColour);
+            }
+        };
+    }
+
+    public List<String> getTabAutoCompleteOptions() {
+        return switch (this.type) {
+            case BOOL -> List.of("true", "false");
+            case STRING -> List.of("null");
+            case CHAT_COLOUR -> EnumUtil.enumToStringList(ChatUtil.ChatColour.class);
+            case INT, COUNTRY_PREFIX -> List.of();
+        };
+    }
+
+    public static TextComponent.Builder getEditButtonComponents(String editCommand, String defaultCommand) {
+        return Component.text()
+                        // [Edit] button
+                        .append(ChatUtil.mm.deserialize(
+                                "<click:suggest_command:'" + editCommand + "'>" +
+                                "<hover:show_text:\"<dark_gray>Click to edit the setting's value.</dark_gray>\">" +
+                                "<dark_gray><bold>[Edit]</bold></dark_gray>" +
+                                "</hover></click>"
+                        ))
+                        .append(Component.text(" "))
+                        // [Default] button
+                        .append(ChatUtil.mm.deserialize(
+                                "<click:suggest_command:'" + defaultCommand + "'>" +
+                                "<hover:show_text:\"<dark_gray>Click to set to default value.</dark_gray>\">" +
+                                "<dark_gray><bold>[Default]</bold></dark_gray>" +
+                                "</hover></click>"
+                        ));
+    }
+}

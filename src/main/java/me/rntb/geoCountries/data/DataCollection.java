@@ -72,14 +72,14 @@ public abstract class DataCollection {
     // register new datacollection to all
     static <T> void addNew(T newDataCollection, List<T> all, String displayName) {
         all.add(newDataCollection);
-        if (ConfigState.DebugLogging)
+        if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Added new " + displayName + ".");
     }
 
     // delete datacollection from all
     static <T> void delete(T dataCollection, List<T> all, String displayName) {
         all.remove(dataCollection);
-        if (ConfigState.DebugLogging)
+        if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Deleted " + displayName + ".");
     }
 }

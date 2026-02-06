@@ -1,9 +1,14 @@
-config-version: 0.0205 # do not change
+config-version: 0.0207 # do not change
 
 debug-logging: false # more logging in server console for debugging
 debug-mode: false # disables several checks and features for easier plugin development
 
 chat-prefix: '§8[GeoCountries] ' # text before every plugin chat and console message
+
+country-prefix-enabled: true # whether to display a country's chosen prefix before its citizens' messages
+country-prefix-format: "%s[%s]" # format of country prefix in chat before usernames, first %s = colour, second %s = country prefix
+country-prefix-min: 1 # min allowed length of a country's chosen prefix
+country-prefix-max: 10 # max allowed length of a country's prefix
 
 sound-effects: true # play notification sound effects (on war declared, chat notif, etc)
 

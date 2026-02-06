@@ -18,7 +18,46 @@ public class ChatUtil {
 
     public static final MiniMessage mm = MiniMessage.miniMessage();
 
-    // not centred automatically, you will need to append whitespace before appending these buttons
+    public enum ChatColour {
+        BLACK,
+        DARK_BLUE,
+        DARK_GREEN,
+        DARK_AQUA,
+        DARK_RED,
+        DARK_MAGENTA,
+        GOLD,
+        LIGHT_GREY,
+        DARK_GREY,
+        BLUE,
+        GREEN,
+        AQUA,
+        RED,
+        MAGENTA,
+        YELLOW,
+        WHITE,
+    }
+    public static String getChatColourByEnum(ChatColour chatColour) {
+        return "§" + switch (chatColour) {
+            case BLACK -> "0";
+            case DARK_BLUE -> "1";
+            case DARK_GREEN -> "2";
+            case DARK_AQUA -> "3";
+            case DARK_RED -> "4";
+            case DARK_MAGENTA -> "5";
+            case GOLD -> "6";
+            case LIGHT_GREY -> "7";
+            case DARK_GREY -> "8";
+            case BLUE -> "9";
+            case GREEN -> "a";
+            case AQUA -> "b";
+            case RED -> "c";
+            case MAGENTA -> "d";
+            case YELLOW -> "e";
+            case WHITE -> "f";
+        };
+    }
+
+    // not centred automatically, you will need to prepend whitespace before appending these buttons
     public static TextComponent.Builder chatPageControlButtons(String commandForPrevious, String commandForNext, int effectiveIndex, int pageCount) {
         TextComponent.Builder message = Component.text();
 
@@ -49,7 +88,7 @@ public class ChatUtil {
     }
 
     public static String newlineIfPrefixIsEmpty() {
-        return ConfigState.ChatPrefix.length() <= 2 ? "" : "\n"; // empty = '', so length = 2
+        return ConfigState.chatPrefix.length() <= 2 ? "" : "\n"; // empty = '', so length = 2
     }
     public static Component newlineIfPrefixIsEmptyComponent() {
         return ChatUtil.newlineIfPrefixIsEmpty().isEmpty() ? Component.empty() : Component.text(ChatUtil.newlineIfPrefixIsEmpty());
@@ -65,7 +104,7 @@ public class ChatUtil {
     public static void broadcastPrefixedMessageToCountry(Country country, String message, boolean playSound) {
         for (UUID uuid : country.citizens) {
             PlayerProfile playerProfile = PlayerProfile.byUUID.get(uuid);
-            if (ConfigState.DebugLogging && playerProfile == null) {
+            if (ConfigState.debugLogging && playerProfile == null) {
                 sendPrefixedLogMessage("Tried to broadcast message to UUID " + uuid + " without PlayerProfile.");
                 return;
             }
@@ -83,13 +122,13 @@ public class ChatUtil {
     public static void sendPrefixedMessage(CommandSender sender, String message) {
         if (sender == null)
             return;
-        sender.sendMessage(ConfigState.ChatPrefix + message);
+        sender.sendMessage(ConfigState.chatPrefix + message);
     }
 
     public static void sendPrefixedMessage(CommandSender sender, Component message) {
         if (sender == null)
             return;
-        sender.sendMessage(ConfigState.ChatPrefixComponent.append(message));
+        sender.sendMessage(ConfigState.chatPrefixComponent.append(message));
     }
 
     public static void sendNoPermissionMessage(CommandSender sender, String command, String permission) {
@@ -98,11 +137,11 @@ public class ChatUtil {
 
     // console
     public static void sendPrefixedLogMessage(String message) {
-        getServer().getConsoleSender().sendMessage(ConfigState.ChatPrefix + message);
+        getServer().getConsoleSender().sendMessage(ConfigState.chatPrefix + "§r" + message);
     }
 
     public static void sendPrefixedLogErrorMessage(String message) {
-        getServer().getConsoleSender().sendMessage(ConfigState.ChatPrefix + "§c" + message);
+        getServer().getConsoleSender().sendMessage(ConfigState.chatPrefix + "§c" + message);
     }
 
     public static void sendPrefixedPlayerOnlyErrorMessage(String command) {

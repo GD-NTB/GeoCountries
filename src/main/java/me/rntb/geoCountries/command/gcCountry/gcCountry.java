@@ -2,11 +2,10 @@ package me.rntb.geoCountries.command.gcCountry;
 
 import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.data.Country;
-import me.rntb.geoCountries.types.Setting;
+import me.rntb.geoCountries.types.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -77,9 +76,7 @@ public class gcCountry extends SubCommand {
                         if (playerCountry == null)
                             yield List.of();
                         // return all settings as strings
-                        yield Arrays.stream(playerCountry.settings)
-                                    .map(s -> s.key)
-                                    .toList();
+                        yield playerCountry.settings.keySet().stream().toList();
                     }
 
                     default -> List.of();
@@ -96,11 +93,11 @@ public class gcCountry extends SubCommand {
                         if (playerCountry == null)
                             yield List.of();
                         // get setting typed before
-                        Setting setting = playerCountry.getSetting(args[1]);
-                        if (setting == null)
+                        SettingData settingData = SettingData.get(args[1]);
+                        if (settingData == null)
                             yield List.of();
-                        // return possible values for this setting
-                        yield setting.type == Setting.Type.BOOL ? List.of("true", "false") : List.of();
+                        // return possible values for this settings
+                        yield settingData.getTabAutoCompleteOptions();
                     }
 
                     default -> List.of();

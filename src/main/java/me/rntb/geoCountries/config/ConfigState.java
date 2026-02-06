@@ -4,18 +4,25 @@ import net.kyori.adventure.text.Component;
 
 public class ConfigState {
 
-    public static boolean DebugMode = false;
-    public static boolean DebugLogging = false;
+    public static final double CONFIG_VERSION = 0.0207; // increment whenever config.yml is changed
 
-    public static String ChatPrefix = "§8[GeoCountries] ";
-    public static Component ChatPrefixComponent;
+    public static boolean debugMode = false;
+    public static boolean debugLogging = false;
 
-    public static boolean SoundEffects = true;
+    public static String chatPrefix = "§8[GeoCountries] ";
+    public static Component chatPrefixComponent; // set in configmanager
 
-    public static int MaxCitizenshipApplications = 10;
+    public static boolean countryPrefixEnabled = true;
+    public static String countryPrefixFormat = "%s[%s]";
+    public static int countryPrefixMin = 1;
+    public static int countryPrefixMax = 10;
 
-    public static int ChatResponseMin = 1;
-    public static int ChatResponseMax = 150;
-    public static int CountryNameMin = 2;
-    public static int CountryNameMax = 35;
+    public static boolean soundEffects = true;
+
+    public static int maxCitizenshipApplications = 10;
+
+    public static int chatResponseMin = 1;
+    public static int chatResponseMax = 150;
+    public static int countryNameMin = 2;
+    public static int countryNameMax = 35;
 }

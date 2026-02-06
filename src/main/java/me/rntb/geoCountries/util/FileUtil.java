@@ -39,7 +39,7 @@ public class FileUtil {
             return;
         }
 
-        if (ConfigState.DebugLogging)
+        if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Created path " + String.valueOf(path) + " and wrote contents!");
     }
 

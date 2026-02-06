@@ -24,7 +24,7 @@ public class gcCitizenshipApply {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if already has citizenship, escape
-        if (!ConfigState.DebugMode && playerProfile.hasCitizenship()) {
+        if (!ConfigState.debugMode && playerProfile.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou can't apply for citizenship of country whilst being a citizen of another!");
             return;
         }
@@ -49,12 +49,12 @@ public class gcCitizenshipApply {
         if (cApplications != null) {
             // if sent too many applications, escape
             int cApplicationsCount = cApplications.size();
-            if (cApplicationsCount >= ConfigState.MaxCitizenshipApplications) {
-                ChatUtil.sendPrefixedMessage(sender, "§cYou've already sent too many §f(" + cApplicationsCount + "/" + ConfigState.MaxCitizenshipApplications + ")§c citizenship applications! Unsend one by doing §f/gc citizenship unsend [country]");
+            if (cApplicationsCount >= ConfigState.maxCitizenshipApplications) {
+                ChatUtil.sendPrefixedMessage(sender, "§cYou've already sent too many §f(" + cApplicationsCount + "/" + ConfigState.maxCitizenshipApplications + ")§c citizenship applications! Unsend one by doing §f/gc citizenship unsend [country]");
                 return;
             }
             // if already sent application to this country, escape
-            if (!ConfigState.DebugMode && cApplications.stream().anyMatch(ca -> ca.toCountry.equals(toCountry.uuid))) {
+            if (!ConfigState.debugMode && cApplications.stream().anyMatch(ca -> ca.toCountry.equals(toCountry.uuid))) {
                 ChatUtil.sendPrefixedMessage(sender, "§cYou already have a pending citizenship application to §f" + countryName + "§c!");
                 return;
             }
@@ -70,7 +70,7 @@ public class gcCitizenshipApply {
         CitizenshipApplication.open(cApplication,true);
 
         // if country has auto-accept enabled, accept and escape
-        if (toCountry.getSetting("autoacceptcitizenshipapplications").value.equals("true")) {
+        if (toCountry.settings.get("autoacceptcitizenshipapplications").equals("true")) {
             CitizenshipApplication.accept(cApplication, true);
             // broadcast notif to country
             ChatUtil.broadcastPrefixedMessageToCountry(toCountry, "§f" + playerProfile.username + "§6 is now a citizen of §f" + toCountry.name + "§6!", false);

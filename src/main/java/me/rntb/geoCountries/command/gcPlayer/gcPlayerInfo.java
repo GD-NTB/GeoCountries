@@ -45,7 +45,7 @@ public class gcPlayerInfo {
                          §a%s§f (%s§f)
                          §f> %s
                          §f> Joined on §2%s §8(%s day%s ago)
-                         §6================================="""
+                         §6================================"""
                         .formatted(playerProfile.username,
                                    onlineString,
                                    rankAndCountryString,

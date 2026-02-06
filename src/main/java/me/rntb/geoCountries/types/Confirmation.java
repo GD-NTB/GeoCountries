@@ -81,7 +81,7 @@ public class Confirmation {
             }
         }
 
-        if (ConfigState.DebugLogging)
+        if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Stopped waiting for " + uuid + " to do /gc confirm.");
     }
 

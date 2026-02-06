@@ -33,7 +33,7 @@ public class CitizenshipApplication extends DataCollection {
         openByUUID.put(cApplication.uuid, cApplication);
         openByApplicant.put(cApplication.applicant, cApplication);
 
-        if (ConfigState.DebugLogging)
+        if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Created new open CitizenshipApplication");
 
         if (sendMessage)
@@ -48,7 +48,7 @@ public class CitizenshipApplication extends DataCollection {
         openByUUID.remove(cApplication.uuid);
         openByApplicant.remove(cApplication.applicant);
 
-        if (ConfigState.DebugLogging)
+        if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Cancelled open CitizenshipApplication");
 
         if (sendMessage)
@@ -69,7 +69,7 @@ public class CitizenshipApplication extends DataCollection {
 
         cApplication.timeCreated = System.currentTimeMillis();
 
-        if (ConfigState.DebugLogging)
+        if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Sent open CitizenshipApplication");
 
         if (sendMessage) {
@@ -135,7 +135,7 @@ public class CitizenshipApplication extends DataCollection {
 
         delete(cApplication, sentAll, DISPLAY_NAME);
 
-        if (ConfigState.DebugLogging)
+        if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Deleted sent CitizenshipApplication");
     }
     public static void deleteAllSentByApplicant(PlayerProfile player) {
@@ -160,7 +160,7 @@ public class CitizenshipApplication extends DataCollection {
         // delete sent application
         deleteSent(cApplication);
 
-        if (ConfigState.DebugLogging)
+        if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Accepted sent CitizenshipApplication");
 
         if (sendMessageToApplicant) {
@@ -186,7 +186,7 @@ public class CitizenshipApplication extends DataCollection {
         // delete sent application
         deleteSent(cApplication);
 
-        if (ConfigState.DebugLogging)
+        if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Rejected sent CitizenshipApplication");
 
         if (sendMessageToApplicant) {
@@ -223,7 +223,7 @@ public class CitizenshipApplication extends DataCollection {
 
         }
 
-        if (ConfigState.DebugLogging) {
+        if (ConfigState.debugLogging) {
             int count = sentAll.size();
             ChatUtil.sendPrefixedLogMessage("Loaded " + count + " CitizenApplication" + StringUtil.leadingS(count) + ".");
         }
@@ -232,7 +232,7 @@ public class CitizenshipApplication extends DataCollection {
     public static void save() {
         writeToFile(FILE_PATH, DISPLAY_NAME, sentAll);
 
-        if (sentAll != null && ConfigState.DebugLogging) {
+        if (sentAll != null && ConfigState.debugLogging) {
             int count = sentAll.size();
             ChatUtil.sendPrefixedLogMessage("Saved " + count + " CitizenApplication" + StringUtil.leadingS(count) + ".");
         }

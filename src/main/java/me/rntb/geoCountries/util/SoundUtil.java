@@ -12,10 +12,10 @@ public class SoundUtil {
     }
 
     public static void playSound(Player player, SoundEffect soundEffect) {;
-        if (!ConfigState.SoundEffects || player == null)
+        if (!ConfigState.soundEffects || player == null)
             return;
         PlayerProfile toPlayerProfile = PlayerProfile.get(player);
-        if (toPlayerProfile == null || toPlayerProfile.getSetting("chatnotificationsounds").value.equals("false"))
+        if (toPlayerProfile == null || toPlayerProfile.settings.get("chatnotificationsounds").equals("false"))
             return;
         Sound sound;
         switch (soundEffect) {
