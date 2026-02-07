@@ -1,4 +1,4 @@
-# GeoCountries (ALPHA 0.041)
+# GeoCountries (ALPHA 0.042)
 
 A Minecraft plugin for Paper servers built from the ground-up which helps players to simulate diplomacy, trade, wars, and more.
 It is intended to work in a similar way to many existing Factions plugins.
@@ -28,14 +28,7 @@ It is intended to work in a similar way to many existing Factions plugins.
 
 ## To-do:
 
-* In-country ranks
-* Chunk claiming
-* Pl3xMap support
-* And a lot more sh!te
-
-... Specifically:
 ```
-// todo: revoke citizenship command
 // todo: in-country ranks
 // todo: promote command
 // todo: gui
