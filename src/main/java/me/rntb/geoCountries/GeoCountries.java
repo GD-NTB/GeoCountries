@@ -1,12 +1,14 @@
 package me.rntb.geoCountries;
 
 import me.rntb.geoCountries.command.gc;
+import me.rntb.geoCountries.config.ConfigManager;
 import me.rntb.geoCountries.data.DataCollectionManager;
+import me.rntb.geoCountries.listener.ChatListener;
 import me.rntb.geoCountries.listener.JoinListener;
 import me.rntb.geoCountries.listener.LeaveListener;
-import me.rntb.geoCountries.listener.ChatListener;
-import me.rntb.geoCountries.config.ConfigManager;
 import me.rntb.geoCountries.util.ChatUtil;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
@@ -53,6 +55,9 @@ public class GeoCountries extends JavaPlugin {
         DataCollectionManager.init();
 
         ChatUtil.sendPrefixedLogMessage("Plugin enabled!");
+
+        // set up bstats
+        bStatsSetup();
     }
 
     @Override
@@ -61,5 +66,17 @@ public class GeoCountries extends JavaPlugin {
         DataCollectionManager.save();
 
         ChatUtil.sendPrefixedLogMessage("Plugin disabled!");
+    }
+
+    private void bStatsSetup() {
+        // You can find the plugin id of your plugins on
+        // the page https://bstats.org/what-is-my-plugin-id
+        int pluginId = 29384;
+        Metrics metrics = new Metrics(this, pluginId);
+
+        // Optional: Add custom charts
+        metrics.addCustomChart(
+                new SimplePie("chart_id", () -> "My value")
+        );
     }
 }
