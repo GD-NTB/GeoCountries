@@ -143,9 +143,8 @@ public class SettingData {
                           getValueColour(value) + value);
     }
 
-    // todo: chat colour type should be coloured when is value
     public String toStringFull(String key, String value) {
-        return "§e%s §6(%s)§f - %s: %s"
+        return "§e%s §8(%s)§f - %s: %s"
                .formatted(this.name,
                           key,
                           this.description,
@@ -165,11 +164,13 @@ public class SettingData {
             case INT, STRING, COUNTRY_PREFIX -> "§r";
             case CHAT_COLOUR -> {
                 ChatUtil.ChatColour chatColour;
+                ChatUtil.sendPrefixedLogMessage(String.valueOf(ChatUtil.ChatColour.valueOf(value)));
                 try {
                     chatColour = ChatUtil.ChatColour.valueOf(value);
                 } catch (IllegalArgumentException e) {
                     yield "§r";
                 }
+                ChatUtil.sendPrefixedLogMessage(String.valueOf(chatColour));
                 yield ChatUtil.getChatColourByEnum(chatColour);
             }
         };

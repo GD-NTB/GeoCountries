@@ -67,6 +67,17 @@ public class PlayerProfile extends DataCollection {
         for (PlayerProfile player : all) {
             byUsername.put(player.username, player);
             byUUID.put(player.uuid, player);
+
+            // load any new settings
+            for (String key : defaultSettings.keySet()) {
+                if (!player.settings.containsKey(key))
+                    player.settings.put(key, defaultSettings.get(key));
+            }
+            // remove any old settings
+            for (String key : player.settings.keySet()) {
+                if (!defaultSettings.containsKey(key))
+                    player.settings.remove(key);
+            }
         }
 
         if (ConfigState.debugLogging) {
@@ -91,6 +102,9 @@ public class PlayerProfile extends DataCollection {
         byUUID.put(player.uuid, player);
 
         player.timeFirstJoined = System.currentTimeMillis();
+
+        // create settings
+        player.settings = new HashMap<>(defaultSettings);
     }
 
     public static void delete(PlayerProfile player) {
@@ -223,7 +237,8 @@ public class PlayerProfile extends DataCollection {
     }
 
     // settings
-    public Map<String, String> settings = new HashMap<>(
+    public Map<String, String> settings = new HashMap<>();
+    public static final Map<String, String> defaultSettings = new HashMap<>(
             Map.ofEntries(
                     Map.entry("chatnotificationsounds", "true")
             )

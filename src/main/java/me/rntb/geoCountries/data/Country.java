@@ -44,12 +44,23 @@ public class Country extends DataCollection {
             return;
         }
 
-        // reset and populate hashmaps, load settings shite
+        // reset and populate hashmaps, load settings
         byUUID.clear();
         byName.clear();
         for (Country country : all) {
             byUUID.put(country.uuid, country);
             byName.put(country.name, country);
+
+            // load any new settings
+            for (String key : defaultSettings.keySet()) {
+                if (!country.settings.containsKey(key))
+                    country.settings.put(key, defaultSettings.get(key));
+            }
+            // remove any old settings
+            for (String key : country.settings.keySet()) {
+                if (!defaultSettings.containsKey(key))
+                    country.settings.remove(key);
+            }
         }
 
         if (ConfigState.debugLogging)
@@ -69,6 +80,9 @@ public class Country extends DataCollection {
         byUUID.put(country.uuid, country);
 
         country.timeCreated = System.currentTimeMillis();
+
+        // create settings
+        country.settings = new HashMap<>(defaultSettings);
     }
 
     public static void delete(Country country) {
@@ -109,9 +123,8 @@ public class Country extends DataCollection {
         // if has leader
         if (this.leader != null) {
             // if player is already leader, escape
-            if (this.leader.equals(player.uuid)) {
+            if (this.leader.equals(player.uuid))
                 return;
-            }
 
             // demote old
             PlayerProfile old = PlayerProfile.byUUID.get(this.leader);
@@ -142,23 +155,21 @@ public class Country extends DataCollection {
     }
     public void removeCitizen(PlayerProfile player) {
         this.citizens.remove(player.uuid);
-        if (player.citizenship != null && player.citizenship.equals(this.uuid)) {
+        if (player.citizenship != null && player.citizenship.equals(this.uuid))
             player.citizenship = null;
-        }
     }
 
     // settings
-    // todo: adding a new setting requires the country to be recreated, fix somehow
-    // todo: also these are unordered for some reason, prob because we use .keyset which is a set which is unordered mate
-    public final Map<String, String> settings = new HashMap<>(
+    // todo: these are unordered when displayed as we use .keySet, need to fix
+    public Map<String, String> settings = new HashMap<>();
+    public static final Map<String, String>  defaultSettings = new HashMap<>(
             Map.ofEntries(
                 Map.entry("autoacceptcitizenshipapplications", "false"),
                 Map.entry("countryprefixenabled", "true"),
                 Map.entry("countryprefix", "null"),
-                Map.entry("countryprefixcolour", "DARK_GRAY")
+                Map.entry("countryprefixcolour", "DARK_GREY")
             )
     );
-
 
     public long timeCreated = 0;
     public String timeCreatedAsString() {

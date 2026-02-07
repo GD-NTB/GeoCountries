@@ -55,7 +55,7 @@ public class gcCountrySettings {
             message.append(Component.newline());
         }
 
-        message.append(Component.text("§6=========================="));
+        message.append(Component.text("§6============================="));
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 
