@@ -48,7 +48,7 @@ public class gcPlayerSettings {
     private static TextComponent.Builder getMessageAll(PlayerProfile playerProfile) {
         TextComponent.Builder message = Component.text();
         for (String key : playerProfile.settings.keySet()) {
-            SettingData settingData = SettingData.get(key);
+            SettingData settingData = SettingData.map.get(key);
             if (settingData == null)
                 continue;
             message.append(Component.text("§f> " + settingData.toString(playerProfile.settings.get(key)) + " "))
@@ -60,7 +60,7 @@ public class gcPlayerSettings {
     }
 
     private static TextComponent.Builder getMessageSpecific(String key, PlayerProfile playerProfile) {
-        SettingData settingData = SettingData.get(key);
+        SettingData settingData = SettingData.map.get(key);
         if (settingData == null)
             return null;
         return Component.text().append(Component.text(settingData.toStringFull(key, playerProfile.settings.get(key)) + " "))

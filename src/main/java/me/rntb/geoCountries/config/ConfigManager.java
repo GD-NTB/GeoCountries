@@ -16,7 +16,6 @@ public class ConfigManager {
         GeoCountries.self.saveResource("config.yml", false); // create from resources/config.yml if not exist
         config = GeoCountries.self.getConfig();
 
-        ChatUtil.sendPrefixedLogMessage(String.valueOf(config.getDouble("config-version", 0)));
         if (config.getDouble("config-version", 0) != ConfigState.CONFIG_VERSION)
             updateConfig();
 
@@ -75,6 +74,8 @@ public class ConfigManager {
         ConfigState.chatResponseMax = config.getInt("chat-response-max");
         ConfigState.countryNameMin = config.getInt("country-name-min");
         ConfigState.countryNameMax = config.getInt("country-name-max");
+        ConfigState.countryMottoMin = config.getInt("country-motto-min");
+        ConfigState.countryMottoMax = config.getInt("country-motto-max");
     }
 
     private static void writeStateToFile() {
@@ -96,5 +97,7 @@ public class ConfigManager {
         config.set("chat-response-max", ConfigState.chatResponseMax);
         config.set("country-name-min", ConfigState.countryNameMin);
         config.set("country-name-max", ConfigState.countryNameMax);
+        config.set("country-motto-min", ConfigState.countryMottoMin);
+        config.set("country-motto-max", ConfigState.countryMottoMax);
     }
 }

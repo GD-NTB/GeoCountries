@@ -37,15 +37,20 @@ public class gcCountryInfo {
 
         PlayerProfile leader = country.getLeader();
         long daysAgo = DateUtil.daysAgo(country.timeCreated);
+
+        String countryMotto = country.settings.get("motto");
+
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
                          """
                          §6========== COUNTRY INFO ==========
                          §a%s§f
+                         §f> §eMotto§f: %s
                          §f> §eLeader§f: %s
                          §f> §eCitizens§f: %s
                          §f> Created on §2%s §8(%s day%s ago)
                          §6================================="""
                          .formatted(country.name,
+                                    !countryMotto.equals("null") ? countryMotto : "§cNone",
                                     leader != null ? leader.username : "§cNone",
                                     country.citizenCount(),
                                     country.timeCreatedAsString(),

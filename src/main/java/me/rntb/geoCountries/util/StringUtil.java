@@ -78,7 +78,28 @@ public class StringUtil {
         if (!illegalChars.isEmpty())
             return "§cThe following character(s) are not allowed in a country prefix: §r" + String.join("", illegalChars);
         if (prefix.chars().anyMatch(ch -> ch < 32))
-            return "§cChat message must not contain any control characters!";
+            return "§cCountry prefix must not contain any control characters!";
+
+        // country prefix is valid
+        return null;
+    }
+
+    // ----- country motto -----
+    // country motto should be trimmed beforehand
+    public static String validateCountryMotto(String motto) {
+        if (!(ConfigState.countryMottoMin <= motto.length() && motto.length() <= ConfigState.countryMottoMax))
+            return "§cCountry motto must be between §f%d and %d§c characters!§r"
+                    .formatted(ConfigState.countryMottoMin, ConfigState.countryMottoMax);
+
+        // illegal characters
+        Matcher m = Pattern.compile("[^\\p{L}0-9', ()./_-]").matcher(motto);
+        Set<String> illegalChars = new LinkedHashSet<>();
+        while (m.find())
+            illegalChars.add(m.group());
+        if (!illegalChars.isEmpty())
+            return "§cThe following character(s) are not allowed in a country motto: §r" + String.join("", illegalChars);
+        if (motto.chars().anyMatch(ch -> ch < 32))
+            return "§cCountry motto must not contain any control characters!";
 
         // country prefix is valid
         return null;

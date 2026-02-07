@@ -68,16 +68,10 @@ public class PlayerProfile extends DataCollection {
             byUsername.put(player.username, player);
             byUUID.put(player.uuid, player);
 
-            // load any new settings
-            for (String key : defaultSettings.keySet()) {
-                if (!player.settings.containsKey(key))
-                    player.settings.put(key, defaultSettings.get(key));
-            }
-            // remove any old settings
-            for (String key : player.settings.keySet()) {
-                if (!defaultSettings.containsKey(key))
-                    player.settings.remove(key);
-            }
+            // add any new settings
+            defaultSettings.forEach(player.settings::putIfAbsent);
+            // remove any old removed settings
+            player.settings.keySet().retainAll(defaultSettings.keySet());
         }
 
         if (ConfigState.debugLogging) {

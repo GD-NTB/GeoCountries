@@ -18,3 +18,5 @@ chat-response-min: 1 # min allowed length of chat message when player asked to t
 chat-response-max: 150  # max allowed length of chat message when player asked to type in chat
 country-name-min: 2 # min allowed length of new country names
 country-name-max: 35 # max allowed length of new country names
+country-motto-min: 1 # min allowed length of country mottos
+country-motto-max: 50 # max allowed length of country mottos

@@ -62,7 +62,7 @@ public class gcCountrySettings {
     private static TextComponent.Builder getMessageAll(Country country) {
         TextComponent.Builder message = Component.text();
         for (String key : country.settings.keySet()) {
-            SettingData settingData = SettingData.get(key);
+            SettingData settingData = SettingData.map.get(key);
             if (settingData == null)
                 continue;
             message.append(Component.text("§f> " + settingData.toString(country.settings.get(key)) + " "))
@@ -74,7 +74,7 @@ public class gcCountrySettings {
     }
 
     private static TextComponent.Builder getMessageSpecific(String key, Country country) {
-        SettingData settingData = SettingData.get(key);
+        SettingData settingData = SettingData.map.get(key);
         if (settingData == null)
             return null;
         return Component.text().append(Component.text(settingData.toStringFull(key, country.settings.get(key)) + " "))

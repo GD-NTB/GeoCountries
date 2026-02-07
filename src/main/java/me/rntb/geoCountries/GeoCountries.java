@@ -11,7 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
 
-// todo: country description, motto?
 // todo: config skip /gc confirm option
 // todo: in-country ranks
 // todo: promote command

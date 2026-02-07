@@ -80,7 +80,7 @@ public class gcPlayer extends SubCommand {
                         if (playerCountry == null)
                             yield List.of();
                         // get settings typed before
-                        SettingData settingData = SettingData.get(args[1]);
+                        SettingData settingData = SettingData.map.get(args[1]);
                         if (settingData == null)
                             yield List.of();
                         // return possible values for this setting

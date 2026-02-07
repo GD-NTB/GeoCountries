@@ -51,16 +51,10 @@ public class Country extends DataCollection {
             byUUID.put(country.uuid, country);
             byName.put(country.name, country);
 
-            // load any new settings
-            for (String key : defaultSettings.keySet()) {
-                if (!country.settings.containsKey(key))
-                    country.settings.put(key, defaultSettings.get(key));
-            }
-            // remove any old settings
-            for (String key : country.settings.keySet()) {
-                if (!defaultSettings.containsKey(key))
-                    country.settings.remove(key);
-            }
+            // add any new settings
+            defaultSettings.forEach(country.settings::putIfAbsent);
+            // remove any old removed settings
+            country.settings.keySet().retainAll(defaultSettings.keySet());
         }
 
         if (ConfigState.debugLogging)
@@ -160,14 +154,15 @@ public class Country extends DataCollection {
     }
 
     // settings
-    // todo: these are unordered when displayed as we use .keySet, need to fix
+    // todo: these are unordered when displayed as we use .keySet, need to fix somehow
     public Map<String, String> settings = new HashMap<>();
     public static final Map<String, String>  defaultSettings = new HashMap<>(
             Map.ofEntries(
                 Map.entry("autoacceptcitizenshipapplications", "false"),
-                Map.entry("countryprefixenabled", "true"),
-                Map.entry("countryprefix", "null"),
-                Map.entry("countryprefixcolour", "DARK_GREY")
+                Map.entry("prefixenabled", "true"),
+                Map.entry("prefix", "null"),
+                Map.entry("prefixcolour", "DARK_GREY"),
+                Map.entry("motto", "null")
             )
     );
 

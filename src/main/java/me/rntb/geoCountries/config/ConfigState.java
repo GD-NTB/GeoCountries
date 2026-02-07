@@ -25,4 +25,6 @@ public class ConfigState {
     public static int chatResponseMax = 150;
     public static int countryNameMin = 2;
     public static int countryNameMax = 35;
+    public static int countryMottoMin = 1;
+    public static int countryMottoMax = 50;
 }

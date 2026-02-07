@@ -8,6 +8,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,8 @@ public class SettingData {
         INT,
         STRING,
         COUNTRY_PREFIX,
-        CHAT_COLOUR
+        CHAT_COLOUR,
+        COUNTRY_MOTTO
     }
     public Type type;
     public String name;
@@ -31,44 +33,47 @@ public class SettingData {
     public int min;
     public int max;
 
-    public static SettingData get(String key) {
-        return switch (key) {
-            // country
-            case "autoacceptcitizenshipapplications" -> new SettingData("false",
+    public static final Map<String, SettingData> map = new HashMap<>(
+            Map.ofEntries(
+                    // country
+                    Map.entry("autoacceptcitizenshipapplications", new SettingData("false",
+                                                                                   Type.BOOL,
+                                                                                   "Auto-Accept Citizenship Applications",
+                                                                                   "Automatically accept citizenship applications when received")),
+                    Map.entry("prefixenabled", new SettingData("true",
+                                                               Type.BOOL,
+                                                               "Prefix Enabled",
+                                                               "Whether or not to show the country prefix in chat messages")),
+                    Map.entry("prefix", new SettingData("null",
+                                                        Type.COUNTRY_PREFIX,
+                                                        "Prefix",
+                                                        "The prefix to show in its citizens' chat messages",
+                                                        ConfigState.countryPrefixMin, ConfigState.countryPrefixMax)),
+                    Map.entry("prefixcolour", new SettingData("DARK_GREY",
+                                                              Type.CHAT_COLOUR,
+                                                              "Prefix Colour",
+                                                              "The colour of the prefix to show in its citizens' chat messages")),
+                    Map.entry("motto", new SettingData("null",
+                                                        Type.COUNTRY_MOTTO,
+                                                        "Motto",
+                                                        "The motto of the country")),
+                    // player
+                    Map.entry("chatnotificationsounds", new SettingData("true",
                                                                         Type.BOOL,
-                                                                        "Auto-Accept Citizenship Applications",
-                                                                        "Automatically accept citizenship applications when received");
-            case "countryprefixenabled" -> new SettingData("true",
-                                                           Type.BOOL,
-                                                           "Country Prefix Enabled",
-                                                           "Whether or not to show the country prefix in chat messages");
-            case "countryprefix" -> new SettingData("null",
-                                                    Type.COUNTRY_PREFIX,
-                                                    "Country Prefix",
-                                                    "The prefix to show in its citizens' chat messages",
-                                                    ConfigState.countryPrefixMin, ConfigState.countryPrefixMax);
-            case "countryprefixcolour" -> new SettingData("DARK_GRAY",
-                                                          Type.CHAT_COLOUR,
-                                                          "Country Prefix Colour",
-                                                          "The colour of the prefix to show in its citizens' chat messages");
-            // player
-            case "chatnotificationsounds" -> new SettingData("true",
-                                                             Type.BOOL,
-                                                             "Chat Notification Sounds",
-                                                             "Play a ding sound effect when receiving important chat messages");
-
-            default -> null;
-        };
-    }
+                                                                        "Chat Notification Sounds",
+                                                                        "Play a ding sound effect when receiving important chat messages"))
+            )
+    );
 
     public static void setSetting(CommandSender sender, String key, String toValue, Map<String, String> settingsMap) {
-        SettingData settingData = get(key);
+        SettingData settingData = map.get(key);
         if (settingData == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cSetting §f" + key + "§c could not be found!");
             return;
         }
 
         String toValueTrimmed = toValue.trim();
+        String validationString; // java stop being homosexual
 
         // validate value
         switch (settingData.type) {
@@ -104,7 +109,7 @@ public class SettingData {
                 break;
 
             case COUNTRY_PREFIX:
-                String validationString = StringUtil.validateCountryPrefix(toValueTrimmed);
+                validationString = StringUtil.validateCountryPrefix(toValueTrimmed);
                 if (validationString != null) {
                     ChatUtil.sendPrefixedMessage(sender, validationString);
                     return;
@@ -114,6 +119,14 @@ public class SettingData {
             case CHAT_COLOUR:
                 if (!EnumUtil.enumToStringList(ChatUtil.ChatColour.class).contains(toValueTrimmed)) {
                     ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (chat colour) must be one of the available chat colours (look at tab the autocomplete options)!");
+                    return;
+                }
+                break;
+
+            case COUNTRY_MOTTO:
+                validationString = StringUtil.validateCountryMotto(toValueTrimmed);
+                if (validationString != null) {
+                    ChatUtil.sendPrefixedMessage(sender, validationString);
                     return;
                 }
                 break;
@@ -161,16 +174,15 @@ public class SettingData {
                 else
                     yield "§r";
             }
-            case INT, STRING, COUNTRY_PREFIX -> "§r";
+            case INT -> "§r";
+            case STRING, COUNTRY_PREFIX, COUNTRY_MOTTO -> value.equals("null") ? "§c" : "§r";
             case CHAT_COLOUR -> {
                 ChatUtil.ChatColour chatColour;
-                ChatUtil.sendPrefixedLogMessage(String.valueOf(ChatUtil.ChatColour.valueOf(value)));
                 try {
                     chatColour = ChatUtil.ChatColour.valueOf(value);
                 } catch (IllegalArgumentException e) {
                     yield "§r";
                 }
-                ChatUtil.sendPrefixedLogMessage(String.valueOf(chatColour));
                 yield ChatUtil.getChatColourByEnum(chatColour);
             }
         };
@@ -179,9 +191,9 @@ public class SettingData {
     public List<String> getTabAutoCompleteOptions() {
         return switch (this.type) {
             case BOOL -> List.of("true", "false");
-            case STRING -> List.of("null");
+            case STRING, COUNTRY_PREFIX, COUNTRY_MOTTO -> List.of("null");
             case CHAT_COLOUR -> EnumUtil.enumToStringList(ChatUtil.ChatColour.class);
-            case INT, COUNTRY_PREFIX -> List.of();
+            case INT -> List.of();
         };
     }
 
