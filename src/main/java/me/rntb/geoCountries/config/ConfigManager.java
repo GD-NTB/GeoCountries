@@ -58,6 +58,8 @@ public class ConfigManager {
         ConfigState.debugMode = config.getBoolean("debug-mode");
         ConfigState.debugLogging = config.getBoolean("debug-logging");
 
+        ConfigState.enableGcConfirm = config.getBoolean("enable-gc-confirm");
+
         ConfigState.chatPrefix = config.getString("chat-prefix") + "§r";
         ConfigState.chatPrefixComponent = legacySerialisation.deserialize(ConfigState.chatPrefix);
 
@@ -81,6 +83,8 @@ public class ConfigManager {
     private static void writeStateToFile() {
         config.set("debug-mode", ConfigState.debugMode);
         config.set("debug-logging", ConfigState.debugLogging);
+
+        config.set("enable-gc-confirm", ConfigState.enableGcConfirm);
 
         config.set("chat-prefix", ConfigState.chatPrefix.replace("§r", ""));
 

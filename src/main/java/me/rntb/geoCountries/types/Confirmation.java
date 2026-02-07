@@ -29,6 +29,12 @@ public class Confirmation {
     }
 
     public static void startWaiting(UUID uuid, Confirmation confirmation, boolean sendMessage) {
+        // if disabled in config, just execute method
+        if (!ConfigState.enableGcConfirm) {
+            confirmation.function.accept(confirmation.sender, confirmation.args);
+            return;
+        }
+
         pendingConfirmations.put(uuid, confirmation);
 
         // timeout after x seconds

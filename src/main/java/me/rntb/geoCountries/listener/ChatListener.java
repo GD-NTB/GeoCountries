@@ -22,8 +22,8 @@ public class ChatListener implements Listener {
         // prepend country prefix to start of player message
         doPrefixLogic(event, playerProfile);
 
-        // confirm or cancel confirm / chat response
-        doConfirmAndResponseLogic(event, playerProfile);
+        // confirm or cancel chat response
+        doResponseLogic(event, playerProfile);
     }
 
     private void doPrefixLogic(AsyncChatEvent event, PlayerProfile playerProfile) {
@@ -45,7 +45,7 @@ public class ChatListener implements Listener {
         );
     }
 
-    private void doConfirmAndResponseLogic(AsyncChatEvent event, PlayerProfile playerProfile) {
+    private void doResponseLogic(AsyncChatEvent event, PlayerProfile playerProfile) {
         UUID uuid = playerProfile.uuid;
 
         // if wasn't waiting for response, escape

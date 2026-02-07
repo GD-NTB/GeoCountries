@@ -1,7 +1,9 @@
-config-version: 0.0207 # do not change
+config-version: 0.0208 # do not change
 
 debug-logging: false # more logging in server console for debugging
 debug-mode: false # disables several checks and features for easier plugin development
+
+enable-gc-confirm: true # sometimes require a command to be confirmed via /gc confirm
 
 chat-prefix: '§8[GeoCountries] ' # text before every plugin chat and console message
 
