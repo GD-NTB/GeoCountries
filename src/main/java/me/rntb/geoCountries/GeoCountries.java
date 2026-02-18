@@ -13,9 +13,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
 
+// todo: gui
 // todo: in-country ranks
 // todo: promote command
-// todo: gui
 // todo: claiming (max chunks in config)
 public class GeoCountries extends JavaPlugin {
 

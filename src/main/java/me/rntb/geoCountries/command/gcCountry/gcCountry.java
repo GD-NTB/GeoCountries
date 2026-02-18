@@ -4,6 +4,7 @@ import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.types.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -12,8 +13,8 @@ import java.util.function.BiConsumer;
 
 public class gcCountry extends SubCommand {
 
-    public gcCountry(String displayName, String requiredPermission, boolean consoleCanUse) {
-        super(displayName, requiredPermission, consoleCanUse);
+    public gcCountry(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
+        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
         this.HelpString = "Manages, edits, and views info about all countries.";
         this.HelpPage   = """
                           §f/gc country [...]: §aManage, edit, and view info about all countries.

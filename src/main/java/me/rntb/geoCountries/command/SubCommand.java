@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.command;
 
 import me.rntb.geoCountries.util.ChatUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -11,16 +12,22 @@ import java.util.function.BiConsumer;
 
 public abstract class SubCommand {
 
-    public String DisplayName = "/gc command";
-    public String RequiredPermission = "gc";
-    public boolean ConsoleCanUse = true;
+    // todo: make a subcommands field, this way we can know if we need another sub gui page
+    public String Name;
+    public String DisplayName;
+    public String RequiredPermission;
+    public boolean ConsoleCanUse;
+    public Material MenuItemMaterial;
+    
     public String HelpString = "";
     public String HelpPage = ""; // shown in /gc help [...]
 
-    public SubCommand(String displayName, String requiredPermission, boolean consoleCanUse) {
+    public SubCommand(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuItemMaterial) {
+        this.Name = name;
         this.DisplayName = displayName;
         this.RequiredPermission = requiredPermission;
         this.ConsoleCanUse = consoleCanUse;
+        this.MenuItemMaterial = menuItemMaterial;
     }
 
     public void onCommandEntered(CommandSender sender, String[] args) {

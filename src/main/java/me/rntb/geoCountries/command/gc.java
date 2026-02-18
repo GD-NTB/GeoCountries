@@ -1,16 +1,16 @@
 package me.rntb.geoCountries.command;
 
-import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.command.gcAdmin.gcAdmin;
-import me.rntb.geoCountries.command.gcDebug.gcDebug;
 import me.rntb.geoCountries.command.gcCitizenship.gcCitizenship;
 import me.rntb.geoCountries.command.gcConfig.gcConfig;
 import me.rntb.geoCountries.command.gcCountry.gcCountry;
+import me.rntb.geoCountries.command.gcDebug.gcDebug;
 import me.rntb.geoCountries.command.gcPlayer.gcPlayer;
 import me.rntb.geoCountries.command.gcPurge.gcPurge;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -22,19 +22,20 @@ import java.util.*;
 public class gc implements TabExecutor {
 
     public static Map<String, SubCommand> subCommands = Map.ofEntries(
-            Map.entry("help", new gcHelp("/gc help", "gc.help", true)),
-            Map.entry("purge", new gcPurge("/gc purge", "gc.purge", true)),
-            Map.entry("dump", new gcDump("/gc dump", "gc.dump", true)),
-            Map.entry("country", new gcCountry("/gc country", "gc.country", false)),
-            Map.entry("player", new gcPlayer("/gc player", "gc.player", false)),
-            Map.entry("confirm", new gcConfirm("/gc confirm", "gc.confirm", true)),
-            Map.entry("cancel", new gcCancel("/gc cancel", "gc.cancel", true)),
-            Map.entry("save", new gcSave("/gc save", "gc.save", true)),
-            Map.entry("config", new gcConfig("/gc config", "gc.config", true)),
-            Map.entry("citizenship", new gcCitizenship("/gc citizenship", "gc.citizenship", false)),
-            Map.entry("debug", new gcDebug("/gc debug", "gc.debug", true)),
-            Map.entry("admin", new gcAdmin("/gc admin", "gc.admin", true)),
-            Map.entry("load", new gcLoad("/gc load", "gc.load", true))
+            Map.entry("help", new gcHelp("help", "/gc help", "gc.help", true, Material.GRASS_BLOCK)),
+            Map.entry("purge", new gcPurge("purge", "/gc purge", "gc.purge", true, Material.FLINT_AND_STEEL)),
+            Map.entry("dump", new gcDump("dump", "/gc dump", "gc.dump", true, Material.BAKED_POTATO)),
+            Map.entry("country", new gcCountry("country", "/gc country", "gc.country", false, Material.EMERALD)),
+            Map.entry("player", new gcPlayer("player", "/gc player", "gc.player", false, Material.PLAYER_HEAD)),
+            Map.entry("confirm", new gcConfirm("confirm", "/gc confirm", "gc.confirm", true, Material.GREEN_CONCRETE)),
+            Map.entry("cancel", new gcCancel("cancel", "/gc cancel", "gc.cancel", true, Material.BARRIER)),
+            Map.entry("save", new gcSave("save", "/gc save", "gc.save", true, Material.RED_BED)),
+            Map.entry("config", new gcConfig("config", "/gc config", "gc.config", true, Material.BOOK)),
+            Map.entry("citizenship", new gcCitizenship("citizenship", "/gc citizenship", "gc.citizenship", false, Material.WRITABLE_BOOK)),
+            Map.entry("debug", new gcDebug("debug", "/gc debug", "gc.debug", true, Material.SILVERFISH_SPAWN_EGG)),
+            Map.entry("admin", new gcAdmin("admin", "/gc admin", "gc.admin", true, Material.DIAMOND_ORE)),
+            Map.entry("load", new gcLoad("load", "/gc load", "gc.load", true, Material.CARROT_ON_A_STICK)),
+            Map.entry("gui", new gcGui("gui", "/gc gui", "gc.gui", false, null))
     );
     public static Map<String, String> subCommandsAliases = Map.ofEntries(
             Map.entry("c", "country"),
@@ -75,11 +76,17 @@ public class gc implements TabExecutor {
             ChatUtil.sendNoPermissionMessage(sender, "/gc", "gc");
             return;
         }
+        // do /gc gui
+        if (!sender.hasPermission("gc.gui")) {
+            ChatUtil.sendNoPermissionMessage(sender, "/gc gui", "gc.gui");
+            return;
+        }
+        subCommands.get("gui").onCommand(sender, new String[]{ });
 
-        ChatUtil.sendPrefixedMessage(sender, """
-                                             §aThis server is running §f%s§a, a plugin developed by §frNTB§a.
-                                             Do §f/gc help§a for a list of commands!"""
-                                             .formatted(GeoCountries.PluginNameAndVersion));
+//        ChatUtil.sendPrefixedMessage(sender, """
+//                                             §aThis server is running §f%s§a, a plugin developed by §frNTB§a.
+//                                             Do §f/gc help§a for a list of commands!"""
+//                                             .formatted(GeoCountries.PluginNameAndVersion));
     }
 
     private void onCommandArgs(@NotNull CommandSender sender, @NotNull String[] args) {

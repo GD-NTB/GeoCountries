@@ -4,6 +4,7 @@ import me.rntb.geoCountries.types.Pagination;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -11,8 +12,8 @@ import java.util.List;
 
 public class gcHelp extends SubCommand {
 
-    public gcHelp(String displayName, String requiredPermission, boolean consoleCanUse) {
-        super(displayName, requiredPermission, consoleCanUse);
+    public gcHelp(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
+        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
         this.HelpString = "Lists all commands and gives help for any command.";
         this.HelpPage   = """
                           §f/gc help: §aLists all commands and a summary of what each does.

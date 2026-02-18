@@ -33,6 +33,7 @@ permissions:
       gc.country.renounce: true
       gc.player: true
       gc.player.info: true
+      gc.gui: true
 
   # -------------------- PLAYER -------------------
   gc.group.player:

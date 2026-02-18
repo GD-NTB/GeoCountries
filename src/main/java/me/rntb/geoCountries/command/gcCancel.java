@@ -4,6 +4,7 @@ import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.types.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -11,8 +12,8 @@ import java.util.UUID;
 
 public class gcCancel extends SubCommand {
 
-    public gcCancel(String displayName, String requiredPermission, boolean consoleCanUse) {
-        super(displayName, requiredPermission, consoleCanUse);
+    public gcCancel(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
+        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
         this.HelpString = "Cancels a command or action.";
         this.HelpPage   = """
                           §f/gc cancel: §aCancels the last command you were trying to do.""";

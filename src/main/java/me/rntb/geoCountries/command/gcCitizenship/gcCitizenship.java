@@ -6,6 +6,7 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -16,8 +17,8 @@ import java.util.function.BiConsumer;
 
 public class gcCitizenship extends SubCommand {
 
-    public gcCitizenship(String displayName, String requiredPermission, boolean consoleCanUse) {
-        super(displayName, requiredPermission, consoleCanUse);
+    public gcCitizenship(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
+        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
         this.HelpString = "Manages your citizenship and your citizens.";
         this.HelpPage   = """
                           §f/gc citizenship [...]§a: Manages your citizenship and your country's citizens.

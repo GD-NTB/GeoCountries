@@ -4,14 +4,15 @@ import me.rntb.geoCountries.data.DataCollectionManager;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
 public class gcLoad extends SubCommand {
 
-    public gcLoad(String displayName, String requiredPermission, boolean consoleCanUse) {
-        super(displayName, requiredPermission, consoleCanUse);
+    public gcLoad(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
+        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
         this.HelpString = "Loads all plugin data from disk.";
         this.HelpPage   = """
                           §f/gc load: §aLoads all saved plugin data from the disk to memory.""";

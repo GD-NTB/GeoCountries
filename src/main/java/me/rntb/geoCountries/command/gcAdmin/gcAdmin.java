@@ -5,6 +5,7 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.EnumUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ import java.util.function.BiConsumer;
 
 public class gcAdmin extends SubCommand {
 
-    public gcAdmin(String displayName, String requiredPermission, boolean consoleCanUse) {
-        super(displayName, requiredPermission, consoleCanUse);
+    public gcAdmin(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
+        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
         this.HelpString = "Useful admin commands.";
         this.HelpPage   = """
                           §f/gc debug [...]: §aUseful admin commands for managing the server.

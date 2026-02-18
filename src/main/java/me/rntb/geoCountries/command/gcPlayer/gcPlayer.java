@@ -4,6 +4,7 @@ import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -12,8 +13,8 @@ import java.util.function.BiConsumer;
 
 public class gcPlayer extends SubCommand {
 
-    public gcPlayer(String displayName, String requiredPermission, boolean consoleCanUse) {
-        super(displayName, requiredPermission, consoleCanUse);
+    public gcPlayer(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
+        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
         this.HelpString = "Manages and views information about players.";
         this.HelpPage   = """
                           §f/gc player [...]: §aManages and views information about players.

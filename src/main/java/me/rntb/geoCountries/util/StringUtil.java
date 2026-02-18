@@ -17,6 +17,10 @@ public class StringUtil {
         return count == 1 ? "" : "s";
     }
 
+    public static String sentenceCase(String string) {
+        return string.substring(0, 1).toUpperCase() + string.substring(1);
+
+    }
     // ---------- string validation ----------
 
     // ----- country name -----

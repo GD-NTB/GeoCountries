@@ -2,6 +2,7 @@ package me.rntb.geoCountries.command.gcConfig;
 
 import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.util.ChatUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -10,8 +11,8 @@ import java.util.function.BiConsumer;
 
 public class gcConfig extends SubCommand {
 
-    public gcConfig(String displayName, String requiredPermission, boolean consoleCanUse) {
-        super(displayName, requiredPermission, consoleCanUse);
+    public gcConfig(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
+        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
         this.HelpString = "Manages the plugin config.";
         this.HelpPage   = """
                           §f/gc config [...]: §aManages the plugin config file at config.yml.
