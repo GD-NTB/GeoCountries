@@ -1,5 +1,5 @@
 name: GeoCountries
-version: 'ALPHA-0.042'
+version: 'ALPHA-0.043'
 main: me.rntb.geoCountries.GeoCountries
 api-version: '1.21'
 authors: [ rNTB ]
