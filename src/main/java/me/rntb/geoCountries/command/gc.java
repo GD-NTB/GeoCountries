@@ -27,13 +27,13 @@ public class gc implements TabExecutor {
             Map.entry("dump", new gcDump("dump", "/gc dump", "gc.dump", true, Material.BAKED_POTATO)),
             Map.entry("country", new gcCountry("country", "/gc country", "gc.country", false, Material.EMERALD)),
             Map.entry("player", new gcPlayer("player", "/gc player", "gc.player", false, Material.PLAYER_HEAD)),
-            Map.entry("confirm", new gcConfirm("confirm", "/gc confirm", "gc.confirm", true, Material.GREEN_CONCRETE)),
-            Map.entry("cancel", new gcCancel("cancel", "/gc cancel", "gc.cancel", true, Material.BARRIER)),
+            Map.entry("confirm", new gcConfirm("confirm", "/gc confirm", "gc.confirm", true, null)),
+            Map.entry("cancel", new gcCancel("cancel", "/gc cancel", "gc.cancel", true, null)),
             Map.entry("save", new gcSave("save", "/gc save", "gc.save", true, Material.RED_BED)),
-            Map.entry("config", new gcConfig("config", "/gc config", "gc.config", true, Material.BOOK)),
+            Map.entry("config", new gcConfig("config", "/gc config", "gc.config", true, Material.GRINDSTONE)),
             Map.entry("citizenship", new gcCitizenship("citizenship", "/gc citizenship", "gc.citizenship", false, Material.WRITABLE_BOOK)),
-            Map.entry("debug", new gcDebug("debug", "/gc debug", "gc.debug", true, Material.SILVERFISH_SPAWN_EGG)),
-            Map.entry("admin", new gcAdmin("admin", "/gc admin", "gc.admin", true, Material.DIAMOND_ORE)),
+            Map.entry("debug", new gcDebug("debug", "/gc debug", "gc.debug", true, Material.ANVIL)),
+            Map.entry("admin", new gcAdmin("admin", "/gc admin", "gc.admin", true, Material.DIAMOND_BLOCK)),
             Map.entry("load", new gcLoad("load", "/gc load", "gc.load", true, Material.CARROT_ON_A_STICK)),
             Map.entry("gui", new gcGui("gui", "/gc gui", "gc.gui", false, null))
     );

@@ -58,6 +58,10 @@ public class SettingData {
                                                         "Motto",
                                                         "The motto of the country")),
                     // player
+                    Map.entry("soundeffects", new SettingData("true",
+                                                              Type.BOOL,
+                                                              "Sound Effects",
+                                                              "Play sound effects")),
                     Map.entry("chatnotificationsounds", new SettingData("true",
                                                                         Type.BOOL,
                                                                         "Chat Notification Sounds",

@@ -234,6 +234,7 @@ public class PlayerProfile extends DataCollection {
     public Map<String, String> settings = new HashMap<>();
     public static final Map<String, String> defaultSettings = new HashMap<>(
             Map.ofEntries(
+                    Map.entry("soundeffects", "true"),
                     Map.entry("chatnotificationsounds", "true")
             )
     );

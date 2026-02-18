@@ -4,6 +4,7 @@ import me.rntb.geoCountries.command.gc;
 import me.rntb.geoCountries.config.ConfigManager;
 import me.rntb.geoCountries.data.DataCollectionManager;
 import me.rntb.geoCountries.listener.ChatListener;
+import me.rntb.geoCountries.listener.InventoryListener;
 import me.rntb.geoCountries.listener.JoinListener;
 import me.rntb.geoCountries.listener.LeaveListener;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -41,6 +42,7 @@ public class GeoCountries extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
         getServer().getPluginManager().registerEvents(new LeaveListener(), this);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
+        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
 
         // initialise commands
         getCommand("gc").setExecutor(new gc());

@@ -1,9 +1,11 @@
 package me.rntb.geoCountries.command;
 
 import me.rntb.geoCountries.util.ChatUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 
 import java.util.Arrays;
 import java.util.List;
@@ -70,4 +72,12 @@ public abstract class SubCommand {
     public abstract void onCommand(CommandSender sender, String[] args);
 
     public abstract List<String> getTabCompletion(CommandSender sender,  String[] args);
+
+    public boolean isAdminCommand() {
+        Permission parent = Bukkit.getPluginManager().getPermission("gc.group.admin");
+        if (parent == null)
+            return false; // should never trigger
+
+        return parent.getChildren().containsKey(this.RequiredPermission);
+    }
 }

@@ -14,7 +14,7 @@ public class gcPurge extends SubCommand {
 
     public gcPurge(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
         super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Purges (deletes) plugin data.";
+        this.HelpString = "Deletes plugin data.";
         this.HelpPage   = """
                           §f/gc purge [...]: §aPurges (deletes) specific data within the plugin's persistent storage, such as data collections, etc.
                           §cShould be used very very rarely!

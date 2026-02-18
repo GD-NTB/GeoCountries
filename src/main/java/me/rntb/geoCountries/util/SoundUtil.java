@@ -8,20 +8,36 @@ import org.bukkit.entity.Player;
 public class SoundUtil {
 
     public enum SoundEffect {
-        CHAT_NOTIF
+        CHAT_NOTIF,
+        MENU_CLICK
     }
 
     public static void playSound(Player player, SoundEffect soundEffect) {;
         if (!ConfigState.soundEffects || player == null)
             return;
         PlayerProfile toPlayerProfile = PlayerProfile.get(player);
-        if (toPlayerProfile == null || toPlayerProfile.settings.get("chatnotificationsounds").equals("false"))
+        if (toPlayerProfile == null || toPlayerProfile.settings.get("soundeffects").equals("false"))
             return;
+
         Sound sound;
+        float volume = 0.75f;
+        float pitch = 1.0f;
         switch (soundEffect) {
-            case CHAT_NOTIF: sound = Sound.BLOCK_NOTE_BLOCK_HARP; break;
-            default: return;
+            case MENU_CLICK:
+                sound = Sound.UI_BUTTON_CLICK;
+                volume = 0.25f;
+                break;
+
+            case CHAT_NOTIF:
+                if (toPlayerProfile.settings.get("chatnotificationsounds").equals("false"))
+                    return;
+                sound = Sound.BLOCK_NOTE_BLOCK_HARP;
+                pitch = 2.0f;
+                break;
+
+            default:
+                return;
         }
-        player.playSound(player.getLocation(), sound, 0.75f, 2.0f);
+        player.playSound(player.getLocation(), sound, volume, pitch);
     }
 }
