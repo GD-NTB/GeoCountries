@@ -60,18 +60,18 @@ public class gcCitizenshipApply {
             }
         }
 
-
         // create new application
         UUID playerUUID = playerProfile.uuid;
         cApplication = new CitizenshipApplication(UUID.randomUUID(),
                                                   playerUUID,
                                                   toCountry.uuid); // reuse variable
         cApplication.reason = "N/A";
-        CitizenshipApplication.open(cApplication,true);
+        CitizenshipApplication.open(cApplication, true);
 
         // if country has auto-accept enabled, accept and escape
         if (toCountry.settings.get("autoacceptcitizenshipapplications").equals("true")) {
-            CitizenshipApplication.accept(cApplication, true);
+            CitizenshipApplication.cancel(cApplication, false); // cancel open application
+            CitizenshipApplication.accept(cApplication, true); // send sent application
             // broadcast notif to country
             ChatUtil.broadcastPrefixedMessageToCountry(toCountry, "§f" + playerProfile.username + "§6 is now a citizen of §f" + toCountry.name + "§6!", false);
             return;

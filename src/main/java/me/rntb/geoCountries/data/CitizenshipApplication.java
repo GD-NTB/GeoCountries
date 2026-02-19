@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
+// todo: make management functions non-static
 public class CitizenshipApplication extends DataCollection {
 
     private static final String FILE_PATH = "data/citizenshipapplications";

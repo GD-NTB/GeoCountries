@@ -67,6 +67,6 @@ public class gcCitizenshipAccept {
         SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
 
         // broadcast notif to country
-        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.username + "§6 is now a citizen of §f" + country.name + "§6!", true);
+        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.username + "§6 is now a citizen of §f" + country.name + "§6!", false);
     }
 }
