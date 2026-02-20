@@ -70,13 +70,12 @@ public class gcCountryCitizens extends SubSubCommand {
                .append(Component.text("§6========== COUNTRY CITIZENS =========="))
                .append(Component.newline());
 
-        int effectiveIndex, pageCount;
-        String commandForPrevious, commandForNext;
+        int effectiveIndex = 0, pageCount = 0;
+        String commandForPrevious = "", commandForNext = "";
 
         int citizenCount = country.citizenCount();
         if (citizenCount == 0) {
             message.append(Component.text("§cThere are no citizens of this country.\n"));
-            return;
         }
         else {
             message.append(Component.text("§e%s§f has §e%d§f citizen%s:\n"
