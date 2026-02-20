@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public class gcPlayer extends SubCommand {
 
@@ -20,12 +19,12 @@ public class gcPlayer extends SubCommand {
                           §f/gc player [...]: §aManages and views information about players.
                           §f> info [username]: §2Displays info about a particular player.
                           §f> settings [setting?] [value?]: §2Sets/lists your settings""";
-    }
 
-    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
-            Map.entry("info", gcPlayerInfo::onCommand),
-            Map.entry("settings", gcPlayerSettings::onCommand)
-    );
+        this.subSubCommands = Map.ofEntries(
+                Map.entry("info", gcPlayerInfo::onCommand),
+                Map.entry("settings", gcPlayerSettings::onCommand)
+        );
+    }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
@@ -39,14 +38,14 @@ public class gcPlayer extends SubCommand {
             gcPlayerInfo.onCommand(sender, args);
             return;
         }
-        findAndExecuteSubCommand(sender, args, subCommands, false);
+        findAndExecuteSubCommand(sender, args, subSubCommands, false);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc player [commands]
-            case 1 -> subCommands.keySet().stream()
+            case 1 -> subSubCommands.keySet().stream()
                                           .filter(x -> sender.hasPermission(this.RequiredPermission + "." + x))
                                           .toList();
 

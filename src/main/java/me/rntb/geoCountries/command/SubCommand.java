@@ -8,21 +8,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 public abstract class SubCommand {
 
-    // todo: make a subcommands field, this way we can know if we need another sub gui page
     public String Name;
     public String DisplayName;
     public String RequiredPermission;
     public boolean ConsoleCanUse;
     public Material MenuItemMaterial;
     
-    public String HelpString = "";
+    public String HelpString = ""; // shown in /gc help
     public String HelpPage = ""; // shown in /gc help [...]
+
+    public Map<String, BiConsumer<CommandSender, String[]>> subSubCommands = Collections.emptyMap();
 
     public SubCommand(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuItemMaterial) {
         this.Name = name;

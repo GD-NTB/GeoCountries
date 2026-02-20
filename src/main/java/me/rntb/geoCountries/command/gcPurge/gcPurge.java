@@ -8,7 +8,6 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public class gcPurge extends SubCommand {
 
@@ -23,15 +22,14 @@ public class gcPurge extends SubCommand {
                           §f> playerprofile: §2Purges all PlayerProfile data collections.
                           §f> uuid [uuid]: §2Purges a PlayerProfile by UUID.;
                           §f> username [username]: §2Purges a PlayerProfile by username.""";
+        this.subSubCommands = Map.ofEntries(
+                Map.entry("citizenshipapplication", gcPurgeCitizenshipApplication::onCommand),
+                Map.entry("country", gcPurgeCountry::onCommand),
+                Map.entry("playerprofile", gcPurgePlayerProfile::onCommand),
+                Map.entry("uuid", gcPurgeUUID::onCommand),
+                Map.entry("username", gcPurgeUsername::onCommand)
+        );
     }
-
-    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
-            Map.entry("citizenshipapplication", gcPurgeCitizenshipApplication::onCommand),
-            Map.entry("country", gcPurgeCountry::onCommand),
-            Map.entry("playerprofile", gcPurgePlayerProfile::onCommand),
-            Map.entry("uuid", gcPurgeUUID::onCommand),
-            Map.entry("username", gcPurgeUsername::onCommand)
-    );
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
@@ -42,14 +40,14 @@ public class gcPurge extends SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-        findAndExecuteSubCommand(sender, args, subCommands, true);
+        findAndExecuteSubCommand(sender, args, subSubCommands, true);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc purge [commands]
-            case 1 -> subCommands.keySet().stream().toList();
+            case 1 -> subSubCommands.keySet().stream().toList();
 
             // /gc purge [...] 2
             case 2 ->

@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public class gcCountry extends SubCommand {
 
@@ -25,17 +24,16 @@ public class gcCountry extends SubCommand {
                           §f> list: §2Lists all countries on the server.
                           §f> rename [name]: §2Renames your country.
                           §f> settings [setting?] [value?]: §2Sets/lists your country's settings""";
+        this.subSubCommands = Map.ofEntries(
+                Map.entry("citizens", gcCountryCitizens::onCommand),
+                Map.entry("create", gcCountryCreate::onCommand),
+                Map.entry("dissolve", gcCountryDissolve::onCommand),
+                Map.entry("info", gcCountryInfo::onCommand),
+                Map.entry("list", gcCountryList::onCommand),
+                Map.entry("rename", gcCountryRename::onCommand),
+                Map.entry("settings", gcCountrySettings::onCommand)
+        );
     }
-
-    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
-            Map.entry("citizens", gcCountryCitizens::onCommand),
-            Map.entry("create", gcCountryCreate::onCommand),
-            Map.entry("dissolve", gcCountryDissolve::onCommand),
-            Map.entry("info", gcCountryInfo::onCommand),
-            Map.entry("list", gcCountryList::onCommand),
-            Map.entry("rename", gcCountryRename::onCommand),
-            Map.entry("settings", gcCountrySettings::onCommand)
-    );
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
@@ -49,14 +47,14 @@ public class gcCountry extends SubCommand {
             gcCountryInfo.onCommand(sender, args);
             return;
         }
-        findAndExecuteSubCommand(sender, args, subCommands, false);
+        findAndExecuteSubCommand(sender, args, subSubCommands, false);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch(args.length) {
             // /gc country [commands]
-            case 1 -> subCommands.keySet().stream()
+            case 1 -> subSubCommands.keySet().stream()
                                           .filter(x -> sender.hasPermission(this.RequiredPermission + "." + x))
                                           .toList();
 

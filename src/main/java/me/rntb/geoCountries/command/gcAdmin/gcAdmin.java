@@ -11,7 +11,6 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public class gcAdmin extends SubCommand {
 
@@ -23,13 +22,12 @@ public class gcAdmin extends SubCommand {
                           §f> deletecountry [name]: §2Delete a country from the server.
                           §f> setplayercountry [country] §2Set a player's country.
                           §f> setplayerrank [username] [rank]: §2Set a player's rank.""";
+        this.subSubCommands = Map.ofEntries(
+                Map.entry("deletecountry", gcAdminDeleteCountry::onCommand),
+                Map.entry("setplayercountry", gcAdminSetPlayerCountry::onCommand),
+                Map.entry("setplayerrank", gcAdminSetPlayerRank::onCommand)
+        );
     }
-
-    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
-            Map.entry("deletecountry", gcAdminDeleteCountry::onCommand),
-            Map.entry("setplayercountry", gcAdminSetPlayerCountry::onCommand),
-            Map.entry("setplayerrank", gcAdminSetPlayerRank::onCommand)
-    );
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
@@ -41,14 +39,14 @@ public class gcAdmin extends SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-        findAndExecuteSubCommand(sender, args, subCommands, true);
+        findAndExecuteSubCommand(sender, args, subSubCommands, true);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc admin [commands]
-            case 1 -> subCommands.keySet().stream().toList();
+            case 1 -> subSubCommands.keySet().stream().toList();
 
             // gc admin [command] [...]
             case 2 ->

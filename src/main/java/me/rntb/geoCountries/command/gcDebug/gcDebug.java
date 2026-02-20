@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public class gcDebug extends SubCommand {
 
@@ -18,12 +17,11 @@ public class gcDebug extends SubCommand {
                           §f/gc debug [...]: §aUseful debug commands for plugin development.
                           §f> createcountry [name]: §2Creates a test country.
                           §f> soundtest: §2Plays a sound effect.""";
+        this.subSubCommands = Map.ofEntries(
+                Map.entry("createcountry", gcDebugCreateCountry::onCommand),
+                Map.entry("soundtest", gcDebugSoundTest::onCommand)
+        );
     }
-
-    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
-            Map.entry("createcountry", gcDebugCreateCountry::onCommand),
-            Map.entry("soundtest", gcDebugSoundTest::onCommand)
-    );
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
@@ -34,14 +32,14 @@ public class gcDebug extends SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-        findAndExecuteSubCommand(sender, args, subCommands, true);
+        findAndExecuteSubCommand(sender, args, subSubCommands, true);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc debug [commands]
-            case 1 -> subCommands.keySet().stream().toList();
+            case 1 -> subSubCommands.keySet().stream().toList();
 
             default -> List.of();
         };

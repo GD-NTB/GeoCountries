@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 public class gcCitizenship extends SubCommand {
 
@@ -30,18 +29,17 @@ public class gcCitizenship extends SubCommand {
                           §f> revoke: §2Revoke's the citizenship of a player of your country.
                           §f> sent: §2Lists citizenship applications that you have sent.
                           §f> unsend: §2Unsends a citizenship application that you previously sent.""";
+        this.subSubCommands = Map.ofEntries(
+                Map.entry("accept", gcCitizenshipAccept::onCommand),
+                Map.entry("apply", gcCitizenshipApply::onCommand),
+                Map.entry("received", gcCitizenshipReceived::onCommand),
+                Map.entry("reject", gcCitizenshipReject::onCommand),
+                Map.entry("renounce", gcCitizenshipRenounce::onCommand),
+                Map.entry("revoke", gcCitizenshipRevoke::onCommand),
+                Map.entry("sent", gcCitizenshipSent::onCommand),
+                Map.entry("unsend", gcCitizenshipUnsend::onCommand)
+        );
     }
-
-    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
-            Map.entry("accept", gcCitizenshipAccept::onCommand),
-            Map.entry("apply", gcCitizenshipApply::onCommand),
-            Map.entry("received", gcCitizenshipReceived::onCommand),
-            Map.entry("reject", gcCitizenshipReject::onCommand),
-            Map.entry("renounce", gcCitizenshipRenounce::onCommand),
-            Map.entry("revoke", gcCitizenshipRevoke::onCommand),
-            Map.entry("sent", gcCitizenshipSent::onCommand),
-            Map.entry("unsend", gcCitizenshipUnsend::onCommand)
-    );
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
@@ -52,14 +50,14 @@ public class gcCitizenship extends SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-        findAndExecuteSubCommand(sender, args, subCommands, false);
+        findAndExecuteSubCommand(sender, args, subSubCommands, false);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         return switch (args.length) {
             // /gc citizen [commands]
-            case 1 -> subCommands.keySet().stream()
+            case 1 -> subSubCommands.keySet().stream()
                                           .filter(x -> sender.hasPermission(this.RequiredPermission + "." + x))
                                           .toList();
 

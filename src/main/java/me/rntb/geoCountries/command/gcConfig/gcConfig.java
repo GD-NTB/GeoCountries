@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public class gcConfig extends SubCommand {
 
@@ -17,11 +16,10 @@ public class gcConfig extends SubCommand {
         this.HelpPage   = """
                           §f/gc config [...]: §aManages the plugin config file at config.yml.
                           §f> reload: §2Reloads the config and updates the plugin's state.""";
+        this.subSubCommands = Map.ofEntries(
+                Map.entry("reload", gcConfigReload::onCommand)
+        );
     }
-
-    private static final Map<String, BiConsumer<CommandSender, String[]>> subCommands = Map.ofEntries(
-            Map.entry("reload", gcConfigReload::onCommand)
-    );
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
@@ -32,14 +30,14 @@ public class gcConfig extends SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-        findAndExecuteSubCommand(sender, args, subCommands, true);
+        findAndExecuteSubCommand(sender, args, subSubCommands, true);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc config [commands]
-            case 1 -> subCommands.keySet().stream()
+            case 1 -> subSubCommands.keySet().stream()
                                           .filter(x -> sender.hasPermission(this.RequiredPermission + "." + x))
                                           .toList();
 
