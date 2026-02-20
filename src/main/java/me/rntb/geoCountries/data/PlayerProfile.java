@@ -2,6 +2,7 @@ package me.rntb.geoCountries.data;
 
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.types.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
@@ -61,17 +62,17 @@ public class PlayerProfile extends DataCollection {
             return;
         }
 
-        // reset and populate hashmaps, load settings shite
+        // reset and populate hashmaps, load settings
         byUUID.clear();
         byUsername.clear();
         for (PlayerProfile player : all) {
             byUsername.put(player.username, player);
             byUUID.put(player.uuid, player);
 
-            // add any new settings
-            defaultSettings.forEach(player.settings::putIfAbsent);
-            // remove any old removed settings
-            player.settings.keySet().retainAll(defaultSettings.keySet());
+            // load settings by defaultSettings
+            LinkedHashMap<String, String> orderedSettings = new LinkedHashMap<>();
+            settingsData.forEach((key, settingData) -> orderedSettings.put(key, player.settings.getOrDefault(key, settingData.defaultValue)));
+            player.settings = orderedSettings;
         }
 
         if (ConfigState.debugLogging) {
@@ -98,7 +99,7 @@ public class PlayerProfile extends DataCollection {
         player.timeFirstJoined = System.currentTimeMillis();
 
         // create settings
-        player.settings = new HashMap<>(defaultSettings);
+        player.settings = buildDefaultSettings();
     }
 
     public static void delete(PlayerProfile player) {
@@ -231,14 +232,23 @@ public class PlayerProfile extends DataCollection {
     }
 
     // settings
-    // todo: use linkedhashmap
-    public Map<String, String> settings = new HashMap<>();
-    public static final Map<String, String> defaultSettings = new HashMap<>(
-            Map.ofEntries(
-                    Map.entry("soundeffects", "true"),
-                    Map.entry("chatnotificationsounds", "true")
-            )
-    );
+    public LinkedHashMap<String, String> settings = new LinkedHashMap<>();
+    public static final LinkedHashMap<String, SettingData> settingsData = new LinkedHashMap<>() {{
+        put("soundeffects", new SettingData("true",
+                                            SettingData.Type.BOOL,
+                                            "Sound Effects",
+                                            "Play sound effects"));
+        put("chatnotificationsounds", new SettingData("true",
+                                                      SettingData.Type.BOOL,
+                                                      "Chat Notification Sounds",
+                                                      "Play a ding sound effect when receiving important chat messages"));
+    }};
+    public static LinkedHashMap<String, String> buildDefaultSettings() {
+        return settingsData.entrySet().stream()
+                                     .collect(LinkedHashMap::new,
+                                             (m, e) -> m.put(e.getKey(), e.getValue().defaultValue),
+                                             LinkedHashMap::putAll);
+    }
 
     public long timeFirstJoined = 0;
     public String timeFirstJoinedAsString() {

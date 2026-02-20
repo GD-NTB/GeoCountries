@@ -39,7 +39,7 @@ public class gcCountrySettings extends SubSubCommand {
                 return;
             }
             String toValue = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-            SettingData.setSetting(sender, args[0], toValue, country.settings);
+            SettingData.setSetting(sender, args[0], toValue, Country.settingsData, country.settings);
             return;
         }
         // else list all/specific setting
@@ -70,7 +70,7 @@ public class gcCountrySettings extends SubSubCommand {
     private TextComponent.Builder getMessageAll(Country country, boolean isLeader) {
         TextComponent.Builder message = Component.text();
         for (String key : country.settings.keySet()) {
-            SettingData settingData = SettingData.map.get(key);
+            SettingData settingData = Country.settingsData.get(key);
             if (settingData == null)
                 continue;
             message.append(Component.text("§f> " + settingData.toString(country.settings.get(key)) + " "));
@@ -83,7 +83,7 @@ public class gcCountrySettings extends SubSubCommand {
     }
 
     private TextComponent.Builder getMessageSpecific(String key, Country country, boolean isLeader) {
-        SettingData settingData = SettingData.map.get(key);
+        SettingData settingData = Country.settingsData.get(key);
         if (settingData == null)
             return null;
         TextComponent.Builder message = Component.text().append(Component.text(settingData.toStringFull(key, country.settings.get(key)) + " "));
@@ -106,7 +106,7 @@ public class gcCountrySettings extends SubSubCommand {
             return playerCountry.settings.keySet().stream().toList();
 
         // get setting typed before
-        SettingData settingData = SettingData.map.get(args[1]);
+        SettingData settingData = Country.settingsData.get(args[1]);
         if (settingData == null)
             return  List.of();
         // return possible values for this settings

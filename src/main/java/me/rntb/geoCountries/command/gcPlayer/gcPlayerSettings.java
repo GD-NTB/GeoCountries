@@ -24,7 +24,7 @@ public class gcPlayerSettings extends SubSubCommand {
         // if setting a setting, set and escape
         if (args.length >= 2) {
             String toValue = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-            SettingData.setSetting(sender, args[0], toValue, playerProfile.settings);
+            SettingData.setSetting(sender, args[0], toValue, PlayerProfile.settingsData, playerProfile.settings);
             return;
         }
         // else list all/specific setting
@@ -55,7 +55,7 @@ public class gcPlayerSettings extends SubSubCommand {
     private TextComponent.Builder getMessageAll(PlayerProfile playerProfile) {
         TextComponent.Builder message = Component.text();
         for (String key : playerProfile.settings.keySet()) {
-            SettingData settingData = SettingData.map.get(key);
+            SettingData settingData = PlayerProfile.settingsData.get(key);
             if (settingData == null)
                 continue;
             message.append(Component.text("§f> " + settingData.toString(playerProfile.settings.get(key)) + " "))
@@ -67,7 +67,7 @@ public class gcPlayerSettings extends SubSubCommand {
     }
 
     private TextComponent.Builder getMessageSpecific(String key, PlayerProfile playerProfile) {
-        SettingData settingData = SettingData.map.get(key);
+        SettingData settingData = PlayerProfile.settingsData.get(key);
         if (settingData == null)
             return null;
         return Component.text().append(Component.text(settingData.toStringFull(key, playerProfile.settings.get(key)) + " "))
@@ -88,7 +88,7 @@ public class gcPlayerSettings extends SubSubCommand {
             return playerProfile.settings.keySet().stream().toList();
 
         // get setting typed before
-        SettingData settingData = SettingData.map.get(args[1]);
+        SettingData settingData = PlayerProfile.settingsData.get(args[1]);
         if (settingData == null)
             return List.of();
         // return possible values for this setting

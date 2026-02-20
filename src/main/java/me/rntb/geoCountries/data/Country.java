@@ -2,6 +2,7 @@ package me.rntb.geoCountries.data;
 
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.types.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.command.CommandSender;
@@ -52,10 +53,10 @@ public class Country extends DataCollection {
             byUUID.put(country.uuid, country);
             byName.put(country.name, country);
 
-            // add any new settings
-            defaultSettings.forEach(country.settings::putIfAbsent);
-            // remove any old removed settings
-            country.settings.keySet().retainAll(defaultSettings.keySet());
+            // load settings by defaultSettings
+            LinkedHashMap<String, String> orderedSettings = new LinkedHashMap<>();
+            settingsData.forEach((key, settingData) -> orderedSettings.put(key, country.settings.getOrDefault(key, settingData.defaultValue)));
+            country.settings = orderedSettings;
         }
 
         if (ConfigState.debugLogging)
@@ -77,7 +78,7 @@ public class Country extends DataCollection {
         country.timeCreated = System.currentTimeMillis();
 
         // create settings
-        country.settings = new HashMap<>(defaultSettings);
+        country.settings = buildDefaultSettings();
     }
 
     public static void delete(Country country) {
@@ -155,17 +156,37 @@ public class Country extends DataCollection {
     }
 
     // settings
-    // todo: use linkedhashmap
-    public Map<String, String> settings = new HashMap<>();
-    public static final Map<String, String>  defaultSettings = new HashMap<>(
-            Map.ofEntries(
-                Map.entry("autoacceptcitizenshipapplications", "false"),
-                Map.entry("prefixenabled", "true"),
-                Map.entry("prefix", "null"),
-                Map.entry("prefixcolour", "DARK_GREY"),
-                Map.entry("motto", "null")
-            )
-    );
+    public LinkedHashMap<String, String> settings = new LinkedHashMap<>();
+    public static final LinkedHashMap<String, SettingData> settingsData = new LinkedHashMap<>() {{
+        put("motto", new SettingData("null",
+                                     SettingData.Type.COUNTRY_MOTTO,
+                                     "Motto",
+                                     "The motto of the country"));
+        put("prefixenabled", new SettingData("true",
+                                             SettingData.Type.BOOL,
+                                             "Prefix Enabled",
+                                             "Whether or not to show the country prefix in chat messages"));
+        put("prefix", new SettingData("null",
+                                      SettingData.Type.COUNTRY_PREFIX,
+                                      "Prefix",
+                                      "The prefix to show in its citizens' chat messages, doesn't show if set to null",
+                                      ConfigState.countryPrefixMin, ConfigState.countryPrefixMax));
+        put("prefixcolour", new SettingData("DARK_GREY",
+                                            SettingData.Type.CHAT_COLOUR,
+                                            "Prefix Colour",
+                                            "The colour of the prefix to show in its citizens' chat messages"));
+        put("autoacceptcitizenshipapplications", new SettingData("false",
+                                                                 SettingData.Type.BOOL,
+                                                                 "Auto-Accept Citizenship Applications",
+                                                                 "Automatically accept citizenship applications when received"));
+
+    }};
+    public static LinkedHashMap<String, String> buildDefaultSettings() {
+        return settingsData.entrySet().stream()
+                                     .collect(LinkedHashMap::new,
+                                              (m, e) -> m.put(e.getKey(), e.getValue().defaultValue),
+                                              LinkedHashMap::putAll);
+    }
 
     public long timeCreated = 0;
     public String timeCreatedAsString() {

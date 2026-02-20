@@ -1,6 +1,5 @@
 package me.rntb.geoCountries.types;
 
-import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.EnumUtil;
 import me.rntb.geoCountries.util.StringUtil;
@@ -8,12 +7,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 // essentially a struct for the "metadata" of a setting
-// i dont like how i've implemented this, but it works...
 public class SettingData {
 
     public String defaultValue;
@@ -33,44 +30,9 @@ public class SettingData {
     public int min;
     public int max;
 
-    public static final Map<String, SettingData> map = new HashMap<>(
-            Map.ofEntries(
-                    // country
-                    Map.entry("autoacceptcitizenshipapplications", new SettingData("false",
-                                                                                   Type.BOOL,
-                                                                                   "Auto-Accept Citizenship Applications",
-                                                                                   "Automatically accept citizenship applications when received")),
-                    Map.entry("prefixenabled", new SettingData("true",
-                                                               Type.BOOL,
-                                                               "Prefix Enabled",
-                                                               "Whether or not to show the country prefix in chat messages")),
-                    Map.entry("prefix", new SettingData("null",
-                                                        Type.COUNTRY_PREFIX,
-                                                        "Prefix",
-                                                        "The prefix to show in its citizens' chat messages",
-                                                        ConfigState.countryPrefixMin, ConfigState.countryPrefixMax)),
-                    Map.entry("prefixcolour", new SettingData("DARK_GREY",
-                                                              Type.CHAT_COLOUR,
-                                                              "Prefix Colour",
-                                                              "The colour of the prefix to show in its citizens' chat messages")),
-                    Map.entry("motto", new SettingData("null",
-                                                        Type.COUNTRY_MOTTO,
-                                                        "Motto",
-                                                        "The motto of the country")),
-                    // player
-                    Map.entry("soundeffects", new SettingData("true",
-                                                              Type.BOOL,
-                                                              "Sound Effects",
-                                                              "Play sound effects")),
-                    Map.entry("chatnotificationsounds", new SettingData("true",
-                                                                        Type.BOOL,
-                                                                        "Chat Notification Sounds",
-                                                                        "Play a ding sound effect when receiving important chat messages"))
-            )
-    );
-
-    public static void setSetting(CommandSender sender, String key, String toValue, Map<String, String> settingsMap) {
-        SettingData settingData = map.get(key);
+    public static void setSetting(CommandSender sender, String key, String toValue, Map<String, SettingData> settingsData, Map<String, String> settingsRef) {
+        SettingData settingData = settingsData.get(key);
+        // if in settingsDataMapRef, should be in settingsMapRef, if not it's gonna be .put anyway (?!)
         if (settingData == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cSetting §f" + key + "§c could not be found!");
             return;
@@ -136,7 +98,7 @@ public class SettingData {
                 break;
         }
 
-        settingsMap.put(key, toValueTrimmed);
+        settingsRef.put(key, toValueTrimmed);
 
         ChatUtil.sendPrefixedMessage(sender, "§aSet §e" + key + "§a to §f" + toValueTrimmed + "§a!");
     }
