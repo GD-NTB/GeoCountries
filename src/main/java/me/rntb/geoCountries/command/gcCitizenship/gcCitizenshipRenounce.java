@@ -16,7 +16,7 @@ public class gcCitizenshipRenounce {
 
         // if doesnt have citizenship, escape
         if (!playerProfile.hasCitizenship()) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must be have citizenship of a country in order to renounce it!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must have citizenship of a country in order to renounce it!");
             return;
         }
 
