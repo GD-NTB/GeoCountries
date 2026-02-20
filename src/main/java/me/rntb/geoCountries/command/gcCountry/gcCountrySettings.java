@@ -24,6 +24,7 @@ public class gcCountrySettings {
         Country country = playerProfile.getCitizenship();
 
         // if setting a setting, set and escape
+        boolean isLeader = playerProfile.rank == PlayerProfile.PlayerRank.LEADER;
         if (args.length >= 2) {
             // if not leader, escape
             if (playerProfile.rank != PlayerProfile.PlayerRank.LEADER) {
@@ -43,11 +44,11 @@ public class gcCountrySettings {
 
         // if no args, list all settings
         if (args.length == 0)
-            message.append(getMessageAll(country));
+            message.append(getMessageAll(country, isLeader));
         // else list specific setting
         else {
             String commandKey = args[0];
-            TextComponent.Builder messageSpecificComponent = getMessageSpecific(commandKey, country);
+            TextComponent.Builder messageSpecificComponent = getMessageSpecific(commandKey, country, isLeader);
             if (messageSpecificComponent == null)
                 message.append(Component.text("§cSetting §f" + commandKey + "§c could not be found!"));
             else
@@ -59,26 +60,29 @@ public class gcCountrySettings {
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 
-    private static TextComponent.Builder getMessageAll(Country country) {
+    private static TextComponent.Builder getMessageAll(Country country, boolean isLeader) {
         TextComponent.Builder message = Component.text();
         for (String key : country.settings.keySet()) {
             SettingData settingData = SettingData.map.get(key);
             if (settingData == null)
                 continue;
-            message.append(Component.text("§f> " + settingData.toString(country.settings.get(key)) + " "))
-                   .append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
-                                                               "/gc country settings " + key + " " + settingData.defaultValue))
-                   .append(Component.newline());
+            message.append(Component.text("§f> " + settingData.toString(country.settings.get(key)) + " "));
+            if (isLeader)
+                message.append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
+                                                                   "/gc country settings " + key + " " + settingData.defaultValue));
+            message.append(Component.newline());
         }
         return message;
     }
 
-    private static TextComponent.Builder getMessageSpecific(String key, Country country) {
+    private static TextComponent.Builder getMessageSpecific(String key, Country country, boolean isLeader) {
         SettingData settingData = SettingData.map.get(key);
         if (settingData == null)
             return null;
-        return Component.text().append(Component.text(settingData.toStringFull(key, country.settings.get(key)) + " "))
-                               .append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
-                                                                           "/gc country settings " + key + " " + settingData.defaultValue));
+        TextComponent.Builder message = Component.text().append(Component.text(settingData.toStringFull(key, country.settings.get(key)) + " "));
+        if (isLeader)
+            message.append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
+                                                               "/gc country settings " + key + " " + settingData.defaultValue));
+        return message;
     }
 }
