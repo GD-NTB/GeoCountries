@@ -49,11 +49,11 @@ public abstract class SubCommand {
         onCommand(sender, args);
     }
 
-    public void findAndExecuteSubCommand(CommandSender sender, String[] args, Map<String, BiConsumer<CommandSender, String[]>> subCommands) {
+    public void findAndExecuteSubCommand(CommandSender sender, String[] args, Map<String, BiConsumer<CommandSender, String[]>> subCommands, boolean onlyNeedBasePermission) {
         String mode = args[0].toLowerCase();
         BiConsumer<CommandSender, String[]> method = subCommands.get(mode);
         if (method != null) {
-            String permission = this.RequiredPermission + "." + mode;
+            String permission = this.RequiredPermission + (onlyNeedBasePermission ? "" : "." + mode);
             if (!sender.hasPermission(permission)) {
                 ChatUtil.sendNoPermissionMessage(sender, this.DisplayName + " " + mode, permission);
                 return;

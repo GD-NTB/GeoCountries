@@ -32,7 +32,7 @@ public class gcConfig extends SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-        findAndExecuteSubCommand(sender, args, subCommands);
+        findAndExecuteSubCommand(sender, args, subCommands, true);
     }
 
     @Override

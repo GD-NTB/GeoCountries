@@ -52,7 +52,7 @@ public class gcCitizenship extends SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-        findAndExecuteSubCommand(sender, args, subCommands);
+        findAndExecuteSubCommand(sender, args, subCommands, false);
     }
 
     @Override

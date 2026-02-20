@@ -49,7 +49,7 @@ public class gcCountry extends SubCommand {
             gcCountryInfo.onCommand(sender, args);
             return;
         }
-        findAndExecuteSubCommand(sender, args, subCommands);
+        findAndExecuteSubCommand(sender, args, subCommands, false);
     }
 
     @Override

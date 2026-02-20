@@ -39,7 +39,7 @@ public class gcPlayer extends SubCommand {
             gcPlayerInfo.onCommand(sender, args);
             return;
         }
-        findAndExecuteSubCommand(sender, args, subCommands);
+        findAndExecuteSubCommand(sender, args, subCommands, false);
     }
 
     @Override
