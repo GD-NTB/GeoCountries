@@ -96,8 +96,9 @@ public class ChatUtil {
 
     // all
     public static void broadcastPrefixedMessage(String message) {
-        for (Player player : Bukkit.getOnlinePlayers())
+        for (Player player : Bukkit.getOnlinePlayers()) {
             sendPrefixedMessage(player, message);
+        }
     }
 
     // country

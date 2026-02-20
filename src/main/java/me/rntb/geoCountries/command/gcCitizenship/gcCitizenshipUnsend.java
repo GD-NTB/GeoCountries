@@ -53,7 +53,7 @@ public class gcCitizenshipUnsend extends SubSubCommand {
             return;
         }
 
-        CitizenshipApplication.deleteSent(cApplication);
+        cApplication.deleteSent();
 
         ChatUtil.sendPrefixedMessage(sender, "§aUnsent citizenship application!");
     }

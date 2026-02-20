@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-// todo: make management functions non-static
 public class CitizenshipApplication extends DataCollection {
 
     private static final String FILE_PATH = "data/citizenshipapplications";
@@ -28,57 +27,51 @@ public class CitizenshipApplication extends DataCollection {
     public static Map<UUID, CitizenshipApplication> openByUUID = new HashMap<>();
     public static Map<UUID, CitizenshipApplication> openByApplicant = new HashMap<>();
 
-    // create a new open application
-    public static void open(CitizenshipApplication cApplication, boolean sendMessage) {
-        openAll.add(cApplication);
-        openByUUID.put(cApplication.uuid, cApplication);
-        openByApplicant.put(cApplication.applicant, cApplication);
+    public void open(boolean sendMessage) {
+        openAll.add(this);
+        openByUUID.put(this.uuid, this);
+        openByApplicant.put(this.applicant, this);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Created new open CitizenshipApplication");
 
         if (sendMessage)
-            ChatUtil.sendPrefixedMessage(cApplication.getApplicant().getOnlinePlayer(), "§aCreating new citizenship application...");
+            ChatUtil.sendPrefixedMessage(this.getApplicant().getOnlinePlayer(), "§aCreating new citizenship application...");
     }
-    // cancel an open application
-    public static void cancel(CitizenshipApplication cApplication, boolean sendMessage) {
-        if (cApplication == null)
-            return;
-
-        openAll.remove(cApplication);
-        openByUUID.remove(cApplication.uuid);
-        openByApplicant.remove(cApplication.applicant);
+    public void cancel(boolean sendMessage) {
+        openAll.remove(this);
+        openByUUID.remove(this.uuid);
+        openByApplicant.remove(this.applicant);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Cancelled open CitizenshipApplication");
 
         if (sendMessage)
-            ChatUtil.sendPrefixedMessage(cApplication.getApplicant().getOnlinePlayer(), "§aCancelled the citizenship application.");
+            ChatUtil.sendPrefixedMessage(this.getApplicant().getOnlinePlayer(), "§aCancelled the citizenship application.");
     }
-    // send an open application
-    public static void send(CitizenshipApplication cApplication, boolean sendMessage) {
-        cancel(cApplication, false); // remove open application
+    public void send(boolean sendMessage) {
+        cancel(false); // remove open application
 
-        addNew(cApplication, sentAll, DISPLAY_NAME);
+        addNew(this, sentAll, DISPLAY_NAME);
 
         // add to sentByUUID
-        sentByUUID.put(cApplication.uuid, cApplication);
+        sentByUUID.put(this.uuid, this);
         // add to sentByApplicant
-        sentByApplicant.computeIfAbsent(cApplication.applicant, v -> new ArrayList<>()).add(cApplication);
+        sentByApplicant.computeIfAbsent(this.applicant, v -> new ArrayList<>()).add(this);
         // add to sentByToCountry
-        sentByToCountry.computeIfAbsent(cApplication.toCountry, v -> new ArrayList<>()).add(cApplication);
+        sentByToCountry.computeIfAbsent(this.toCountry, v -> new ArrayList<>()).add(this);
 
-        cApplication.timeCreated = System.currentTimeMillis();
+        this.timeCreated = System.currentTimeMillis();
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Sent open CitizenshipApplication");
 
         if (sendMessage) {
-            PlayerProfile applicant = cApplication.getApplicant();
-            ChatUtil.sendPrefixedMessage(applicant.getOnlinePlayer(), "§aSent citizenship application to country §f" + cApplication.getToCountry().name + "§a!");
+            PlayerProfile applicant = this.getApplicant();
+            ChatUtil.sendPrefixedMessage(applicant.getOnlinePlayer(), "§aSent citizenship application to country §f" + this.getToCountry().name + "§a!");
 
             // send notif to leader
-            PlayerProfile leaderProfile = cApplication.getToCountry().getLeader();
+            PlayerProfile leaderProfile = this.getToCountry().getLeader();
             if (leaderProfile == null)
                 return;
             Player leader = leaderProfile.getOnlinePlayer();
@@ -113,59 +106,48 @@ public class CitizenshipApplication extends DataCollection {
             SoundUtil.playSound(leader, SoundUtil.SoundEffect.CHAT_NOTIF);
         }
     }
-    // delete a sent application
-    public static void deleteSent(CitizenshipApplication cApplication) {
+    public void deleteSent() {
         // remove from sentByUUID
-        sentByUUID.remove(cApplication.uuid);
+        sentByUUID.remove(this.uuid);
         // remove from sentByApplicant
-        List<CitizenshipApplication> cApplicationsSent = sentByApplicant.get(cApplication.applicant);
+        List<CitizenshipApplication> cApplicationsSent = sentByApplicant.get(this.applicant);
         if (cApplicationsSent != null) {
-            cApplicationsSent.remove(cApplication);
+            cApplicationsSent.remove(this);
             // delete entry if list is now empty
             if (cApplicationsSent.isEmpty())
-                sentByApplicant.remove(cApplication.applicant);
+                sentByApplicant.remove(this.applicant);
         }
         // remove from sentByToCountry
-        cApplicationsSent = sentByToCountry.get(cApplication.toCountry);
+        cApplicationsSent = sentByToCountry.get(this.toCountry);
         if (cApplicationsSent != null) {
-            cApplicationsSent.remove(cApplication);
+            cApplicationsSent.remove(this);
             // delete entry if list is now empty
             if (cApplicationsSent.isEmpty())
-                sentByApplicant.remove(cApplication.toCountry);
+                sentByApplicant.remove(this.toCountry);
         }
 
-        delete(cApplication, sentAll, DISPLAY_NAME);
+        delete(this, sentAll, DISPLAY_NAME);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Deleted sent CitizenshipApplication");
     }
-    public static void deleteAllSentByApplicant(PlayerProfile player) {
-        List<CitizenshipApplication> cApplicationsSent = sentByApplicant.get(player.uuid);
-        if (cApplicationsSent == null)
-            return;
-        for (CitizenshipApplication cApplication : new ArrayList<>(cApplicationsSent)) {
-            CitizenshipApplication.deleteSent(cApplication);
-        }
-    }
-    // accept a sent application
-    public static void accept(CitizenshipApplication cApplication, boolean sendMessageToApplicant) {
-        // give citizenship to applicant
-        PlayerProfile playerProfile = cApplication.getApplicant();
+    public void accept(boolean sendMessageToApplicant) {
+        PlayerProfile playerProfile = this.getApplicant();
+
+        deleteSent();
         // just in case
         if (playerProfile.rank != PlayerProfile.PlayerRank.NONE) {
-            deleteSent(cApplication);
+            deleteSent();
             return;
         }
-        playerProfile.setCitizenship(cApplication.toCountry, PlayerProfile.PlayerRank.CITIZEN);
 
-        // delete sent application
-        deleteSent(cApplication);
+        playerProfile.setCitizenship(this.toCountry, PlayerProfile.PlayerRank.CITIZEN);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Accepted sent CitizenshipApplication");
 
         if (sendMessageToApplicant) {
-            Country country = Country.byUUID.get(cApplication.toCountry);
+            Country country = Country.byUUID.get(this.toCountry);
             Player player = playerProfile.getOnlinePlayer();
             ChatUtil.sendPrefixedMessage(player, """
                                                  §6Your citizenship application was §aaccepted§6.
@@ -174,28 +156,33 @@ public class CitizenshipApplication extends DataCollection {
             SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
         }
     }
-    // reject a sent application
-    public static void reject(CitizenshipApplication cApplication, boolean sendMessageToApplicant) {
-        // get applicant
-        PlayerProfile playerProfile = cApplication.getApplicant();
+    public void reject(boolean sendMessageToApplicant) {
+        PlayerProfile playerProfile = this.getApplicant();
+
+        deleteSent();
+
         // just in case
         if (playerProfile.rank != PlayerProfile.PlayerRank.NONE) {
-            deleteSent(cApplication);
             return;
         }
-
-        // delete sent application
-        deleteSent(cApplication);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Rejected sent CitizenshipApplication");
 
         if (sendMessageToApplicant) {
-            Country country = Country.byUUID.get(cApplication.toCountry);
+            Country country = Country.byUUID.get(this.toCountry);
             Player player = playerProfile.getOnlinePlayer();
             ChatUtil.sendPrefixedMessage(player, "§6Your citizenship application to §f" + country.name + "§6 was §crejected§6.");
             // play sound effect
             SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        }
+    }
+    public static void deleteAllSentByApplicant(PlayerProfile player) {
+        List<CitizenshipApplication> cApplicationsSent = sentByApplicant.get(player.uuid);
+        if (cApplicationsSent == null)
+            return;
+        for (CitizenshipApplication cApplication : new ArrayList<>(cApplicationsSent)) {
+            cApplication.deleteSent();
         }
     }
 

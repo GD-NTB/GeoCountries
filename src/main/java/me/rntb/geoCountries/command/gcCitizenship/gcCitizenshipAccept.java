@@ -65,7 +65,7 @@ public class gcCitizenshipAccept extends SubSubCommand {
         }
 
         // accept the application
-        CitizenshipApplication.accept(cApplication, true);
+        cApplication.accept(true);
 
         ChatUtil.sendPrefixedMessage(sender, "§aAccepted the citizenship application!");
 

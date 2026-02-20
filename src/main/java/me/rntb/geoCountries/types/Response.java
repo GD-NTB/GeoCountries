@@ -62,7 +62,7 @@ public class Response {
 
         // cancel whatever was going to use the response
         if (stopWaitingEvent != StopWaitingEvent.PLAYER_SENT_MESSAGE) {
-            CitizenshipApplication.cancel(CitizenshipApplication.openByApplicant.get(uuid), true);
+            CitizenshipApplication.openByApplicant.get(uuid).cancel(true);
         }
 
         // send appropriate message

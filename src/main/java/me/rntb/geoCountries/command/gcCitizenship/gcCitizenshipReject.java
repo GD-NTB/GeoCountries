@@ -63,7 +63,7 @@ public class gcCitizenshipReject extends SubSubCommand {
         }
 
         // reject the application
-        CitizenshipApplication.reject(cApplication, true);
+        cApplication.reject(true);
 
         ChatUtil.sendPrefixedMessage(sender, "§aRejected §f" + otherPlayerName + "§a's citizenship application.");
     }

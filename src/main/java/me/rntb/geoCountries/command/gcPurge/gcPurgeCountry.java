@@ -28,8 +28,9 @@ public class gcPurgeCountry extends SubSubCommand {
     @Override
     public void onConfirm(CommandSender sender, String[] args) {
         int count = Country.all.size();
-        for (Country cd : new ArrayList<>(Country.all)) // new ArrayList as we are concurrently modifying
+        for (Country cd : new ArrayList<>(Country.all)) { // new ArrayList as we are concurrently modifying
             Country.delete(cd);
+        }
 
         ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a Countr" + (count > 1 ? "ies" : "y") + ".");
     }

@@ -29,8 +29,9 @@ public class gcPurgePlayerProfile extends SubSubCommand {
     @Override
     public void onConfirm(CommandSender sender, String[] args) {
         int count = PlayerProfile.all.size();
-        for (PlayerProfile playerProfile : new ArrayList<>(PlayerProfile.all)) // new ArrayList as we are concurrently modifying
+        for (PlayerProfile playerProfile : new ArrayList<>(PlayerProfile.all)) { // new ArrayList as we are concurrently modifying
             PlayerProfile.delete(playerProfile);
+        }
 
         ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a PlayerProfile" + StringUtil.leadingS(count) + ".");
     }

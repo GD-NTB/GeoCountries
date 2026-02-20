@@ -73,12 +73,12 @@ public class gcCitizenshipApply extends SubSubCommand {
                                                   playerUUID,
                                                   toCountry.uuid); // reuse variable
         cApplication.reason = "N/A";
-        CitizenshipApplication.open(cApplication, true);
+        cApplication.open(true);
 
         // if country has auto-accept enabled, accept and escape
         if (toCountry.settings.get("autoacceptcitizenshipapplications").equals("true")) {
-            CitizenshipApplication.cancel(cApplication, false); // cancel open application
-            CitizenshipApplication.accept(cApplication, true); // send sent application
+            cApplication.cancel(false); // cancel open application
+            cApplication.accept(true); // send sent application
             // broadcast notif to country
             ChatUtil.broadcastPrefixedMessageToCountry(toCountry, "§f" + playerProfile.username + "§6 is now a citizen of §f" + toCountry.name + "§6!", false);
             return;
@@ -102,7 +102,7 @@ public class gcCitizenshipApply extends SubSubCommand {
         // validate response
         String validation = StringUtil.validateResponse(responseClean);
         if (validation != null) {
-            CitizenshipApplication.cancel(cApplication, true);
+            cApplication.cancel(true);
             ChatUtil.sendPrefixedMessage(sender, validation);
             return;
         }
@@ -110,7 +110,7 @@ public class gcCitizenshipApply extends SubSubCommand {
         cApplication.reason = responseClean;
 
         // send application
-        CitizenshipApplication.send(cApplication, true);
+        cApplication.send(true);
     }
 
     @Override

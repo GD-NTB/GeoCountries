@@ -30,8 +30,9 @@ public class gcPurgeCitizenshipApplication extends SubSubCommand {
     public void onConfirm(CommandSender sender, String[] args) {
         int count = CitizenshipApplication.sentAll.size();
 
-        for (CitizenshipApplication ca : new ArrayList<>(CitizenshipApplication.sentAll)) // new ArrayList as we are concurrently modifying
-            CitizenshipApplication.deleteSent(ca);
+        for (CitizenshipApplication ca : new ArrayList<>(CitizenshipApplication.sentAll)) { // new ArrayList as we are concurrently modifying
+            ca.deleteSent();
+        }
 
         ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a CitizenshipApplication" + StringUtil.leadingS(count) + ".");
     }
