@@ -60,8 +60,11 @@ public class gcCitizenshipUnsend extends SubSubCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        if (args.length != 1)
+            return List.of();
+
         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
-        if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission(this.RequiredPermission + ".revoke"))
+        if (player.rank != PlayerProfile.PlayerRank.LEADER)
             return List.of();
         return player.getCitizenship().citizens.stream()
                                                .map(c -> PlayerProfile.byUUID.get(c).username).toList();

@@ -108,6 +108,6 @@ public class gcCountryCitizens extends SubSubCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return sender.hasPermission(this.RequiredPermission + ".citizens") ? Country.allAsNames(true) : List.of();
+        return args.length == 1 ? Country.allAsStrings(true) : List.of();
     }
 }

@@ -11,6 +11,7 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+// todo: use chat response when just doing /gc country rename
 public class gcCountryRename extends SubSubCommand {
 
     public gcCountryRename(String name, String displayName, String requiredPermission) {

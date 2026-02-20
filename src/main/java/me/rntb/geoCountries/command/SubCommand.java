@@ -19,8 +19,9 @@ public abstract class SubCommand {
     public String RequiredPermission;
     public boolean ConsoleCanUse;
     public Material MenuItemMaterial;
-    
+
     public String HelpString = "No help available."; // shown in /gc help
+    // todo: generate this using SubSubCommand.HelpString
     public String HelpPage = "No further help available."; // shown in /gc help [...]
     public Map<String, SubSubCommand> subSubCommands = Collections.emptyMap();
 
@@ -34,14 +35,14 @@ public abstract class SubCommand {
 
     public final void onCommandEntered(CommandSender sender, String[] args) {
         // if we are console and console can't use, escape
-        if (!(sender instanceof Player) && !this.ConsoleCanUse) {
-            ChatUtil.sendPrefixedPlayerOnlyErrorMessage(this.DisplayName);
+        if (!(sender instanceof Player) && !ConsoleCanUse) {
+            ChatUtil.sendPrefixedPlayerOnlyErrorMessage(DisplayName);
             return;
         }
 
         //  if no permission, escape
         if (RequiredPermission != null && !sender.hasPermission(RequiredPermission)) {
-            ChatUtil.sendNoPermissionMessage(sender, this.DisplayName, this.RequiredPermission);
+            ChatUtil.sendNoPermissionMessage(sender, DisplayName, RequiredPermission);
             return;
         }
 
@@ -50,18 +51,18 @@ public abstract class SubCommand {
 
     public void findAndExecuteSubCommand(CommandSender sender, String[] args, boolean onlyNeedBasePermission) {
         String mode = args[0].toLowerCase();
-        SubSubCommand subSubCommand = this.subSubCommands.get(mode);
+        SubSubCommand subSubCommand = subSubCommands.get(mode);
         if (subSubCommand == null) {
             ChatUtil.sendPrefixedMessage(sender, """
                                                  §c§f%s§c is not a valid command for §f%s§c!
                                                  Usage: §f%s [...]"""
-                                                 .formatted(mode, this.DisplayName, this.DisplayName));
+                                                 .formatted(mode, DisplayName, DisplayName));
             return;
         }
 
-        String permission = this.RequiredPermission + (onlyNeedBasePermission ? "" : "." + mode);
+        String permission = RequiredPermission + (onlyNeedBasePermission ? "" : "." + mode);
         if (!sender.hasPermission(permission)) {
-            ChatUtil.sendNoPermissionMessage(sender, this.DisplayName + " " + mode, permission);
+            ChatUtil.sendNoPermissionMessage(sender, DisplayName + " " + mode, permission);
             return;
         }
 

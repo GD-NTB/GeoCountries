@@ -2,9 +2,7 @@ package me.rntb.geoCountries.command.gcAdmin;
 
 import me.rntb.geoCountries.command.SubCommand;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 
-import java.util.List;
 import java.util.Map;
 
 public class gcAdmin extends SubCommand {
@@ -22,10 +20,5 @@ public class gcAdmin extends SubCommand {
                 Map.entry("setplayercountry", new gcAdminSetPlayerCountry("setplayercountry", "/gc admin setplayercountry", "gc.admin")),
                 Map.entry("setplayerrank", new gcAdminSetPlayerRank("setplayerrank", "/gc admin setplayerrank", "gc.admin"))
         );
-    }
-
-    @Override
-    public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return this.subSubCommands.keySet().stream().sorted().toList();
     }
 }

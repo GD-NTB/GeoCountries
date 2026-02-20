@@ -34,7 +34,7 @@ public class gcPurge extends SubCommand {
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc purge [commands]
-            case 1 -> this.subSubCommands.keySet().stream().toList();
+            case 1 -> subSubCommands.keySet().stream().toList();
 
             // /gc purge [...] 2
             case 2 ->

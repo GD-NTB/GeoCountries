@@ -47,10 +47,10 @@ public class GeoCountries extends JavaPlugin {
         getCommand("gc").setExecutor(new gc());
 
         // initialise globals
-        PluginName = this.getDescription().getName();
-        PluginVersion = this.getDescription().getVersion();
+        PluginName = getDescription().getName();
+        PluginVersion = getDescription().getVersion();
         PluginNameAndVersion = PluginName + " [" + PluginVersion + "]";
-        PluginAbsoluteDataFolderPath = this.getDataPath().toAbsolutePath();
+        PluginAbsoluteDataFolderPath = getDataPath().toAbsolutePath();
 
         // initialise data collections
         DataCollectionManager.init();

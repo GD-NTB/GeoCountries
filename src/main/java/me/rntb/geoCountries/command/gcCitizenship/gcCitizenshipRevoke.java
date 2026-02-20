@@ -77,8 +77,6 @@ public class gcCitizenshipRevoke extends SubSubCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        if (!sender.hasPermission(this.RequiredPermission + ".unsend"))
-            return List.of();
-        return PlayerProfile.get((Player) sender).getSentCitizenshipApplicationsAsStrings();
+        return args.length == 1 ? PlayerProfile.get((Player) sender).getSentCitizenshipApplicationsAsStrings() : List.of();
     }
 }

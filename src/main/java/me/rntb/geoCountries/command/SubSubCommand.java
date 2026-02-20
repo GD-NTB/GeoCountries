@@ -22,7 +22,7 @@ public abstract class SubSubCommand {
     public final void onCommandEntered(CommandSender sender, String[] args) {
         //  if no permission, escape
         if (RequiredPermission != null && !sender.hasPermission(RequiredPermission)) {
-            ChatUtil.sendNoPermissionMessage(sender, this.DisplayName, this.RequiredPermission);
+            ChatUtil.sendNoPermissionMessage(sender, DisplayName, RequiredPermission);
             return;
         }
 

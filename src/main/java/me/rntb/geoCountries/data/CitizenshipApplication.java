@@ -27,30 +27,40 @@ public class CitizenshipApplication extends DataCollection {
     public static Map<UUID, CitizenshipApplication> openByUUID = new HashMap<>();
     public static Map<UUID, CitizenshipApplication> openByApplicant = new HashMap<>();
 
+    // create a new OPEN application
     public void open(boolean sendMessage) {
         openAll.add(this);
-        openByUUID.put(this.uuid, this);
-        openByApplicant.put(this.applicant, this);
+        openByUUID.put(uuid, this);
+        openByApplicant.put(applicant, this);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Created new open CitizenshipApplication");
 
         if (sendMessage)
-            ChatUtil.sendPrefixedMessage(this.getApplicant().getOnlinePlayer(), "§aCreating new citizenship application...");
+            ChatUtil.sendPrefixedMessage(getApplicant().getOnlinePlayer(), "§aCreating new citizenship application...");
     }
+    // cancel an OPEN application
     public void cancel(boolean sendMessage) {
         openAll.remove(this);
-        openByUUID.remove(this.uuid);
-        openByApplicant.remove(this.applicant);
+        openByUUID.remove(uuid);
+        openByApplicant.remove(applicant);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Cancelled open CitizenshipApplication");
 
         if (sendMessage)
-            ChatUtil.sendPrefixedMessage(this.getApplicant().getOnlinePlayer(), "§aCancelled the citizenship application.");
+            ChatUtil.sendPrefixedMessage(getApplicant().getOnlinePlayer(), "§aCancelled the citizenship application.");
     }
+    // send an OPEN application
     public void send(boolean sendMessage) {
         cancel(false); // remove open application
+
+        // if country deleted between opening of application and calling this method, escape
+        if (getToCountry() == null) {
+            if (sendMessage)
+                ChatUtil.sendPrefixedMessage(getApplicant().getOnlinePlayer(), "§cCancelled the citizenship application - the recipient country was deleted!");
+            return;
+        }
 
         addNew(this, sentAll, DISPLAY_NAME);
 
@@ -106,6 +116,7 @@ public class CitizenshipApplication extends DataCollection {
             SoundUtil.playSound(leader, SoundUtil.SoundEffect.CHAT_NOTIF);
         }
     }
+    // delete a SENT application
     public void deleteSent() {
         // remove from sentByUUID
         sentByUUID.remove(this.uuid);
@@ -131,6 +142,7 @@ public class CitizenshipApplication extends DataCollection {
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Deleted sent CitizenshipApplication");
     }
+    // accept a SENT application
     public void accept(boolean sendMessageToApplicant) {
         PlayerProfile playerProfile = this.getApplicant();
 
@@ -156,15 +168,15 @@ public class CitizenshipApplication extends DataCollection {
             SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
         }
     }
+    // reject a SENT application
     public void reject(boolean sendMessageToApplicant) {
         PlayerProfile playerProfile = this.getApplicant();
 
         deleteSent();
 
         // just in case
-        if (playerProfile.rank != PlayerProfile.PlayerRank.NONE) {
+        if (playerProfile.rank != PlayerProfile.PlayerRank.NONE)
             return;
-        }
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Rejected sent CitizenshipApplication");
@@ -177,11 +189,21 @@ public class CitizenshipApplication extends DataCollection {
             SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
         }
     }
+    // delete all SENT applications by applicant
     public static void deleteAllSentByApplicant(PlayerProfile player) {
         List<CitizenshipApplication> cApplicationsSent = sentByApplicant.get(player.uuid);
         if (cApplicationsSent == null)
             return;
         for (CitizenshipApplication cApplication : new ArrayList<>(cApplicationsSent)) {
+            cApplication.deleteSent();
+        }
+    }
+    // delete all SENT applications by country sent to
+    public static void deleteAllSentByToCountry(Country country) {
+        List<CitizenshipApplication> cApplicationsReceived = sentByToCountry.get(country.uuid);
+        if (cApplicationsReceived == null)
+            return;
+        for (CitizenshipApplication cApplication : new ArrayList<>(cApplicationsReceived)) {
             cApplication.deleteSent();
         }
     }

@@ -123,10 +123,10 @@ public class PlayerProfile extends DataCollection {
 
     public UUID citizenship = null;
     public Country getCitizenship() {
-        return me.rntb.geoCountries.data.Country.byUUID.get(this.citizenship);
+        return me.rntb.geoCountries.data.Country.byUUID.get(citizenship);
     }
     public void setCitizenship(UUID country, PlayerRank rank) {
-        UUID prevCountryUUID = this.citizenship;
+        UUID prevCountryUUID = citizenship;
 
         // if removing player country
         if (prevCountryUUID != null && !prevCountryUUID.equals(country)) {
@@ -135,13 +135,13 @@ public class PlayerProfile extends DataCollection {
             if (prevCountry != null) {
                 prevCountry.removeCitizen(this);
 
-                if (this.uuid.equals(prevCountry.leader))
+                if (uuid.equals(prevCountry.leader))
                     prevCountry.setLeader(null);
             }
         }
 
         // set citizenship
-        this.citizenship = country;
+        citizenship = country;
 
         // update rank
         setRank(rank);
@@ -153,14 +153,14 @@ public class PlayerProfile extends DataCollection {
         setCitizenship((UUID) null, PlayerRank.NONE);
     }
     public boolean hasCitizenship() {
-        return this.citizenship != null;
+        return citizenship != null;
     }
 
     public Player getOnlinePlayer() {
-        return Bukkit.getPlayer(this.uuid);
+        return Bukkit.getPlayer(uuid);
     }
     public OfflinePlayer getOfflinePlayer() {
-        return Bukkit.getOfflinePlayer(this.uuid);
+        return Bukkit.getOfflinePlayer(uuid);
     }
 
     public enum PlayerRank {
@@ -170,65 +170,65 @@ public class PlayerProfile extends DataCollection {
     }
     public PlayerRank rank = PlayerRank.NONE;
     public String getRankString() {
-        return switch (this.rank) {
+        return switch (rank) {
             case NONE -> "None";
             case CITIZEN -> "Citizen";
             case LEADER -> "Leader";
         };
     }
     public int getRankLevel() {
-        return this.rank.ordinal();
+        return rank.ordinal();
     }
     public void setRank(PlayerRank newRank) {
         // if no change, escape
-        if (this.rank == newRank)
+        if (rank == newRank)
             return;
 
-        Country country = Country.byUUID.get(this.citizenship);
+        Country country = Country.byUUID.get(citizenship);
         // if not part of country, dont do anything except set to NONE
         if (country == null) {
-            this.rank = PlayerRank.NONE;
+            rank = PlayerRank.NONE;
             return;
         }
 
         // if demoting completely, remove rank and escape
         if (newRank == PlayerRank.NONE) {
             // remove from citizens list if needed
-            if (this.uuid.equals(country.leader)) {
+            if (uuid.equals(country.leader)) {
                 country.setLeader(null);
             }
 
             country.removeCitizen(this);
 
-            this.citizenship = null;
-            this.rank = PlayerRank.NONE;
+            citizenship = null;
+            rank = PlayerRank.NONE;
             return;
         }
 
         // upon gaining any kind of citizenship, cancel all previous citizenship applications
-        if (CitizenshipApplication.sentByApplicant.get(this.uuid) != null)
+        if (CitizenshipApplication.sentByApplicant.get(uuid) != null)
             CitizenshipApplication.deleteAllSentByApplicant(this);
 
         // set rank in country
         if (newRank == PlayerRank.LEADER) {
             country.setLeader(this);
-            this.rank = PlayerRank.LEADER;
+            rank = PlayerRank.LEADER;
             return;
         }
 
         if (newRank == PlayerRank.CITIZEN) {
             // if was leader, remove leadership
-            if (this.uuid.equals(country.leader)) {
+            if (uuid.equals(country.leader)) {
                 country.setLeader(null); // or country.removeLeader()
             }
 
             country.addCitizen(this);
-            this.rank = PlayerRank.CITIZEN;
+            rank = PlayerRank.CITIZEN;
             return;
         }
 
         // finally set rank property if didnt get set
-        this.rank = newRank;
+        rank = newRank;
     }
 
     // settings

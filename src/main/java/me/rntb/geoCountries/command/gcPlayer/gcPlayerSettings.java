@@ -77,18 +77,16 @@ public class gcPlayerSettings extends SubSubCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        if (!sender.hasPermission(this.RequiredPermission + ".settings"))
-            return List.of();
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
         if (playerProfile == null)
             return List.of();
 
         // if no setting mentioned, return all settings as strings
-        if (args.length == 0)
+        if (args.length == 1)
             return playerProfile.settings.keySet().stream().toList();
 
         // get setting typed before
-        SettingData settingData = PlayerProfile.settingsData.get(args[1]);
+        SettingData settingData = PlayerProfile.settingsData.get(args[0]);
         if (settingData == null)
             return List.of();
         // return possible values for this setting

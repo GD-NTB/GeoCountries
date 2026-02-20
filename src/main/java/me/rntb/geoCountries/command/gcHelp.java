@@ -141,9 +141,6 @@ public class gcHelp extends SubCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
-        if (args.length == 1)
-            return gc.subCommandsTabAutoCompleteList(sender);
-
-        return List.of();
+        return args.length == 1 ? gc.subCommandsTabAutoCompleteList(sender) : List.of();
     }
 }

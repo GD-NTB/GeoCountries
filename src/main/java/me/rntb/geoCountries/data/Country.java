@@ -20,7 +20,7 @@ public class Country extends DataCollection {
 
     // list of all countries existing
     public static ArrayList<Country> all = null;
-    public static List<String> allAsNames(boolean alphabetical) {
+    public static List<String> allAsStrings(boolean alphabetical) {
         Stream<String> countries = byName.keySet().stream();
         if (!alphabetical)
             return countries.toList();
@@ -92,6 +92,9 @@ public class Country extends DataCollection {
         byName.remove(country.name);
         byUUID.remove(country.uuid);
 
+        // delete any associated applications
+        CitizenshipApplication.deleteAllSentByToCountry(country);
+
         delete(country, all, DISPLAY_NAME);
     }
 
@@ -101,7 +104,7 @@ public class Country extends DataCollection {
 
     public String name;
     public void setName(String name) {
-        byName.put(name, byName.remove(this.name));
+        byName.put(name, this);
         this.name = name;
     }
 
@@ -112,46 +115,46 @@ public class Country extends DataCollection {
     public void setLeader(PlayerProfile player) {
         // if clearing leader, set to null and escape
         if (player == null) {
-            this.leader = null;
+            leader = null;
             return;
         }
 
         // if has leader
-        if (this.leader != null) {
+        if (leader != null) {
             // if player is already leader, escape
-            if (this.leader.equals(player.uuid))
+            if (leader.equals(player.uuid))
                 return;
 
             // demote old
-            PlayerProfile old = PlayerProfile.byUUID.get(this.leader);
+            PlayerProfile old = PlayerProfile.byUUID.get(leader);
             old.setRank(PlayerProfile.PlayerRank.CITIZEN);
         }
 
         // set player to leader and add as citizen if not already
-        this.leader = player.uuid;
+        leader = player.uuid;
         addCitizen(player);
         player.rank = PlayerProfile.PlayerRank.LEADER; // re-set rank
     }
 
     public ArrayList<UUID> citizens = new ArrayList<>();
     public List<PlayerProfile> citizensSortedByRank() {
-        return this.citizens.stream()
-                            .map(uuid -> PlayerProfile.byUUID.get(uuid))
-                            .sorted(Comparator.comparing(PlayerProfile::getRankLevel))
-                            .toList().reversed();
+        return citizens.stream()
+                       .map(uuid -> PlayerProfile.byUUID.get(uuid))
+                       .sorted(Comparator.comparing(PlayerProfile::getRankLevel))
+                       .toList().reversed();
     }
     public int citizenCount() {
         return citizens.size();
     }
     public void addCitizen(PlayerProfile player) {
-        if (!this.citizens.contains(player.uuid)) {
-            this.citizens.add(player.uuid);
-            player.citizenship = this.uuid;
+        if (!citizens.contains(player.uuid)) {
+            citizens.add(player.uuid);
+            player.citizenship = uuid;
         }
     }
     public void removeCitizen(PlayerProfile player) {
-        this.citizens.remove(player.uuid);
-        if (player.citizenship != null && player.citizenship.equals(this.uuid))
+        citizens.remove(player.uuid);
+        if (player.citizenship != null && player.citizenship.equals(uuid))
             player.citizenship = null;
     }
 
@@ -190,13 +193,13 @@ public class Country extends DataCollection {
 
     public long timeCreated = 0;
     public String timeCreatedAsString() {
-        Instant instant = Instant.ofEpochMilli(this.timeCreated);
+        Instant instant = Instant.ofEpochMilli(timeCreated);
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         return dateTime.format(StringUtil.timeFormatter);
     }
 
     public List<String> getReceivedCitizenshipApplicationsAsStrings() {
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(this.uuid);
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(uuid);
         if (cApplications == null)
             return List.of();
         return cApplications.stream()

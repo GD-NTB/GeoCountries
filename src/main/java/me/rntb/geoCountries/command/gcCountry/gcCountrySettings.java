@@ -95,18 +95,16 @@ public class gcCountrySettings extends SubSubCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        if (!sender.hasPermission(this.RequiredPermission + ".settings"))
-            return List.of();
         Country playerCountry = Country.byCommandSender(sender);
         if (playerCountry == null)
             return List.of();
 
         // if no setting mentioned, return all settings as strings
-        if (args.length == 0)
+        if (args.length == 1)
             return playerCountry.settings.keySet().stream().toList();
 
         // get setting typed before
-        SettingData settingData = Country.settingsData.get(args[1]);
+        SettingData settingData = Country.settingsData.get(args[0]);
         if (settingData == null)
             return  List.of();
         // return possible values for this settings

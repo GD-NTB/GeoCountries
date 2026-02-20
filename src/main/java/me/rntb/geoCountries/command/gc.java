@@ -52,16 +52,18 @@ public class gc implements TabExecutor {
                                    .filter(sc -> sender.hasPermission(sc.RequiredPermission)).toList();
     }
     public static List<String> allowedSubCommandsAsStrings(CommandSender sender) {
-        return subCommands.entrySet().stream()
-                                     .filter(sc -> sender.hasPermission(sc.getValue().RequiredPermission))
-                                     .map(Map.Entry::getKey)
-                                     .sorted().toList();
+        return subCommands.values().stream()
+                                   .filter(sc -> sender.hasPermission(sc.RequiredPermission))
+                                   .map(sc -> sc.Name)
+                          .sorted().toList();
     }
     public static List<String> subCommandsTabAutoCompleteList(CommandSender sender) {
-        return Stream.concat(subCommands.entrySet().stream()
-                                                   .filter(sc -> sender.hasPermission(sc.getValue().RequiredPermission))
-                                                   .map(Map.Entry::getKey),
-                             subCommandsAliases.keySet().stream())
+        return Stream.concat(subCommands.values().stream()
+                                                 .filter(sc -> sender.hasPermission(sc.RequiredPermission))
+                                                 .map(sc -> sc.Name),
+                             subCommandsAliases.entrySet().stream()
+                                                        .filter(sca -> sender.hasPermission(subCommands.get(sca.getValue()).RequiredPermission))
+                                               .map(Map.Entry::getKey))
                      .sorted().toList();
     }
 
@@ -81,10 +83,6 @@ public class gc implements TabExecutor {
     }
 
     private void onCommandNoArgs(@NotNull CommandSender sender) {
-//        ChatUtil.sendPrefixedMessage(sender, """
-//                                             §aThis server is running §f%s§a, a plugin developed by §frNTB§a.
-//                                             Do §f/gc help§a for a list of commands!"""
-//                                             .formatted(gcCountries.PluginNameAndVersion));
         subCommands.get("gui").onCommandEntered(sender, new String[]{ });
     }
 
@@ -105,11 +103,9 @@ public class gc implements TabExecutor {
 
         // if we are waiting for sender to confirm a command, but they sent a different command, cancel waiting
         UUID senderUuid = UuidUtil.getUUIDOfCommandSender(sender);
-        if (Confirmation.isWaiting(senderUuid)) {
-            if (!(args.length == 1 && (args[0].equalsIgnoreCase("confirm") || args[0].equalsIgnoreCase("cancel")))) {
+        if (Confirmation.isWaiting(senderUuid))
+            if (!(args.length == 1 && (args[0].equalsIgnoreCase("confirm") || args[0].equalsIgnoreCase("cancel"))))
                 Confirmation.stopWaiting(senderUuid, Confirmation.StopWaitingEvent.CANCELLED, true);
-            }
-        }
 
         // get subargs (the [...] in /gc [subcommand] [...])
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
@@ -120,32 +116,23 @@ public class gc implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) // tab autocomplete disabled for console
+        if (args.length == 0 || !(sender instanceof Player player))
             return List.of();
 
-        return switch (args.length) {
-            // /gc
-            case 0 -> List.of();
+        if (args.length == 1)
+            return subCommandsTabAutoCompleteList(player);
 
-            // /gc [...]
-            case 1 -> subCommandsTabAutoCompleteList(player);
+        String commandName = args[0];
+        // convert alias to subcommand
+        String subCommandNameAlias = gc.subCommandsAliases.get(commandName);
+        if (subCommandNameAlias != null)
+            commandName = subCommandNameAlias;
+        // find subcommand
+        SubCommand subCommand = subCommands.get(commandName);
+        if (subCommand == null || !sender.hasPermission(subCommand.RequiredPermission))
+            return List.of();
 
-            // /gc [subcommand] [...]
-            default -> {
-                String commandName = args[0];
-                // convert alias to subcommand
-                String subCommandNameAlias = gc.subCommandsAliases.get(commandName);
-                if (subCommandNameAlias != null)
-                    commandName = subCommandNameAlias;
-                // find subcommand
-                SubCommand subCommand = subCommands.get(commandName);
-                if (subCommand == null || !sender.hasPermission(subCommand.RequiredPermission)) {
-                    yield List.of();
-                }
-
-                // get tab completion of subcommand
-                yield subCommand.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));
-            }
-        };
+        // get tab completion of subcommand
+        return subCommand.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));
     }
 }

@@ -64,8 +64,6 @@ public class gcPlayerInfo extends SubSubCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        if (!sender.hasPermission(this.RequiredPermission))
-            return List.of();
-        return PlayerProfile.allAsUsernames(true);
+        return args.length == 1 ? PlayerProfile.allAsUsernames(true) : List.of();
     }
 }

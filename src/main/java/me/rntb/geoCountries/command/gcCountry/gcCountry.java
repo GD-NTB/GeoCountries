@@ -1,7 +1,6 @@
 package me.rntb.geoCountries.command.gcCountry;
 
 import me.rntb.geoCountries.command.SubCommand;
-import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
@@ -35,12 +34,7 @@ public class gcCountry extends SubCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            // do /gc country info
-            if (!sender.hasPermission("gc.country.info")) {
-                ChatUtil.sendNoPermissionMessage(sender, "/gc country info", "gc.country.info");
-                return;
-            }
-            this.subSubCommands.get("info").onCommand(sender, args);
+            subSubCommands.get("info").onCommandEntered(sender, args);
             return;
         }
         findAndExecuteSubCommand(sender, args, false);

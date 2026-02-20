@@ -25,7 +25,7 @@ public class gcDump extends SubCommand {
                                              %sPlayerProfile.all(%s)
                                              byUsername(%s), byUUID(%s)
                                              ----------
-                                             CitizenshipApplication.sendByApplicant(%s)
+                                             CitizenshipApplication.sentByApplicant(%s)
                                              ----------
                                              Country.all(%s)
                                              ----------

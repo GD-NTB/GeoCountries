@@ -60,9 +60,8 @@ public class gcAdminSetPlayerCountry extends SubSubCommand {
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         return switch (args.length) {
             case 1 -> PlayerProfile.allAsUsernames(true);
-            case 2 -> Stream.concat(Country.allAsNames(true).stream(),
-                                    Stream.of("null"))
-                            .toList();
+            case 2 -> Stream.concat(Country.allAsStrings(true).stream(),
+                                    Stream.of("null")).toList();
             default -> List.of();
         };
     }

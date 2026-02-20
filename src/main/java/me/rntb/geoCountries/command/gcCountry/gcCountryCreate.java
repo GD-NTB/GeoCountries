@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+// todo: use chat response when just doing /gc country create
 public class gcCountryCreate extends SubSubCommand {
 
     public gcCountryCreate(String name, String displayName, String requiredPermission) {
