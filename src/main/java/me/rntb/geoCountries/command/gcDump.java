@@ -10,15 +10,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.List;
-
 public class gcDump extends SubCommand {
 
     public gcDump(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
         super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
         this.HelpString = "Dumps plugin info.";
         this.HelpPage   = """
-                          §f/gc dump: §aDumps some plugin info into the chat for easier debugging.""";;
+                          §f/gc dump: §aDumps some plugin info into the chat for easier debugging.""";
     }
 
     @Override
@@ -39,10 +37,5 @@ public class gcDump extends SubCommand {
                                                         CitizenshipApplication.sentByApplicant.size(),
                                                         Country.all.size(),
                                                         ((Player) sender).getPersistentDataContainer().has(MenuPage.ISMENUOPEN_KEY, PersistentDataType.BOOLEAN)));
-    }
-
-    @Override
-    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
-        return List.of();
     }
 }

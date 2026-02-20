@@ -1,13 +1,10 @@
 package me.rntb.geoCountries.command.gcPlayer;
 
 import me.rntb.geoCountries.command.SubCommand;
-import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.types.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import java.util.List;
 import java.util.Map;
 
 public class gcPlayer extends SubCommand {
@@ -21,8 +18,8 @@ public class gcPlayer extends SubCommand {
                           §f> settings [setting?] [value?]: §2Sets/lists your settings""";
 
         this.subSubCommands = Map.ofEntries(
-                Map.entry("info", gcPlayerInfo::onCommand),
-                Map.entry("settings", gcPlayerSettings::onCommand)
+                Map.entry("info", new gcPlayerInfo("player", "/gc player info", "gc.player.info")),
+                Map.entry("settings", new gcPlayerSettings("settings", "/gc player settings", "gc.player.settings"))
         );
     }
 
@@ -35,62 +32,9 @@ public class gcPlayer extends SubCommand {
                 ChatUtil.sendNoPermissionMessage(sender, this.DisplayName + " info", permission);
                 return;
             }
-            gcPlayerInfo.onCommand(sender, args);
+            this.subSubCommands.get("info").onCommand(sender, args);
             return;
         }
-        findAndExecuteSubCommand(sender, args, subSubCommands, false);
-    }
-
-    @Override
-    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
-        return switch (args.length) {
-            // /gc player [commands]
-            case 1 -> subSubCommands.keySet().stream()
-                                          .filter(x -> sender.hasPermission(this.RequiredPermission + "." + x))
-                                          .toList();
-
-            // /gc player [command] [...]
-            case 2 ->
-                switch (args[0]) {
-                    // /gc player info [players]
-                    case "info" -> sender.hasPermission(this.RequiredPermission + ".info") ? PlayerProfile.allAsUsernames(true) : List.of();
-
-                    // /gc player settings [settings]
-                    case "settings" -> {
-                        if (!sender.hasPermission(this.RequiredPermission + ".settings"))
-                            yield List.of();
-                        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
-                        if (playerProfile == null)
-                            yield List.of();
-                        // return all settings as strings
-                        yield playerProfile.settings.keySet().stream().toList();
-                    }
-
-                    default -> List.of();
-                };
-
-            // gc player [command] [...] [...]
-            case 3 ->
-                switch (args[0]) {
-                    // /gc player settings [setting] [value]
-                    case "settings" -> {
-                        if (!sender.hasPermission(this.RequiredPermission + ".settings"))
-                            yield List.of();
-                        PlayerProfile playerCountry = PlayerProfile.byCommandSender(sender);
-                        if (playerCountry == null)
-                            yield List.of();
-                        // get settings typed before
-                        SettingData settingData = SettingData.map.get(args[1]);
-                        if (settingData == null)
-                            yield List.of();
-                        // return possible values for this setting
-                        yield settingData.getTabAutoCompleteOptions();
-                    }
-
-                    default -> List.of();
-                };
-
-            default -> List.of();
-        };
+        findAndExecuteSubCommand(sender, args, false);
     }
 }

@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
@@ -9,9 +10,14 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class gcCitizenshipRenounce {
+public class gcCitizenshipRenounce extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcCitizenshipRenounce(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if doesnt have citizenship, escape
@@ -28,14 +34,14 @@ public class gcCitizenshipRenounce {
 
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
-                                  new Confirmation(gcCitizenshipRenounce::onConfirm,
+                                  new Confirmation(this::onConfirm,
                                                    sender,
                                                    new String[] { }),
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
+    @Override
+    public void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         Country country = playerProfile.getCitizenship();
@@ -44,7 +50,7 @@ public class gcCitizenshipRenounce {
         playerProfile.clearCitizenship();
 
         // play sound to renouncer
-        SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        SoundUtil.playSound((Player) sender, SoundUtil.SoundEffect.CHAT_NOTIF);
 
         // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.username + "§6 is no longer a citizen of §f" + country.name + "§6!", true);

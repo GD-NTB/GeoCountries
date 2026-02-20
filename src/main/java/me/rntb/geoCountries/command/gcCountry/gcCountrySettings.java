@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcCountry;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.SettingData;
@@ -9,10 +10,16 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
+import java.util.List;
 
-public class gcCountrySettings {
+public class gcCountrySettings extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcCountrySettings(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if doesnt have citizenship, escape
@@ -60,7 +67,7 @@ public class gcCountrySettings {
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 
-    private static TextComponent.Builder getMessageAll(Country country, boolean isLeader) {
+    private TextComponent.Builder getMessageAll(Country country, boolean isLeader) {
         TextComponent.Builder message = Component.text();
         for (String key : country.settings.keySet()) {
             SettingData settingData = SettingData.map.get(key);
@@ -75,7 +82,7 @@ public class gcCountrySettings {
         return message;
     }
 
-    private static TextComponent.Builder getMessageSpecific(String key, Country country, boolean isLeader) {
+    private TextComponent.Builder getMessageSpecific(String key, Country country, boolean isLeader) {
         SettingData settingData = SettingData.map.get(key);
         if (settingData == null)
             return null;
@@ -84,5 +91,25 @@ public class gcCountrySettings {
             message.append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
                                                                "/gc country settings " + key + " " + settingData.defaultValue));
         return message;
+    }
+
+    @Override
+    public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        if (!sender.hasPermission(this.RequiredPermission + ".settings"))
+            return List.of();
+        Country playerCountry = Country.byCommandSender(sender);
+        if (playerCountry == null)
+            return List.of();
+
+        // if no setting mentioned, return all settings as strings
+        if (args.length == 0)
+            return playerCountry.settings.keySet().stream().toList();
+
+        // get setting typed before
+        SettingData settingData = SettingData.map.get(args[1]);
+        if (settingData == null)
+            return  List.of();
+        // return possible values for this settings
+        return settingData.getTabCompletion();
     }
 }

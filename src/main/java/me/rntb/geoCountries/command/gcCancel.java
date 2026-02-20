@@ -7,7 +7,6 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import java.util.List;
 import java.util.UUID;
 
 public class gcCancel extends SubCommand {
@@ -32,10 +31,5 @@ public class gcCancel extends SubCommand {
         // cancel
         Confirmation.stopWaiting(uuid, Confirmation.StopWaitingEvent.CANCELLED, true);
         Response.stopWaiting(uuid, Response.StopWaitingEvent.CANCELLED, true);
-    }
-
-    @Override
-    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
-        return List.of();
     }
 }

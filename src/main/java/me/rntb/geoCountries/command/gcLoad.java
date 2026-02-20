@@ -7,8 +7,6 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import java.util.List;
-
 public class gcLoad extends SubCommand {
 
     public gcLoad(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
@@ -33,10 +31,5 @@ public class gcLoad extends SubCommand {
         ChatUtil.sendPrefixedMessage(sender, "§eLoading all data collections...");
         DataCollectionManager.init();
         ChatUtil.sendPrefixedMessage(sender, "§aLoaded all data!");
-    }
-
-    @Override
-    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
-        return List.of();
     }
 }

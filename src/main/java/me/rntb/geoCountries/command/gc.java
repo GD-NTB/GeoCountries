@@ -17,7 +17,11 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 public class gc implements TabExecutor {
 
@@ -45,8 +49,7 @@ public class gc implements TabExecutor {
 
     public static List<SubCommand> allowedSubCommands(CommandSender sender) {
         return subCommands.values().stream()
-                                   .filter(sc -> sender.hasPermission(sc.RequiredPermission))
-                                   .toList();
+                                   .filter(sc -> sender.hasPermission(sc.RequiredPermission)).toList();
     }
     public static List<String> allowedSubCommandsAsStrings(CommandSender sender) {
         return subCommands.entrySet().stream()
@@ -55,38 +58,34 @@ public class gc implements TabExecutor {
                                      .sorted().toList();
     }
     public static List<String> subCommandsTabAutoCompleteList(CommandSender sender) {
-        List<String> subCommandsStrings = new ArrayList<>(allowedSubCommandsAsStrings(sender));
-        subCommandsStrings.addAll(subCommandsAliases.keySet());
-        // yeah the list is gonna have been sorted twice, and what mate?
-        return subCommandsStrings.stream()
-                                 .sorted().toList();
+        return Stream.concat(subCommands.entrySet().stream()
+                                                   .filter(sc -> sender.hasPermission(sc.getValue().RequiredPermission))
+                                                   .map(Map.Entry::getKey),
+                             subCommandsAliases.keySet().stream())
+                     .sorted().toList();
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args)  {
+        if (!sender.hasPermission("gc")) {
+            ChatUtil.sendNoPermissionMessage(sender, "/gc", "gc");
+            return true;
+        }
+
         if (args.length == 0)
             onCommandNoArgs(sender); // /gc
         else
             onCommandArgs(sender, args); // /gc [...]
+
         return true;
     }
 
     private void onCommandNoArgs(@NotNull CommandSender sender) {
-        if (!sender.hasPermission("gc")) {
-            ChatUtil.sendNoPermissionMessage(sender, "/gc", "gc");
-            return;
-        }
-        // do /gc gui
-        if (!sender.hasPermission("gc.gui")) {
-            ChatUtil.sendNoPermissionMessage(sender, "/gc gui", "gc.gui");
-            return;
-        }
-        subCommands.get("gui").onCommand(sender, new String[]{ });
-
 //        ChatUtil.sendPrefixedMessage(sender, """
 //                                             §aThis server is running §f%s§a, a plugin developed by §frNTB§a.
 //                                             Do §f/gc help§a for a list of commands!"""
-//                                             .formatted(GeoCountries.PluginNameAndVersion));
+//                                             .formatted(gcCountries.PluginNameAndVersion));
+        subCommands.get("gui").onCommandEntered(sender, new String[]{ });
     }
 
     private void onCommandArgs(@NotNull CommandSender sender, @NotNull String[] args) {
@@ -115,7 +114,7 @@ public class gc implements TabExecutor {
         // get subargs (the [...] in /gc [subcommand] [...])
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
 
-        // do perms and console check then subcommand.onCommandArgs
+        // do perms and console check then subcommand.onCommand
         subCommand.onCommandEntered(sender, subArgs);
     }
 
@@ -140,8 +139,9 @@ public class gc implements TabExecutor {
                     commandName = subCommandNameAlias;
                 // find subcommand
                 SubCommand subCommand = subCommands.get(commandName);
-                if (subCommand == null || !sender.hasPermission(subCommand.RequiredPermission))
+                if (subCommand == null || !sender.hasPermission(subCommand.RequiredPermission)) {
                     yield List.of();
+                }
 
                 // get tab completion of subcommand
                 yield subCommand.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));

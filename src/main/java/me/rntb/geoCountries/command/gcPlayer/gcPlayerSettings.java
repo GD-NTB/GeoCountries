@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcPlayer;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -8,10 +9,16 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
+import java.util.List;
 
-public class gcPlayerSettings {
+public class gcPlayerSettings extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcPlayerSettings(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if setting a setting, set and escape
@@ -45,7 +52,7 @@ public class gcPlayerSettings {
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 
-    private static TextComponent.Builder getMessageAll(PlayerProfile playerProfile) {
+    private TextComponent.Builder getMessageAll(PlayerProfile playerProfile) {
         TextComponent.Builder message = Component.text();
         for (String key : playerProfile.settings.keySet()) {
             SettingData settingData = SettingData.map.get(key);
@@ -59,12 +66,32 @@ public class gcPlayerSettings {
         return message;
     }
 
-    private static TextComponent.Builder getMessageSpecific(String key, PlayerProfile playerProfile) {
+    private TextComponent.Builder getMessageSpecific(String key, PlayerProfile playerProfile) {
         SettingData settingData = SettingData.map.get(key);
         if (settingData == null)
             return null;
         return Component.text().append(Component.text(settingData.toStringFull(key, playerProfile.settings.get(key)) + " "))
                                .append(SettingData.getEditButtonComponents("/gc player settings " + key + " ",
                                                                            "/gc player settings " + key + " " + settingData.defaultValue));
+    }
+
+    @Override
+    public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        if (!sender.hasPermission(this.RequiredPermission + ".settings"))
+            return List.of();
+        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        if (playerProfile == null)
+            return List.of();
+
+        // if no setting mentioned, return all settings as strings
+        if (args.length == 0)
+            return playerProfile.settings.keySet().stream().toList();
+
+        // get setting typed before
+        SettingData settingData = SettingData.map.get(args[1]);
+        if (settingData == null)
+            return List.of();
+        // return possible values for this setting
+        return settingData.getTabCompletion();
     }
 }

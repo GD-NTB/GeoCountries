@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -10,17 +11,21 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class gcCitizenshipSent {
+public class gcCitizenshipSent extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcCitizenshipSent(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         TextComponent.Builder message = Component.text();
 
         message.append(ChatUtil.newlineIfPrefixIsEmptyComponent())
                .append(Component.text("§6========== CITIZENSHIP APPLICATIONS =========="))
                .append(Component.newline());
 
-        Player player = (Player) sender;
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.getUniqueId());
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(((Player) sender).getUniqueId());
         if (cApplications == null || cApplications.isEmpty()) {
             message.append(Component.text("§cYou have not sent any citizenship applications.\n"));
         }

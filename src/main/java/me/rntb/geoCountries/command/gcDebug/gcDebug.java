@@ -1,11 +1,8 @@
 package me.rntb.geoCountries.command.gcDebug;
 
 import me.rntb.geoCountries.command.SubCommand;
-import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 
-import java.util.List;
 import java.util.Map;
 
 public class gcDebug extends SubCommand {
@@ -18,30 +15,8 @@ public class gcDebug extends SubCommand {
                           §f> createcountry [name]: §2Creates a test country.
                           §f> soundtest: §2Plays a sound effect.""";
         this.subSubCommands = Map.ofEntries(
-                Map.entry("createcountry", gcDebugCreateCountry::onCommand),
-                Map.entry("soundtest", gcDebugSoundTest::onCommand)
+                Map.entry("createcountry", new gcDebugCreateCountry("createcountry", "/gc debug createcountry", "gc.debug")),
+                Map.entry("soundtest", new gcDebugSoundTest("soundtest", "/gc debug soundtest", "gc.soundtest"))
         );
-    }
-
-    @Override
-    public void onCommand(CommandSender sender, String[] args) {
-        if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, """
-                                                 §a%s
-                                                 Usage: §f%s [...]"""
-                                                 .formatted(this.HelpString, this.DisplayName));
-            return;
-        }
-        findAndExecuteSubCommand(sender, args, subSubCommands, true);
-    }
-
-    @Override
-    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
-        return switch (args.length) {
-            // /gc debug [commands]
-            case 1 -> subSubCommands.keySet().stream().toList();
-
-            default -> List.of();
-        };
     }
 }

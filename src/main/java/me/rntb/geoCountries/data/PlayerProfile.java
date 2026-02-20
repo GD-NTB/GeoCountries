@@ -231,6 +231,7 @@ public class PlayerProfile extends DataCollection {
     }
 
     // settings
+    // todo: use linkedhashmap
     public Map<String, String> settings = new HashMap<>();
     public static final Map<String, String> defaultSettings = new HashMap<>(
             Map.ofEntries(
@@ -248,6 +249,14 @@ public class PlayerProfile extends DataCollection {
 
     public UUID getLeaderOf() {
         return rank == PlayerRank.LEADER ? this.citizenship : null;
+    }
+
+    public List<String> getSentCitizenshipApplicationsAsStrings() {
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(this.uuid);
+        if (cApplications == null)
+            return List.of();
+        return cApplications.stream()
+                            .map(ca -> ca.getToCountry().name).toList();
     }
 
     public PlayerProfile() { }

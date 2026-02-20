@@ -21,7 +21,8 @@ public class Country extends DataCollection {
     public static ArrayList<Country> all = null;
     public static List<String> allAsNames(boolean alphabetical) {
         Stream<String> countries = byName.keySet().stream();
-        if (!alphabetical) return countries.toList();
+        if (!alphabetical)
+            return countries.toList();
         return countries.sorted().toList();
     }
 
@@ -154,7 +155,7 @@ public class Country extends DataCollection {
     }
 
     // settings
-    // todo: these are unordered when displayed as we use .keySet, need to fix somehow
+    // todo: use linkedhashmap
     public Map<String, String> settings = new HashMap<>();
     public static final Map<String, String>  defaultSettings = new HashMap<>(
             Map.ofEntries(
@@ -171,6 +172,14 @@ public class Country extends DataCollection {
         Instant instant = Instant.ofEpochMilli(this.timeCreated);
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         return dateTime.format(StringUtil.timeFormatter);
+    }
+
+    public List<String> getReceivedCitizenshipApplicationsAsStrings() {
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(this.uuid);
+        if (cApplications == null)
+            return List.of();
+        return cApplications.stream()
+                            .map(ca -> ca.getApplicant().username).toList();
     }
 
     public Country() { }

@@ -1,16 +1,21 @@
 package me.rntb.geoCountries.command.gcCountry;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-public class gcCountryDissolve {
+public class gcCountryDissolve extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcCountryDissolve(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if doesnt have citizenship, escape
@@ -27,13 +32,14 @@ public class gcCountryDissolve {
 
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
-                                  new Confirmation(gcCountryDissolve::onConfirm,
+                                  new Confirmation(this::onConfirm,
                                                    sender,
                                                    new String[] { }),
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender, String[] args) {
+    @Override
+    public void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
         Country country = playerProfile.getCitizenship();
 

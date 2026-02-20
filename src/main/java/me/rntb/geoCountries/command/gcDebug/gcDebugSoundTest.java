@@ -1,13 +1,19 @@
 package me.rntb.geoCountries.command.gcDebug;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.SoundUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class gcDebugSoundTest {
+public class gcDebugSoundTest extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcDebugSoundTest(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
             ChatUtil.sendPrefixedPlayerOnlyErrorMessage("/gc debug soundtest");
             return;

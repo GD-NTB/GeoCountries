@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcPurge;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -9,18 +10,24 @@ import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 
-public class gcPurgePlayerProfile {
+public class gcPurgePlayerProfile extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcPurgePlayerProfile(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
-                                  new Confirmation(gcPurgePlayerProfile::onConfirm,
+                                  new Confirmation(this::onConfirm,
                                                    sender,
                                                    new String[] { }),
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender, String[] args) {
+    @Override
+    public void onConfirm(CommandSender sender, String[] args) {
         int count = PlayerProfile.all.size();
         for (PlayerProfile playerProfile : new ArrayList<>(PlayerProfile.all)) // new ArrayList as we are concurrently modifying
             PlayerProfile.delete(playerProfile);

@@ -1,13 +1,10 @@
 package me.rntb.geoCountries.command.gcCountry;
 
 import me.rntb.geoCountries.command.SubCommand;
-import me.rntb.geoCountries.data.Country;
-import me.rntb.geoCountries.types.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import java.util.List;
 import java.util.Map;
 
 public class gcCountry extends SubCommand {
@@ -25,84 +22,27 @@ public class gcCountry extends SubCommand {
                           §f> rename [name]: §2Renames your country.
                           §f> settings [setting?] [value?]: §2Sets/lists your country's settings""";
         this.subSubCommands = Map.ofEntries(
-                Map.entry("citizens", gcCountryCitizens::onCommand),
-                Map.entry("create", gcCountryCreate::onCommand),
-                Map.entry("dissolve", gcCountryDissolve::onCommand),
-                Map.entry("info", gcCountryInfo::onCommand),
-                Map.entry("list", gcCountryList::onCommand),
-                Map.entry("rename", gcCountryRename::onCommand),
-                Map.entry("settings", gcCountrySettings::onCommand)
+                Map.entry("citizens", new gcCountryCitizens("citizens", "/gc country citizens", "gc.country.citizens")),
+                Map.entry("create", new gcCountryCreate("create", "/gc country create", "gc.country.create")),
+                Map.entry("dissolve", new gcCountryDissolve("dissolve", "/gc country dissolve", "gc.country.dissolve")),
+                Map.entry("info", new gcCountryInfo("info", "/gc country info", "gc.country.info")),
+                Map.entry("list", new gcCountryList("list", "/gc country list", "gc.country.list")),
+                Map.entry("rename", new gcCountryRename("rename", "/gc country rename", "gc.country.rename")),
+                Map.entry("settings", new gcCountrySettings("settings", "/gc country settings", "gc.country.settings"))
         );
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // /gc country
         if (args.length == 0) {
             // do /gc country info
             if (!sender.hasPermission("gc.country.info")) {
                 ChatUtil.sendNoPermissionMessage(sender, "/gc country info", "gc.country.info");
                 return;
             }
-            gcCountryInfo.onCommand(sender, args);
+            this.subSubCommands.get("info").onCommand(sender, args);
             return;
         }
-        findAndExecuteSubCommand(sender, args, subSubCommands, false);
-    }
-
-    @Override
-    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
-        return switch(args.length) {
-            // /gc country [commands]
-            case 1 -> subSubCommands.keySet().stream()
-                                          .filter(x -> sender.hasPermission(this.RequiredPermission + "." + x))
-                                          .toList();
-
-            // gc country [command] [...]
-            case 2 ->
-                switch (args[0]) {
-                    // /gc country citizens [countries]
-                    case "citizens" -> sender.hasPermission(this.RequiredPermission + ".citizens") ? Country.allAsNames(true) : List.of();
-
-                    // /gc country info [countries]
-                    case "info" -> sender.hasPermission(this.RequiredPermission + ".info") ? Country.allAsNames(true) : List.of();
-
-                    // /gc country settings [settings]
-                    case "settings" -> {
-                        if (!sender.hasPermission(this.RequiredPermission + ".settings"))
-                            yield List.of();
-                        Country playerCountry = Country.byCommandSender(sender);
-                        if (playerCountry == null)
-                            yield List.of();
-                        // return all settings as strings
-                        yield playerCountry.settings.keySet().stream().toList();
-                    }
-
-                    default -> List.of();
-                };
-
-            // gc country [command] [...] [...]
-            case 3 ->
-                switch (args[0]) {
-                    // /gc country settings [setting] [value]
-                    case "settings" -> {
-                        if (!sender.hasPermission(this.RequiredPermission + ".settings"))
-                            yield List.of();
-                        Country playerCountry = Country.byCommandSender(sender);
-                        if (playerCountry == null)
-                            yield List.of();
-                        // get setting typed before
-                        SettingData settingData = SettingData.map.get(args[1]);
-                        if (settingData == null)
-                            yield List.of();
-                        // return possible values for this settings
-                        yield settingData.getTabAutoCompleteOptions();
-                    }
-
-                    default -> List.of();
-                };
-
-            default -> List.of();
-        };
+        findAndExecuteSubCommand(sender, args, false);
     }
 }

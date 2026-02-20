@@ -1,15 +1,24 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class gcCitizenshipRevoke {
+import java.util.List;
 
-    public static void onCommand(CommandSender sender, String[] args) {
+public class gcCitizenshipRevoke extends SubSubCommand {
+
+    public gcCitizenshipRevoke(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the player you want to revoke the citizenship of!");
             return;
@@ -46,13 +55,14 @@ public class gcCitizenshipRevoke {
 
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
-                                  new Confirmation(gcCitizenshipRevoke::onConfirm,
+                                  new Confirmation(this::onConfirm,
                                                    sender,
                                                    new String[] { playerProfile.username }),
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender, String[] args) {
+    @Override
+    public void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byUsername.get(args[0]);
 
         Country country = playerProfile.getCitizenship();
@@ -63,5 +73,12 @@ public class gcCitizenshipRevoke {
 
         // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.username + "§6 is no longer a citizen of §f" + country.name + "§6!", true);
+    }
+
+    @Override
+    public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        if (!sender.hasPermission(this.RequiredPermission + ".unsend"))
+            return List.of();
+        return PlayerProfile.get((Player) sender).getSentCitizenshipApplicationsAsStrings();
     }
 }

@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcDebug;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
@@ -7,9 +8,14 @@ import org.bukkit.command.CommandSender;
 
 import java.util.UUID;
 
-public class gcDebugCreateCountry {
+public class gcDebugCreateCountry extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcDebugCreateCountry(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you want to create!");
             return;

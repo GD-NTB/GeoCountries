@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcCountry;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -7,13 +8,20 @@ import me.rntb.geoCountries.util.DateUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.command.CommandSender;
 
-public class gcCountryInfo {
+import java.util.List;
 
-    public static void onCommand(CommandSender sender, String[] args) {
+public class gcCountryInfo extends SubSubCommand {
+
+    public gcCountryInfo(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         Country country;
         // if no args, get player country
         if (args.length == 0) {
-            PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);;
+            PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
             country = playerProfile.getCitizenship();
             if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
@@ -57,5 +65,10 @@ public class gcCountryInfo {
                                     country.timeCreatedAsString(),
                                     daysAgo, StringUtil.leadingS(daysAgo));
         ChatUtil.sendPrefixedMessage(sender, message);
+    }
+
+    @Override
+    public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        return sender.hasPermission(this.RequiredPermission + ".info") ? Country.allAsNames(true) : List.of();
     }
 }

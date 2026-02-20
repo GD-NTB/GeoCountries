@@ -7,8 +7,6 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import java.util.List;
-
 public class gcSave extends SubCommand {
 
     public gcSave(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
@@ -33,10 +31,5 @@ public class gcSave extends SubCommand {
         ChatUtil.sendPrefixedMessage(sender, "§eSaving all data collections...");
         DataCollectionManager.save();
         ChatUtil.sendPrefixedMessage(sender, "§aSaved all data!");
-    }
-
-    @Override
-    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
-        return List.of();
     }
 }

@@ -1,11 +1,8 @@
 package me.rntb.geoCountries.command.gcConfig;
 
 import me.rntb.geoCountries.command.SubCommand;
-import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 
-import java.util.List;
 import java.util.Map;
 
 public class gcConfig extends SubCommand {
@@ -17,31 +14,7 @@ public class gcConfig extends SubCommand {
                           §f/gc config [...]: §aManages the plugin config file at config.yml.
                           §f> reload: §2Reloads the config and updates the plugin's state.""";
         this.subSubCommands = Map.ofEntries(
-                Map.entry("reload", gcConfigReload::onCommand)
+                Map.entry("reload", new gcConfigReload("reload", "/gc config reload", "gc.config"))
         );
-    }
-
-    @Override
-    public void onCommand(CommandSender sender, String[] args) {
-        if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, """
-                                                 §a%s
-                                                 Usage: §f%s [...]"""
-                                                 .formatted(this.HelpString, this.DisplayName));
-            return;
-        }
-        findAndExecuteSubCommand(sender, args, subSubCommands, true);
-    }
-
-    @Override
-    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
-        return switch (args.length) {
-            // /gc config [commands]
-            case 1 -> subSubCommands.keySet().stream()
-                                          .filter(x -> sender.hasPermission(this.RequiredPermission + "." + x))
-                                          .toList();
-
-            default -> List.of();
-        };
     }
 }

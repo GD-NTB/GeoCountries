@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcPlayer;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -8,9 +9,16 @@ import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-public class gcPlayerInfo {
+import java.util.List;
 
-    public static void onCommand(CommandSender sender, String[] args) {
+public class gcPlayerInfo extends SubSubCommand {
+
+    public gcPlayerInfo(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile;
         // if no args, get player profile
         if (args.length == 0) {
@@ -52,5 +60,12 @@ public class gcPlayerInfo {
                                    playerProfile.timeFirstJoinedAsString(),
                                    daysAgo, StringUtil.leadingS(daysAgo));
         ChatUtil.sendPrefixedMessage(sender, message);
+    }
+
+    @Override
+    public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        if (!sender.hasPermission(this.RequiredPermission))
+            return List.of();
+        return PlayerProfile.allAsUsernames(true);
     }
 }

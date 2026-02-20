@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcPurge;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -8,18 +9,24 @@ import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 
-public class gcPurgeCountry {
+public class gcPurgeCountry extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcPurgeCountry(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
-                                  new Confirmation(gcPurgeCountry::onConfirm,
+                                  new Confirmation(this::onConfirm,
                                                    sender,
                                                    new String[] { }),
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender, String[] args) {
+    @Override
+    public void onConfirm(CommandSender sender, String[] args) {
         int count = Country.all.size();
         for (Country cd : new ArrayList<>(Country.all)) // new ArrayList as we are concurrently modifying
             Country.delete(cd);

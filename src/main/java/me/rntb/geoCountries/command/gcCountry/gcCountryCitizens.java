@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcCountry;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Pagination;
@@ -10,13 +11,19 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
+import java.util.List;
 
-public class gcCountryCitizens {
+public class gcCountryCitizens extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcCountryCitizens(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         Country country;
         int index = 1;
-        String countryName = "";
+        String countryName;
 
         // if no args, country = player's country
         if (args.length == 0) {
@@ -63,10 +70,8 @@ public class gcCountryCitizens {
                .append(Component.text("§6========== COUNTRY CITIZENS =========="))
                .append(Component.newline());
 
-        int effectiveIndex = 0;
-        int pageCount = 0;
-        String commandForPrevious = "";
-        String commandForNext = "";
+        int effectiveIndex, pageCount;
+        String commandForPrevious, commandForNext;
 
         int citizenCount = country.citizenCount();
         if (citizenCount == 0) {
@@ -99,5 +104,10 @@ public class gcCountryCitizens {
         message.append(ChatUtil.chatPageControlButtons(commandForPrevious, commandForNext, effectiveIndex, pageCount));
 
         ChatUtil.sendPrefixedMessage(sender, message.build());
+    }
+
+    @Override
+    public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        return sender.hasPermission(this.RequiredPermission + ".citizens") ? Country.allAsNames(true) : List.of();
     }
 }

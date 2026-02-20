@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
@@ -11,11 +12,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public class gcCitizenshipApply {
+public class gcCitizenshipApply extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcCitizenshipApply(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you want to apply to!");
             return;
@@ -81,16 +88,16 @@ public class gcCitizenshipApply {
 
         // start waiting for response
         Response.startWaiting(playerUUID,
-                              new Response(gcCitizenshipApply::onResponse,
+                              new Response(this::onResponse,
                                            sender),
                               true);
     }
 
-    private static void onResponse(CommandSender sender, String response) {
+    @Override
+    public void onResponse(CommandSender sender, String response) {
         String responseClean = response.trim();
 
-        Player player = (Player) sender;
-        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(player.getUniqueId());
+        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(((Player) sender).getUniqueId());
 
         // validate response
         String validation = StringUtil.validateResponse(responseClean);
@@ -104,5 +111,10 @@ public class gcCitizenshipApply {
 
         // send application
         CitizenshipApplication.send(cApplication, true);
+    }
+
+    @Override
+    public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        return sender.hasPermission(this.RequiredPermission + ".apply") ? Country.allAsNames(true) : List.of();
     }
 }

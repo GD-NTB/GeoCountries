@@ -1,13 +1,19 @@
 package me.rntb.geoCountries.command.gcCountry;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 
-public class gcCountryList {
+public class gcCountryList extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcCountryList(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         // todo: pages
         StringBuilder sb = new StringBuilder(ChatUtil.newlineIfPrefixIsEmpty() +
                                              "§6========== COUNTRY LIST ==========\n");

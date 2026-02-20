@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcCountry;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
@@ -10,11 +11,14 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
+public class gcCountryRename extends SubSubCommand {
 
-public class gcCountryRename {
+    public gcCountryRename(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
 
-    public static void onCommand(CommandSender sender, String[] args) {;
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if doesnt have citizenship, escape
@@ -45,15 +49,15 @@ public class gcCountryRename {
 
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
-                                  new Confirmation(gcCountryRename::onConfirm,
+                                  new Confirmation(this::onConfirm,
                                                    sender,
                                                    new String[] { countryName }),
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender, String[] args) {
+    @Override
+    public void onConfirm(CommandSender sender, String[] args) {
         String countryName = args[0];
-        Player player = (Player) sender;
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
         Country country = playerProfile.getCitizenship();
 
@@ -64,7 +68,7 @@ public class gcCountryRename {
         ChatUtil.broadcastPrefixedMessage("§6The country of §f" + country.name + "§6 has been renamed to §f" + countryName + "§6!");
 
         // play sound to renamer
-        SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        SoundUtil.playSound((Player) sender, SoundUtil.SoundEffect.CHAT_NOTIF);
 
         // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has now been renamed to §f" + countryName + "§6!", true);

@@ -1,18 +1,25 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.UuidUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class gcCitizenshipReceived {
+public class gcCitizenshipReceived extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcCitizenshipReceived(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile senderProfile = PlayerProfile.byCommandSender(sender);
 
         // if not leader, escape
@@ -65,7 +72,7 @@ public class gcCitizenshipReceived {
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 
-    private static TextComponent.Builder doCommandList(PlayerProfile senderProfile) {
+    private TextComponent.Builder doCommandList(PlayerProfile senderProfile) {
         TextComponent.Builder message = Component.text();
 
         message.append(ChatUtil.newlineIfPrefixIsEmptyComponent())
@@ -121,7 +128,7 @@ public class gcCitizenshipReceived {
         return message;
     }
 
-    public static TextComponent.Builder doCommandSpecific(CitizenshipApplication cApplication) {
+    private TextComponent.Builder doCommandSpecific(CitizenshipApplication cApplication) {
         TextComponent.Builder message = Component.text();
 
         String reason = cApplication.reason;
@@ -152,5 +159,13 @@ public class gcCitizenshipReceived {
                .append(Component.text("§6==========================================="));
 
         return message;
+    }
+
+    @Override
+    public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
+        if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission(this.RequiredPermission + ".received"))
+            return List.of();
+        return player.getCitizenship().getReceivedCitizenshipApplicationsAsStrings();
     }
 }

@@ -2,7 +2,6 @@ package me.rntb.geoCountries.command.gcPurge;
 
 import me.rntb.geoCountries.command.SubCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
@@ -20,34 +19,22 @@ public class gcPurge extends SubCommand {
                           §f> citizenshipapplication: §2Purges all citizenship applications in memory.
                           §f> country: §2Purges all Country data collections.
                           §f> playerprofile: §2Purges all PlayerProfile data collections.
-                          §f> uuid [uuid]: §2Purges a PlayerProfile by UUID.;
+                          §f> uuid [uuid]: §2Purges a PlayerProfile by UUID.
                           §f> username [username]: §2Purges a PlayerProfile by username.""";
         this.subSubCommands = Map.ofEntries(
-                Map.entry("citizenshipapplication", gcPurgeCitizenshipApplication::onCommand),
-                Map.entry("country", gcPurgeCountry::onCommand),
-                Map.entry("playerprofile", gcPurgePlayerProfile::onCommand),
-                Map.entry("uuid", gcPurgeUUID::onCommand),
-                Map.entry("username", gcPurgeUsername::onCommand)
+                Map.entry("citizenshipapplication", new gcPurgeCitizenshipApplication("citizenshipapplication", "/gc purge citizenshipapplication", "gc.purge")),
+                Map.entry("country", new gcPurgeCountry("country", "/gc purge country", "gc.purge")),
+                Map.entry("playerprofile", new gcPurgePlayerProfile("playerprofile", "/gc purge playerprofile", "gc.purge")),
+                Map.entry("uuid", new gcPurgeUUID("uuid", "/gc purge uuid", "gc.purge")),
+                Map.entry("username", new gcPurgeUsername("username", "/gc purge username", "gc.purge"))
         );
-    }
-
-    @Override
-    public void onCommand(CommandSender sender, String[] args) {
-        if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, """
-                                                 §a%s
-                                                 Usage: §f%s [...]"""
-                                                 .formatted(this.HelpString, this.DisplayName));
-            return;
-        }
-        findAndExecuteSubCommand(sender, args, subSubCommands, true);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
         return switch (args.length) {
             // /gc purge [commands]
-            case 1 -> subSubCommands.keySet().stream().toList();
+            case 1 -> this.subSubCommands.keySet().stream().toList();
 
             // /gc purge [...] 2
             case 2 ->

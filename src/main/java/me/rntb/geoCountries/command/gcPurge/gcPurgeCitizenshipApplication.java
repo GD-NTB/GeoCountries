@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcPurge;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -9,18 +10,24 @@ import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 
-public class gcPurgeCitizenshipApplication {
+public class gcPurgeCitizenshipApplication extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcPurgeCitizenshipApplication(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
-                                  new Confirmation(gcPurgeCitizenshipApplication::onConfirm,
+                                  new Confirmation(this::onConfirm,
                                                    sender,
                                                    new String[] { }),
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender, String[] args) {
+    @Override
+    public void onConfirm(CommandSender sender, String[] args) {
         int count = CitizenshipApplication.sentAll.size();
 
         for (CitizenshipApplication ca : new ArrayList<>(CitizenshipApplication.sentAll)) // new ArrayList as we are concurrently modifying

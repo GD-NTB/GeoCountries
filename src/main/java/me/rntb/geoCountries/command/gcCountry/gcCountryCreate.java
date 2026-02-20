@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.command.gcCountry;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
@@ -12,9 +13,14 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class gcCountryCreate {
+public class gcCountryCreate extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcCountryCreate(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // already has citizenship
@@ -40,15 +46,15 @@ public class gcCountryCreate {
 
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
-                                  new Confirmation(gcCountryCreate::onConfirm,
+                                  new Confirmation(this::onConfirm,
                                                    sender,
                                                    new String[] { countryName }),
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender, String[] args) {
+    @Override
+    public void onConfirm(CommandSender sender, String[] args) {
         String countryName = args[0];
-        Player player = (Player) sender;
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         Country newCountry = new Country(UUID.randomUUID(), countryName);
@@ -65,6 +71,6 @@ public class gcCountryCreate {
         ChatUtil.broadcastPrefixedMessage("§6A new country §f" + countryName + "§6 has just been created!");
 
         // play sound to creator
-        SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        SoundUtil.playSound((Player) sender, SoundUtil.SoundEffect.CHAT_NOTIF);
     }
 }

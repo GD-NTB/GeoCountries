@@ -192,7 +192,7 @@ public class SettingData {
         };
     }
 
-    public List<String> getTabAutoCompleteOptions() {
+    public List<String> getTabCompletion() {
         return switch (this.type) {
             case BOOL -> List.of("true", "false");
             case STRING, COUNTRY_PREFIX, COUNTRY_MOTTO -> List.of("null");

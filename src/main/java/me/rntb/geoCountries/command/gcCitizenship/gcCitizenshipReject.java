@@ -1,17 +1,23 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
+import me.rntb.geoCountries.command.SubSubCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class gcCitizenshipReject {
+public class gcCitizenshipReject extends SubSubCommand {
 
-    public static void onCommand(CommandSender sender, String[] args) {
+    public gcCitizenshipReject(String name, String displayName, String requiredPermission) {
+        super(name, displayName, requiredPermission);
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the player you want to reject the citizenship application of!");
             return;
@@ -60,5 +66,13 @@ public class gcCitizenshipReject {
         CitizenshipApplication.reject(cApplication, true);
 
         ChatUtil.sendPrefixedMessage(sender, "§aRejected §f" + otherPlayerName + "§a's citizenship application.");
+    }
+
+    @Override
+    public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
+        if (player.rank != PlayerProfile.PlayerRank.LEADER || !sender.hasPermission(this.RequiredPermission + ".reject"))
+            return List.of();
+        return player.getCitizenship().getReceivedCitizenshipApplicationsAsStrings();
     }
 }

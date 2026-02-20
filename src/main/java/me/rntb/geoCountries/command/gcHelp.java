@@ -17,7 +17,7 @@ public class gcHelp extends SubCommand {
         this.HelpString = "Lists all commands and gives help for any command.";
         this.HelpPage   = """
                           §f/gc help: §aLists all commands and a summary of what each does.
-                          §f/gc help [subcommands]: §aDisplays more information on a specific command, as well as what subcommands it has.""";;
+                          §f/gc help [subcommands]: §aDisplays more information on a specific command, as well as what subcommands it has.""";
     }
 
     @Override
@@ -28,10 +28,8 @@ public class gcHelp extends SubCommand {
                .append(Component.text("§6========== HELP =========="))
                .append(Component.newline());
 
-        int effectiveIndex = 0;
-        int pageCount = 0;
-        String commandForPrevious = "";
-        String commandForNext = "";
+        int effectiveIndex = 0, pageCount = 0;
+        String commandForPrevious, commandForNext;
 
         // /gc help
         if (args.length == 0) {
@@ -108,12 +106,11 @@ public class gcHelp extends SubCommand {
     private static Pagination getHelpAll(CommandSender sender, int index) {
         StringBuilder sb = new StringBuilder();
         List<SubCommand> subCommands;
-        if (sender instanceof Player player) {
+        if (sender instanceof Player player)
             subCommands = gc.allowedSubCommands(player);
-        }
-        else {
+        else
             subCommands = gc.subCommands.values().stream().toList();
-        }
+
         // append help for each command
         for (SubCommand sc : subCommands) {
             sb.append("§f").append(sc.DisplayName).append(": §a").append(sc.HelpString).append("§f");
@@ -144,12 +141,9 @@ public class gcHelp extends SubCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender,  String[] args) {
-        Player player = (Player) sender;
-        return switch (args.length) {
-            // /gc help 1
-            case 1 -> gc.subCommandsTabAutoCompleteList(player);
+        if (args.length == 1)
+            return gc.subCommandsTabAutoCompleteList(sender);
 
-            default -> List.of();
-        };
+        return List.of();
     }
 }
