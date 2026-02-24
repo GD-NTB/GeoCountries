@@ -10,6 +10,7 @@ public class gcDebugSoundTest extends SubSubCommand {
 
     public gcDebugSoundTest(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Plays a sound effect.";
     }
 
     @Override

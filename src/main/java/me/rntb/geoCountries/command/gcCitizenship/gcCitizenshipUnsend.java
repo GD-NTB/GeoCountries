@@ -15,6 +15,7 @@ public class gcCitizenshipUnsend extends SubSubCommand {
 
     public gcCitizenshipUnsend(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Unsends a citizenship application that you previously sent.";
     }
 
     @Override

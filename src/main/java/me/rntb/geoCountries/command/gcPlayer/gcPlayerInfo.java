@@ -15,6 +15,7 @@ public class gcPlayerInfo extends SubSubCommand {
 
     public gcPlayerInfo(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Displays info about a particular player.";
     }
 
     @Override

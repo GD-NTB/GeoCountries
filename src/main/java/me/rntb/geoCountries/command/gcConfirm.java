@@ -12,9 +12,7 @@ public class gcConfirm extends SubCommand {
 
     public gcConfirm(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
         super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Confirms a command or action.";
-        this.HelpPage   = """
-                          §f/gc confirm: §aConfirms the last command/action you were asked to confirm.""";
+        this.HelpString = "Confirms the last command/action you were asked to confirm.";
     }
 
     @Override

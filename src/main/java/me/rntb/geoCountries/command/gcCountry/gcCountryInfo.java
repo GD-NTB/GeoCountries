@@ -14,6 +14,7 @@ public class gcCountryInfo extends SubSubCommand {
 
     public gcCountryInfo(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Displays info about your/any particular country.";
     }
 
     @Override

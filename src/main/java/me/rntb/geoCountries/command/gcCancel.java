@@ -13,9 +13,7 @@ public class gcCancel extends SubCommand {
 
     public gcCancel(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
         super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Cancels a command or action.";
-        this.HelpPage   = """
-                          §f/gc cancel: §aCancels the last command you were trying to do.""";
+        this.HelpString = "Cancels the last command/action you were trying to do.";
     }
 
     @Override

@@ -11,9 +11,7 @@ public class gcSave extends SubCommand {
 
     public gcSave(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
         super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Saves all plugin data.";
-        this.HelpPage   = """
-                          §f/gc save: §aSaves all plugin data in memory to the disk.""";
+        this.HelpString = "Saves all plugin data in memory to the disk.";
     }
 
     @Override

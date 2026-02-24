@@ -11,9 +11,7 @@ public class gcLoad extends SubCommand {
 
     public gcLoad(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
         super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Loads all plugin data from disk.";
-        this.HelpPage   = """
-                          §f/gc load: §aLoads all saved plugin data from the disk to memory.""";
+        this.HelpString = "Loads all saved plugin data from the disk to memory.";
     }
 
     @Override

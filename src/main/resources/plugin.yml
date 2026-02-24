@@ -22,7 +22,7 @@ permissions:
 
   # -------------------- ESSENTIAL --------------------
   gc.group.essential:
-    description: Gives all the essential commands.
+    description: Gives all the essential permissions.
     children:
       gc: true
       gc.help: true
@@ -37,10 +37,10 @@ permissions:
 
   # -------------------- PLAYER -------------------
   gc.group.player:
-    description: Gives all the player commands.
+    description: Gives all the player permissions.
     children:
       gc.group.essential: true
-      # all essential commands, plus...
+      # all essential permissions, plus...
       gc.confirm: true
       gc.cancel: true
       gc.country.create: true
@@ -63,7 +63,7 @@ permissions:
     description: Gives all admin permissions.
     children:
       gc.group.player: true
-      # all essential and player commands, plus...
+      # all essential and player permissions, plus...
       gc.purge: true
       gc.dump: true
       gc.save: true

@@ -11,6 +11,7 @@ public class gcPurgeUUID extends SubSubCommand {
 
     public gcPurgeUUID(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Purges a PlayerProfile by UUID.";
     }
 
     @Override

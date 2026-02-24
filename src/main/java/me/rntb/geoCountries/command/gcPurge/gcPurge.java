@@ -12,15 +12,7 @@ public class gcPurge extends SubCommand {
 
     public gcPurge(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
         super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Deletes plugin data.";
-        this.HelpPage   = """
-                          §f/gc purge [...]: §aPurges (deletes) specific data within the plugin's persistent storage, such as data collections, etc.
-                          §cShould be used very very rarely!
-                          §f> citizenshipapplication: §2Purges all citizenship applications in memory.
-                          §f> country: §2Purges all Country data collections.
-                          §f> playerprofile: §2Purges all PlayerProfile data collections.
-                          §f> uuid [uuid]: §2Purges a PlayerProfile by UUID.
-                          §f> username [username]: §2Purges a PlayerProfile by username.""";
+        this.HelpString = "Purges (deletes) plugin data - should be used very rarely!";
         this.subSubCommands = Map.ofEntries(
                 Map.entry("citizenshipapplication", new gcPurgeCitizenshipApplication("citizenshipapplication", "/gc purge citizenshipapplication", "gc.purge")),
                 Map.entry("country", new gcPurgeCountry("country", "/gc purge country", "gc.purge")),

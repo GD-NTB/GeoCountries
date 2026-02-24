@@ -9,6 +9,7 @@ public class gcConfigReload extends SubSubCommand {
 
     public gcConfigReload(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Reloads the config and updates the plugin's state.";
     }
 
     @Override

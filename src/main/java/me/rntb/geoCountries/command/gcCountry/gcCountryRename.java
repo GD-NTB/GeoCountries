@@ -16,6 +16,7 @@ public class gcCountryRename extends SubSubCommand {
 
     public gcCountryRename(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Renames your country.";
     }
 
     @Override

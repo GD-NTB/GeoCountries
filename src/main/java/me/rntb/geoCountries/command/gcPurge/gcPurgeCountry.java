@@ -13,6 +13,7 @@ public class gcPurgeCountry extends SubSubCommand {
 
     public gcPurgeCountry(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Purges all Country data collections.";
     }
 
     @Override

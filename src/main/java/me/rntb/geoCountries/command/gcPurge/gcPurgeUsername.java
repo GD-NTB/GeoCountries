@@ -11,6 +11,7 @@ public class gcPurgeUsername extends SubSubCommand {
 
     public gcPurgeUsername(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Purges a PlayerProfile by username.";
     }
 
     @Override

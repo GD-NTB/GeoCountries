@@ -18,6 +18,7 @@ public class gcCountryCreate extends SubSubCommand {
 
     public gcCountryCreate(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Creates a new country.";
     }
 
     @Override

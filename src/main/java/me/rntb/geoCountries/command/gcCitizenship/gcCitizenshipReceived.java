@@ -16,6 +16,7 @@ public class gcCitizenshipReceived extends SubSubCommand {
 
     public gcCitizenshipReceived(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Lists received citizenship applications to your country.";
     }
 
     @Override

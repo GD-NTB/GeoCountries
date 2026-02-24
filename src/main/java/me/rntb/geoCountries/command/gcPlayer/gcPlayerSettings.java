@@ -15,6 +15,7 @@ public class gcPlayerSettings extends SubSubCommand {
 
     public gcPlayerSettings(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Sets/lists your settings.";
     }
 
     @Override

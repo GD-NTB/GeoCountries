@@ -16,6 +16,7 @@ public class gcCitizenshipAccept extends SubSubCommand {
 
     public gcCitizenshipAccept(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Accepts a player's citizenship application to your country.";
     }
 
     @Override

@@ -14,9 +14,7 @@ public class gcDump extends SubCommand {
 
     public gcDump(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
         super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Dumps plugin info.";
-        this.HelpPage   = """
-                          §f/gc dump: §aDumps some plugin info into the chat for easier debugging.""";
+        this.HelpString = "Prints some debug shite in the chat for debugging.";
     }
 
     @Override

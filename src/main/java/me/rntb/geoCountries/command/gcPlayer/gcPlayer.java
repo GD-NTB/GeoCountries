@@ -11,10 +11,6 @@ public class gcPlayer extends SubCommand {
     public gcPlayer(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
         super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
         this.HelpString = "Manages and views information about players.";
-        this.HelpPage   = """
-                          §f/gc player [...]: §aManages and views information about players.
-                          §f> info [username]: §2Displays info about a particular player.
-                          §f> settings [setting?] [value?]: §2Sets/lists your settings""";
 
         this.subSubCommands = Map.ofEntries(
                 Map.entry("info", new gcPlayerInfo("info", "/gc player info", "gc.player.info")),

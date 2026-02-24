@@ -11,13 +11,14 @@ public abstract class SubSubCommand {
     public String DisplayName;
     public String RequiredPermission;
 
+    public String HelpString = "No help available."; // shown in /gc help [subcommand] [...]
+    // todo: implement getHelpPage
+
     public SubSubCommand(String name, String displayName, String requiredPermission) {
         this.Name = name;
         this.DisplayName = displayName;
         this.RequiredPermission = requiredPermission;
     }
-
-    public String HelpString = "No help available."; // shown in /gc help [subcommand] [...]
 
     public final void onCommandEntered(CommandSender sender, String[] args) {
         //  if no permission, escape

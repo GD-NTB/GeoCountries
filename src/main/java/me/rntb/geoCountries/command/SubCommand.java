@@ -21,8 +21,16 @@ public abstract class SubCommand {
     public Material MenuItemMaterial;
 
     public String HelpString = "No help available."; // shown in /gc help
-    // todo: generate this using SubSubCommand.HelpString
-    public String HelpPage = "No further help available."; // shown in /gc help [...]
+    public String getHelpPage() {
+        StringBuilder sb = new StringBuilder("§f%s%s:§a %s\n"
+                                             .formatted(DisplayName,
+                                                        subSubCommands.isEmpty() ? "" : " [...]",
+                                                        HelpString));
+        for (SubSubCommand ssc : subSubCommands.values()) {
+            sb.append("§f> ").append(ssc.Name).append(": §2").append(ssc.HelpString).append("\n");
+        }
+        return String.valueOf(sb);
+    }
     public Map<String, SubSubCommand> subSubCommands = Collections.emptyMap();
 
     public SubCommand(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuItemMaterial) {

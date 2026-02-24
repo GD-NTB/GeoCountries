@@ -12,6 +12,7 @@ public class gcCountryDissolve extends SubSubCommand {
 
     public gcCountryDissolve(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Dissolves (deletes) your country.";
     }
 
     @Override

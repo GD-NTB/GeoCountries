@@ -14,6 +14,7 @@ public class gcPurgeCitizenshipApplication extends SubSubCommand {
 
     public gcPurgeCitizenshipApplication(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Purges all citizenship applications in memory.";
     }
 
     @Override

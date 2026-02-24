@@ -15,6 +15,7 @@ public class gcCitizenshipRevoke extends SubSubCommand {
 
     public gcCitizenshipRevoke(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Revoke's the citizenship of a player of your country.";
     }
 
     @Override

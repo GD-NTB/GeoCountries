@@ -14,10 +14,7 @@ public class gcHelp extends SubCommand {
 
     public gcHelp(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
         super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Lists all commands and gives help for any command.";
-        this.HelpPage   = """
-                          §f/gc help: §aLists all commands and a summary of what each does.
-                          §f/gc help [subcommands]: §aDisplays more information on a specific command, as well as what subcommands it has.""";
+        this.HelpString = "Lists all commands or displays a specific command's info.";
     }
 
     @Override
@@ -113,8 +110,7 @@ public class gcHelp extends SubCommand {
 
         // append help for each command
         for (SubCommand sc : subCommands) {
-            sb.append("§f").append(sc.DisplayName).append(": §a").append(sc.HelpString).append("§f");
-            sb.append("\n");
+            sb.append("§f").append(sc.DisplayName).append(": §a").append(sc.HelpString).append("§f\n");
         }
 
         // split into pages and return
@@ -133,7 +129,7 @@ public class gcHelp extends SubCommand {
             return null;
         }
         // append help for this command
-        sb.append(sc.HelpPage).append("\n");
+        sb.append(sc.getHelpPage()).append("\n");
 
         // split into pages and return
         return Pagination.paginate(String.valueOf(sb), "\n", index, 10);

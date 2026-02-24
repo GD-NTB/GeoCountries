@@ -14,6 +14,7 @@ public class gcCitizenshipRenounce extends SubSubCommand {
 
     public gcCitizenshipRenounce(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Renounces (gives up) citizenship of your country.";
     }
 
     @Override

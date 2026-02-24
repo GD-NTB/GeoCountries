@@ -17,6 +17,7 @@ public class gcCountryCitizens extends SubSubCommand {
 
     public gcCountryCitizens(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Lists all citizens of your/any country, their rank, and how many.";
     }
 
     @Override

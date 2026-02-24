@@ -12,6 +12,7 @@ public class gcAdminSetPlayerRank extends SubSubCommand {
 
     public gcAdminSetPlayerRank(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Set a player's rank.";
     }
 
     @Override

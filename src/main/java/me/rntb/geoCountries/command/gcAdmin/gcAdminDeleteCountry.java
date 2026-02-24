@@ -13,6 +13,7 @@ public class gcAdminDeleteCountry extends SubSubCommand {
 
     public gcAdminDeleteCountry(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Delete a country from the server.";
     }
 
     @Override

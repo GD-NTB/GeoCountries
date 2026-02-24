@@ -62,7 +62,7 @@ public class gc implements TabExecutor {
                                                  .filter(sc -> sender.hasPermission(sc.RequiredPermission))
                                                  .map(sc -> sc.Name),
                              subCommandsAliases.entrySet().stream()
-                                                        .filter(sca -> sender.hasPermission(subCommands.get(sca.getValue()).RequiredPermission))
+                                                          .filter(sca -> sender.hasPermission(subCommands.get(sca.getValue()).RequiredPermission))
                                                .map(Map.Entry::getKey))
                      .sorted().toList();
     }

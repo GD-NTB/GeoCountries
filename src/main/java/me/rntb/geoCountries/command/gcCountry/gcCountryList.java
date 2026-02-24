@@ -10,6 +10,7 @@ public class gcCountryList extends SubSubCommand {
 
     public gcCountryList(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Lists all countries on the server.";
     }
 
     @Override

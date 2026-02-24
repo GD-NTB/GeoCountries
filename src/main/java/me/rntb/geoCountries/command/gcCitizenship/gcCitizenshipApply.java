@@ -19,6 +19,7 @@ public class gcCitizenshipApply extends SubSubCommand {
 
     public gcCitizenshipApply(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Applies for citizenship to a country.";
     }
 
     @Override

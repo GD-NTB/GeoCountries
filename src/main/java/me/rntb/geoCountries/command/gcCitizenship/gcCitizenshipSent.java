@@ -15,6 +15,7 @@ public class gcCitizenshipSent extends SubSubCommand {
 
     public gcCitizenshipSent(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Lists citizenship applications that you have sent.";
     }
 
     @Override

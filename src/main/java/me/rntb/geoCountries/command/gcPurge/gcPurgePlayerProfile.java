@@ -14,6 +14,7 @@ public class gcPurgePlayerProfile extends SubSubCommand {
 
     public gcPurgePlayerProfile(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Purges all PlayerProfile data collections.";
     }
 
     @Override

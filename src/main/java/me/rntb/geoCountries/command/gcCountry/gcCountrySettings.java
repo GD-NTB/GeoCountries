@@ -16,6 +16,7 @@ public class gcCountrySettings extends SubSubCommand {
 
     public gcCountrySettings(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Sets/lists your country's settings.";
     }
 
     @Override

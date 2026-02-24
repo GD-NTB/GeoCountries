@@ -10,9 +10,7 @@ public class gcGui extends SubCommand {
 
     public gcGui(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
         super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Opens the plugin's GUI menu.";
-        this.HelpPage   = """
-                          §f/gc dump: §aOpens the GeoCountries visual GUI menu.""";
+        this.HelpString = "Opens the GeoCountries visual GUI menu.";
     }
 
     @Override

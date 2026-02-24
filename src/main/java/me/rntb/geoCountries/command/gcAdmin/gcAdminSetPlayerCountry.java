@@ -14,6 +14,7 @@ public class gcAdminSetPlayerCountry extends SubSubCommand {
 
     public gcAdminSetPlayerCountry(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Set a player's country";
     }
 
     @Override

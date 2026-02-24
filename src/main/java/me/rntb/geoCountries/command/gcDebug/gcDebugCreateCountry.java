@@ -12,6 +12,7 @@ public class gcDebugCreateCountry extends SubSubCommand {
 
     public gcDebugCreateCountry(String name, String displayName, String requiredPermission) {
         super(name, displayName, requiredPermission);
+        this.HelpString = "Creates a test country.";
     }
 
     @Override
