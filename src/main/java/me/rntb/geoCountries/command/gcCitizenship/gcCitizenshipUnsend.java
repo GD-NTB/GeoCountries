@@ -1,21 +1,22 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class gcCitizenshipUnsend extends SubSubCommand {
+public class gcCitizenshipUnsend extends GeoCommand {
 
-    public gcCitizenshipUnsend(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Unsends a citizenship application that you previously sent.";
+    public gcCitizenshipUnsend(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Unsends a citizenship application that you previously sent.";
     }
 
     @Override
@@ -67,6 +68,7 @@ public class gcCitizenshipUnsend extends SubSubCommand {
         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
         if (player.rank != PlayerProfile.PlayerRank.LEADER)
             return List.of();
+
         return player.getCitizenship().citizens.stream()
                                                .map(c -> PlayerProfile.byUUID.get(c).username).toList();
     }

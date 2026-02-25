@@ -1,18 +1,19 @@
 package me.rntb.geoCountries.command.gcCountry;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-public class gcCountryDissolve extends SubSubCommand {
+public class gcCountryDissolve extends GeoCommand {
 
-    public gcCountryDissolve(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Dissolves (deletes) your country.";
+    public gcCountryDissolve(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Dissolves (deletes) your country.";
     }
 
     @Override
@@ -39,8 +40,7 @@ public class gcCountryDissolve extends SubSubCommand {
                                   true);
     }
 
-    @Override
-    public void onConfirm(CommandSender sender, String[] args) {
+    private void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
         Country country = playerProfile.getCitizenship();
 

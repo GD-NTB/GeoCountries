@@ -1,22 +1,23 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class gcCitizenshipAccept extends SubSubCommand {
+public class gcCitizenshipAccept extends GeoCommand {
 
-    public gcCitizenshipAccept(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Accepts a player's citizenship application to your country.";
+    public gcCitizenshipAccept(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Accepts a player's citizenship application to your country.";
     }
 
     @Override
@@ -85,6 +86,7 @@ public class gcCitizenshipAccept extends SubSubCommand {
         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
         if (player.rank != PlayerProfile.PlayerRank.LEADER)
             return List.of();
+
         return player.getCitizenship().getReceivedCitizenshipApplicationsAsStrings();
     }
 }

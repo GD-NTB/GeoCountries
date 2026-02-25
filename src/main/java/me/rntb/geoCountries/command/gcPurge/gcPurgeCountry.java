@@ -1,19 +1,20 @@
 package me.rntb.geoCountries.command.gcPurge;
 
-import me.rntb.geoCountries.command.SubSubCommand;
-import me.rntb.geoCountries.types.Confirmation;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 
-public class gcPurgeCountry extends SubSubCommand {
+public class gcPurgeCountry extends GeoCommand {
 
-    public gcPurgeCountry(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Purges all Country data collections.";
+    public gcPurgeCountry(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Purges all Country data collections.";
     }
 
     @Override
@@ -26,8 +27,7 @@ public class gcPurgeCountry extends SubSubCommand {
                                   true);
     }
 
-    @Override
-    public void onConfirm(CommandSender sender, String[] args) {
+    private void onConfirm(CommandSender sender, String[] args) {
         int count = Country.all.size();
         for (Country cd : new ArrayList<>(Country.all)) { // new ArrayList as we are concurrently modifying
             Country.delete(cd);

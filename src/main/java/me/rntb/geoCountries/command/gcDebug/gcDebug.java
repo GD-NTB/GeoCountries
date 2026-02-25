@@ -1,18 +1,18 @@
 package me.rntb.geoCountries.command.gcDebug;
 
-import me.rntb.geoCountries.command.SubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import org.bukkit.Material;
 
 import java.util.LinkedHashMap;
 
-public class gcDebug extends SubCommand {
+public class gcDebug extends GeoCommand {
 
-    public gcDebug(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
-        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Debug commands for development.";
-        this.subSubCommands = new LinkedHashMap<>() {{
-            put("createcountry", new gcDebugCreateCountry("createcountry", "/gc debug createcountry", "gc.debug"));
-            put("soundtest", new gcDebugSoundTest("soundtest", "/gc debug soundtest", "gc.soundtest"));
+    public gcDebug(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Debug commands for development.";
+        this.childCommands = new LinkedHashMap<>() {{
+            put("createcountry", new gcDebugCreateCountry("createcountry", "/gc debug createcountry", "gc.debug", Material.NETHER_STAR));
+            put("soundtest", new gcDebugSoundTest("soundtest", "/gc debug soundtest", "gc.soundtest", Material.JUKEBOX));
         }};
     }
 }

@@ -7,24 +7,24 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-public class gcSave extends SubCommand {
+public class gcSave extends GeoCommand {
 
-    public gcSave(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
-        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Saves all plugin data in memory to the disk.";
+    public gcSave(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Saves all plugin data in memory to the disk.";
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
-                                  new Confirmation(gcSave::onConfirm,
+                                  new Confirmation(this::onConfirm,
                                                   sender,
                                                   new String[] { }),
                                   true);
     }
 
-    private static void onConfirm(CommandSender sender, String[] args) {
+    private void onConfirm(CommandSender sender, String[] args) {
         // save data collections
         ChatUtil.sendPrefixedMessage(sender, "§eSaving all data collections...");
         DataCollectionManager.save();

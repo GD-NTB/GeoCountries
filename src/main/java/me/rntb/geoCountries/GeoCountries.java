@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
 
+// todo: rewrite helper functions that dont need to be List to be type of Array
 // todo: gui
 // todo: in-country ranks
 // todo: promote command
@@ -44,7 +45,7 @@ public class GeoCountries extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
 
         // initialise commands
-        getCommand("gc").setExecutor(new gc());
+        getCommand("gc").setExecutor(new gc("gc", "/gc", null, null));
 
         // initialise globals
         PluginName = getDescription().getName();

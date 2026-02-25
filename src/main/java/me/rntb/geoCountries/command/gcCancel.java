@@ -9,11 +9,11 @@ import org.bukkit.command.CommandSender;
 
 import java.util.UUID;
 
-public class gcCancel extends SubCommand {
+public class gcCancel extends GeoCommand {
 
-    public gcCancel(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
-        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Cancels the last command/action you were trying to do.";
+    public gcCancel(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Cancels the last command/action you were trying to do.";
     }
 
     @Override

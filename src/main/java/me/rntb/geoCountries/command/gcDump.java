@@ -10,11 +10,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 
-public class gcDump extends SubCommand {
+public class gcDump extends GeoCommand {
 
-    public gcDump(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
-        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Prints some debug shite in the chat for debugging.";
+    public gcDump(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Prints some debug shite in the chat for debugging.";
     }
 
     @Override

@@ -1,21 +1,22 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class gcCitizenshipSent extends SubSubCommand {
+public class gcCitizenshipSent extends GeoCommand {
 
-    public gcCitizenshipSent(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Lists citizenship applications that you have sent.";
+    public gcCitizenshipSent(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Lists citizenship applications that you have sent.";
     }
 
     @Override

@@ -1,42 +1,21 @@
 package me.rntb.geoCountries.command.gcPurge;
 
-import me.rntb.geoCountries.command.SubCommand;
-import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.command.GeoCommand;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 
-public class gcPurge extends SubCommand {
+public class gcPurge extends GeoCommand {
 
-    public gcPurge(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
-        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Purges (deletes) plugin data - should be used very rarely!";
-        this.subSubCommands = new LinkedHashMap<>() {{
-            put("citizenshipapplication", new gcPurgeCitizenshipApplication("citizenshipapplication", "/gc purge citizenshipapplication", "gc.purge"));
-            put("country", new gcPurgeCountry("country", "/gc purge country", "gc.purge"));
-            put("playerprofile", new gcPurgePlayerProfile("playerprofile", "/gc purge playerprofile", "gc.purge"));
-            put("uuid", new gcPurgeUUID("uuid", "/gc purge uuid", "gc.purge"));
-            put("username", new gcPurgeUsername("username", "/gc purge username", "gc.purge"));
+    public gcPurge(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Purges (deletes) plugin data - should be used very rarely!";
+        this.childCommands = new LinkedHashMap<>() {{
+            put("citizenshipapplication", new gcPurgeCitizenshipApplication("citizenshipapplication", "/gc purge citizenshipapplication", "gc.purge", Material.FLINT_AND_STEEL));
+            put("country", new gcPurgeCountry("country", "/gc purge country", "gc.purge", Material.FLINT_AND_STEEL));
+            put("playerprofile", new gcPurgePlayerProfile("playerprofile", "/gc purge playerprofile", "gc.purge", Material.FLINT_AND_STEEL));
+            put("uuid", new gcPurgeUUID("uuid", "/gc purge uuid", "gc.purge", Material.FLINT_AND_STEEL));
+            put("username", new gcPurgeUsername("username", "/gc purge username", "gc.purge", Material.FLINT_AND_STEEL));
         }};
-    }
-
-    @Override
-    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
-        return switch (args.length) {
-            // /gc purge [commands]
-            case 1 -> subSubCommands.keySet().stream().toList();
-
-            // /gc purge [...] 2
-            case 2 ->
-                switch (args[0]) {
-                    case "username" -> PlayerProfile.allAsUsernames(true);
-                    case "uuid" -> PlayerProfile.allAsUUIDStrings();
-                    default -> List.of();
-                };
-
-            default -> List.of();
-        };
     }
 }

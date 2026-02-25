@@ -144,8 +144,4 @@ public class ChatUtil {
     public static void sendPrefixedLogErrorMessage(String message) {
         getServer().getConsoleSender().sendMessage(ConfigState.chatPrefix + "§c" + message);
     }
-
-    public static void sendPrefixedPlayerOnlyErrorMessage(String command) {
-        ChatUtil.sendPrefixedLogErrorMessage("§cOnly players can do §f" + command + "§c!");
-    }
 }

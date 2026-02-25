@@ -1,20 +1,21 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class gcCitizenshipRenounce extends SubSubCommand {
+public class gcCitizenshipRenounce extends GeoCommand {
 
-    public gcCitizenshipRenounce(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Renounces (gives up) citizenship of your country.";
+    public gcCitizenshipRenounce(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Renounces (gives up) citizenship of your country.";
     }
 
     @Override
@@ -41,8 +42,7 @@ public class gcCitizenshipRenounce extends SubSubCommand {
                                   true);
     }
 
-    @Override
-    public void onConfirm(CommandSender sender, String[] args) {
+    private void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         Country country = playerProfile.getCitizenship();

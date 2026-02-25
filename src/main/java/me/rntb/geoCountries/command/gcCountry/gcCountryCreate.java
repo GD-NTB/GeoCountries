@@ -1,6 +1,6 @@
 package me.rntb.geoCountries.command.gcCountry;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
@@ -8,17 +8,18 @@ import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
 // todo: use chat response when just doing /gc country create
-public class gcCountryCreate extends SubSubCommand {
+public class gcCountryCreate extends GeoCommand {
 
-    public gcCountryCreate(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Creates a new country.";
+    public gcCountryCreate(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Creates a new country.";
     }
 
     @Override
@@ -54,8 +55,7 @@ public class gcCountryCreate extends SubSubCommand {
                                   true);
     }
 
-    @Override
-    public void onConfirm(CommandSender sender, String[] args) {
+    private void onConfirm(CommandSender sender, String[] args) {
         String countryName = args[0];
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 

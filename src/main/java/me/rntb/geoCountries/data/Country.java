@@ -137,6 +137,11 @@ public class Country extends DataCollection {
     }
 
     public ArrayList<UUID> citizens = new ArrayList<>();
+    public List<String> citizensAsStrings() {
+        return citizens.stream()
+                       .map(uuid -> PlayerProfile.byUUID.get(uuid).username)
+                       .toList();
+    }
     public List<PlayerProfile> citizensSortedByRank() {
         return citizens.stream()
                        .map(uuid -> PlayerProfile.byUUID.get(uuid))

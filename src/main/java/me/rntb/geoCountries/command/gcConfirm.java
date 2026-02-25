@@ -8,11 +8,11 @@ import org.bukkit.command.CommandSender;
 
 import java.util.UUID;
 
-public class gcConfirm extends SubCommand {
+public class gcConfirm extends GeoCommand {
 
-    public gcConfirm(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
-        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Confirms the last command/action you were asked to confirm.";
+    public gcConfirm(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Confirms the last command/action you were asked to confirm.";
     }
 
     @Override

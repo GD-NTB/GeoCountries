@@ -1,6 +1,6 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
@@ -8,15 +8,16 @@ import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class gcCitizenshipReceived extends SubSubCommand {
+public class gcCitizenshipReceived extends GeoCommand {
 
-    public gcCitizenshipReceived(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Lists received citizenship applications to your country.";
+    public gcCitizenshipReceived(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Lists received citizenship applications to your country.";
     }
 
     @Override
@@ -170,6 +171,7 @@ public class gcCitizenshipReceived extends SubSubCommand {
         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
         if (player.rank != PlayerProfile.PlayerRank.LEADER)
             return List.of();
+
         return player.getCitizenship().getReceivedCitizenshipApplicationsAsStrings();
     }
 }

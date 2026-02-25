@@ -1,22 +1,23 @@
 package me.rntb.geoCountries.command.gcCountry;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class gcCountrySettings extends SubSubCommand {
+public class gcCountrySettings extends GeoCommand {
 
-    public gcCountrySettings(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Sets/lists your country's settings.";
+    public gcCountrySettings(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Sets/lists your country's settings.";
     }
 
     @Override

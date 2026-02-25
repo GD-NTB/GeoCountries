@@ -1,20 +1,21 @@
 package me.rntb.geoCountries.command.gcPurge;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 
-public class gcPurgeCitizenshipApplication extends SubSubCommand {
+public class gcPurgeCitizenshipApplication extends GeoCommand {
 
-    public gcPurgeCitizenshipApplication(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Purges all citizenship applications in memory.";
+    public gcPurgeCitizenshipApplication(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Purges all citizenship applications in memory.";
     }
 
     @Override
@@ -27,8 +28,7 @@ public class gcPurgeCitizenshipApplication extends SubSubCommand {
                                   true);
     }
 
-    @Override
-    public void onConfirm(CommandSender sender, String[] args) {
+    private void onConfirm(CommandSender sender, String[] args) {
         int count = CitizenshipApplication.sentAll.size();
 
         for (CitizenshipApplication ca : new ArrayList<>(CitizenshipApplication.sentAll)) { // new ArrayList as we are concurrently modifying

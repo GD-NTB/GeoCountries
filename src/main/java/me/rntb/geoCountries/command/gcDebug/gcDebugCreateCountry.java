@@ -1,18 +1,19 @@
 package me.rntb.geoCountries.command.gcDebug;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.UUID;
 
-public class gcDebugCreateCountry extends SubSubCommand {
+public class gcDebugCreateCountry extends GeoCommand {
 
-    public gcDebugCreateCountry(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Creates a test country.";
+    public gcDebugCreateCountry(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Creates a test country.";
     }
 
     @Override

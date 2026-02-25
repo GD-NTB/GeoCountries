@@ -1,20 +1,21 @@
 package me.rntb.geoCountries.command.gcCountry;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.DateUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class gcCountryInfo extends SubSubCommand {
+public class gcCountryInfo extends GeoCommand {
 
-    public gcCountryInfo(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Displays info about your/any particular country.";
+    public gcCountryInfo(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Displays info about your/any particular country.";
     }
 
     @Override

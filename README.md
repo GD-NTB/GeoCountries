@@ -16,7 +16,7 @@ It is intended to work in a similar way to many existing Factions plugins.
 
 <img src="readme-stuff/commands-2.gif" width="250" alt="GIF showcasing /gc country commands">
 
-* Help command + subcommand help pages
+* Help command + command help pages
 
 <img src="readme-stuff/commands-3.gif" width="250" alt="GIF showcasing /gc country commands">
 

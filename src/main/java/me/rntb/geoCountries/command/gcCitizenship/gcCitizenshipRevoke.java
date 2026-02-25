@@ -1,21 +1,22 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class gcCitizenshipRevoke extends SubSubCommand {
+public class gcCitizenshipRevoke extends GeoCommand {
 
-    public gcCitizenshipRevoke(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Revoke's the citizenship of a player of your country.";
+    public gcCitizenshipRevoke(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Revoke's the citizenship of a player of your country.";
     }
 
     @Override
@@ -62,8 +63,7 @@ public class gcCitizenshipRevoke extends SubSubCommand {
                                   true);
     }
 
-    @Override
-    public void onConfirm(CommandSender sender, String[] args) {
+    private void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.byUsername.get(args[0]);
 
         Country country = playerProfile.getCitizenship();
@@ -78,6 +78,10 @@ public class gcCitizenshipRevoke extends SubSubCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return args.length == 1 ? PlayerProfile.get((Player) sender).getSentCitizenshipApplicationsAsStrings() : List.of();
+        Country country = PlayerProfile.get((Player) sender).getCitizenship();
+        if (country == null)
+            return List.of();
+
+        return args.length == 1 ? country.citizensAsStrings() : List.of();
     }
 }

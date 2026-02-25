@@ -1,6 +1,6 @@
 package me.rntb.geoCountries.command.gcCitizenship;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
@@ -8,6 +8,7 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -15,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class gcCitizenshipApply extends SubSubCommand {
+public class gcCitizenshipApply extends GeoCommand {
 
-    public gcCitizenshipApply(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Applies for citizenship to a country.";
+    public gcCitizenshipApply(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Applies for citizenship to a country.";
     }
 
     @Override
@@ -94,8 +95,7 @@ public class gcCitizenshipApply extends SubSubCommand {
                               true);
     }
 
-    @Override
-    public void onResponse(CommandSender sender, String response) {
+    private void onResponse(CommandSender sender, String response) {
         String responseClean = response.trim();
 
         CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(((Player) sender).getUniqueId());

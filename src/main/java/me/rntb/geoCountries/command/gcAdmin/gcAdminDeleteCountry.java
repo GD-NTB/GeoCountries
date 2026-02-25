@@ -1,19 +1,20 @@
 package me.rntb.geoCountries.command.gcAdmin;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class gcAdminDeleteCountry extends SubSubCommand {
+public class gcAdminDeleteCountry extends GeoCommand {
 
-    public gcAdminDeleteCountry(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Delete a country from the server.";
+    public gcAdminDeleteCountry(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Delete a country from the server.";
     }
 
     @Override
@@ -38,8 +39,7 @@ public class gcAdminDeleteCountry extends SubSubCommand {
                                   true);
     }
 
-    @Override
-    public void onConfirm(CommandSender sender, String[] args) {
+    private void onConfirm(CommandSender sender, String[] args) {
         Country country = Country.byName.get(args[0]);
         Country.delete(country);
 

@@ -8,65 +8,48 @@ import me.rntb.geoCountries.command.gcDebug.gcDebug;
 import me.rntb.geoCountries.command.gcPlayer.gcPlayer;
 import me.rntb.geoCountries.command.gcPurge.gcPurge;
 import me.rntb.geoCountries.types.Confirmation;
-import me.rntb.geoCountries.types.MenuPage;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-// todo: his should inherit from a common Command base class
-public class gc implements TabExecutor {
+public class gc extends GeoCommand implements TabExecutor  {
 
-    public static LinkedHashMap<String, SubCommand> subCommands = new LinkedHashMap<>() {{
-        put("help", new gcHelp("help", "/gc help", "gc.help", true, Material.GRASS_BLOCK));
-        put("purge", new gcPurge("purge", "/gc purge", "gc.purge", true, Material.FLINT_AND_STEEL));
-        put("dump", new gcDump("dump", "/gc dump", "gc.dump", true, Material.BAKED_POTATO));
-        put("country", new gcCountry("country", "/gc country", "gc.country", false, Material.EMERALD));
-        put("player", new gcPlayer("player", "/gc player", "gc.player", false, Material.PLAYER_HEAD));
-        put("confirm", new gcConfirm("confirm", "/gc confirm", "gc.confirm", true, null));
-        put("cancel", new gcCancel("cancel", "/gc cancel", "gc.cancel", true, null));
-        put("save", new gcSave("save", "/gc save", "gc.save", true, Material.RED_BED));
-        put("config", new gcConfig("config", "/gc config", "gc.config", true, Material.GRINDSTONE));
-        put("citizenship", new gcCitizenship("citizenship", "/gc citizenship", "gc.citizenship", false, Material.WRITABLE_BOOK));
-        put("debug", new gcDebug("debug", "/gc debug", "gc.debug", true, Material.ANVIL));
-        put("admin", new gcAdmin("admin", "/gc admin", "gc.admin", true, Material.DIAMOND_BLOCK));
-        put("load", new gcLoad("load", "/gc load", "gc.load", true, Material.CARROT_ON_A_STICK));
-        put("gui", new gcGui("gui", "/gc gui", "gc.gui", false, null));
-    }};
-    public static Map<String, String> subCommandsAliases = Map.ofEntries(
+    public gc(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "The base command for GeoCountries. Opens the plugin's visual GUI menu.";
+        this.childCommands = new LinkedHashMap<>() {{
+            put("help", new gcHelp("help", "/gc help", "gc.help", Material.GRASS_BLOCK));
+            put("purge", new gcPurge("purge", "/gc purge", "gc.purge", Material.FLINT_AND_STEEL));
+            put("dump", new gcDump("dump", "/gc dump", "gc.dump", Material.BAKED_POTATO));
+            put("country", new gcCountry("country", "/gc country", "gc.country", Material.MAP));
+            put("player", new gcPlayer("player", "/gc player", "gc.player", Material.PLAYER_HEAD));
+            put("confirm", new gcConfirm("confirm", "/gc confirm", "gc.confirm", null));
+            put("cancel", new gcCancel("cancel", "/gc cancel", "gc.cancel", null));
+            put("save", new gcSave("save", "/gc save", "gc.save", Material.RED_BED));
+            put("config", new gcConfig("config", "/gc config", "gc.config", Material.GRINDSTONE));
+            put("citizenship", new gcCitizenship("citizenship", "/gc citizenship", "gc.citizenship", Material.WRITABLE_BOOK));
+            put("debug", new gcDebug("debug", "/gc debug", "gc.debug", Material.ANVIL));
+            put("admin", new gcAdmin("admin", "/gc admin", "gc.admin", Material.DIAMOND_BLOCK));
+            put("load", new gcLoad("load", "/gc load", "gc.load", Material.CARROT_ON_A_STICK));
+            put("gui", new gcGui("gui", "/gc gui", "gc.gui", null));
+        }};
+
+        GeoCommand.baseCommand = this;
+    }
+
+    public Map<String, String> childCommandsAliases = Map.ofEntries(
             Map.entry("c", "country"),
             Map.entry("p", "player"),
             Map.entry("citizen", "citizenship")
     );
-
-    public static List<SubCommand> allowedSubCommands(CommandSender sender) {
-        return subCommands.values().stream()
-                                   .filter(sc -> sender.hasPermission(sc.RequiredPermission)).toList();
-    }
-    public static List<String> allowedSubCommandsAsStrings(CommandSender sender) {
-        return subCommands.values().stream()
-                                   .filter(sc -> sender.hasPermission(sc.RequiredPermission))
-                                   .map(sc -> sc.Name)
-                          .sorted().toList();
-    }
-    public static List<String> subCommandsTabAutoCompleteList(CommandSender sender) {
-        return Stream.concat(subCommands.values().stream()
-                                                 .filter(sc -> sender.hasPermission(sc.RequiredPermission))
-                                                 .map(sc -> sc.Name),
-                             subCommandsAliases.entrySet().stream()
-                                                          .filter(sca -> sender.hasPermission(subCommands.get(sca.getValue()).RequiredPermission))
-                                               .map(Map.Entry::getKey))
-                     .sorted().toList();
-    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args)  {
@@ -84,21 +67,21 @@ public class gc implements TabExecutor {
     }
 
     private void onCommandNoArgs(@NotNull CommandSender sender) {
-        subCommands.get("gui").onCommandEntered(sender, new String[]{ });
+        childCommands.get("gui").onCommandEntered(sender, new String[] { });
     }
 
     private void onCommandArgs(@NotNull CommandSender sender, @NotNull String[] args) {
-        // find subcommand
-        String subCommandName = args[0].toLowerCase();
+        // find childCommand
+        String childCommandName = args[0].toLowerCase();
         // replace with alias if needed
-        String subCommandNameAlias = subCommandsAliases.get(subCommandName);
-        if (subCommandNameAlias != null)
-            subCommandName = subCommandNameAlias;
+        String childCommandNameAlias = childCommandsAliases.get(childCommandName);
+        if (childCommandNameAlias != null)
+            childCommandName = childCommandNameAlias;
 
-        SubCommand subCommand = subCommands.get(subCommandName);
-        if (subCommand == null) {
+        GeoCommand childCommand = childCommands.get(childCommandName);
+        if (childCommand == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cThe command §f/gc %s§c doesn't exist!"
-                                                 .formatted(subCommandName));
+                                                 .formatted(childCommandName));
             return;
         }
 
@@ -108,11 +91,11 @@ public class gc implements TabExecutor {
             if (!(args.length == 1 && (args[0].equalsIgnoreCase("confirm") || args[0].equalsIgnoreCase("cancel"))))
                 Confirmation.stopWaiting(senderUuid, Confirmation.StopWaitingEvent.CANCELLED, true);
 
-        // get subargs (the [...] in /gc [subcommand] [...])
+        // get subargs (the [...] in /gc [childCommand] [...])
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
 
-        // do perms and console check then subcommand.onCommand
-        subCommand.onCommandEntered(sender, subArgs);
+        // do perms and console check then childCommand.onCommand
+        childCommand.onCommandEntered(sender, subArgs);
     }
 
     @Override
@@ -121,45 +104,30 @@ public class gc implements TabExecutor {
             return List.of();
 
         if (args.length == 1)
-            return subCommandsTabAutoCompleteList(player);
+            return getTabCompletion(player, new String[]{ });
 
         String commandName = args[0];
-        // convert alias to subcommand
-        String subCommandNameAlias = gc.subCommandsAliases.get(commandName);
-        if (subCommandNameAlias != null)
-            commandName = subCommandNameAlias;
-        // find subcommand
-        SubCommand subCommand = subCommands.get(commandName);
-        if (subCommand == null || !sender.hasPermission(subCommand.RequiredPermission))
+        // convert alias to childCommand
+        String childCommandNameAlias = this.childCommandsAliases.get(commandName);
+        if (childCommandNameAlias != null)
+            commandName = childCommandNameAlias;
+        // find childCommand
+        GeoCommand childCommand = childCommands.get(commandName);
+        if (childCommand == null || !sender.hasPermission(childCommand.permission))
             return List.of();
 
-        // get tab completion of subcommand
-        return subCommand.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));
+        // get tab completion of childCommand
+        return childCommand.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));
     }
 
-    public static ItemStack[] getMenuButtons(Player player) {
-        int subCommandsCount = subCommands.size();
-        if (subCommandsCount == 0)
-            return new ItemStack[] { };
-
-        List<SubCommand> subCommandsList = new ArrayList<>(subCommands.sequencedValues());
-
-        ItemStack[] buttons = new ItemStack[subCommandsCount];
-        int i = 0;
-        for (SubCommand sc : subCommandsList) {
-            if (sc.MenuItemMaterial == null)
-                continue;
-
-            String titleColour = sc.isAdminCommand() ? "§6" : "§a";
-            buttons[i] = MenuPage.createButton(sc.MenuItemMaterial,
-                                               titleColour + StringUtil.sentenceCase(sc.Name),
-                                               "§f" + sc.HelpString,
-                                               sc.DisplayName,
-                                               player);
-
-            i++;
-        }
-
-        return buttons;
+    @Override
+    public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        return Stream.concat(childCommands.values().stream()
+                                .filter(sc -> sender.hasPermission(sc.permission))
+                                .map(sc -> sc.name),
+                        childCommandsAliases.entrySet().stream()
+                                .filter(sca -> sender.hasPermission(childCommands.get(sca.getValue()).permission))
+                                .map(Map.Entry::getKey))
+                .sorted().toList();
     }
 }

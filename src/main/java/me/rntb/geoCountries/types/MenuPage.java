@@ -27,7 +27,7 @@ public class MenuPage {
         Inventory inventory = Bukkit.createInventory(player, slots, Component.text("§8/gc"));
 
         // 6 commands per row, padded left and right
-        int subCommandIndex = 0;
+        int childCommandIndex = 0;
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < 9; col++) {
                 int flatIndex = row*9 + col;
@@ -45,8 +45,8 @@ public class MenuPage {
                 }
 
                 // put item in inventory
-                inventory.setItem(flatIndex, buttons[subCommandIndex]);
-                subCommandIndex++;
+                inventory.setItem(flatIndex, buttons[childCommandIndex]);
+                childCommandIndex++;
             }
         }
 

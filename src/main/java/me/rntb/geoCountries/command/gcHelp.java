@@ -10,11 +10,12 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class gcHelp extends SubCommand {
+// todo: rewrite using new Command.getHelpPage method
+public class gcHelp extends GeoCommand {
 
-    public gcHelp(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuMaterialItem) {
-        super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
-        this.HelpString = "Lists all commands or displays a specific command's info.";
+    public gcHelp(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Lists all commands or displays a specific command's info.";
     }
 
     @Override
@@ -100,43 +101,43 @@ public class gcHelp extends SubCommand {
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 
-    private static Pagination getHelpAll(CommandSender sender, int index) {
+    private Pagination getHelpAll(CommandSender sender, int index) {
         StringBuilder sb = new StringBuilder();
-        List<SubCommand> subCommands;
+        List<GeoCommand> childCommands;
         if (sender instanceof Player player)
-            subCommands = gc.allowedSubCommands(player);
+            childCommands = GeoCommand.baseCommand.allowedChildCommands(player);
         else
-            subCommands = gc.subCommands.values().stream().toList();
+            childCommands = GeoCommand.baseCommand.childCommands.values().stream().toList();
 
         // append help for each command
-        for (SubCommand sc : subCommands) {
-            sb.append("§f").append(sc.DisplayName).append(": §a").append(sc.HelpString).append("§f\n");
+        for (GeoCommand command : childCommands) {
+            sb.append("§f%s: §a%s§f\n"
+                      .formatted(command.displayName, command.helpString));
         }
 
         // split into pages and return
         return Pagination.paginate(String.valueOf(sb), "\n", index, 10);
     }
 
-    private static Pagination getHelpSpecific(CommandSender sender, String commandName, int index) {
+    private Pagination getHelpSpecific(CommandSender sender, String commandName, int index) {
         StringBuilder sb = new StringBuilder();
         // replace with alias if needed
-        String subCommandNameAlias = gc.subCommandsAliases.get(commandName);
-        if (subCommandNameAlias != null)
-            commandName = subCommandNameAlias;
-        SubCommand sc = gc.subCommands.get(commandName);
+        String commandAlias = ((gc) GeoCommand.baseCommand).childCommandsAliases.get(commandName);
+        if (commandAlias != null)
+            commandName = commandAlias;
+        GeoCommand command = GeoCommand.baseCommand.childCommands.get(commandName);
         // if command doesnt exist or no permission, escape
-        if (sc == null || !sender.hasPermission(sc.RequiredPermission)) {
+        if (command == null || !sender.hasPermission(command.permission))
             return null;
-        }
         // append help for this command
-        sb.append(sc.getHelpPage()).append("\n");
+        sb.append(command.getHelpPage()).append("\n");
 
         // split into pages and return
         return Pagination.paginate(String.valueOf(sb), "\n", index, 10);
     }
 
     @Override
-    public List<String> getTabCompletion(CommandSender sender,  String[] args) {
-        return args.length == 1 ? gc.subCommandsTabAutoCompleteList(sender) : List.of();
+    public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        return args.length == 1 ? GeoCommand.baseCommand.getTabCompletion(sender, new String[] { }) : List.of();
     }
 }

@@ -1,17 +1,20 @@
 package me.rntb.geoCountries.command.gcPurge;
 
-import me.rntb.geoCountries.command.SubSubCommand;
-import me.rntb.geoCountries.types.Confirmation;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-public class gcPurgeUsername extends SubSubCommand {
+import java.util.List;
 
-    public gcPurgeUsername(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Purges a PlayerProfile by username.";
+public class gcPurgeUsername extends GeoCommand {
+
+    public gcPurgeUsername(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Purges a PlayerProfile by username.";
     }
 
     @Override
@@ -36,10 +39,15 @@ public class gcPurgeUsername extends SubSubCommand {
                                   true);
     }
 
-    public void onConfirm(CommandSender sender, String[] args) {
+    private void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile player = PlayerProfile.byUsername.get(args[0]);
         PlayerProfile.delete(player);
 
         ChatUtil.sendPrefixedMessage(sender, "§aPurged player §f" + player.username + "§a.");
+    }
+
+    @Override
+    public List<String> getTabCompletion(CommandSender sender, String[] args) {
+        return args.length == 1 ? PlayerProfile.allAsUsernames(true) : List.of();
     }
 }

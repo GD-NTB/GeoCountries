@@ -1,18 +1,19 @@
 package me.rntb.geoCountries.command.gcAdmin;
 
-import me.rntb.geoCountries.command.SubSubCommand;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.EnumUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class gcAdminSetPlayerRank extends SubSubCommand {
+public class gcAdminSetPlayerRank extends GeoCommand {
 
-    public gcAdminSetPlayerRank(String name, String displayName, String requiredPermission) {
-        super(name, displayName, requiredPermission);
-        this.HelpString = "Set a player's rank.";
+    public gcAdminSetPlayerRank(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+        super(name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Set a player's rank.";
     }
 
     @Override
