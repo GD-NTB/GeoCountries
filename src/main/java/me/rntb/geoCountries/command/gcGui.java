@@ -17,7 +17,7 @@ public class gcGui extends SubCommand {
     public void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
 
-        player.openInventory(MenuPage.getBasePage(player));
+        player.openInventory(MenuPage.createPage(gc.getMenuButtons(player), player));
         player.getPersistentDataContainer().set(MenuPage.ISMENUOPEN_KEY, PersistentDataType.BOOLEAN, true); // set menu flag to open
     }
 }

@@ -1,17 +1,18 @@
 package me.rntb.geoCountries.command;
 
+import me.rntb.geoCountries.types.MenuPage;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+// todo: SubCommand and SubSubCommand should inherit from a common base Command class?
 public abstract class SubCommand {
 
     public String Name;
@@ -31,7 +32,7 @@ public abstract class SubCommand {
         }
         return String.valueOf(sb);
     }
-    public Map<String, SubSubCommand> subSubCommands = Collections.emptyMap();
+    public LinkedHashMap<String, SubSubCommand> subSubCommands;
 
     public SubCommand(String name, String displayName, String requiredPermission, boolean consoleCanUse, Material menuItemMaterial) {
         this.Name = name;
@@ -99,7 +100,31 @@ public abstract class SubCommand {
         return subSubCommand.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));
     }
 
-    // todo: implement getMenuButtons
+    public ItemStack[] getMenuButtons(Player player) {
+        int subSubCommandsCount = subSubCommands.size();
+        if (subSubCommandsCount == 0)
+            return new ItemStack[] { };
+
+        List<SubSubCommand> subSubCommandsList = new ArrayList<>(subSubCommands.sequencedValues());
+
+        ItemStack[] buttons = new ItemStack[subSubCommandsCount];
+        int i = 0;
+        for (SubSubCommand ssc : subSubCommandsList) {
+            if (ssc.MenuItemMaterial == null)
+                continue;
+
+            String titleColour = ssc.isAdminCommand() ? "§6" : "§a";
+            buttons[i] = MenuPage.createButton(ssc.MenuItemMaterial,
+                                               titleColour + StringUtil.sentenceCase(ssc.Name),
+                                               "§f" + ssc.HelpString,
+                                               ssc.DisplayName,
+                                               player);
+
+            i++;
+        }
+
+        return buttons;
+    }
 
     public List<SubSubCommand> allowedSubSubCommands(CommandSender sender) {
         return this.subSubCommands.values().stream()
@@ -113,8 +138,8 @@ public abstract class SubCommand {
     }
 
     public boolean isAdminCommand() {
-        Permission parent = Bukkit.getPluginManager().getPermission("gc.group.admin");
-        assert parent != null;
-        return parent.getChildren().containsKey(this.RequiredPermission);
+        Permission adminPermission = Bukkit.getPluginManager().getPermission("gc.group.admin");
+        assert adminPermission != null;
+        return adminPermission.getChildren().containsKey(this.RequiredPermission);
     }
 }

@@ -4,7 +4,7 @@ import me.rntb.geoCountries.command.SubCommand;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class gcPlayer extends SubCommand {
 
@@ -12,10 +12,10 @@ public class gcPlayer extends SubCommand {
         super(name, displayName, requiredPermission, consoleCanUse, menuMaterialItem);
         this.HelpString = "Manages and views information about players.";
 
-        this.subSubCommands = Map.ofEntries(
-                Map.entry("info", new gcPlayerInfo("info", "/gc player info", "gc.player.info")),
-                Map.entry("settings", new gcPlayerSettings("settings", "/gc player settings", "gc.player.settings"))
-        );
+        this.subSubCommands = new LinkedHashMap<>() {{
+            put("info", new gcPlayerInfo("info", "/gc player info", "gc.player.info"));
+            put("settings", new gcPlayerSettings("settings", "/gc player settings", "gc.player.settings"));
+        }};
     }
 
     @Override

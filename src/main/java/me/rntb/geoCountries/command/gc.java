@@ -8,39 +8,40 @@ import me.rntb.geoCountries.command.gcDebug.gcDebug;
 import me.rntb.geoCountries.command.gcPlayer.gcPlayer;
 import me.rntb.geoCountries.command.gcPurge.gcPurge;
 import me.rntb.geoCountries.types.Confirmation;
+import me.rntb.geoCountries.types.MenuPage;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 
+// todo: his should inherit from a common Command base class
 public class gc implements TabExecutor {
 
-    public static Map<String, SubCommand> subCommands = Map.ofEntries(
-            Map.entry("help", new gcHelp("help", "/gc help", "gc.help", true, Material.GRASS_BLOCK)),
-            Map.entry("purge", new gcPurge("purge", "/gc purge", "gc.purge", true, Material.FLINT_AND_STEEL)),
-            Map.entry("dump", new gcDump("dump", "/gc dump", "gc.dump", true, Material.BAKED_POTATO)),
-            Map.entry("country", new gcCountry("country", "/gc country", "gc.country", false, Material.EMERALD)),
-            Map.entry("player", new gcPlayer("player", "/gc player", "gc.player", false, Material.PLAYER_HEAD)),
-            Map.entry("confirm", new gcConfirm("confirm", "/gc confirm", "gc.confirm", true, null)),
-            Map.entry("cancel", new gcCancel("cancel", "/gc cancel", "gc.cancel", true, null)),
-            Map.entry("save", new gcSave("save", "/gc save", "gc.save", true, Material.RED_BED)),
-            Map.entry("config", new gcConfig("config", "/gc config", "gc.config", true, Material.GRINDSTONE)),
-            Map.entry("citizenship", new gcCitizenship("citizenship", "/gc citizenship", "gc.citizenship", false, Material.WRITABLE_BOOK)),
-            Map.entry("debug", new gcDebug("debug", "/gc debug", "gc.debug", true, Material.ANVIL)),
-            Map.entry("admin", new gcAdmin("admin", "/gc admin", "gc.admin", true, Material.DIAMOND_BLOCK)),
-            Map.entry("load", new gcLoad("load", "/gc load", "gc.load", true, Material.CARROT_ON_A_STICK)),
-            Map.entry("gui", new gcGui("gui", "/gc gui", "gc.gui", false, null))
-    );
+    public static LinkedHashMap<String, SubCommand> subCommands = new LinkedHashMap<>() {{
+        put("help", new gcHelp("help", "/gc help", "gc.help", true, Material.GRASS_BLOCK));
+        put("purge", new gcPurge("purge", "/gc purge", "gc.purge", true, Material.FLINT_AND_STEEL));
+        put("dump", new gcDump("dump", "/gc dump", "gc.dump", true, Material.BAKED_POTATO));
+        put("country", new gcCountry("country", "/gc country", "gc.country", false, Material.EMERALD));
+        put("player", new gcPlayer("player", "/gc player", "gc.player", false, Material.PLAYER_HEAD));
+        put("confirm", new gcConfirm("confirm", "/gc confirm", "gc.confirm", true, null));
+        put("cancel", new gcCancel("cancel", "/gc cancel", "gc.cancel", true, null));
+        put("save", new gcSave("save", "/gc save", "gc.save", true, Material.RED_BED));
+        put("config", new gcConfig("config", "/gc config", "gc.config", true, Material.GRINDSTONE));
+        put("citizenship", new gcCitizenship("citizenship", "/gc citizenship", "gc.citizenship", false, Material.WRITABLE_BOOK));
+        put("debug", new gcDebug("debug", "/gc debug", "gc.debug", true, Material.ANVIL));
+        put("admin", new gcAdmin("admin", "/gc admin", "gc.admin", true, Material.DIAMOND_BLOCK));
+        put("load", new gcLoad("load", "/gc load", "gc.load", true, Material.CARROT_ON_A_STICK));
+        put("gui", new gcGui("gui", "/gc gui", "gc.gui", false, null));
+    }};
     public static Map<String, String> subCommandsAliases = Map.ofEntries(
             Map.entry("c", "country"),
             Map.entry("p", "player"),
@@ -134,5 +135,31 @@ public class gc implements TabExecutor {
 
         // get tab completion of subcommand
         return subCommand.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));
+    }
+
+    public static ItemStack[] getMenuButtons(Player player) {
+        int subCommandsCount = subCommands.size();
+        if (subCommandsCount == 0)
+            return new ItemStack[] { };
+
+        List<SubCommand> subCommandsList = new ArrayList<>(subCommands.sequencedValues());
+
+        ItemStack[] buttons = new ItemStack[subCommandsCount];
+        int i = 0;
+        for (SubCommand sc : subCommandsList) {
+            if (sc.MenuItemMaterial == null)
+                continue;
+
+            String titleColour = sc.isAdminCommand() ? "§6" : "§a";
+            buttons[i] = MenuPage.createButton(sc.MenuItemMaterial,
+                                               titleColour + StringUtil.sentenceCase(sc.Name),
+                                               "§f" + sc.HelpString,
+                                               sc.DisplayName,
+                                               player);
+
+            i++;
+        }
+
+        return buttons;
     }
 }
