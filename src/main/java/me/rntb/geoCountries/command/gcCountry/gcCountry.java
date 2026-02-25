@@ -28,6 +28,6 @@ public class gcCountry extends SubCommand {
             subSubCommands.get("info").onCommandEntered(sender, args);
             return;
         }
-        findAndExecuteSubCommand(sender, args, false);
+        findAndExecuteSubSubCommand(sender, args, false);
     }
 }

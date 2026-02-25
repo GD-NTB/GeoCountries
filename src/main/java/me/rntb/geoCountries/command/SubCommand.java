@@ -58,7 +58,7 @@ public abstract class SubCommand {
         onCommand(sender, args);
     }
 
-    public void findAndExecuteSubCommand(CommandSender sender, String[] args, boolean onlyNeedBasePermission) {
+    public void findAndExecuteSubSubCommand(CommandSender sender, String[] args, boolean onlyNeedBasePermission) {
         String mode = args[0].toLowerCase();
         SubSubCommand subSubCommand = subSubCommands.get(mode);
         if (subSubCommand == null) {
@@ -86,7 +86,7 @@ public abstract class SubCommand {
                                                  .formatted(this.HelpString, this.DisplayName));
             return;
         }
-        findAndExecuteSubCommand(sender, args, true);
+        findAndExecuteSubSubCommand(sender, args, true);
     }
 
     public List<String> getTabCompletion(CommandSender sender, String[] args) {

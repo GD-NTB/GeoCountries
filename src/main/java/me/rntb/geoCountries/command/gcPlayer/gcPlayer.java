@@ -24,6 +24,6 @@ public class gcPlayer extends SubCommand {
             this.subSubCommands.get("info").onCommand(sender, args);
             return;
         }
-        findAndExecuteSubCommand(sender, args, false);
+        findAndExecuteSubSubCommand(sender, args, false);
     }
 }
