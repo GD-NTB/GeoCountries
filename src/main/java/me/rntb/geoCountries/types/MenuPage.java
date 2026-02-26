@@ -11,7 +11,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
@@ -23,16 +22,14 @@ public class MenuPage {
     public static final NamespacedKey COMMAND_KEY = new NamespacedKey(GeoCountries.self, "command");
     // player metadata
     public static final NamespacedKey ISMENUOPEN_KEY = new NamespacedKey(GeoCountries.self, "isMenuOpen");
-    public static final NamespacedKey TITLE_KEY = new NamespacedKey(GeoCountries.self, "title");
 
     // todo: buttons that we don't have permission for (e.g. not the correct rank) need to be hidden (GeoCommand.isUsable?)
-    public static Inventory createPage(ItemStack[] buttons, Player player)  {
+    public static Inventory createPage(ItemStack[] buttons, String title, Player player)  {
         int buttonCount = buttons.length;
 
         int rows = 2 + (Math.ceilDiv(buttonCount, 7));
         int slots = 9 * rows;
 
-        String title = player.getPersistentDataContainer().get(MenuPage.TITLE_KEY, PersistentDataType.STRING);
         Inventory inventory = Bukkit.createInventory(player, slots, Component.text("§8" + title));
 
         // 6 commands per row, padded left and right
@@ -109,11 +106,8 @@ public class MenuPage {
     }
 
     public static void openMenuPage(Player player, String title, ItemStack[] buttons)  {
-        PersistentDataContainer playerMetadata = player.getPersistentDataContainer();
-        playerMetadata.set(MenuPage.TITLE_KEY, PersistentDataType.STRING, title); // set menu name metadata
+        player.openInventory(createPage(buttons, title, player));
 
-        player.openInventory(createPage(buttons, player));
-
-        playerMetadata.set(MenuPage.ISMENUOPEN_KEY, PersistentDataType.BOOLEAN, true); // set menu flag to open
+        player.getPersistentDataContainer().set(MenuPage.ISMENUOPEN_KEY, PersistentDataType.BOOLEAN, true); // set menu flag to open
     }
 }
