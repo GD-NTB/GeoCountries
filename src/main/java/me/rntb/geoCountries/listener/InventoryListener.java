@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.listener;
 
 import me.rntb.geoCountries.GeoCountries;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.types.MenuPage;
 import me.rntb.geoCountries.util.SoundUtil;
 import org.bukkit.Bukkit;
@@ -29,17 +30,30 @@ public class InventoryListener implements Listener {
         if (itemClicked == null)
             return;
 
-        String command = itemClicked.getPersistentDataContainer().get(MenuPage.COMMAND_KEY, PersistentDataType.STRING);
-        if (command == null)
+        String commandString = itemClicked.getPersistentDataContainer().get(MenuPage.COMMAND_KEY, PersistentDataType.STRING);
+        if (commandString == null)
             return;
 
-        // execute command
-        if (!command.equals("CLOSE"))
-            player.performCommand(command.substring(1));
+        // find command
+        if (commandString.equals("GUI_CLOSE"))
+            player.closeInventory();
+        else {
+            GeoCommand command = GeoCommand.getByCommandString.get(commandString);
+            if (command == null)
+                return;
 
-        // close page after click
-        Bukkit.getScheduler().runTask(GeoCountries.self, () -> player.closeInventory()); // 1 tick delay
-        player.getPersistentDataContainer().remove(MenuPage.ISMENUOPEN_KEY); // set menu flag to closed
+            // if this command has no menu buttons, execute, else open its page
+            ItemStack[] commandButtons = command.getMenuButtons(player);
+            if (commandButtons == null) {
+                command.onCommandEntered(player, new String[] { });
+                // close page after click
+                // todo: config option for this, default = false
+                Bukkit.getScheduler().runTask(GeoCountries.self, () -> player.closeInventory()); // 1 tick delay
+                player.getPersistentDataContainer().remove(MenuPage.ISMENUOPEN_KEY); // set menu flag to closed
+            }
+            else
+                MenuPage.openMenuPage(player, command.command, command.getMenuButtons(player));
+        }
 
         // play click sound
         SoundUtil.playSound(player, SoundUtil.SoundEffect.MENU_CLICK);

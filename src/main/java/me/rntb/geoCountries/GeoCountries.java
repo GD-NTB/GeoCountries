@@ -12,9 +12,13 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
-// todo: rewrite helper functions that dont need to be List to be type of Array
+// todo: config option to not close inventory on menu button click
+// todo: a lot of commands need to be support no args, e.g. /gc country create should prompt a Response
+// todo: change colour of settings [edit] and [default]
 // todo: gui
+// todo: rewrite helper functions that dont need to be List to be type of Array
 // todo: in-country ranks
 // todo: promote command
 // todo: claiming (max chunks in config)
@@ -45,11 +49,11 @@ public class GeoCountries extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
 
         // initialise commands
-        getCommand("gc").setExecutor(new gc("gc", "/gc", null, null));
+        Objects.requireNonNull(getCommand("gc")).setExecutor(new gc("gc", "/gc", null, null));
 
         // initialise globals
-        PluginName = getDescription().getName();
-        PluginVersion = getDescription().getVersion();
+        PluginName = getPluginMeta().getName();
+        PluginVersion = getPluginMeta().getVersion();
         PluginNameAndVersion = PluginName + " [" + PluginVersion + "]";
         PluginAbsoluteDataFolderPath = getDataPath().toAbsolutePath();
 
@@ -71,8 +75,6 @@ public class GeoCountries extends JavaPlugin {
     }
 
     private void bStatsSetup() {
-        // You can find the plugin id of your plugins on
-        // the page https://bstats.org/what-is-my-plugin-id
         int pluginId = 29384;
         new Metrics(this, pluginId);
     }

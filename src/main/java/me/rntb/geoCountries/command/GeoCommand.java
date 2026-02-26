@@ -18,6 +18,7 @@ public abstract class GeoCommand {
     
     public String name;
     public String command;
+    public static HashMap<String, GeoCommand> getByCommandString = new HashMap<>();
     public String permission;
     public Material menuButtonItem;
 
@@ -42,6 +43,8 @@ public abstract class GeoCommand {
         this.command = command;
         this.permission = permission;
         this.menuButtonItem = menuButtonItem;
+
+        getByCommandString.put(command, this);
     }
 
     public final void onCommandEntered(CommandSender sender, String[] args) {
@@ -104,6 +107,9 @@ public abstract class GeoCommand {
     }
 
     public ItemStack[] getMenuButtons(Player player) {
+        if (childCommands.isEmpty())
+            return null;
+
         List<GeoCommand> allowedChildCommands = new ArrayList<>(allowedChildCommands(player));
         allowedChildCommands.removeIf(c -> c.menuButtonItem == null);
 

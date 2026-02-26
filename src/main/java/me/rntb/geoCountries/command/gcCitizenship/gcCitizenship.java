@@ -18,7 +18,7 @@ public class gcCitizenship extends GeoCommand {
             put("renounce", new gcCitizenshipRenounce("renounce", "/gc citizenship renounce", "gc.citizenship.renounce", Material.SHEARS));
             put("revoke", new gcCitizenshipRevoke("revoke", "/gc citizenship revoke", "gc.citizenship.revoke", Material.GRINDSTONE));
             put("sent", new gcCitizenshipSent("sent", "/gc citizenship sent", "gc.citizenship.sent", Material.BOOK));
-            put("unsend", new gcCitizenshipUnsend("unsend", "/gc citizenship unsend", "gc.citizenship.unsend", Material.WIND_CHARGE));
+            put("unsend", new gcCitizenshipUnsend("unsend", "/gc citizenship unsend", "gc.citizenship.unsend", Material.CARROT_ON_A_STICK));
         }};
     }
 }
