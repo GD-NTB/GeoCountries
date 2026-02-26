@@ -34,12 +34,11 @@ public class InventoryListener implements Listener {
             return;
 
         // execute command
-        // todo: open into other pages
         if (!command.equals("CLOSE"))
             player.performCommand(command.substring(1));
 
         // close page after click
-        Bukkit.getScheduler().runTask(GeoCountries.self, () -> player.closeInventory()); // needs to have 1 tick delay
+        Bukkit.getScheduler().runTask(GeoCountries.self, () -> player.closeInventory()); // 1 tick delay
         player.getPersistentDataContainer().remove(MenuPage.ISMENUOPEN_KEY); // set menu flag to closed
 
         // play click sound

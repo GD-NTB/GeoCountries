@@ -12,7 +12,7 @@ public class gcConfirm extends GeoCommand {
 
     public gcConfirm(String name, String displayName, String requiredPermission, Material menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Confirms the last command/action you were asked to confirm.";
+        this.helpString = "Confirms a pending command/action.";
     }
 
     @Override

@@ -112,7 +112,7 @@ public class gcHelp extends GeoCommand {
         // append help for each command
         for (GeoCommand command : childCommands) {
             sb.append("§f%s: §a%s§f\n"
-                      .formatted(command.displayName, command.helpString));
+                      .formatted(command.command, command.helpString));
         }
 
         // split into pages and return

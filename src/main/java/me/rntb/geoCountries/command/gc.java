@@ -26,20 +26,20 @@ public class gc extends GeoCommand implements TabExecutor  {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "The base command for GeoCountries. Opens the plugin's visual GUI menu.";
         this.childCommands = new LinkedHashMap<>() {{
+            put("country", new gcCountry("country", "/gc country", "gc.country", Material.FILLED_MAP));
+            put("player", new gcPlayer("player", "/gc player", "gc.player", Material.PLAYER_HEAD));
+            put("citizenship", new gcCitizenship("citizenship", "/gc citizenship", "gc.citizenship", Material.WRITABLE_BOOK));
             put("help", new gcHelp("help", "/gc help", "gc.help", Material.GRASS_BLOCK));
+            put("admin", new gcAdmin("admin", "/gc admin", "gc.admin", Material.DIAMOND_BLOCK));
+            put("debug", new gcDebug("debug", "/gc debug", "gc.debug", Material.REDSTONE));
+            put("config", new gcConfig("config", "/gc config", "gc.config", Material.BOOK));
+            put("save", new gcSave("save", "/gc save", "gc.save", Material.RED_BED));
+            put("load", new gcLoad("load", "/gc load", "gc.load", Material.CARROT_ON_A_STICK));
             put("purge", new gcPurge("purge", "/gc purge", "gc.purge", Material.FLINT_AND_STEEL));
             put("dump", new gcDump("dump", "/gc dump", "gc.dump", Material.BAKED_POTATO));
-            put("country", new gcCountry("country", "/gc country", "gc.country", Material.MAP));
-            put("player", new gcPlayer("player", "/gc player", "gc.player", Material.PLAYER_HEAD));
+            put("gui", new gcGui("gui", "/gc gui", "gc.gui", null));
             put("confirm", new gcConfirm("confirm", "/gc confirm", "gc.confirm", null));
             put("cancel", new gcCancel("cancel", "/gc cancel", "gc.cancel", null));
-            put("save", new gcSave("save", "/gc save", "gc.save", Material.RED_BED));
-            put("config", new gcConfig("config", "/gc config", "gc.config", Material.GRINDSTONE));
-            put("citizenship", new gcCitizenship("citizenship", "/gc citizenship", "gc.citizenship", Material.WRITABLE_BOOK));
-            put("debug", new gcDebug("debug", "/gc debug", "gc.debug", Material.ANVIL));
-            put("admin", new gcAdmin("admin", "/gc admin", "gc.admin", Material.DIAMOND_BLOCK));
-            put("load", new gcLoad("load", "/gc load", "gc.load", Material.CARROT_ON_A_STICK));
-            put("gui", new gcGui("gui", "/gc gui", "gc.gui", null));
         }};
 
         GeoCommand.baseCommand = this;
@@ -59,15 +59,11 @@ public class gc extends GeoCommand implements TabExecutor  {
         }
 
         if (args.length == 0)
-            onCommandNoArgs(sender); // /gc
+            childCommands.get("gui").onCommandEntered(sender, new String[] { });
         else
-            onCommandArgs(sender, args); // /gc [...]
+            onCommandArgs(sender, args);
 
         return true;
-    }
-
-    private void onCommandNoArgs(@NotNull CommandSender sender) {
-        childCommands.get("gui").onCommandEntered(sender, new String[] { });
     }
 
     private void onCommandArgs(@NotNull CommandSender sender, @NotNull String[] args) {
@@ -123,11 +119,11 @@ public class gc extends GeoCommand implements TabExecutor  {
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         return Stream.concat(childCommands.values().stream()
-                                .filter(sc -> sender.hasPermission(sc.permission))
-                                .map(sc -> sc.name),
-                        childCommandsAliases.entrySet().stream()
-                                .filter(sca -> sender.hasPermission(childCommands.get(sca.getValue()).permission))
-                                .map(Map.Entry::getKey))
-                .sorted().toList();
+                                                   .filter(sc -> sender.hasPermission(sc.permission))
+                                                   .map(sc -> sc.name),
+                             childCommandsAliases.entrySet().stream()
+                                                            .filter(sca -> sender.hasPermission(childCommands.get(sca.getValue()).permission))
+                                                            .map(Map.Entry::getKey))
+                     .sorted().toList();
     }
 }

@@ -17,14 +17,14 @@ public abstract class GeoCommand {
     public static GeoCommand baseCommand;
     
     public String name;
-    public String displayName;
+    public String command;
     public String permission;
     public Material menuButtonItem;
 
     public String helpString = "No help available."; // shown in /gc help
     public String getHelpPage() {
         StringBuilder sb = new StringBuilder("§f%s%s:§a %s\n"
-                                             .formatted(displayName,
+                                             .formatted(command,
                                                         childCommands.isEmpty() ? "" : " [...]",
                                                         helpString));
         for (GeoCommand childCommand : childCommands.values()) {
@@ -37,9 +37,9 @@ public abstract class GeoCommand {
     public LinkedHashMap<String, GeoCommand> childCommands = new LinkedHashMap<>();
     // todo: implement childCommandsAliases
 
-    public GeoCommand(String name, String displayName, String permission, Material menuButtonItem) {
+    public GeoCommand(String name, String command, String permission, Material menuButtonItem) {
         this.name = name;
-        this.displayName = displayName;
+        this.command = command;
         this.permission = permission;
         this.menuButtonItem = menuButtonItem;
     }
@@ -52,7 +52,7 @@ public abstract class GeoCommand {
 
         //  if no permission, escape
         if (permission != null && !sender.hasPermission(permission)) {
-            ChatUtil.sendNoPermissionMessage(sender, displayName, permission);
+            ChatUtil.sendNoPermissionMessage(sender, command, permission);
             return;
         }
 
@@ -61,11 +61,10 @@ public abstract class GeoCommand {
 
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            // todo: this is probably formatted wrong...
             ChatUtil.sendPrefixedMessage(sender, """
                                                  §a%s
                                                  Usage: §f%s [...]"""
-                                                 .formatted(this.helpString, this.displayName));
+                                                 .formatted(this.helpString, this.command));
             return;
         }
         findAndExecuteChildCommand(sender, args);
@@ -78,12 +77,12 @@ public abstract class GeoCommand {
             ChatUtil.sendPrefixedMessage(sender, """
                                                  §c§f%s§c is not a valid command for §f%s§c!
                                                  Usage: §f%s [...]"""
-                                                 .formatted(mode, displayName, displayName));
+                                                 .formatted(mode, command, command));
             return;
         }
 
         if (permission != null && !sender.hasPermission(permission)) {
-            ChatUtil.sendNoPermissionMessage(sender, displayName + " " + mode, permission);
+            ChatUtil.sendNoPermissionMessage(sender, command + " " + mode, permission);
             return;
         }
 
@@ -105,23 +104,19 @@ public abstract class GeoCommand {
     }
 
     public ItemStack[] getMenuButtons(Player player) {
-        int childCommandsCount = childCommands.size();
-        if (childCommandsCount == 0)
-            return new ItemStack[] { };
+        List<GeoCommand> allowedChildCommands = new ArrayList<>(allowedChildCommands(player));
+        allowedChildCommands.removeIf(c -> c.menuButtonItem == null);
 
-        List<GeoCommand> childCommandsList = new ArrayList<>(childCommands.sequencedValues());
+        int childCommandsCount = allowedChildCommands.size();
 
         ItemStack[] buttons = new ItemStack[childCommandsCount];
         int i = 0;
-        for (GeoCommand childCommand : childCommandsList) {
-            if (childCommand.menuButtonItem == null)
-                continue;
-
+        for (GeoCommand childCommand : allowedChildCommands) {
             String titleColour = childCommand.isAdminCommand() ? "§6" : "§a";
             buttons[i] = MenuPage.createButton(childCommand.menuButtonItem,
                                                titleColour + StringUtil.sentenceCase(childCommand.name),
                                                "§f" + childCommand.helpString,
-                                               childCommand.displayName,
+                                               childCommand.command,
                                                player);
 
             i++;
@@ -131,14 +126,14 @@ public abstract class GeoCommand {
     }
 
     public final List<GeoCommand> allowedChildCommands(CommandSender sender) {
-        return this.childCommands.values().stream()
-                                          .filter(cc -> cc.permission == null || sender.hasPermission(cc.permission)).toList();
+        return this.childCommands.sequencedValues().stream()
+                                                   .filter(c -> c.permission == null || sender.hasPermission(c.permission)).toList();
     }
     public final List<String> allowedChildCommandsAsStrings(CommandSender sender) {
-        return this.childCommands.values().stream()
-                                          .filter(cc -> cc.permission == null || sender.hasPermission(cc.permission))
-                                          .map(cc -> cc.name)
-                                          .sorted().toList();
+        return this.childCommands.sequencedValues().stream()
+                                                   .filter(c -> c.permission == null || sender.hasPermission(c.permission))
+                                                   .map(c -> c.name)
+                                                   .sorted().toList();
     }
 
     public final boolean isAdminCommand() {

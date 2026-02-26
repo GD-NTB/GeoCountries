@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -38,13 +39,29 @@ public class MenuPage {
                     continue;
                 }
 
-                // pad top, bottom, left, and right
-                if (row == 0 || row == rows-1 || col == 0 || col == 8) {
+                // bottom row
+                if (row == rows-1) {
+                    // set confirm button
+                    if (col == 3)
+                        inventory.setItem(flatIndex, createButton(Material.LIME_WOOL, "§a/gc confirm", "Confirms a pending command/action.", "/gc confirm", player));
+                    // set cancel button
+                    else if (col == 5)
+                        inventory.setItem(flatIndex, createButton(Material.RED_WOOL, "§c/gc cancel", "Cancels a pending command/action. ", "/gc cancel", player));
+                    // pad bottom
+                    else
+                        inventory.setItem(flatIndex, createButton(Material.LIME_STAINED_GLASS_PANE, "", null, null, player));
+                    continue;
+                }
+
+                // pad top, left, right
+                if (row == 0 || col == 0 || col == 8) {
                     inventory.setItem(flatIndex, createButton(Material.LIME_STAINED_GLASS_PANE, "", null, null, player));
                     continue;
                 }
 
                 // put item in inventory
+                if (childCommandIndex >= buttonCount)
+                    continue;
                 inventory.setItem(flatIndex, buttons[childCommandIndex]);
                 childCommandIndex++;
             }
@@ -63,6 +80,11 @@ public class MenuPage {
                 meta.lore(List.of(Component.text("§f" + description)));
             if (command != null)
                 meta.getPersistentDataContainer().set(COMMAND_KEY, PersistentDataType.STRING, command);
+
+            // hide item hover tooltip shite
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
+            meta.setHideTooltip(false);
+
             // set player head to player's skin
             if (material == Material.PLAYER_HEAD && meta instanceof SkullMeta skullMeta)
                 skullMeta.setOwningPlayer(player);

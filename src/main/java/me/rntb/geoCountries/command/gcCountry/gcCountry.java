@@ -10,7 +10,7 @@ public class gcCountry extends GeoCommand {
 
     public gcCountry(String name, String displayName, String requiredPermission, Material menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Manages, edits, and views info about all countries.";
+        this.helpString = "Manages, edits, and views info about countries.";
         this.childCommands = new LinkedHashMap<>() {{
             put("citizens", new gcCountryCitizens("citizens", "/gc country citizens", "gc.country.citizens", Material.BOOK));
             put("create", new gcCountryCreate("create", "/gc country create", "gc.country.create", Material.NETHER_STAR));
