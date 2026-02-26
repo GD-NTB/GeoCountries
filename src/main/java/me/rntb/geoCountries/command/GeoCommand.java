@@ -118,11 +118,11 @@ public abstract class GeoCommand {
         ItemStack[] buttons = new ItemStack[childCommandsCount];
         int i = 0;
         for (GeoCommand childCommand : allowedChildCommands) {
-            String titleColour = childCommand.isAdminCommand() ? "§6" : "§a";
             buttons[i] = MenuPage.createButton(childCommand.menuButtonItem,
-                                               titleColour + StringUtil.sentenceCase(childCommand.name),
+                                               StringUtil.sentenceCase(childCommand.name),
                                                "§f" + childCommand.helpString,
                                                childCommand.command,
+                                               childCommand.isAdminCommand(),
                                                player);
 
             i++;

@@ -41,18 +41,19 @@ public class MenuPage {
 
                 // set close button
                 if (flatIndex == 8) {
-                    inventory.setItem(flatIndex, createButton(Material.BARRIER, "§cClose", null, "GUI_CLOSE", player));
+                    inventory.setItem(flatIndex, createButton(Material.BARRIER, "§cClose", null, "GUI_CLOSE", false, player));
                     continue;
                 }
 
                 // bottom row
                 if (row == rows-1) {
                     // set confirm button
+                    // todo: hide these if no perm
                     if (col == 3)
-                        inventory.setItem(flatIndex, createButton(Material.LIME_WOOL, "§a/gc confirm", "Confirms a pending command/action.", "/gc confirm", player));
+                        inventory.setItem(flatIndex, createButton(Material.LIME_WOOL, "§a/gc confirm", "Confirms a pending command/action.", "/gc confirm", false, player));
                     // set cancel button
                     else if (col == 5)
-                        inventory.setItem(flatIndex, createButton(Material.RED_WOOL, "§c/gc cancel", "Cancels a pending command/action. ", "/gc cancel", player));
+                        inventory.setItem(flatIndex, createButton(Material.RED_WOOL, "§c/gc cancel", "Cancels a pending command/action. ", "/gc cancel", false, player));
                     // else pad bottom
                     else
                         inventory.setItem(flatIndex, getPaddingButton(player));
@@ -77,19 +78,23 @@ public class MenuPage {
     }
 
     public static ItemStack getPaddingButton(Player player) {
-        return createButton(Material.LIME_STAINED_GLASS_PANE, null, null, null, player);
+        return createButton(Material.LIME_STAINED_GLASS_PANE, "", null, null, false, player);
     }
 
-    public static ItemStack createButton(Material material, String name, String description, String command, Player player) {
+    public static ItemStack createButton(Material material, String name, String description, String command, Boolean isAdminCommand, Player player) {
         ItemStack item = ItemStack.of(material);
 
         item.editMeta(meta -> {
-            if (name != null)
-                meta.displayName(Component.text(name));
+            if (name != null) {
+                String titleColour = isAdminCommand ? "§6" : "§a";
+                meta.displayName(Component.text(titleColour + name));
+            }
             if (description != null)
                 meta.lore(List.of(Component.text("§f" + description)));
             if (command != null)
                 meta.getPersistentDataContainer().set(COMMAND_KEY, PersistentDataType.STRING, command);
+            if (isAdminCommand)
+                meta.setEnchantmentGlintOverride(true);
 
             // hide item hover tooltip shite
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
