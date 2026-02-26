@@ -7,14 +7,14 @@ import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.DateUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 public class gcPlayerInfo extends GeoCommand {
 
-    public gcPlayerInfo(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcPlayerInfo(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Displays info about a particular player.";
     }

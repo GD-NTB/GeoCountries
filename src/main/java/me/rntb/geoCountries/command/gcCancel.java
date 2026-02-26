@@ -4,14 +4,14 @@ import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.types.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
 public class gcCancel extends GeoCommand {
 
-    public gcCancel(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcCancel(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Cancels a pending command/action.";
     }

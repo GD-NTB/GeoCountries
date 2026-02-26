@@ -5,14 +5,14 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.MenuPage;
 import me.rntb.geoCountries.util.ChatUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 public class gcDump extends GeoCommand {
 
-    public gcDump(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcDump(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Prints some debug shite in the chat for debugging.";
     }

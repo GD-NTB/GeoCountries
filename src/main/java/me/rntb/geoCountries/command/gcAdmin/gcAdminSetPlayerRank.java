@@ -4,16 +4,16 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.EnumUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 public class gcAdminSetPlayerRank extends GeoCommand {
 
-    public gcAdminSetPlayerRank(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcAdminSetPlayerRank(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Set a player's rank.";
+        this.helpString = "Sets a player's rank.";
     }
 
     @Override

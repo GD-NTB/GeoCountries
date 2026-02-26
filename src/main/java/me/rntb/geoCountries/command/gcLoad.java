@@ -4,12 +4,12 @@ import me.rntb.geoCountries.data.DataCollectionManager;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 public class gcLoad extends GeoCommand {
 
-    public gcLoad(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcLoad(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Loads all saved plugin data from the disk to memory.";
     }

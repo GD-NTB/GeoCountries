@@ -4,14 +4,14 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
 public class gcDebugCreateCountry extends GeoCommand {
 
-    public gcDebugCreateCountry(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcDebugCreateCountry(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Creates a test country.";
     }

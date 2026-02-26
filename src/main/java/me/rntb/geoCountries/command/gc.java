@@ -15,6 +15,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -22,21 +23,21 @@ import java.util.stream.Stream;
 
 public class gc extends GeoCommand implements TabExecutor  {
 
-    public gc(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gc(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "The base command for GeoCountries. Opens the plugin's visual GUI menu.";
         this.childCommands = new LinkedHashMap<>() {{
-            put("country", new gcCountry("country", "/gc country", "gc.country", Material.FILLED_MAP));
-            put("player", new gcPlayer("player", "/gc player", "gc.player", Material.PLAYER_HEAD));
-            put("citizenship", new gcCitizenship("citizenship", "/gc citizenship", "gc.citizenship", Material.WRITABLE_BOOK));
-            put("help", new gcHelp("help", "/gc help", "gc.help", Material.GRASS_BLOCK));
-            put("admin", new gcAdmin("admin", "/gc admin", "gc.admin", Material.DIAMOND_BLOCK));
-            put("debug", new gcDebug("debug", "/gc debug", "gc.debug", Material.REDSTONE));
-            put("config", new gcConfig("config", "/gc config", "gc.config", Material.BOOK));
-            put("save", new gcSave("save", "/gc save", "gc.save", Material.RED_BED));
-            put("load", new gcLoad("load", "/gc load", "gc.load", Material.CARROT_ON_A_STICK));
-            put("purge", new gcPurge("purge", "/gc purge", "gc.purge", Material.FLINT_AND_STEEL));
-            put("dump", new gcDump("dump", "/gc dump", "gc.dump", Material.BAKED_POTATO));
+            put("country", new gcCountry("country", "/gc country", "gc.country", ItemStack.of(Material.FILLED_MAP)));
+            put("player", new gcPlayer("player", "/gc player", "gc.player", ItemStack.of(Material.DEBUG_STICK))); // debug stick -> skull of player
+            put("citizenship", new gcCitizenship("citizenship", "/gc citizenship", "gc.citizenship", ItemStack.of(Material.WRITABLE_BOOK)));
+            put("help", new gcHelp("help", "/gc help", "gc.help", ItemStack.of(Material.GRASS_BLOCK)));
+            put("admin", new gcAdmin("admin", "/gc admin", "gc.admin", ItemStack.of(Material.DIAMOND_BLOCK)));
+            put("debug", new gcDebug("debug", "/gc debug", "gc.debug", ItemStack.of(Material.REDSTONE)));
+            put("config", new gcConfig("config", "/gc config", "gc.config", ItemStack.of(Material.BOOK)));
+            put("purge", new gcPurge("purge", "/gc purge", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
+            put("dump", new gcDump("dump", "/gc dump", "gc.dump", ItemStack.of(Material.BAKED_POTATO)));
+            put("load", new gcLoad("load", "/gc load", "gc.load", ItemStack.of(Material.CARROT_ON_A_STICK)));
+            put("save", new gcSave("save", "/gc save", "gc.save", ItemStack.of(Material.CAMPFIRE)));
             put("gui", new gcGui("gui", "/gc gui", "gc.gui", null));
             put("confirm", new gcConfirm("confirm", "/gc confirm", "gc.confirm", null));
             put("cancel", new gcCancel("cancel", "/gc cancel", "gc.cancel", null));

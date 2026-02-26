@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.types;
 
 import me.rntb.geoCountries.GeoCountries;
+import me.rntb.geoCountries.util.ItemUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -24,7 +25,8 @@ public class MenuPage {
     public static final NamespacedKey ISMENUOPEN_KEY = new NamespacedKey(GeoCountries.self, "isMenuOpen");
     public static final NamespacedKey TITLE_KEY = new NamespacedKey(GeoCountries.self, "title");
 
-    public static Inventory createPage(ItemStack[] buttons, Player player) {
+    // todo: buttons that we don't have permission for (e.g. not the correct rank) need to be hidden (GeoCommand.isUsable?)
+    public static Inventory createPage(ItemStack[] buttons, Player player)  {
         int buttonCount = buttons.length;
 
         int rows = 2 + (Math.ceilDiv(buttonCount, 7));
@@ -39,30 +41,27 @@ public class MenuPage {
             for (int col = 0; col < 9; col++) {
                 int flatIndex = row*9 + col;
 
-                // set close button
-                if (flatIndex == 8) {
-                    inventory.setItem(flatIndex, createButton(Material.BARRIER, "§cClose", null, "GUI_CLOSE", false, player));
-                    continue;
-                }
-
                 // bottom row
                 if (row == rows-1) {
+                    // todo: hide these if not on base page
                     // set confirm button
-                    // todo: hide these if no perm
-                    if (col == 3)
-                        inventory.setItem(flatIndex, createButton(Material.LIME_WOOL, "§a/gc confirm", "Confirms a pending command/action.", "/gc confirm", false, player));
+                    if (col == 6)
+                        inventory.setItem(flatIndex, createButton(ItemUtil.getSkull(ItemUtil.Skull.GREEN_TICK), "§a/gc confirm", "Confirms a pending command/action.", "/gc confirm", false));
                     // set cancel button
-                    else if (col == 5)
-                        inventory.setItem(flatIndex, createButton(Material.RED_WOOL, "§c/gc cancel", "Cancels a pending command/action. ", "/gc cancel", false, player));
+                    else if (col == 7)
+                        inventory.setItem(flatIndex, createButton(ItemUtil.getSkull(ItemUtil.Skull.RED_CROSS), "§c/gc cancel", "Cancels a pending command/action. ", "/gc cancel", false));
+                    // set close button
+                    else if (col == 8)
+                        inventory.setItem(flatIndex, createButton(ItemStack.of(Material.BARRIER), "§cClose", null, "GUI_CLOSE", false));
                     // else pad bottom
                     else
-                        inventory.setItem(flatIndex, getPaddingButton(player));
+                        inventory.setItem(flatIndex, getPaddingButton());
                     continue;
                 }
 
                 // pad top, left, right
                 if (row == 0 || col == 0 || col == 8) {
-                    inventory.setItem(flatIndex, getPaddingButton(player));
+                    inventory.setItem(flatIndex, getPaddingButton());
                     continue;
                 }
 
@@ -77,14 +76,19 @@ public class MenuPage {
         return inventory;
     }
 
-    public static ItemStack getPaddingButton(Player player) {
-        return createButton(Material.LIME_STAINED_GLASS_PANE, "", null, null, false, player);
+    public static ItemStack getPaddingButton() {
+        return createButton(ItemStack.of(Material.LIME_STAINED_GLASS_PANE), "", null, null, false);
     }
 
-    public static ItemStack createButton(Material material, String name, String description, String command, Boolean isAdminCommand, Player player) {
-        ItemStack item = ItemStack.of(material);
+    public static ItemStack createButtonOfPlayerSkull(Player player, String name, String description, String command, Boolean isAdminCommand) {
+        ItemStack skullItem = ItemStack.of(Material.PLAYER_HEAD);
+        skullItem.editMeta(meta -> ((SkullMeta) meta).setOwningPlayer(player));
+        return createButton(skullItem, name, description, command, isAdminCommand);
+    }
+    public static ItemStack createButton(ItemStack item, String name, String description, String command, Boolean isAdminCommand) {
+        ItemStack newItem = item.clone();
 
-        item.editMeta(meta -> {
+        newItem.editMeta(meta -> {
             if (name != null) {
                 String titleColour = isAdminCommand ? "§6" : "§a";
                 meta.displayName(Component.text(titleColour + name));
@@ -99,16 +103,12 @@ public class MenuPage {
             // hide item hover tooltip shite
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
             meta.setHideTooltip(false);
-
-            // set player head to player's skin
-            if (material == Material.PLAYER_HEAD && meta instanceof SkullMeta skullMeta)
-                skullMeta.setOwningPlayer(player);
         });
 
-        return item;
+        return newItem;
     }
 
-    public static void openMenuPage(Player player, String title, ItemStack[] buttons) {
+    public static void openMenuPage(Player player, String title, ItemStack[] buttons)  {
         PersistentDataContainer playerMetadata = player.getPersistentDataContainer();
         playerMetadata.set(MenuPage.TITLE_KEY, PersistentDataType.STRING, title); // set menu name metadata
 

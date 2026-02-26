@@ -6,14 +6,14 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.DateUtil;
 import me.rntb.geoCountries.util.StringUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 public class gcCountryInfo extends GeoCommand {
 
-    public gcCountryInfo(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcCountryInfo(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Displays info about your/any particular country.";
     }

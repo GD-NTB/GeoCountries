@@ -7,15 +7,15 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.UuidUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 public class gcCitizenshipAccept extends GeoCommand {
 
-    public gcCitizenshipAccept(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcCitizenshipAccept(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Accepts a player's citizenship application to your country.";
     }

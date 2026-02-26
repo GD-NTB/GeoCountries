@@ -5,14 +5,14 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 public class gcPurgeUUID extends GeoCommand {
 
-    public gcPurgeUUID(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcPurgeUUID(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Purges a PlayerProfile by UUID.";
     }

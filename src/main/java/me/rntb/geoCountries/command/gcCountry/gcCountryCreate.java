@@ -8,16 +8,16 @@ import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
 // todo: use chat response when just doing /gc country create
 public class gcCountryCreate extends GeoCommand {
 
-    public gcCountryCreate(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcCountryCreate(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Creates a new country.";
     }

@@ -6,15 +6,15 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.types.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 public class gcCitizenshipRevoke extends GeoCommand {
 
-    public gcCitizenshipRevoke(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcCitizenshipRevoke(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Revoke's the citizenship of a player of your country.";
     }

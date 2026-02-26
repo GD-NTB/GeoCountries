@@ -6,15 +6,15 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class gcCitizenshipUnsend extends GeoCommand {
 
-    public gcCitizenshipUnsend(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcCitizenshipUnsend(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Unsends a citizenship application that you previously sent.";
     }

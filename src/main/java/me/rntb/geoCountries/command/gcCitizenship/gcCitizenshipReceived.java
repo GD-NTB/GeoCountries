@@ -8,14 +8,14 @@ import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 public class gcCitizenshipReceived extends GeoCommand {
 
-    public gcCitizenshipReceived(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcCitizenshipReceived(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Lists received citizenship applications to your country.";
     }

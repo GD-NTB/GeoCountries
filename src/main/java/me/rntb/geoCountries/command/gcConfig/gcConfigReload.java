@@ -3,12 +3,12 @@ package me.rntb.geoCountries.command.gcConfig;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.config.ConfigManager;
 import me.rntb.geoCountries.util.ChatUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 public class gcConfigReload extends GeoCommand {
 
-    public gcConfigReload(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcConfigReload(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Reloads the config and updates the plugin's state.";
     }

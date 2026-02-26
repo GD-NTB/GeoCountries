@@ -4,16 +4,16 @@ import me.rntb.geoCountries.types.Pagination;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 // todo: rewrite using new Command.getHelpPage method
 public class gcHelp extends GeoCommand {
 
-    public gcHelp(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcHelp(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Lists all commands or displays a specific command's info.";
     }

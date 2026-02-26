@@ -8,14 +8,14 @@ import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 // todo: use chat response when just doing /gc country rename
 public class gcCountryRename extends GeoCommand {
 
-    public gcCountryRename(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcCountryRename(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Renames your country.";
     }

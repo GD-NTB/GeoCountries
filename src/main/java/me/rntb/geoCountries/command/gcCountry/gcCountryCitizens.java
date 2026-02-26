@@ -8,15 +8,15 @@ import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class gcCountryCitizens extends GeoCommand {
 
-    public gcCountryCitizens(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcCountryCitizens(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Lists all citizens of your/any country, their rank, and how many.";
     }

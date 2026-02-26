@@ -7,15 +7,15 @@ import me.rntb.geoCountries.types.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class gcCountrySettings extends GeoCommand {
 
-    public gcCountrySettings(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcCountrySettings(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Sets/lists your country's settings.";
     }

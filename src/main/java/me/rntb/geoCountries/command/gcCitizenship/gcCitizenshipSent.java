@@ -6,15 +6,15 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 public class gcCitizenshipSent extends GeoCommand {
 
-    public gcCitizenshipSent(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcCitizenshipSent(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Lists citizenship applications that you have sent.";
     }

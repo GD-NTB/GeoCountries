@@ -20,7 +20,7 @@ public abstract class GeoCommand {
     public String command;
     public static HashMap<String, GeoCommand> getByCommandString = new HashMap<>();
     public String permission;
-    public Material menuButtonItem;
+    public ItemStack menuButtonItem; // Material.PLAYER_HEAD gives skull with player's skin
 
     public String helpString = "No help available."; // shown in /gc help
     public String getHelpPage() {
@@ -38,7 +38,7 @@ public abstract class GeoCommand {
     public LinkedHashMap<String, GeoCommand> childCommands = new LinkedHashMap<>();
     // todo: implement childCommandsAliases
 
-    public GeoCommand(String name, String command, String permission, Material menuButtonItem) {
+    public GeoCommand(String name, String command, String permission, ItemStack menuButtonItem) {
         this.name = name;
         this.command = command;
         this.permission = permission;
@@ -118,12 +118,18 @@ public abstract class GeoCommand {
         ItemStack[] buttons = new ItemStack[childCommandsCount];
         int i = 0;
         for (GeoCommand childCommand : allowedChildCommands) {
-            buttons[i] = MenuPage.createButton(childCommand.menuButtonItem,
-                                               StringUtil.sentenceCase(childCommand.name),
-                                               "§f" + childCommand.helpString,
-                                               childCommand.command,
-                                               childCommand.isAdminCommand(),
-                                               player);
+            if (childCommand.menuButtonItem.getType() == Material.DEBUG_STICK)
+                buttons[i] = MenuPage.createButtonOfPlayerSkull(player,
+                                                                StringUtil.sentenceCase(childCommand.name),
+                                                                "§f" + childCommand.helpString,
+                                                                childCommand.command,
+                                                                childCommand.isAdminCommand());
+            else
+                buttons[i] = MenuPage.createButton(childCommand.menuButtonItem,
+                                                   StringUtil.sentenceCase(childCommand.name),
+                                                   "§f" + childCommand.helpString,
+                                                   childCommand.command,
+                                                   childCommand.isAdminCommand());
 
             i++;
         }

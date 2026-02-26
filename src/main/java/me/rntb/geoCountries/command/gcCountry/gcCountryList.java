@@ -4,12 +4,12 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 public class gcCountryList extends GeoCommand {
 
-    public gcCountryList(String name, String displayName, String requiredPermission, Material menuButtonItem) {
+    public gcCountryList(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Lists all countries on the server.";
     }
