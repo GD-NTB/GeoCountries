@@ -1,4 +1,4 @@
-package me.rntb.geoCountries.types;
+package me.rntb.geoCountries.type;
 
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.config.ConfigState;

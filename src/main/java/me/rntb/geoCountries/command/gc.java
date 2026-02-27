@@ -7,7 +7,7 @@ import me.rntb.geoCountries.command.gcCountry.gcCountry;
 import me.rntb.geoCountries.command.gcDebug.gcDebug;
 import me.rntb.geoCountries.command.gcPlayer.gcPlayer;
 import me.rntb.geoCountries.command.gcPurge.gcPurge;
-import me.rntb.geoCountries.types.Confirmation;
+import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.Material;
@@ -36,8 +36,8 @@ public class gc extends GeoCommand implements TabExecutor  {
             put("config", new gcConfig("config", "/gc config", "gc.config", ItemStack.of(Material.BOOK)));
             put("purge", new gcPurge("purge", "/gc purge", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
             put("dump", new gcDump("dump", "/gc dump", "gc.dump", ItemStack.of(Material.BAKED_POTATO)));
-            put("load", new gcLoad("load", "/gc load", "gc.load", ItemStack.of(Material.CARROT_ON_A_STICK)));
             put("save", new gcSave("save", "/gc save", "gc.save", ItemStack.of(Material.CAMPFIRE)));
+            put("load", new gcLoad("load", "/gc load", "gc.load", ItemStack.of(Material.CARROT_ON_A_STICK)));
             put("gui", new gcGui("gui", "/gc gui", "gc.gui", null));
             put("confirm", new gcConfirm("confirm", "/gc confirm", "gc.confirm", null));
             put("cancel", new gcCancel("cancel", "/gc cancel", "gc.cancel", null));

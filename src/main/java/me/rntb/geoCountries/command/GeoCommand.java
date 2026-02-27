@@ -1,6 +1,6 @@
 package me.rntb.geoCountries.command;
 
-import me.rntb.geoCountries.types.MenuPage;
+import me.rntb.geoCountries.type.MenuPage;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
@@ -20,7 +20,7 @@ public abstract class GeoCommand {
     public String command;
     public static HashMap<String, GeoCommand> getByCommandString = new HashMap<>();
     public String permission;
-    public ItemStack menuButtonItem; // Material.PLAYER_HEAD gives skull with player's skin
+    public ItemStack menuButtonItem; // ItemStack.of(Material.PLAYER_HEAD) gives skull with player's skin
 
     public String helpString = "No help available."; // shown in /gc help
     public String getHelpPage() {

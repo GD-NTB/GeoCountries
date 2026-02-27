@@ -1,4 +1,4 @@
-package me.rntb.geoCountries.types;
+package me.rntb.geoCountries.type;
 
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.EnumUtil;

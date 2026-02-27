@@ -1,4 +1,4 @@
-package me.rntb.geoCountries.types;
+package me.rntb.geoCountries.type;
 
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.util.ItemUtil;
@@ -13,18 +13,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 // todo: move this somewhere out of types package
 public class MenuPage {
 
+    // todo: move these to some metadata class (in package "class"?)
     // item metadata
-    public static final NamespacedKey COMMAND_KEY = new NamespacedKey(GeoCountries.self, "command");
+    public static final NamespacedKey ITEM_COMMAND_KEY = new NamespacedKey(GeoCountries.self, "command");
     // player metadata
-    public static final NamespacedKey ISMENUOPEN_KEY = new NamespacedKey(GeoCountries.self, "isMenuOpen");
+    public static final HashMap<UUID, Boolean> playerIsMenuOpen = new HashMap<>();
+    public static final HashMap<UUID, String> playerPreviousPage = new HashMap<>();
 
     // todo: buttons that we don't have permission for (e.g. not the correct rank) need to be hidden (GeoCommand.isUsable?)
-    public static Inventory createPage(ItemStack[] buttons, String title, Player player)  {
+    public static Inventory createPage(ItemStack[] buttons, String title, Player player, boolean isBasePage)  {
         int buttonCount = buttons.length;
 
         int rows = 2 + (Math.ceilDiv(buttonCount, 7));
@@ -40,19 +44,30 @@ public class MenuPage {
 
                 // bottom row
                 if (row == rows-1) {
-                    // todo: hide these if not on base page
                     // set confirm button
-                    if (col == 6)
+                    if (isBasePage && col == 6) {
                         inventory.setItem(flatIndex, createButton(ItemUtil.getSkull(ItemUtil.Skull.GREEN_TICK), "§a/gc confirm", "Confirms a pending command/action.", "/gc confirm", false));
+                        continue;
+                    }
+
                     // set cancel button
-                    else if (col == 7)
+                    if (isBasePage && col == 7) {
                         inventory.setItem(flatIndex, createButton(ItemUtil.getSkull(ItemUtil.Skull.RED_CROSS), "§c/gc cancel", "Cancels a pending command/action. ", "/gc cancel", false));
-                    // set close button
-                    else if (col == 8)
-                        inventory.setItem(flatIndex, createButton(ItemStack.of(Material.BARRIER), "§cClose", null, "GUI_CLOSE", false));
+                        continue;
+                    }
+
+                    if (col == 8) {
+                        // set close button
+                        if (isBasePage)
+                            inventory.setItem(flatIndex, createButton(ItemStack.of(Material.BARRIER), "§cClose", null, "GUI_CLOSE", false));
+                        // set back button
+                        else
+                            inventory.setItem(flatIndex, createButton(ItemStack.of(Material.ARROW), "§fGo Back", null, MenuPage.playerPreviousPage.get(player.getUniqueId()), false));
+                        continue;
+                    }
+
                     // else pad bottom
-                    else
-                        inventory.setItem(flatIndex, getPaddingButton());
+                    inventory.setItem(flatIndex, getPaddingButton());
                     continue;
                 }
 
@@ -93,7 +108,7 @@ public class MenuPage {
             if (description != null)
                 meta.lore(List.of(Component.text("§f" + description)));
             if (command != null)
-                meta.getPersistentDataContainer().set(COMMAND_KEY, PersistentDataType.STRING, command);
+                meta.getPersistentDataContainer().set(ITEM_COMMAND_KEY, PersistentDataType.STRING, command);
             if (isAdminCommand)
                 meta.setEnchantmentGlintOverride(true);
 
@@ -105,9 +120,15 @@ public class MenuPage {
         return newItem;
     }
 
-    public static void openMenuPage(Player player, String title, ItemStack[] buttons)  {
-        player.openInventory(createPage(buttons, title, player));
+    public static void openMenuPage(ItemStack[] buttons, String title, Player player, boolean isBasePage)  {
+        player.openInventory(createPage(buttons, title, player, isBasePage));
+        MenuPage.playerIsMenuOpen.put(player.getUniqueId(), true);
+    }
 
-        player.getPersistentDataContainer().set(MenuPage.ISMENUOPEN_KEY, PersistentDataType.BOOLEAN, true); // set menu flag to open
+    public static void closeMenuPage(Player player) {
+        if (!MenuPage.playerIsMenuOpen.get(player.getUniqueId()))
+            return;
+        Bukkit.getScheduler().runTask(GeoCountries.self, () -> player.closeInventory()); // 1 tick delay
+        MenuPage.playerIsMenuOpen.put(player.getUniqueId(), false);
     }
 }

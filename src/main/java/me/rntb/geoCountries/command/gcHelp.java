@@ -1,6 +1,6 @@
 package me.rntb.geoCountries.command;
 
-import me.rntb.geoCountries.types.Pagination;
+import me.rntb.geoCountries.type.Pagination;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;

@@ -14,10 +14,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Path;
 import java.util.Objects;
 
-// todo: config option to not close inventory on menu button click
-// todo: a lot of commands need to be support no args, e.g. /gc country create should prompt a Response
-// todo: change colour of settings [edit] and [default]
 // todo: gui
+// todo: change colour of settings [edit] and [default]
+// todo: a lot of commands need to be support no args, e.g. /gc country create should prompt a Response
 // todo: rewrite helper functions that dont need to be List to be type of Array
 // todo: in-country ranks
 // todo: promote command

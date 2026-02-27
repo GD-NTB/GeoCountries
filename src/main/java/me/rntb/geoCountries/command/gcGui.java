@@ -1,6 +1,6 @@
 package me.rntb.geoCountries.command;
 
-import me.rntb.geoCountries.types.MenuPage;
+import me.rntb.geoCountries.type.MenuPage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -19,6 +19,8 @@ public class gcGui extends GeoCommand {
         player.closeInventory(); // close any inventory already open
 
         // open base menu page
-        MenuPage.openMenuPage(player, GeoCommand.baseCommand.command, GeoCommand.baseCommand.getMenuButtons(player));
+        MenuPage.playerPreviousPage.put(player.getUniqueId(), GeoCommand.baseCommand.command);
+        MenuPage.openMenuPage(GeoCommand.baseCommand.getMenuButtons(player), GeoCommand.baseCommand.command, player, true);
+
     }
 }
