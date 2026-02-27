@@ -1,8 +1,8 @@
 package me.rntb.geoCountries.listener;
 
-import me.rntb.geoCountries.type.Confirmation;
-import me.rntb.geoCountries.type.MenuPage;
-import me.rntb.geoCountries.type.Response;
+import me.rntb.geoCountries.metadata.PlayerMetadata;
+import me.rntb.geoCountries.model.Confirmation;
+import me.rntb.geoCountries.model.Response;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,7 +22,7 @@ public class LeaveListener implements Listener {
         Response.stopWaiting(uuid, Response.StopWaitingEvent.CANCELLED, false);
 
         // clear player metadata
-        MenuPage.playerIsMenuOpen.remove(uuid);
-        MenuPage.playerPreviousPage.remove(uuid);
+        PlayerMetadata.isMenuOpen.remove(uuid);
+        PlayerMetadata.previousPage.remove(uuid);
     }
 }

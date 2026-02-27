@@ -7,7 +7,7 @@ import me.rntb.geoCountries.command.gcCountry.gcCountry;
 import me.rntb.geoCountries.command.gcDebug.gcDebug;
 import me.rntb.geoCountries.command.gcPlayer.gcPlayer;
 import me.rntb.geoCountries.command.gcPurge.gcPurge;
-import me.rntb.geoCountries.type.Confirmation;
+import me.rntb.geoCountries.model.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.Material;

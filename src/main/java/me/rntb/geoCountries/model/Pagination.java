@@ -1,4 +1,4 @@
-package me.rntb.geoCountries.type;
+package me.rntb.geoCountries.model;
 
 import java.util.Arrays;
 import java.util.List;

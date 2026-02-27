@@ -1,6 +1,6 @@
 package me.rntb.geoCountries.command;
 
-import me.rntb.geoCountries.type.MenuPage;
+import me.rntb.geoCountries.menu.MenuPage;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;

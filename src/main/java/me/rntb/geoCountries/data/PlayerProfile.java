@@ -2,7 +2,7 @@ package me.rntb.geoCountries.data;
 
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
-import me.rntb.geoCountries.type.SettingData;
+import me.rntb.geoCountries.model.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;

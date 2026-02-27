@@ -2,7 +2,7 @@ package me.rntb.geoCountries.command.gcPlayer;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.type.SettingData;
+import me.rntb.geoCountries.model.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;

@@ -1,15 +1,13 @@
 package me.rntb.geoCountries.command;
 
+import me.rntb.geoCountries.metadata.PlayerMetadata;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.type.MenuPage;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 
 public class gcDump extends GeoCommand {
 
@@ -35,6 +33,6 @@ public class gcDump extends GeoCommand {
                                                         PlayerProfile.byUsername.size(), PlayerProfile.byUUID.size(),
                                                         CitizenshipApplication.sentByApplicant.size(),
                                                         Country.all.size(),
-                                                        MenuPage.playerIsMenuOpen.get(UuidUtil.getUUIDOfCommandSender(sender))));
+                                                        PlayerMetadata.isMenuOpen.get(UuidUtil.getUUIDOfCommandSender(sender))));
     }
 }

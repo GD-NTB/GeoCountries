@@ -5,7 +5,7 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.type.Response;
+import me.rntb.geoCountries.model.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.command.CommandSender;

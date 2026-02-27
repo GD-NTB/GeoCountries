@@ -4,7 +4,7 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.type.Response;
+import me.rntb.geoCountries.model.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;

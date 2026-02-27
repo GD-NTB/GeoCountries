@@ -2,7 +2,7 @@ package me.rntb.geoCountries.command.gcPurge;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
-import me.rntb.geoCountries.type.Confirmation;
+import me.rntb.geoCountries.model.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;

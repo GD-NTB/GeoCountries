@@ -3,7 +3,7 @@ package me.rntb.geoCountries.command.gcCountry;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.type.Confirmation;
+import me.rntb.geoCountries.model.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.StringUtil;

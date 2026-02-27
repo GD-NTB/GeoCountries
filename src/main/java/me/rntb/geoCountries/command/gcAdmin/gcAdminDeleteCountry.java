@@ -2,7 +2,7 @@ package me.rntb.geoCountries.command.gcAdmin;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
-import me.rntb.geoCountries.type.Confirmation;
+import me.rntb.geoCountries.model.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;

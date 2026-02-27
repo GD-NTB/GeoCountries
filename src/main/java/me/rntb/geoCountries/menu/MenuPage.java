@@ -1,31 +1,21 @@
-package me.rntb.geoCountries.type;
+package me.rntb.geoCountries.menu;
 
 import me.rntb.geoCountries.GeoCountries;
+import me.rntb.geoCountries.metadata.ItemMetadata;
+import me.rntb.geoCountries.metadata.PlayerMetadata;
 import me.rntb.geoCountries.util.ItemUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.persistence.PersistentDataType;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
-// todo: move this somewhere out of types package
 public class MenuPage {
-
-    // todo: move these to some metadata class (in package "class"?)
-    // item metadata
-    public static final NamespacedKey ITEM_COMMAND_KEY = new NamespacedKey(GeoCountries.self, "command");
-    // player metadata
-    public static final HashMap<UUID, Boolean> playerIsMenuOpen = new HashMap<>();
-    public static final HashMap<UUID, String> playerPreviousPage = new HashMap<>();
 
     // todo: buttons that we don't have permission for (e.g. not the correct rank) need to be hidden (GeoCommand.isUsable?)
     public static Inventory createPage(ItemStack[] buttons, String title, Player player, boolean isBasePage)  {
@@ -62,7 +52,7 @@ public class MenuPage {
                             inventory.setItem(flatIndex, createButton(ItemStack.of(Material.BARRIER), "§cClose", null, "GUI_CLOSE", false));
                         // set back button
                         else
-                            inventory.setItem(flatIndex, createButton(ItemStack.of(Material.ARROW), "§fGo Back", null, MenuPage.playerPreviousPage.get(player.getUniqueId()), false));
+                            inventory.setItem(flatIndex, createButton(ItemStack.of(Material.ARROW), "§fGo Back", null, PlayerMetadata.previousPage.get(player.getUniqueId()), false));
                         continue;
                     }
 
@@ -108,7 +98,7 @@ public class MenuPage {
             if (description != null)
                 meta.lore(List.of(Component.text("§f" + description)));
             if (command != null)
-                meta.getPersistentDataContainer().set(ITEM_COMMAND_KEY, PersistentDataType.STRING, command);
+                ItemMetadata.setItemCommand(meta, command);
             if (isAdminCommand)
                 meta.setEnchantmentGlintOverride(true);
 
@@ -122,13 +112,13 @@ public class MenuPage {
 
     public static void openMenuPage(ItemStack[] buttons, String title, Player player, boolean isBasePage)  {
         player.openInventory(createPage(buttons, title, player, isBasePage));
-        MenuPage.playerIsMenuOpen.put(player.getUniqueId(), true);
+        PlayerMetadata.isMenuOpen.put(player.getUniqueId(), true);
     }
 
     public static void closeMenuPage(Player player) {
-        if (!MenuPage.playerIsMenuOpen.get(player.getUniqueId()))
+        if (!PlayerMetadata.isMenuOpen.get(player.getUniqueId()))
             return;
         Bukkit.getScheduler().runTask(GeoCountries.self, () -> player.closeInventory()); // 1 tick delay
-        MenuPage.playerIsMenuOpen.put(player.getUniqueId(), false);
+        PlayerMetadata.isMenuOpen.put(player.getUniqueId(), false);
     }
 }

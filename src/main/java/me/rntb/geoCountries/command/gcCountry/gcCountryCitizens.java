@@ -3,7 +3,7 @@ package me.rntb.geoCountries.command.gcCountry;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.type.Pagination;
+import me.rntb.geoCountries.model.Pagination;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import net.kyori.adventure.text.Component;
