@@ -2,7 +2,7 @@ package me.rntb.geoCountries.command.gcPurge;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.model.Confirmation;
+import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
@@ -31,7 +31,7 @@ public class gcPurgePlayerProfile extends GeoCommand {
     private void onConfirm(CommandSender sender, String[] args) {
         int count = PlayerProfile.all.size();
         for (PlayerProfile playerProfile : new ArrayList<>(PlayerProfile.all)) { // new ArrayList as we are concurrently modifying
-            PlayerProfile.delete(playerProfile);
+            playerProfile.deregister();
         }
 
         ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a PlayerProfile" + StringUtil.leadingS(count) + ".");

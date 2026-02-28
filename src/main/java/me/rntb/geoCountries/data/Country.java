@@ -2,10 +2,13 @@ package me.rntb.geoCountries.data;
 
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
-import me.rntb.geoCountries.model.SettingData;
+import me.rntb.geoCountries.service.CitizenshipApplicationService;
+import me.rntb.geoCountries.service.CitizenshipService;
+import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -14,9 +17,6 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class Country extends DataCollection {
-
-    private static final String FILE_PATH = "data/countries";
-    private static final String DISPLAY_NAME = "Country";
 
     // list of all countries existing
     public static ArrayList<Country> all = null;
@@ -40,9 +40,13 @@ public class Country extends DataCollection {
     }
 
     public static void init() {
-        all = readFromFile(FILE_PATH, DISPLAY_NAME, new TypeToken<ArrayList<Country>>() {}.getType());
+        filePath = "data/countries";
+        displayName = "Country";
+
+        all = readFromFile(filePath, displayName, new TypeToken<ArrayList<Country>>() {}.getType());
         if (all == null) {
-            ChatUtil.sendPrefixedLogMessage("ReadFromFile(%s) was null, something is very wrong!");
+            ChatUtil.sendPrefixedLogErrorMessage("ReadFromFile(%s) was null, try backing it up and deleting the file!"
+                                                 .formatted(filePath));
             return;
         }
 
@@ -64,38 +68,38 @@ public class Country extends DataCollection {
     }
 
     public static void save() {
-        writeToFile(FILE_PATH, DISPLAY_NAME, all);
+        writeToFile(filePath, displayName, all);
 
         if (all != null && ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Saved " + all.size() + " Countries");
     }
 
-    public static void addNew(Country country) {
-        addNew(country, all, DISPLAY_NAME);
-        byName.put(country.name, country);
-        byUUID.put(country.uuid, country);
+    public void register() {
+        add(this, all, displayName);
+        byName.put(name, this);
+        byUUID.put(uuid, this);
 
-        country.timeCreated = System.currentTimeMillis();
+        this.timeCreated = System.currentTimeMillis();
 
         // create settings
-        country.settings = buildDefaultSettings();
+        this.settings = buildDefaultSettings();
     }
 
-    public static void delete(Country country) {
+    public void deregister() {
         // clear all citizen's citizenships
-        for (UUID uuid : new ArrayList<>(country.citizens)) { // new arraylist while we're modifying
+        for (UUID uuid : new ArrayList<>(citizens)) { // new arraylist while we're modifying
             PlayerProfile player = PlayerProfile.byUUID.get(uuid);
             if (player != null)
-                player.clearCitizenship();
+                CitizenshipService.leaveCountry(player);
         }
 
-        byName.remove(country.name);
-        byUUID.remove(country.uuid);
+        byName.remove(name);
+        byUUID.remove(uuid);
 
         // delete any associated applications
-        CitizenshipApplication.deleteAllSentByToCountry(country);
+        CitizenshipApplicationService.deleteAllSentByToCountry(this);
 
-        delete(country, all, DISPLAY_NAME);
+        delete(this, all, displayName);
     }
 
     // ---
@@ -112,31 +116,25 @@ public class Country extends DataCollection {
     public PlayerProfile getLeader() {
         return PlayerProfile.byUUID.get(leader);
     }
-    public void setLeader(PlayerProfile player) {
-        // if clearing leader, set to null and escape
-        if (player == null) {
-            leader = null;
-            return;
-        }
-
-        // if has leader
-        if (leader != null) {
-            // if player is already leader, escape
-            if (leader.equals(player.uuid))
-                return;
-
-            // demote old
-            PlayerProfile old = PlayerProfile.byUUID.get(leader);
-            old.setRank(PlayerProfile.PlayerRank.CITIZEN);
-        }
-
-        // set player to leader and add as citizen if not already
-        leader = player.uuid;
-        addCitizen(player);
-        player.rank = PlayerProfile.PlayerRank.LEADER; // re-set rank
-    }
 
     public ArrayList<UUID> citizens = new ArrayList<>();
+    public List<Player> getOnlineCitizens() {
+        List<Player> players = new ArrayList<>();
+
+        for (UUID uuid : citizens) {
+            PlayerProfile profile = PlayerProfile.byUUID.get(uuid);
+            if (profile == null)
+                continue;
+
+            Player player = profile.getOnlinePlayer();
+            if (player == null)
+                continue;
+
+            players.add(player);
+        }
+
+        return players;
+    }
     public List<String> citizensAsStrings() {
         return citizens.stream()
                        .map(uuid -> PlayerProfile.byUUID.get(uuid).username)
@@ -151,19 +149,7 @@ public class Country extends DataCollection {
     public int citizenCount() {
         return citizens.size();
     }
-    public void addCitizen(PlayerProfile player) {
-        if (!citizens.contains(player.uuid)) {
-            citizens.add(player.uuid);
-            player.citizenship = uuid;
-        }
-    }
-    public void removeCitizen(PlayerProfile player) {
-        citizens.remove(player.uuid);
-        if (player.citizenship != null && player.citizenship.equals(uuid))
-            player.citizenship = null;
-    }
 
-    // settings
     public LinkedHashMap<String, String> settings = new LinkedHashMap<>();
     public static final LinkedHashMap<String, SettingData> settingsData = new LinkedHashMap<>() {{
         put("motto", new SettingData("null",

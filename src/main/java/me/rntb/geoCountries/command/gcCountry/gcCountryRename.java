@@ -3,13 +3,12 @@ package me.rntb.geoCountries.command.gcCountry;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.model.Confirmation;
+import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 // todo: use chat response when just doing /gc country rename
@@ -65,14 +64,16 @@ public class gcCountryRename extends GeoCommand {
 
         country.setName(countryName);
 
-        ChatUtil.sendPrefixedMessage(sender, "§aRenamed country to §f" + countryName + "§a!");
+        ChatUtil.sendPrefixedNotificationMessage(sender, "§aRenamed country to §f" + countryName + "§a!");
 
         ChatUtil.broadcastPrefixedMessage("§6The country of §f" + country.name + "§6 has been renamed to §f" + countryName + "§6!");
 
-        // play sound to renamer
-        SoundUtil.playSound((Player) sender, SoundUtil.SoundEffect.CHAT_NOTIF);
-
         // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has now been renamed to §f" + countryName + "§6!", true);
+    }
+
+    @Override
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        return PlayerProfile.byCommandSender(sender).rank == PlayerRank.LEADER;
     }
 }

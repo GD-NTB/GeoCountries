@@ -2,6 +2,9 @@ package me.rntb.geoCountries.command.gcAdmin;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.service.CitizenshipService;
+import me.rntb.geoCountries.service.RankService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.EnumUtil;
 import org.bukkit.command.CommandSender;
@@ -37,16 +40,27 @@ public class gcAdminSetPlayerRank extends GeoCommand {
         }
 
         // get rank
-        PlayerProfile.PlayerRank rank;
+        PlayerRank rank;
         try {
-            rank = PlayerProfile.PlayerRank.valueOf(args[1]);
+            rank = PlayerRank.valueOf(args[1]);
         } catch (IllegalArgumentException e) {
             ChatUtil.sendPrefixedMessage(sender, "§cRank §f" + args[1] + "§c could not be found!");
             return;
         }
 
         // set rank
-        player.setRank(rank);
+        switch (rank) {
+            case LEADER:
+                RankService.promoteToLeader(player);
+                break;
+            case CITIZEN:
+                if (player.rank == PlayerRank.LEADER)
+                    RankService.demoteFromLeader(player);
+                break;
+            case NONE:
+                CitizenshipService.leaveCountry(player);
+                break;
+        }
 
         ChatUtil.sendPrefixedMessage(sender, "§aSet player rank!");
     }
@@ -55,7 +69,7 @@ public class gcAdminSetPlayerRank extends GeoCommand {
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         return switch (args.length) {
             case 1 -> PlayerProfile.allAsUsernames(true);
-            case 2 -> EnumUtil.enumToStringList(PlayerProfile.PlayerRank.class);
+            case 2 -> EnumUtil.enumToStringList(PlayerRank.class);
             default -> List.of();
         };
     }

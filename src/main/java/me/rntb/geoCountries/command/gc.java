@@ -7,7 +7,7 @@ import me.rntb.geoCountries.command.gcCountry.gcCountry;
 import me.rntb.geoCountries.command.gcDebug.gcDebug;
 import me.rntb.geoCountries.command.gcPlayer.gcPlayer;
 import me.rntb.geoCountries.command.gcPurge.gcPurge;
-import me.rntb.geoCountries.model.Confirmation;
+import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.Material;
@@ -42,8 +42,6 @@ public class gc extends GeoCommand implements TabExecutor  {
             put("confirm", new gcConfirm("confirm", "/gc confirm", "gc.confirm", null));
             put("cancel", new gcCancel("cancel", "/gc cancel", "gc.cancel", null));
         }};
-
-        GeoCommand.baseCommand = this;
     }
 
     public Map<String, String> childCommandsAliases = Map.ofEntries(

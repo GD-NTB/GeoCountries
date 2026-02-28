@@ -1,5 +1,6 @@
 package me.rntb.geoCountries;
 
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.command.gc;
 import me.rntb.geoCountries.config.ConfigManager;
 import me.rntb.geoCountries.data.DataCollectionManager;
@@ -9,12 +10,15 @@ import me.rntb.geoCountries.listener.JoinListener;
 import me.rntb.geoCountries.listener.LeaveListener;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
 import java.util.Objects;
 
 // todo: gui
+// todo: better tab autocomplete using String.startswith check for every suggestion
+// todo: use getters and setters instead of changing the state of internal variables?
 // todo: change colour of settings [edit] and [default]
 // todo: a lot of commands need to be support no args, e.g. /gc country create should prompt a Response
 // todo: rewrite helper functions that dont need to be List to be type of Array
@@ -47,22 +51,27 @@ public class GeoCountries extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
 
-        // initialise commands
-        Objects.requireNonNull(getCommand("gc")).setExecutor(new gc("gc", "/gc", null, null));
+        // initialise base command
+        GeoCommand.baseCommand = new gc("gc", "/gc", null, null);
+        Objects.requireNonNull(getCommand("gc")).setExecutor((CommandExecutor) GeoCommand.baseCommand);
 
         // initialise globals
         PluginName = getPluginMeta().getName();
         PluginVersion = getPluginMeta().getVersion();
         PluginNameAndVersion = PluginName + " [" + PluginVersion + "]";
+
         PluginAbsoluteDataFolderPath = getDataPath().toAbsolutePath();
+
+        GeoCommand.adminPermissionGroup = "gc.group.admin";
 
         // initialise data collections
         DataCollectionManager.init();
 
-        ChatUtil.sendPrefixedLogMessage("Plugin enabled!");
-
         // set up bstats
         bStatsSetup();
+
+        // done
+        ChatUtil.sendPrefixedLogMessage("Plugin enabled!");
     }
 
     @Override

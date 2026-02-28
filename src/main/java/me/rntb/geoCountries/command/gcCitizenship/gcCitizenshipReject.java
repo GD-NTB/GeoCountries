@@ -4,6 +4,8 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -28,7 +30,7 @@ public class gcCitizenshipReject extends GeoCommand {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if not leader, escape
-        if (playerProfile.rank != PlayerProfile.PlayerRank.LEADER && playerProfile.hasCitizenship()) {
+        if (playerProfile.rank != PlayerRank.LEADER && playerProfile.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cOnly a leader of a country can reject citizenship applications!");
             return;
         }
@@ -65,7 +67,7 @@ public class gcCitizenshipReject extends GeoCommand {
         }
 
         // reject the application
-        cApplication.reject(true);
+        CitizenshipApplicationService.reject(cApplication, true);
 
         ChatUtil.sendPrefixedMessage(sender, "§aRejected §f" + otherPlayerName + "§a's citizenship application.");
     }
@@ -76,7 +78,7 @@ public class gcCitizenshipReject extends GeoCommand {
             return List.of();
 
         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
-        if (player.rank != PlayerProfile.PlayerRank.LEADER)
+        if (player.rank != PlayerRank.LEADER)
             return List.of();
 
         return player.getCitizenship().getReceivedCitizenshipApplicationsAsStrings();

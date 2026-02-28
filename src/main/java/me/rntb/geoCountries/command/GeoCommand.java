@@ -15,6 +15,7 @@ import java.util.*;
 public abstract class GeoCommand {
     
     public static GeoCommand baseCommand;
+    public static String adminPermissionGroup;
     
     public String name;
     public String command;
@@ -106,20 +107,19 @@ public abstract class GeoCommand {
         return command.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));
     }
 
-    public ItemStack[] getMenuButtons(Player player) {
+    public ItemStack[] getMenuButtons(CommandSender sender) {
         if (childCommands.isEmpty())
             return null;
 
-        List<GeoCommand> allowedChildCommands = new ArrayList<>(allowedChildCommands(player));
-        allowedChildCommands.removeIf(c -> c.menuButtonItem == null);
+        List<GeoCommand> allowedChildCommands = new ArrayList<>(allowedChildCommands(sender));
+        // if isRunnableBySender is not overridden, permission will have been checked twice, but this isnt an expensive operation (hopefully)
+        allowedChildCommands.removeIf(c -> c.menuButtonItem == null || !c.isVisibleOnMenu(sender));
 
-        int childCommandsCount = allowedChildCommands.size();
-
-        ItemStack[] buttons = new ItemStack[childCommandsCount];
+        ItemStack[] buttons = new ItemStack[allowedChildCommands.size()];
         int i = 0;
         for (GeoCommand childCommand : allowedChildCommands) {
             if (childCommand.menuButtonItem.getType() == Material.DEBUG_STICK)
-                buttons[i] = MenuPage.createButtonOfPlayerSkull(player,
+                buttons[i] = MenuPage.createButtonOfPlayerSkull((Player) sender,
                                                                 StringUtil.sentenceCase(childCommand.name),
                                                                 "§f" + childCommand.helpString,
                                                                 childCommand.command,
@@ -137,11 +137,21 @@ public abstract class GeoCommand {
         return buttons;
     }
 
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        return sender.hasPermission(permission);
+    }
+
     public final List<GeoCommand> allowedChildCommands(CommandSender sender) {
+        if (!(sender instanceof Player) || childCommands.isEmpty())
+            return List.of();
+
         return this.childCommands.sequencedValues().stream()
                                                    .filter(c -> c.permission == null || sender.hasPermission(c.permission)).toList();
     }
     public final List<String> allowedChildCommandsAsStrings(CommandSender sender) {
+        if (!(sender instanceof Player) || childCommands.isEmpty())
+            return List.of();
+
         return this.childCommands.sequencedValues().stream()
                                                    .filter(c -> c.permission == null || sender.hasPermission(c.permission))
                                                    .map(c -> c.name)
@@ -152,7 +162,7 @@ public abstract class GeoCommand {
         if (permission == null)
             return false;
 
-        Permission adminPermission = Bukkit.getPluginManager().getPermission("gc.group.admin");
+        Permission adminPermission = Bukkit.getPluginManager().getPermission(adminPermissionGroup);
         assert adminPermission != null;
         return adminPermission.getChildren().containsKey(this.permission);
     }

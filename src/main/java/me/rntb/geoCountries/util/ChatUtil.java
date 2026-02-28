@@ -2,15 +2,12 @@ package me.rntb.geoCountries.util;
 
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
-import me.rntb.geoCountries.data.PlayerProfile;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 import static org.bukkit.Bukkit.getServer;
 
@@ -100,20 +97,23 @@ public class ChatUtil {
             sendPrefixedMessage(player, message);
         }
     }
+    public static void broadcastPrefixedMessage(Component message) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            sendPrefixedMessage(player, message);
+        }
+    }
 
     // country
     public static void broadcastPrefixedMessageToCountry(Country country, String message, boolean playSound) {
-        for (UUID uuid : country.citizens) {
-            PlayerProfile playerProfile = PlayerProfile.byUUID.get(uuid);
-            if (ConfigState.debugLogging && playerProfile == null) {
-                sendPrefixedLogMessage("Tried to broadcast message to UUID " + uuid + " without PlayerProfile.");
-                return;
-            }
-            Player player = playerProfile.getOnlinePlayer();
-
-            sendPrefixedMessage(playerProfile.getOnlinePlayer(), message);
-
-            // play sound
+        for (Player player : country.getOnlineCitizens()) {
+            sendPrefixedMessage(player, message);
+            if (playSound)
+                SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+        }
+    }
+    public static void broadcastPrefixedMessageToCountry(Country country, Component message, boolean playSound) {
+        for (Player player : country.getOnlineCitizens()) {
+            sendPrefixedMessage(player, message);
             if (playSound)
                 SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
         }
@@ -125,7 +125,6 @@ public class ChatUtil {
             return;
         sender.sendMessage(ConfigState.chatPrefix + message);
     }
-
     public static void sendPrefixedMessage(CommandSender sender, Component message) {
         if (sender == null)
             return;
@@ -134,6 +133,19 @@ public class ChatUtil {
 
     public static void sendNoPermissionMessage(CommandSender sender, String command, String permission) {
         sendPrefixedMessage(sender, "§cYou do not have permission to do §f" + command + "§c! §8(" + permission + ")");
+    }
+
+    public static void sendPrefixedNotificationMessage(CommandSender sender, String message) {
+        if (!(sender instanceof Player player))
+            return;
+        sendPrefixedMessage(sender, message);
+        SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
+    }
+    public static void sendPrefixedNotificationMessage(CommandSender sender, Component message) {
+        if (!(sender instanceof Player player))
+            return;
+        sendPrefixedMessage(sender, message);
+        SoundUtil.playSound(player, SoundUtil.SoundEffect.CHAT_NOTIF);
     }
 
     // console

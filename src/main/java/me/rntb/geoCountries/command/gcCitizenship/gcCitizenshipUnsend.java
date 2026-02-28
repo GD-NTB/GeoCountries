@@ -4,6 +4,8 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -55,7 +57,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
             return;
         }
 
-        cApplication.deleteSent();
+        CitizenshipApplicationService.deleteSent(cApplication);
 
         ChatUtil.sendPrefixedMessage(sender, "§aUnsent citizenship application!");
     }
@@ -66,7 +68,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
             return List.of();
 
         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
-        if (player.rank != PlayerProfile.PlayerRank.LEADER)
+        if (player.rank != PlayerRank.LEADER)
             return List.of();
 
         return player.getCitizenship().citizens.stream()

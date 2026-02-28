@@ -73,4 +73,9 @@ public class gcCountryInfo extends GeoCommand {
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         return args.length == 1 ? Country.allAsStrings(true) : List.of();
     }
+
+    @Override
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        return PlayerProfile.byCommandSender(sender).hasCitizenship();
+    }
 }

@@ -33,7 +33,7 @@ public class InventoryListener implements Listener {
         if (commandString == null)
             return;
 
-        // these are hardcoded "command" commands... yeah
+        // these are hardcoded "command" commands
         // GUI_CLOSE
         if (commandString.equals("GUI_CLOSE")) {
             player.closeInventory();

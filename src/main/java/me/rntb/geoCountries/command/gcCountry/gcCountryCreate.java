@@ -3,13 +3,13 @@ package me.rntb.geoCountries.command.gcCountry;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.model.Confirmation;
+import me.rntb.geoCountries.service.CitizenshipService;
+import me.rntb.geoCountries.service.RankService;
+import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -64,15 +64,19 @@ public class gcCountryCreate extends GeoCommand {
         newCountry.citizens.add(playerProfile.uuid);
 
         // create country
-        Country.addNew(newCountry);
+        newCountry.register();
 
         // set player citizenship and rank
-        playerProfile.setCitizenship(newCountry, PlayerProfile.PlayerRank.LEADER);
+        CitizenshipService.joinCountry(playerProfile, newCountry);
+        RankService.promoteToLeader(playerProfile);
 
-        ChatUtil.sendPrefixedMessage(sender, "§aCreated country §f" + countryName + "§a!");
+        ChatUtil.sendPrefixedNotificationMessage(sender, "§aCreated country §f" + countryName + "§a!");
+
         ChatUtil.broadcastPrefixedMessage("§6A new country §f" + countryName + "§6 has just been created!");
+    }
 
-        // play sound to creator
-        SoundUtil.playSound((Player) sender, SoundUtil.SoundEffect.CHAT_NOTIF);
+    @Override
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        return !PlayerProfile.byCommandSender(sender).hasCitizenship();
     }
 }

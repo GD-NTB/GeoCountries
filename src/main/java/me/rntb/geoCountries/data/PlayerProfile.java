@@ -2,7 +2,7 @@ package me.rntb.geoCountries.data;
 
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
-import me.rntb.geoCountries.model.SettingData;
+import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
@@ -17,9 +17,6 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class PlayerProfile extends DataCollection {
-
-    private static final String FILE_PATH = "data/players";
-    private static final String DISPLAY_NAME = "PlayerProfile"; // for errors and logging
 
     // list of every player to have ever joined the server
     public static ArrayList<PlayerProfile> all = null;
@@ -55,10 +52,13 @@ public class PlayerProfile extends DataCollection {
     }
 
     public static void init() {
-        all = readFromFile(FILE_PATH, DISPLAY_NAME, new TypeToken<ArrayList<PlayerProfile>>() {}.getType());
+        filePath = "data/players";
+        displayName = "PlayerProfile";
+
+        all = readFromFile(filePath, displayName, new TypeToken<ArrayList<PlayerProfile>>() {}.getType());
         if (all == null) {
-            ChatUtil.sendPrefixedLogMessage("ReadFromFile(%s) was null, try deleting the file!"
-                                            .formatted(FILE_PATH));
+            ChatUtil.sendPrefixedLogErrorMessage("ReadFromFile(%s) was null, try backing it up and deleting the file!"
+                                                 .formatted(filePath));
             return;
         }
 
@@ -82,7 +82,7 @@ public class PlayerProfile extends DataCollection {
     }
 
     public static void save() {
-        writeToFile(FILE_PATH, DISPLAY_NAME, all);
+        writeToFile(filePath, displayName, all);
 
         if (all != null && ConfigState.debugLogging) {
             int count = all.size();
@@ -90,29 +90,28 @@ public class PlayerProfile extends DataCollection {
         }
     }
 
-    public static void addNew(PlayerProfile player) {
-        addNew(player, all, DISPLAY_NAME);
+    public void register() {
+        add(this, all, displayName);
 
-        byUsername.put(player.username, player);
-        byUUID.put(player.uuid, player);
+        byUsername.put(this.username, this);
+        byUUID.put(this.uuid, this);
 
-        player.timeFirstJoined = System.currentTimeMillis();
+        timeFirstJoined = System.currentTimeMillis();
 
-        // create settings
-        player.settings = buildDefaultSettings();
+        settings = buildDefaultSettings();
     }
 
-    public static void delete(PlayerProfile player) {
+    public void deregister() {
         // remove all mentions of this player profile from all countries
         for (Country c : me.rntb.geoCountries.data.Country.all) {
-            if (c.leader != null && c.leader.equals(player.uuid)) { c.leader = null; }
-            c.citizens.remove(player.uuid);
+            if (c.leader != null && c.leader.equals(uuid)) { c.leader = null; }
+            c.citizens.remove(uuid);
         }
 
-        byUsername.remove(player.username);
-        byUUID.remove(player.uuid);
+        byUsername.remove(username);
+        byUUID.remove(uuid);
 
-        delete(player, all, DISPLAY_NAME);
+        delete(this, all, displayName);
     }
 
     // ---
@@ -123,44 +122,10 @@ public class PlayerProfile extends DataCollection {
 
     public UUID citizenship = null;
     public Country getCitizenship() {
-        return me.rntb.geoCountries.data.Country.byUUID.get(citizenship);
-    }
-    public void setCitizenship(UUID country, PlayerRank rank) {
-        UUID prevCountryUUID = citizenship;
-
-        // if removing player country
-        if (prevCountryUUID != null && !prevCountryUUID.equals(country)) {
-            Country prevCountry = Country.byUUID.get(prevCountryUUID);
-
-            if (prevCountry != null) {
-                prevCountry.removeCitizen(this);
-
-                if (uuid.equals(prevCountry.leader))
-                    prevCountry.setLeader(null);
-            }
-        }
-
-        // set citizenship
-        citizenship = country;
-
-        // update rank
-        setRank(rank);
-    }
-    public void setCitizenship(Country country, PlayerRank rank) {
-        setCitizenship(country.uuid, rank);
-    }
-    public void clearCitizenship() {
-        setCitizenship((UUID) null, PlayerRank.NONE);
+        return Country.byUUID.get(citizenship);
     }
     public boolean hasCitizenship() {
         return citizenship != null;
-    }
-
-    public Player getOnlinePlayer() {
-        return Bukkit.getPlayer(uuid);
-    }
-    public OfflinePlayer getOfflinePlayer() {
-        return Bukkit.getOfflinePlayer(uuid);
     }
 
     public enum PlayerRank {
@@ -178,57 +143,6 @@ public class PlayerProfile extends DataCollection {
     }
     public int getRankLevel() {
         return rank.ordinal();
-    }
-    public void setRank(PlayerRank newRank) {
-        // if no change, escape
-        if (rank == newRank)
-            return;
-
-        Country country = Country.byUUID.get(citizenship);
-        // if not part of country, dont do anything except set to NONE
-        if (country == null) {
-            rank = PlayerRank.NONE;
-            return;
-        }
-
-        // if demoting completely, remove rank and escape
-        if (newRank == PlayerRank.NONE) {
-            // remove from citizens list if needed
-            if (uuid.equals(country.leader)) {
-                country.setLeader(null);
-            }
-
-            country.removeCitizen(this);
-
-            citizenship = null;
-            rank = PlayerRank.NONE;
-            return;
-        }
-
-        // upon gaining any kind of citizenship, cancel all previous citizenship applications
-        if (CitizenshipApplication.sentByApplicant.get(uuid) != null)
-            CitizenshipApplication.deleteAllSentByApplicant(this);
-
-        // set rank in country
-        if (newRank == PlayerRank.LEADER) {
-            country.setLeader(this);
-            rank = PlayerRank.LEADER;
-            return;
-        }
-
-        if (newRank == PlayerRank.CITIZEN) {
-            // if was leader, remove leadership
-            if (uuid.equals(country.leader)) {
-                country.setLeader(null); // or country.removeLeader()
-            }
-
-            country.addCitizen(this);
-            rank = PlayerRank.CITIZEN;
-            return;
-        }
-
-        // finally set rank property if didnt get set
-        rank = newRank;
     }
 
     // settings
@@ -267,6 +181,13 @@ public class PlayerProfile extends DataCollection {
             return List.of();
         return cApplications.stream()
                             .map(ca -> ca.getToCountry().name).toList();
+    }
+
+    public Player getOnlinePlayer() {
+        return Bukkit.getPlayer(uuid);
+    }
+    public OfflinePlayer getOfflinePlayer() {
+        return Bukkit.getOfflinePlayer(uuid);
     }
 
     public PlayerProfile() { }

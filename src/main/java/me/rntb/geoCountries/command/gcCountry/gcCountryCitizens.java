@@ -3,7 +3,7 @@ package me.rntb.geoCountries.command.gcCountry;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.model.Pagination;
+import me.rntb.geoCountries.type.Pagination;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import net.kyori.adventure.text.Component;
@@ -110,5 +110,10 @@ public class gcCountryCitizens extends GeoCommand {
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         return args.length == 1 ? Country.allAsStrings(true) : List.of();
+    }
+
+    @Override
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        return PlayerProfile.byCommandSender(sender).hasCitizenship();
     }
 }

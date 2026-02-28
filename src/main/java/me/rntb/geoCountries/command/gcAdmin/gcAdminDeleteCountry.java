@@ -2,7 +2,7 @@ package me.rntb.geoCountries.command.gcAdmin;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
-import me.rntb.geoCountries.model.Confirmation;
+import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -41,7 +41,7 @@ public class gcAdminDeleteCountry extends GeoCommand {
 
     private void onConfirm(CommandSender sender, String[] args) {
         Country country = Country.byName.get(args[0]);
-        Country.delete(country);
+        country.deregister();
 
         ChatUtil.sendPrefixedMessage(sender, "§aDeleted country!");
     }

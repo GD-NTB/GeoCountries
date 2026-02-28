@@ -3,6 +3,7 @@ package me.rntb.geoCountries.command.gcAdmin;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.service.CitizenshipService;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
@@ -40,10 +41,9 @@ public class gcAdminSetPlayerCountry extends GeoCommand {
 
         String countryName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-        if (countryName.equals("null")) {
-            // set country
-            player.clearCitizenship();
-        }
+        // set country
+        if (countryName.equals("null"))
+            CitizenshipService.leaveCountry(player);
         else {
             Country country = Country.byName.get(countryName);
             if (country == null) {
@@ -52,7 +52,7 @@ public class gcAdminSetPlayerCountry extends GeoCommand {
             }
 
             // set country
-            player.setCitizenship(country, player.rank != PlayerProfile.PlayerRank.NONE ? player.rank : PlayerProfile.PlayerRank.CITIZEN);
+            CitizenshipService.joinCountry(player, country);
         }
 
         ChatUtil.sendPrefixedMessage(sender, "§aSet player country!");

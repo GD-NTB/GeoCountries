@@ -17,7 +17,7 @@ public class JoinListener implements Listener {
         if (playerProfile == null) {
             // create and register new PlayerProfile for this player
             playerProfile = new PlayerProfile(player);
-            PlayerProfile.addNew(playerProfile);
+            playerProfile.register();
         }
 
         // update last known username to their current username

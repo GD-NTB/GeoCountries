@@ -36,7 +36,7 @@ public class gcDebugCreateCountry extends GeoCommand {
         newCountry.leader = null;
 
         // create country
-        Country.addNew(newCountry);
+        newCountry.register();
 
         ChatUtil.sendPrefixedMessage(sender, "§aCreated country §f" + countryName + "§a!");
         ChatUtil.broadcastPrefixedMessage("§6A new country §f" + countryName + "§6 has just been created!");

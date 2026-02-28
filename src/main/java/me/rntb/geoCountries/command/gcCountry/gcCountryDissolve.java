@@ -3,7 +3,8 @@ package me.rntb.geoCountries.command.gcCountry;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.model.Confirmation;
+import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -50,6 +51,11 @@ public class gcCountryDissolve extends GeoCommand {
         // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has just been dissolved! §cYou are no longer a citizen of any country.", true);
 
-        Country.delete(country);
+        country.deregister();
+    }
+
+    @Override
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        return PlayerProfile.byCommandSender(sender).rank == PlayerRank.LEADER;
     }
 }

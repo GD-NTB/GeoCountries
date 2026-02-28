@@ -4,11 +4,11 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.SoundUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class gcCitizenshipAccept extends GeoCommand {
         PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
 
         // if not leader, escape
-        if (playerProfile.rank != PlayerProfile.PlayerRank.LEADER && playerProfile.hasCitizenship()) {
+        if (playerProfile.rank != PlayerRank.LEADER && playerProfile.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cOnly a leader of a country can accept citizenship applications!");
             return;
         }
@@ -67,12 +67,10 @@ public class gcCitizenshipAccept extends GeoCommand {
         }
 
         // accept the application
-        cApplication.accept(true);
+        CitizenshipApplicationService.accept(cApplication, true);
 
-        ChatUtil.sendPrefixedMessage(sender, "§aAccepted the citizenship application!");
 
-        // play sound to acceptor
-        SoundUtil.playSound((Player) sender, SoundUtil.SoundEffect.CHAT_NOTIF);
+        ChatUtil.sendPrefixedNotificationMessage(sender, "§aAccepted the citizenship application!");
 
         // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.username + "§6 is now a citizen of §f" + country.name + "§6!", false);
@@ -84,7 +82,7 @@ public class gcCitizenshipAccept extends GeoCommand {
             return List.of();
 
         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
-        if (player.rank != PlayerProfile.PlayerRank.LEADER)
+        if (player.rank != PlayerRank.LEADER)
             return List.of();
 
         return player.getCitizenship().getReceivedCitizenshipApplicationsAsStrings();

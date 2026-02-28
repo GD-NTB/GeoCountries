@@ -15,8 +15,8 @@ public class gcCitizenship extends GeoCommand {
             put("apply", new gcCitizenshipApply("apply", "/gc citizenship apply", "gc.citizenship.apply", ItemStack.of(Material.WRITABLE_BOOK)));
             put("renounce", new gcCitizenshipRenounce("renounce", "/gc citizenship renounce", "gc.citizenship.renounce", ItemStack.of(Material.SHEARS)));
             put("revoke", new gcCitizenshipRevoke("revoke", "/gc citizenship revoke", "gc.citizenship.revoke", ItemStack.of(Material.GRINDSTONE)));
-            put("accept", new gcCitizenshipAccept("accept", "/gc citizenship accept", "gc.citizenship.accept", ItemStack.of(Material.LIME_CANDLE)));
-            put("reject", new gcCitizenshipReject("reject", "/gc citizenship reject", "gc.citizenship.reject", ItemStack.of(Material.RED_CANDLE)));
+            put("accept", new gcCitizenshipAccept("accept", "/gc citizenship accept", "gc.citizenship.accept", null));
+            put("reject", new gcCitizenshipReject("reject", "/gc citizenship reject", "gc.citizenship.reject", null));
             put("received", new gcCitizenshipReceived("received", "/gc citizenship received", "gc.citizenship.received", ItemStack.of(Material.CHEST)));
             put("sent", new gcCitizenshipSent("sent", "/gc citizenship sent", "gc.citizenship.sent", ItemStack.of(Material.BOOK)));
             put("unsend", new gcCitizenshipUnsend("unsend", "/gc citizenship unsend", "gc.citizenship.unsend", ItemStack.of(Material.CARROT_ON_A_STICK)));

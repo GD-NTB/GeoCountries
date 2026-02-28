@@ -5,7 +5,8 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.model.Response;
+import me.rntb.geoCountries.service.CitizenshipApplicationService;
+import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.command.CommandSender;
@@ -75,12 +76,12 @@ public class gcCitizenshipApply extends GeoCommand {
                                                   playerUUID,
                                                   toCountry.uuid); // reuse variable
         cApplication.reason = "N/A";
-        cApplication.open(true);
+        CitizenshipApplicationService.open(cApplication, true);
 
         // if country has auto-accept enabled, accept and escape
         if (toCountry.settings.get("autoacceptcitizenshipapplications").equals("true")) {
-            cApplication.cancel(false); // cancel open application
-            cApplication.accept(true); // send sent application
+            CitizenshipApplicationService.cancel(cApplication, false); // cancel open application
+            CitizenshipApplicationService.accept(cApplication, true); // send sent application
             // broadcast notif to country
             ChatUtil.broadcastPrefixedMessageToCountry(toCountry, "§f" + playerProfile.username + "§6 is now a citizen of §f" + toCountry.name + "§6!", false);
             return;
@@ -103,7 +104,7 @@ public class gcCitizenshipApply extends GeoCommand {
         // validate response
         String validation = StringUtil.validateResponse(responseClean);
         if (validation != null) {
-            cApplication.cancel(true);
+            CitizenshipApplicationService.cancel(cApplication, true);
             ChatUtil.sendPrefixedMessage(sender, validation);
             return;
         }
@@ -111,7 +112,7 @@ public class gcCitizenshipApply extends GeoCommand {
         cApplication.reason = responseClean;
 
         // send application
-        cApplication.send(true);
+        CitizenshipApplicationService.send(cApplication, true);
     }
 
     @Override

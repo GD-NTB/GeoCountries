@@ -1,8 +1,9 @@
-package me.rntb.geoCountries.model;
+package me.rntb.geoCountries.type;
 
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.CitizenshipApplication;
+import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
@@ -61,9 +62,8 @@ public class Response {
         timeoutTasks.remove(uuid);
 
         // cancel whatever was going to use the response
-        if (stopWaitingEvent != StopWaitingEvent.PLAYER_SENT_MESSAGE) {
-            CitizenshipApplication.openByApplicant.get(uuid).cancel(true);
-        }
+        if (stopWaitingEvent != StopWaitingEvent.PLAYER_SENT_MESSAGE)
+            CitizenshipApplicationService.cancel(CitizenshipApplication.openByApplicant.get(uuid), true);
 
         // send appropriate message
         Player player = Bukkit.getPlayer(uuid);

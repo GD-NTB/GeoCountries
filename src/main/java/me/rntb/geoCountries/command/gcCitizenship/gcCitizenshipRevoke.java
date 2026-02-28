@@ -3,7 +3,9 @@ package me.rntb.geoCountries.command.gcCitizenship;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.model.Confirmation;
+import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.service.CitizenshipService;
+import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -29,7 +31,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
         PlayerProfile senderProfile = PlayerProfile.byCommandSender(sender);
 
         // if doesnt have citizenship or isn't leader, escape
-        if (!senderProfile.hasCitizenship() || senderProfile.rank != PlayerProfile.PlayerRank.LEADER) {
+        if (!senderProfile.hasCitizenship() || senderProfile.rank != PlayerRank.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to revoke a player's citizenship!");
             return;
         }
@@ -64,16 +66,16 @@ public class gcCitizenshipRevoke extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.byUsername.get(args[0]);
+        PlayerProfile player = PlayerProfile.byUsername.get(args[0]);
 
-        Country country = playerProfile.getCitizenship();
+        Country country = player.getCitizenship();
 
-        playerProfile.clearCitizenship();
+        CitizenshipService.leaveCountry(player);
 
         ChatUtil.sendPrefixedMessage(sender, "§aRevoked the citizenship of §f" + country.name + "§a!");
 
         // broadcast notif to country
-        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.username + "§6 is no longer a citizen of §f" + country.name + "§6!", true);
+        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + player.username + "§6 is no longer a citizen of §f" + country.name + "§6!", true);
     }
 
     @Override

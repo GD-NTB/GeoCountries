@@ -1,8 +1,8 @@
 package me.rntb.geoCountries.listener;
 
 import me.rntb.geoCountries.metadata.PlayerMetadata;
-import me.rntb.geoCountries.model.Confirmation;
-import me.rntb.geoCountries.model.Response;
+import me.rntb.geoCountries.type.Confirmation;
+import me.rntb.geoCountries.type.Response;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

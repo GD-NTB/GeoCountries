@@ -2,7 +2,8 @@ package me.rntb.geoCountries.command.gcPurge;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
-import me.rntb.geoCountries.model.Confirmation;
+import me.rntb.geoCountries.service.CitizenshipApplicationService;
+import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
@@ -32,7 +33,7 @@ public class gcPurgeCitizenshipApplication extends GeoCommand {
         int count = CitizenshipApplication.sentAll.size();
 
         for (CitizenshipApplication ca : new ArrayList<>(CitizenshipApplication.sentAll)) { // new ArrayList as we are concurrently modifying
-            ca.deleteSent();
+            CitizenshipApplicationService.deleteSent(ca);
         }
 
         ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a CitizenshipApplication" + StringUtil.leadingS(count) + ".");

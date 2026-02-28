@@ -4,6 +4,7 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import net.kyori.adventure.text.Component;
@@ -25,7 +26,7 @@ public class gcCitizenshipReceived extends GeoCommand {
         PlayerProfile senderProfile = PlayerProfile.byCommandSender(sender);
 
         // if not leader, escape
-        if (!senderProfile.hasCitizenship() || senderProfile.rank != PlayerProfile.PlayerRank.LEADER) {
+        if (!senderProfile.hasCitizenship() || senderProfile.rank != PlayerRank.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cOnly the leader of a country can see citizenship applications!");
             return;
         }
@@ -169,7 +170,7 @@ public class gcCitizenshipReceived extends GeoCommand {
             return List.of();
 
         PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
-        if (player.rank != PlayerProfile.PlayerRank.LEADER)
+        if (player.rank != PlayerRank.LEADER)
             return List.of();
 
         return player.getCitizenship().getReceivedCitizenshipApplicationsAsStrings();

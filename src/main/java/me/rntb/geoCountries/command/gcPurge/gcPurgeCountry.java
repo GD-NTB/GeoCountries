@@ -2,7 +2,7 @@ package me.rntb.geoCountries.command.gcPurge;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
-import me.rntb.geoCountries.model.Confirmation;
+import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -30,7 +30,7 @@ public class gcPurgeCountry extends GeoCommand {
     private void onConfirm(CommandSender sender, String[] args) {
         int count = Country.all.size();
         for (Country cd : new ArrayList<>(Country.all)) { // new ArrayList as we are concurrently modifying
-            Country.delete(cd);
+            cd.deregister();
         }
 
         ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a Countr" + (count > 1 ? "ies" : "y") + ".");

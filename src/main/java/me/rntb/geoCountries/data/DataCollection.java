@@ -15,7 +15,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+// todo: we can have a map of maps, like PlayerProfile.getBy("username").get("AldiyarTynysbaev")
 public abstract class DataCollection {
+
+    public static String filePath;
+    public static String displayName;
 
     private static final Gson gson = new Gson();
 
@@ -37,9 +41,8 @@ public abstract class DataCollection {
 
         } catch (IOException e) {
             ChatUtil.sendPrefixedLogErrorMessage("Tried to deserialise/read " + displayName + "from " + String.valueOf(path) + " but failed! (IOException)");
-            //noinspection CallToPrintStackTrace
             e.printStackTrace();
-            return new ArrayList<>();
+            return null;
         }
     }
 
@@ -59,8 +62,8 @@ public abstract class DataCollection {
             writer.flush();
             writer.close();
 
-//            if (ConfigState.DebugLogging)
-//                ChatUtil.sendPrefixedLogMessage("Serialised and wrote " + displayName + " to " + String.valueOf(path) + ".");
+            if (ConfigState.debugLogging)
+                ChatUtil.sendPrefixedLogMessage("Serialised and wrote " + displayName + " to " + String.valueOf(path) + ".");
 
         } catch (IOException e) {
             ChatUtil.sendPrefixedLogErrorMessage("Tried to serialise/write " + displayName + " to " + String.valueOf(path) + " but failed! (IOException)");
@@ -70,14 +73,15 @@ public abstract class DataCollection {
     }
 
     // register new datacollection to all
-    static <T> void addNew(T newDataCollection, List<T> all, String displayName) {
-        all.add(newDataCollection);
+    public static <T> void add(T dataCollection, List<T> all, String displayName) {
+        all.add(dataCollection);
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Added new " + displayName + ".");
     }
 
     // delete datacollection from all
-    static <T> void delete(T dataCollection, List<T> all, String displayName) {
+    // todo: all and displayName should be fields in this class!!
+    public static <T> void delete(T dataCollection, List<T> all, String displayName) {
         all.remove(dataCollection);
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Deleted " + displayName + ".");

@@ -2,7 +2,7 @@ package me.rntb.geoCountries.command.gcPurge;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.model.Confirmation;
+import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -41,7 +41,7 @@ public class gcPurgeUsername extends GeoCommand {
 
     private void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile player = PlayerProfile.byUsername.get(args[0]);
-        PlayerProfile.delete(player);
+        player.deregister();
 
         ChatUtil.sendPrefixedMessage(sender, "§aPurged player §f" + player.username + "§a.");
     }
