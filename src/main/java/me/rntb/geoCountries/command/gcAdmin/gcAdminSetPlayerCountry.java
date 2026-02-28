@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+// todo: use Response for insufficient args
 public class gcAdminSetPlayerCountry extends GeoCommand {
 
     public gcAdminSetPlayerCountry(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {

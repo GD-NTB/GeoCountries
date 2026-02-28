@@ -35,6 +35,8 @@ public class Confirmation {
             return;
         }
 
+        stopWaiting(uuid, StopWaitingEvent.CANCELLED, true);
+
         pendingConfirmations.put(uuid, confirmation);
 
         // timeout after x seconds
@@ -42,12 +44,12 @@ public class Confirmation {
                                                                     () -> stopWaiting(uuid, StopWaitingEvent.TIMED_OUT, true),
                                                                     confirmation.timeoutAfterSeconds *20); // 20 ticks = 1 second
 
+        // add to timeout tasks dict
+        timeoutTasks.put(uuid, timeoutTask);
+
         // send message
         if (sendMessage && confirmation.startMessage != null)
             ChatUtil.sendPrefixedMessage(confirmation.sender, confirmation.startMessage);
-
-        // add to timeout tasks dict
-        timeoutTasks.put(uuid, timeoutTask);
     }
 
     public enum StopWaitingEvent {
@@ -87,8 +89,8 @@ public class Confirmation {
             }
         }
 
-        if (ConfigState.debugLogging)
-            ChatUtil.sendPrefixedLogMessage("Stopped waiting for " + uuid + " to do /gc confirm.");
+        if (ConfigState.debugLogging && player != null)
+            ChatUtil.sendPrefixedLogMessage("Stopped pending Confirmation from " + player.getName() + " (" + stopWaitingEvent.name() + ").");
     }
 
     // ---

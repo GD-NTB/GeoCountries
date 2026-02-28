@@ -148,25 +148,24 @@ public class CitizenshipApplicationService {
         if (cApplication == null)
             return;
 
-        PlayerProfile playerProfile = cApplication.getApplicant();
+        PlayerProfile player = cApplication.getApplicant();
 
         deleteSent(cApplication);
 
         // don't do anything if already in country
-        if (playerProfile.rank != PlayerProfile.PlayerRank.NONE)
+        if (player.rank != PlayerProfile.PlayerRank.NONE)
             return;
 
-        CitizenshipService.joinCountry(playerProfile, Country.get(cApplication.toCountry));
+        CitizenshipService.joinCountry(player, Country.get(cApplication.toCountry));
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Accepted sent CitizenshipApplication");
 
         if (sendMessageToApplicant) {
             Country country = Country.get(cApplication.toCountry);
-            Player player = playerProfile.getOnlinePlayer();
-            ChatUtil.sendPrefixedNotificationMessage(player, """
-                                                             §6Your citizenship application was §aaccepted§6.
-                                                             You are now a citizen of §f""" + country.name + "§6!");
+            ChatUtil.sendPrefixedNotificationMessage(player.getOnlinePlayer(), """
+                                                                               §6Your citizenship application was §aaccepted§6.
+                                                                               You are now a citizen of §f""" + country.name + "§6!");
         }
     }
 
@@ -175,12 +174,12 @@ public class CitizenshipApplicationService {
         if (cApplication == null)
             return;
 
-        PlayerProfile playerProfile = cApplication.getApplicant();
+        PlayerProfile player = cApplication.getApplicant();
 
         deleteSent(cApplication);
 
         // don't do anything if already in country
-        if (playerProfile.rank != PlayerProfile.PlayerRank.NONE)
+        if (player.rank != PlayerProfile.PlayerRank.NONE)
             return;
 
         if (ConfigState.debugLogging)
@@ -188,8 +187,7 @@ public class CitizenshipApplicationService {
 
         if (sendMessageToApplicant) {
             Country country = Country.get(cApplication.toCountry);
-            Player player = playerProfile.getOnlinePlayer();
-            ChatUtil.sendPrefixedNotificationMessage(player, "§6Your citizenship application to §f" + country.name + "§6 was §crejected§6.");
+            ChatUtil.sendPrefixedNotificationMessage(player.getOnlinePlayer(), "§6Your citizenship application to §f" + country.name + "§6 was §crejected§6.");
         }
     }
 

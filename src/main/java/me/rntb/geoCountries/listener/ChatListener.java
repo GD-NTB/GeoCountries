@@ -17,17 +17,17 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public void onPlayerChat(AsyncChatEvent event) {
-        PlayerProfile playerProfile = PlayerProfile.get(event.getPlayer());
+        PlayerProfile player = PlayerProfile.get(event.getPlayer());
 
         // prepend country prefix to start of player message
-        doPrefixLogic(event, playerProfile);
+        doPrefixLogic(event, player);
 
         // confirm or cancel chat response
-        doResponseLogic(event, playerProfile);
+        doResponseLogic(event, player);
     }
 
-    private void doPrefixLogic(AsyncChatEvent event, PlayerProfile playerProfile) {
-        Country playerCountry = playerProfile.getCitizenship();
+    private void doPrefixLogic(AsyncChatEvent event, PlayerProfile player) {
+        Country playerCountry = player.getCitizenship();
         // if not enabled in config, player doesnt have country, country has prefix disabled, or country prefix is null, escape
         if (!ConfigState.countryPrefixEnabled || playerCountry == null || playerCountry.settings.get("prefixenabled").equals("false") || playerCountry.settings.get("prefix").equals("null"))
             return;
@@ -45,8 +45,8 @@ public class ChatListener implements Listener {
         );
     }
 
-    private void doResponseLogic(AsyncChatEvent event, PlayerProfile playerProfile) {
-        UUID uuid = playerProfile.uuid;
+    private void doResponseLogic(AsyncChatEvent event, PlayerProfile player) {
+        UUID uuid = player.uuid;
 
         // if wasn't waiting for response, escape
         if (!Response.isWaiting(uuid))
@@ -55,12 +55,13 @@ public class ChatListener implements Listener {
         // cancel player's original message
         event.setCancelled(true);
 
-        // execute
-        String message = PlainTextComponentSerializer.plainText().serialize(event.message());
         Response response = Response.get(uuid);
-        response.function.accept(response.sender, message);
 
         // remove sender from waiting list
         Response.stopWaiting(uuid, Response.StopWaitingEvent.PLAYER_SENT_MESSAGE, true);
+
+        // execute
+        String message = PlainTextComponentSerializer.plainText().serialize(event.message());
+        response.function.accept(response.sender, message);
     }
 }

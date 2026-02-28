@@ -3,6 +3,7 @@ package me.rntb.geoCountries.command.gcPurge;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.type.Confirmation;
+import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -20,14 +21,21 @@ public class gcPurgeUUID extends GeoCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou need to specify the UUID of the player as it appears in the data collections.");
-            return;
+            ChatUtil.sendPrefixedMessage(sender, "§6What is the UUID of the player you want to purge?");
+            // start waiting for response
+            Response.startWaiting(PlayerProfile.get(sender).uuid,
+                                  new Response(this::onResponse,
+                                               sender),
+                                  true);
         }
+        else
+            onResponse(sender, args[0]);
+    }
 
-        String uuid = args[0];
-        PlayerProfile player = PlayerProfile.byUUIDString(uuid);
+    private void onResponse(CommandSender sender, String uuidString) {
+        PlayerProfile player = PlayerProfile.byUUIDString(uuidString);
         if (player == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§UUID §f" + uuid + "§c could not be found!");
+            ChatUtil.sendPrefixedMessage(sender, "§UUID §f" + uuidString + "§c could not be found!");
             return;
         }
 
@@ -35,7 +43,7 @@ public class gcPurgeUUID extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                                    sender,
-                                                   new String[] { uuid }),
+                                                   new String[] { uuidString }),
                                   true);
     }
 

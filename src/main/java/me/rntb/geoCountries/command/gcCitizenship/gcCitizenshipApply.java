@@ -26,36 +26,48 @@ public class gcCitizenshipApply extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you want to apply to!");
-            return;
-        }
-
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        PlayerProfile player = PlayerProfile.get(sender);
 
         // if already has citizenship, escape
-        if (!ConfigState.debugMode && playerProfile.hasCitizenship()) {
+        if (!ConfigState.debugMode && player.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou can't apply for citizenship of country whilst being a citizen of another!");
             return;
         }
 
-        String countryName = String.join(" ", args);
-        Country toCountry = Country.get(countryName);
+        if (args.length == 0) {
+            ChatUtil.sendPrefixedMessage(sender, "§6What country do you want to apply for citizenship to?");
+            // start waiting for response
+            Response.startWaiting(player.uuid,
+                                  new Response(this::onResponseCountryName,
+                                               sender),
+                                  true);
+        }
+        else {
+            String countryName = String.join(" ", args);
+            onResponseCountryName(sender, countryName);
+        }
+    }
 
+    private void onResponseCountryName(CommandSender sender, String countryName) {
+        PlayerProfile player = PlayerProfile.get(sender);
+
+        Country toCountry = Country.get(countryName);
         // if country not exist, escape
         if (toCountry == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c does not exist!");
+            ChatUtil.sendPrefixedMessage(sender, "§aCancelled the citizenship application!");
             return;
         }
 
         // if already has open application, escape
-        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(playerProfile.uuid);
+        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(player.uuid);
         if (cApplication != null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou're already writing a citizenship application to §f" + cApplication.getToCountry().name + "§c!");
+            ChatUtil.sendPrefixedMessage(sender, "§aCancelled the citizenship application!");
             return;
         }
 
-        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.uuid);
+        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.uuid);
         if (cApplications != null) {
             // if sent too many applications, escape
             int cApplicationsCount = cApplications.size();
@@ -71,7 +83,7 @@ public class gcCitizenshipApply extends GeoCommand {
         }
 
         // create new application
-        UUID playerUUID = playerProfile.uuid;
+        UUID playerUUID = player.uuid;
         cApplication = new CitizenshipApplication(UUID.randomUUID(),
                                                   playerUUID,
                                                   toCountry.uuid); // reuse variable
@@ -83,7 +95,7 @@ public class gcCitizenshipApply extends GeoCommand {
             CitizenshipApplicationService.cancel(cApplication, false); // cancel open application
             CitizenshipApplicationService.accept(cApplication, true); // send sent application
             // broadcast notif to country
-            ChatUtil.broadcastPrefixedMessageToCountry(toCountry, "§f" + playerProfile.username + "§6 is now a citizen of §f" + toCountry.name + "§6!", false);
+            ChatUtil.broadcastPrefixedMessageToCountry(toCountry, "§f" + player.username + "§6 is now a citizen of §f" + toCountry.name + "§6!", false);
             return;
         }
 
@@ -91,12 +103,13 @@ public class gcCitizenshipApply extends GeoCommand {
 
         // start waiting for response
         Response.startWaiting(playerUUID,
-                              new Response(this::onResponse,
+                              new Response(this::onResponseReason,
                                            sender),
                               true);
+
     }
 
-    private void onResponse(CommandSender sender, String response) {
+    private void onResponseReason(CommandSender sender, String response) {
         String responseClean = response.trim();
 
         CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(((Player) sender).getUniqueId());

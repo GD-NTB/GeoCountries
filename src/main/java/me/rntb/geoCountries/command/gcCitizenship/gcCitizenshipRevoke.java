@@ -6,6 +6,7 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
 import me.rntb.geoCountries.service.CitizenshipService;
 import me.rntb.geoCountries.type.Confirmation;
+import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -22,11 +23,6 @@ public class gcCitizenshipRevoke extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the player you want to revoke the citizenship of!");
-            return;
-        }
-
         PlayerProfile senderProfile = PlayerProfile.get(sender);
 
         // if doesnt have citizenship or isn't leader, escape
@@ -35,22 +31,37 @@ public class gcCitizenshipRevoke extends GeoCommand {
             return;
         }
 
+        if (args.length == 0) {
+            ChatUtil.sendPrefixedMessage(sender, "§6What is the name of the player you want to revoke the citizenship of?");
+            // start waiting for response
+            Response.startWaiting(senderProfile.uuid,
+                                  new Response(this::onResponse,
+                                               sender),
+                                  true);
+        }
+        else
+            onResponse(sender, args[0]);
+    }
+
+    private void onResponse(CommandSender sender, String playerName) {
+        PlayerProfile senderProfile = PlayerProfile.get(sender);
+
         // if revoking own citizenship, escape
-        if (args[0].equals(senderProfile.username)) {
+        if (playerName.equals(senderProfile.username)) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou can't revoke your own citizenship, use §f/gc citizenship renounce§c instead!");
             return;
         }
 
-        PlayerProfile playerProfile = PlayerProfile.get(args[0]);
+        PlayerProfile player = PlayerProfile.get(playerName);
         // if player not exist, escape
-        if (playerProfile == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + args[0] + "§c could not be found!");
+        if (player == null) {
+            ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + playerName + "§c could not be found!");
             return;
         }
 
         // if player is not citizen of sender's country, escape
-        if (!playerProfile.citizenship.equals(senderProfile.citizenship)) {
-            ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + playerProfile.username + "§c is not a citizen of your country!");
+        if (!player.citizenship.equals(senderProfile.citizenship)) {
+            ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + player.username + "§c is not a citizen of your country!");
             return;
         }
 
@@ -60,8 +71,9 @@ public class gcCitizenshipRevoke extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                                    sender,
-                                                   new String[] { playerProfile.username }),
+                                                   new String[] { player.username }),
                                   true);
+
     }
 
     private void onConfirm(CommandSender sender, String[] args) {

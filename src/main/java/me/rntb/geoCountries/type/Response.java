@@ -31,6 +31,8 @@ public class Response {
     }
 
     public static void startWaiting(UUID uuid, Response response, boolean sendMessage) {
+        stopWaiting(uuid, StopWaitingEvent.CANCELLED, true);
+
         pendingResponses.put(uuid, response);
 
         // timeout after x seconds
@@ -61,19 +63,17 @@ public class Response {
         timeoutTasks.get(uuid).cancel();
         timeoutTasks.remove(uuid);
 
-        // cancel whatever was going to use the response
-        if (stopWaitingEvent != StopWaitingEvent.PLAYER_SENT_MESSAGE)
-            CitizenshipApplicationService.cancel(CitizenshipApplication.openByApplicant.get(uuid), true);
-
         // send appropriate message
         Player player = Bukkit.getPlayer(uuid);
-        if (sendMessage && player != null) {
+        if (sendMessage) {
             switch (stopWaitingEvent) {
                 case PLAYER_SENT_MESSAGE:
                     if (response.playerSentMessageMessage != null)
                         ChatUtil.sendPrefixedMessage(player, response.playerSentMessageMessage);
                     break;
                 case CANCELLED:
+                    if (response.cancelMessage != null)
+                        ChatUtil.sendPrefixedMessage(player, response.cancelMessage);
                     break;
                 case TIMED_OUT:
                     if (response.timeoutMessage != null)
@@ -83,8 +83,12 @@ public class Response {
             }
         }
 
-        if (ConfigState.debugLogging)
-            ChatUtil.sendPrefixedLogMessage("Stopped waiting for " + uuid + " to type in chat.");
+        // cancel whatever was going to use the response
+        if (stopWaitingEvent != StopWaitingEvent.PLAYER_SENT_MESSAGE)
+            CitizenshipApplicationService.cancel(CitizenshipApplication.openByApplicant.get(uuid), true);
+
+        if (ConfigState.debugLogging && player != null)
+            ChatUtil.sendPrefixedLogMessage("Stopped pending Response from " + player.getName() + " (" + stopWaitingEvent.name() + ").");
     }
 
     // ---
@@ -94,6 +98,7 @@ public class Response {
     public long timeoutAfterSeconds = 30;
     public String startWaitingMessage;
     public String playerSentMessageMessage;
+    public String cancelMessage;
     public String timeoutMessage;
 
     public Response(BiConsumer<CommandSender, String> function, CommandSender sender) {
@@ -102,6 +107,7 @@ public class Response {
 
         this.startWaitingMessage = "§6Type in chat, or do §f/gc cancel§6 to cancel.";
         this.playerSentMessageMessage = null;
+        this.cancelMessage = "§aCancelled!";
         this.timeoutMessage = "§cTimed out because you didn't type anything in chat after §f%d second%s§c!"
                               .formatted(this.timeoutAfterSeconds, StringUtil.leadingS(this.timeoutAfterSeconds));
     }

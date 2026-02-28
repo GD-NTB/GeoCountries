@@ -21,34 +21,34 @@ public class gcPlayerInfo extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile;
+        PlayerProfile player;
         // if no args, get player profile
         if (args.length == 0) {
-            playerProfile = PlayerProfile.get(sender);
+            player = PlayerProfile.get(sender);
         }
         // else get specific player info
         else {
-            playerProfile = PlayerProfile.get(args[0]);
-            if (playerProfile == null) {
+            player = PlayerProfile.get(args[0]);
+            if (player == null) {
                 ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + args[0] + "§c could not be found!");
                 return;
             }
         }
 
         String rankAndCountryString = "§cStateless";
-        if (playerProfile.hasCitizenship()) {
-            Country country = playerProfile.getCitizenship();
+        if (player.hasCitizenship()) {
+            Country country = player.getCitizenship();
             rankAndCountryString = "§e%s§f of §e%s"
-                                   .formatted(playerProfile.getRankString(), country != null ? country.name : "§cNone");
+                                   .formatted(player.getRankString(), country != null ? country.name : "§cNone");
         }
 
         String onlineString = "§aOnline";
-        if (Bukkit.getPlayer(playerProfile.username) == null) {
-            long daysAgo = DateUtil.daysAgo(playerProfile.getOfflinePlayer().getLastSeen());
+        if (Bukkit.getPlayer(player.username) == null) {
+            long daysAgo = DateUtil.daysAgo(player.getOfflinePlayer().getLastSeen());
             onlineString = "§cLast seen §f" + daysAgo + "§c days ago";
         }
 
-        long daysAgo = DateUtil.daysAgo(playerProfile.timeFirstJoined);
+        long daysAgo = DateUtil.daysAgo(player.timeFirstJoined);
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
                          """
                          §6========== PLAYER INFO ==========
@@ -56,10 +56,10 @@ public class gcPlayerInfo extends GeoCommand {
                          §f> %s
                          §f> Joined on §2%s §8(%s day%s ago)
                          §6================================"""
-                        .formatted(playerProfile.username,
+                        .formatted(player.username,
                                    onlineString,
                                    rankAndCountryString,
-                                   playerProfile.timeFirstJoinedAsString(),
+                                   player.timeFirstJoinedAsString(),
                                    daysAgo, StringUtil.leadingS(daysAgo));
         ChatUtil.sendPrefixedMessage(sender, message);
     }

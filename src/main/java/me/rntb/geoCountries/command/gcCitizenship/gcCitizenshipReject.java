@@ -27,10 +27,10 @@ public class gcCitizenshipReject extends GeoCommand {
             return;
         }
 
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        PlayerProfile player = PlayerProfile.get(sender);
 
         // if not leader, escape
-        if (playerProfile.rank != PlayerRank.LEADER && playerProfile.hasCitizenship()) {
+        if (player.rank != PlayerRank.LEADER && player.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cOnly a leader of a country can reject citizenship applications!");
             return;
         }
@@ -44,7 +44,7 @@ public class gcCitizenshipReject extends GeoCommand {
         }
 
         // get country
-        Country country = Country.get(playerProfile.citizenship);
+        Country country = Country.get(player.citizenship);
         if (otherPlayer.citizenship != null && otherPlayer.citizenship.equals(country.uuid)) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + otherPlayerName + "§c is already a citizen of your country!");
             return;
@@ -59,7 +59,7 @@ public class gcCitizenshipReject extends GeoCommand {
 
         // get the citizenship application to the sender's country
         CitizenshipApplication cApplication = cApplications.stream()
-                                                           .filter(ca -> ca.toCountry.equals(playerProfile.citizenship))
+                                                           .filter(ca -> ca.toCountry.equals(player.citizenship))
                                                            .findFirst().orElse(null);
         if (cApplication == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + otherPlayerName + "§c has not sent a citizen application to your country!");
@@ -81,6 +81,6 @@ public class gcCitizenshipReject extends GeoCommand {
         if (player.rank != PlayerRank.LEADER)
             return List.of();
 
-        return player.getCitizenship().getReceivedCitizenshipApplicationsAsStrings();
+        return player.getCitizenship().getReceivedCitizenshipApplicationsAsUsernames();
     }
 }

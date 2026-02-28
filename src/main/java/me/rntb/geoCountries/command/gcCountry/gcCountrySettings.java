@@ -23,21 +23,21 @@ public class gcCountrySettings extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        PlayerProfile player = PlayerProfile.get(sender);
 
         // if doesnt have citizenship, escape
-        if (!playerProfile.hasCitizenship()) {
+        if (!player.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the citizen of a country to see/change its settings!");
             return;
         }
 
-        Country country = playerProfile.getCitizenship();
+        Country country = player.getCitizenship();
 
         // if setting a setting, set and escape
-        boolean isLeader = playerProfile.rank == PlayerRank.LEADER;
+        boolean isLeader = player.rank == PlayerRank.LEADER;
         if (args.length >= 2) {
             // if not leader, escape
-            if (playerProfile.rank != PlayerRank.LEADER) {
+            if (player.rank != PlayerRank.LEADER) {
                 ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to change its settings!");
                 return;
             }

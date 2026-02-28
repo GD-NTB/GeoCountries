@@ -19,7 +19,6 @@ import java.util.Objects;
 // todo: better tab autocomplete using String.startswith check for every suggestion
 // todo: use getters and setters instead of changing the state of internal variables?
 // todo: change colour of settings [edit] and [default]
-// todo: a lot of commands need to be support no args, e.g. /gc country create should prompt a Response
 // todo: rewrite helper functions that dont need to be List to be type of Array
 // todo: in-country ranks
 // todo: promote command

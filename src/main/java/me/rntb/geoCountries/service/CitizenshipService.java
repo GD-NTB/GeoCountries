@@ -14,16 +14,20 @@ public class CitizenshipService {
 
         player.citizenship = country.uuid;
         player.rank = PlayerRank.CITIZEN;
+
+        // remove all pending citizenship applications
+        CitizenshipApplicationService.deleteAllSentByApplicant(player);
     }
 
     public static void leaveCountry(PlayerProfile player) {
         Country currentCountry = player.getCitizenship();
         if (currentCountry == null)
             return;
-        currentCountry.citizens.remove(player.uuid);
 
         if (player.uuid.equals(currentCountry.leader))
-            currentCountry.leader = null;
+            RankService.demoteFromLeader(player);
+
+        currentCountry.citizens.remove(player.uuid);
 
         player.citizenship = null;
         player.rank = PlayerRank.NONE;

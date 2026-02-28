@@ -12,6 +12,9 @@ public class RankService {
         if (country == null)
             return;
 
+        if (country.leader != null && country.leader.equals(player.uuid))
+            return;
+
         // ensure player is citizen
         if (!country.citizens.contains(player.uuid) ) {
             if (ConfigState.debugLogging)
@@ -30,7 +33,14 @@ public class RankService {
 
     public static void demoteFromLeader(PlayerProfile player) {
         Country country = player.getCitizenship();
-        if (country == null) return;
+        if (country == null)
+            return;
+
+        if (country.leader == null) {
+            if (ConfigState.debugLogging)
+                ChatUtil.sendPrefixedLogErrorMessage("Tried to demote leader but country has no leader!");
+            return;
+        }
 
         if (!player.uuid.equals(country.leader)) {
             if (ConfigState.debugLogging)

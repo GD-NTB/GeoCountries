@@ -23,8 +23,8 @@ public class gcCountryInfo extends GeoCommand {
         Country country;
         // if no args, get player country
         if (args.length == 0) {
-            PlayerProfile playerProfile = PlayerProfile.get(sender);
-            country = playerProfile.getCitizenship();
+            PlayerProfile player = PlayerProfile.get(sender);
+            country = player.getCitizenship();
             if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
                                                      """

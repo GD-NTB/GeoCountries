@@ -173,7 +173,7 @@ public class gcCitizenshipReceived extends GeoCommand {
         if (player.rank != PlayerRank.LEADER)
             return List.of();
 
-        return player.getCitizenship().getReceivedCitizenshipApplicationsAsStrings();
+        return player.getCitizenship().getReceivedCitizenshipApplicationsAsUsernames();
     }
 
     @Override

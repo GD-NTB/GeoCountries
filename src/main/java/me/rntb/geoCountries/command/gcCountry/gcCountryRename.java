@@ -5,6 +5,7 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
 import me.rntb.geoCountries.type.Confirmation;
+import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
@@ -21,27 +22,35 @@ public class gcCountryRename extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        PlayerProfile player = PlayerProfile.get(sender);
 
         // if doesnt have citizenship, escape
-        if (!playerProfile.hasCitizenship()) {
+        if (!player.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to rename it!");
             return;
         }
 
         // if not leader of country, escape
-        if (playerProfile.rank != PlayerRank.LEADER) {
+        if (player.rank != PlayerRank.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to change its name!");
             return;
         }
 
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the new name of the country!");
-            return;
+            ChatUtil.sendPrefixedMessage(sender, "§6What do you want the new name of your country to be?");
+            // start waiting for response
+            Response.startWaiting(player.uuid,
+                                  new Response(this::onResponse,
+                                               sender),
+                                  true);
         }
+        else {
+            String countryName = String.join(" ", args).trim();
+            onResponse(sender, countryName);
+        }
+    }
 
-        String countryName = String.join(" ", args).trim();
-
+    private void onResponse(CommandSender sender, String countryName) {
         // validation check
         String validationString = StringUtil.validateCountryName(countryName, true);
         if (validationString != null) {
@@ -59,8 +68,8 @@ public class gcCountryRename extends GeoCommand {
 
     private void onConfirm(CommandSender sender, String[] args) {
         String countryName = args[0];
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Country country = playerProfile.getCitizenship();
+        PlayerProfile player = PlayerProfile.get(sender);
+        Country country = player.getCitizenship();
 
         country.setName(countryName);
 

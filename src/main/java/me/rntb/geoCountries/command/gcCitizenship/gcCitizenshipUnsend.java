@@ -6,6 +6,7 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
+import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -23,12 +24,25 @@ public class gcCitizenshipUnsend extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
+        PlayerProfile player = PlayerProfile.get(sender);
+
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you sent the citizenship application to!");
-            return;
+            ChatUtil.sendPrefixedMessage(sender, "§6To what country was the citizenship application sent to which you want to unsend?");
+            // start waiting for response
+            Response.startWaiting(player.uuid,
+                                  new Response(this::onResponse,
+                                               sender),
+                                  true);
+        }
+        else {
+            String countryName = String.join(" ", args);
+            onResponse(sender, countryName);
         }
 
-        String countryName = String.join(" ", args);
+    }
+
+    private void onResponse(CommandSender sender, String countryName) {
+        PlayerProfile player = PlayerProfile.get(sender);
         Country toCountry = Country.get(countryName);
 
         // if country not exist, escape
@@ -37,13 +51,11 @@ public class gcCitizenshipUnsend extends GeoCommand {
             return;
         }
 
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
-
-        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.uuid);
+        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.uuid);
 
         // if doesnt have any pending applications, escape
         if (cApplications == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou have no pending citizenship applications!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou haven't got a pending application to §f" + countryName + "§c!");
             return;
         }
 

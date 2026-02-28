@@ -20,16 +20,16 @@ public class gcCitizenshipRenounce extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        PlayerProfile player = PlayerProfile.get(sender);
 
         // if doesnt have citizenship, escape
-        if (!playerProfile.hasCitizenship()) {
+        if (!player.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must have citizenship of a country in order to renounce it!");
             return;
         }
 
         // if leader of country, escape
-        if (playerProfile.rank == PlayerRank.LEADER) { // todo: this will eventually be replaced by a system where there is a chosen leader inheritor
+        if (player.rank == PlayerRank.LEADER) { // todo: this will eventually be replaced by a system where there is a chosen leader inheritor
             ChatUtil.sendPrefixedMessage(sender, "§cYou can't renounce your citizenship if you are the leader of a country, you must either promote another player to leader (§f/gc country promote [player]§c) or dissolve the country (§f/gc country dissolve§c)!");
             return;
         }

@@ -198,7 +198,7 @@ public class Country extends DataCollection {
         return dateTime.format(StringUtil.timeFormatter);
     }
 
-    public List<String> getReceivedCitizenshipApplicationsAsStrings() {
+    public List<String> getReceivedCitizenshipApplicationsAsUsernames() {
         List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(uuid);
         if (cApplications == null)
             return List.of();

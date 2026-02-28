@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
+// todo: use Response for insufficient args
 public class gcAdminSetPlayerRank extends GeoCommand {
 
     public gcAdminSetPlayerRank(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
@@ -62,7 +63,7 @@ public class gcAdminSetPlayerRank extends GeoCommand {
                 break;
         }
 
-        ChatUtil.sendPrefixedMessage(sender, "§aSet player rank!");
+        ChatUtil.sendPrefixedMessage(sender, "§aSet player rank to §f" + rank.name() + "§a!");
     }
 
     @Override
