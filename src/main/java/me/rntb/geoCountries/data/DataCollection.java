@@ -15,15 +15,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-// todo: we can have a map of maps, like PlayerProfile.getBy("username").get("AldiyarTynysbaev")
 public abstract class DataCollection {
-
-    public static String filePath;
-    public static String displayName;
 
     private static final Gson gson = new Gson();
 
-    static <T> ArrayList<T> readFromFile(String filePath, String displayName, Type typeToken) {
+    static <T> ArrayList<T> readFromFile(String filePath, String displayName, Type type) {
         if (GeoCountries.PluginAbsoluteDataFolderPath == null)
             return null;
 
@@ -34,7 +30,7 @@ public abstract class DataCollection {
             // create reader for file
             BufferedReader reader = new BufferedReader(new FileReader(path.toFile()));
             // deserialise from reader
-            ArrayList<T> data = gson.fromJson(reader, typeToken);
+            ArrayList<T> data = gson.fromJson(reader, type);
             reader.close();
 
             return data != null ? data : new ArrayList<>();
@@ -80,7 +76,6 @@ public abstract class DataCollection {
     }
 
     // delete datacollection from all
-    // todo: all and displayName should be fields in this class!!
     public static <T> void delete(T dataCollection, List<T> all, String displayName) {
         all.remove(dataCollection);
         if (ConfigState.debugLogging)

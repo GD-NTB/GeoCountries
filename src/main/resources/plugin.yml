@@ -30,7 +30,6 @@ permissions:
       gc.country.list: true
       gc.country.info: true
       gc.country.citizens: true
-      gc.country.renounce: true
       gc.player: true
       gc.player.info: true
       gc.gui: true

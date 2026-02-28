@@ -9,7 +9,6 @@ import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
 
     public gcCitizenshipRevoke(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Revoke's the citizenship of a player of your country.";
+        this.helpString = "Removes the citizenship of a player of your country.";
     }
 
     @Override
@@ -28,7 +27,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
             return;
         }
 
-        PlayerProfile senderProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile senderProfile = PlayerProfile.get(sender);
 
         // if doesnt have citizenship or isn't leader, escape
         if (!senderProfile.hasCitizenship() || senderProfile.rank != PlayerRank.LEADER) {
@@ -42,7 +41,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
             return;
         }
 
-        PlayerProfile playerProfile = PlayerProfile.byUsername.get(args[0]);
+        PlayerProfile playerProfile = PlayerProfile.get(args[0]);
         // if player not exist, escape
         if (playerProfile == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + args[0] + "§c could not be found!");
@@ -66,7 +65,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        PlayerProfile player = PlayerProfile.byUsername.get(args[0]);
+        PlayerProfile player = PlayerProfile.get(args[0]);
 
         Country country = player.getCitizenship();
 
@@ -80,10 +79,19 @@ public class gcCitizenshipRevoke extends GeoCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        Country country = PlayerProfile.get((Player) sender).getCitizenship();
+        if (args.length != 1)
+            return List.of();
+
+        Country country = PlayerProfile.get(sender).getCitizenship();
         if (country == null)
             return List.of();
 
-        return args.length == 1 ? country.citizensAsStrings() : List.of();
+        return country.citizensAsStrings();
+    }
+
+    @Override
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        PlayerProfile player = PlayerProfile.get(sender);
+        return player.rank == PlayerRank.LEADER && player.getCitizenship().citizenCount() > 1; // if 1, leader is the only citizen
     }
 }

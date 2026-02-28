@@ -1,5 +1,6 @@
-package me.rntb.geoCountries.command;
+package me.rntb.geoCountries.command.gcPurge;
 
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.DataCollectionManager;
 import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -7,11 +8,11 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-public class gcLoad extends GeoCommand {
+public class gcPurgeAll extends GeoCommand {
 
-    public gcLoad(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+    public gcPurgeAll(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Loads all plugin data from the disk to memory.";
+        this.helpString = "Purges all data collections.";
     }
 
     @Override
@@ -19,15 +20,13 @@ public class gcLoad extends GeoCommand {
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
-                                                  sender,
-                                                  new String[] { }),
+                                                   sender,
+                                                   new String[] { }),
                                   true);
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        // load data collections
-        ChatUtil.sendPrefixedMessage(sender, "§eLoading all data collections...");
-        DataCollectionManager.init();
-        ChatUtil.sendPrefixedMessage(sender, "§aLoaded all data!");
+        DataCollectionManager.purgeAll();
+        ChatUtil.sendPrefixedMessage(sender, "§aPurged all data collections!");
     }
 }

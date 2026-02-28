@@ -27,7 +27,7 @@ public class gcCitizenshipReject extends GeoCommand {
             return;
         }
 
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if not leader, escape
         if (playerProfile.rank != PlayerRank.LEADER && playerProfile.hasCitizenship()) {
@@ -37,14 +37,14 @@ public class gcCitizenshipReject extends GeoCommand {
 
         // get player
         String otherPlayerName = args[0];
-        PlayerProfile otherPlayer = PlayerProfile.byUsername.get(otherPlayerName);
+        PlayerProfile otherPlayer = PlayerProfile.get(otherPlayerName);
         if (otherPlayer == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + otherPlayerName + "§c could not be found!");
             return;
         }
 
         // get country
-        Country country = Country.byUUID.get(playerProfile.citizenship);
+        Country country = Country.get(playerProfile.citizenship);
         if (otherPlayer.citizenship != null && otherPlayer.citizenship.equals(country.uuid)) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + otherPlayerName + "§c is already a citizen of your country!");
             return;
@@ -77,7 +77,7 @@ public class gcCitizenshipReject extends GeoCommand {
         if (args.length != 1)
             return List.of();
 
-        PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
+        PlayerProfile player = PlayerProfile.get(UuidUtil.getUUIDOfCommandSender(sender));
         if (player.rank != PlayerRank.LEADER)
             return List.of();
 

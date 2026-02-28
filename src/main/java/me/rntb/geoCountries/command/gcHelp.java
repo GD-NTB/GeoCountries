@@ -10,12 +10,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-// todo: rewrite using new Command.getHelpPage method
+// todo: rewrite using new Command.getHelpPage
 public class gcHelp extends GeoCommand {
 
     public gcHelp(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Lists all commands or displays a specific command's info.";
+        this.helpString = "Lists all info about all/any command.";
     }
 
     @Override

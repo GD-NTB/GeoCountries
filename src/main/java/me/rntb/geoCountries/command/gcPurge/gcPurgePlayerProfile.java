@@ -9,8 +9,6 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-
 public class gcPurgePlayerProfile extends GeoCommand {
 
     public gcPurgePlayerProfile(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
@@ -29,11 +27,7 @@ public class gcPurgePlayerProfile extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        int count = PlayerProfile.all.size();
-        for (PlayerProfile playerProfile : new ArrayList<>(PlayerProfile.all)) { // new ArrayList as we are concurrently modifying
-            playerProfile.deregister();
-        }
-
+        int count = PlayerProfile.purge();
         ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a PlayerProfile" + StringUtil.leadingS(count) + ".");
     }
 }

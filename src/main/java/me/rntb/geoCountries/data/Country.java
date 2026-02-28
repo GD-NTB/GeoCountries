@@ -7,7 +7,6 @@ import me.rntb.geoCountries.service.CitizenshipService;
 import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.time.Instant;
@@ -18,6 +17,9 @@ import java.util.stream.Stream;
 
 public class Country extends DataCollection {
 
+    public static String filePath;
+    public static String displayName;
+
     // list of all countries existing
     public static ArrayList<Country> all = null;
     public static List<String> allAsStrings(boolean alphabetical) {
@@ -27,16 +29,13 @@ public class Country extends DataCollection {
         return countries.sorted().toList();
     }
 
-    public static Map<UUID, Country> byUUID = new HashMap<>();
-    public static Map<String, Country> byName = new HashMap<>();
-
-    public static Country byCommandSender(CommandSender sender) {
-        // get playerprofile of player
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
-        if (playerProfile == null)
-            return null;
-        // get country of sender, returns null on none
-        return playerProfile.getCitizenship();
+    private static final Map<UUID, Country> byUUID = new HashMap<>();
+    public static Country get(UUID uuid) {
+        return byUUID.get(uuid);
+    }
+    private static final Map<String, Country> byName = new HashMap<>();
+    public static Country get(String name) {
+        return byName.get(name);
     }
 
     public static void init() {
@@ -68,10 +67,20 @@ public class Country extends DataCollection {
     }
 
     public static void save() {
-        writeToFile(filePath, displayName, all);
+        writeToFile(Country.filePath, Country.displayName, all);
 
         if (all != null && ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Saved " + all.size() + " Countries");
+    }
+
+    // returns number of countries purged
+    public static int purge() {
+        int count = 0;
+        for (Country c : new ArrayList<>(all)) {
+            c.deregister();
+            count++;
+        }
+        return count;
     }
 
     public void register() {
@@ -88,7 +97,7 @@ public class Country extends DataCollection {
     public void deregister() {
         // clear all citizen's citizenships
         for (UUID uuid : new ArrayList<>(citizens)) { // new arraylist while we're modifying
-            PlayerProfile player = PlayerProfile.byUUID.get(uuid);
+            PlayerProfile player = PlayerProfile.get(uuid);
             if (player != null)
                 CitizenshipService.leaveCountry(player);
         }
@@ -114,7 +123,7 @@ public class Country extends DataCollection {
 
     public UUID leader = null;
     public PlayerProfile getLeader() {
-        return PlayerProfile.byUUID.get(leader);
+        return PlayerProfile.get(leader);
     }
 
     public ArrayList<UUID> citizens = new ArrayList<>();
@@ -122,7 +131,7 @@ public class Country extends DataCollection {
         List<Player> players = new ArrayList<>();
 
         for (UUID uuid : citizens) {
-            PlayerProfile profile = PlayerProfile.byUUID.get(uuid);
+            PlayerProfile profile = PlayerProfile.get(uuid);
             if (profile == null)
                 continue;
 
@@ -137,12 +146,12 @@ public class Country extends DataCollection {
     }
     public List<String> citizensAsStrings() {
         return citizens.stream()
-                       .map(uuid -> PlayerProfile.byUUID.get(uuid).username)
+                       .map(uuid -> PlayerProfile.get(uuid).username)
                        .toList();
     }
     public List<PlayerProfile> citizensSortedByRank() {
         return citizens.stream()
-                       .map(uuid -> PlayerProfile.byUUID.get(uuid))
+                       .map(PlayerProfile::get)
                        .sorted(Comparator.comparing(PlayerProfile::getRankLevel))
                        .toList().reversed();
     }

@@ -24,11 +24,11 @@ public class gcPlayerInfo extends GeoCommand {
         PlayerProfile playerProfile;
         // if no args, get player profile
         if (args.length == 0) {
-            playerProfile = PlayerProfile.byCommandSender(sender);
+            playerProfile = PlayerProfile.get(sender);
         }
         // else get specific player info
         else {
-            playerProfile = PlayerProfile.byUsername.get(args[0]);
+            playerProfile = PlayerProfile.get(args[0]);
             if (playerProfile == null) {
                 ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + args[0] + "§c could not be found!");
                 return;

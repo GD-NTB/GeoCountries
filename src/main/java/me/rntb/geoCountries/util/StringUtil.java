@@ -29,7 +29,7 @@ public class StringUtil {
         if (!(ConfigState.countryNameMin <= countryName.length() && countryName.length() <= ConfigState.countryNameMax))
             return "§cCountry name must be between §f%d and %d§c characters!§r"
                    .formatted(ConfigState.countryNameMin, ConfigState.countryNameMax);
-        if (alreadyExistsInvalid && Country.byName.get(countryName) != null)
+        if (alreadyExistsInvalid && Country.get(countryName) != null)
             return "§cA country with that name already exists!§r";
 
         // illegal characters

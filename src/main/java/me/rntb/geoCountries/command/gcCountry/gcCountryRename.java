@@ -21,7 +21,7 @@ public class gcCountryRename extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if doesnt have citizenship, escape
         if (!playerProfile.hasCitizenship()) {
@@ -30,7 +30,7 @@ public class gcCountryRename extends GeoCommand {
         }
 
         // if not leader of country, escape
-        if (playerProfile.getLeaderOf() == null) {
+        if (playerProfile.rank != PlayerRank.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to change its name!");
             return;
         }
@@ -59,7 +59,7 @@ public class gcCountryRename extends GeoCommand {
 
     private void onConfirm(CommandSender sender, String[] args) {
         String countryName = args[0];
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
         Country country = playerProfile.getCitizenship();
 
         country.setName(countryName);
@@ -74,6 +74,6 @@ public class gcCountryRename extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return PlayerProfile.byCommandSender(sender).rank == PlayerRank.LEADER;
+        return PlayerProfile.get(sender).rank == PlayerRank.LEADER;
     }
 }

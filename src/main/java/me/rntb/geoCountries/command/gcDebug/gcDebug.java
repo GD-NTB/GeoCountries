@@ -13,7 +13,7 @@ public class gcDebug extends GeoCommand {
         this.helpString = "Debug commands for development.";
         this.childCommands = new LinkedHashMap<>() {{
             put("createcountry", new gcDebugCreateCountry("createcountry", "/gc debug createcountry", "gc.debug", ItemStack.of(Material.NETHER_STAR)));
-            put("soundtest", new gcDebugSoundTest("soundtest", "/gc debug soundtest", "gc.soundtest", ItemStack.of(Material.JUKEBOX)));
+            put("soundtest", new gcDebugSoundTest("soundtest", "/gc debug soundtest", "gc.debug", ItemStack.of(Material.JUKEBOX)));
         }};
     }
 }

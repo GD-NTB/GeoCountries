@@ -20,7 +20,7 @@ public class gcCitizenshipRenounce extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if doesnt have citizenship, escape
         if (!playerProfile.hasCitizenship()) {
@@ -43,7 +43,7 @@ public class gcCitizenshipRenounce extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        PlayerProfile player = PlayerProfile.byCommandSender(sender);
+        PlayerProfile player = PlayerProfile.get(sender);
 
         Country country = player.getCitizenship();
         CitizenshipService.leaveCountry(player);
@@ -52,5 +52,11 @@ public class gcCitizenshipRenounce extends GeoCommand {
 
         // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + player.username + "§6 is no longer a citizen of §f" + country.name + "§6!", true);
+    }
+
+    @Override
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        PlayerProfile player = PlayerProfile.get(sender);
+        return player.hasCitizenship() && player.rank != PlayerRank.LEADER;
     }
 }

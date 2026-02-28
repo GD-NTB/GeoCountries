@@ -24,7 +24,7 @@ public class gcCountryCreate extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // already has citizenship
         if (playerProfile.hasCitizenship()) {
@@ -57,7 +57,7 @@ public class gcCountryCreate extends GeoCommand {
 
     private void onConfirm(CommandSender sender, String[] args) {
         String countryName = args[0];
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         Country newCountry = new Country(UUID.randomUUID(), countryName);
         newCountry.leader = playerProfile.uuid;
@@ -77,6 +77,6 @@ public class gcCountryCreate extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return !PlayerProfile.byCommandSender(sender).hasCitizenship();
+        return !PlayerProfile.get(sender).hasCitizenship();
     }
 }

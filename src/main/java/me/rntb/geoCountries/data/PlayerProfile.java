@@ -18,6 +18,9 @@ import java.util.stream.Stream;
 
 public class PlayerProfile extends DataCollection {
 
+    public static String filePath;
+    public static String displayName;
+
     // list of every player to have ever joined the server
     public static ArrayList<PlayerProfile> all = null;
     public static List<String> allAsUUIDStrings() {
@@ -26,12 +29,18 @@ public class PlayerProfile extends DataCollection {
     }
     public static List<String> allAsUsernames(boolean alphabetical) {
         Stream<String> usernames = byUsername.keySet().stream();
-        if (!alphabetical) return usernames.toList();
-        return usernames.sorted().toList();
+        if (alphabetical) return usernames.sorted().toList();
+        return usernames.toList();
     }
 
-    public static Map<UUID, PlayerProfile> byUUID = new HashMap<>();
-    public static Map<String, PlayerProfile> byUsername = new HashMap<>();
+    private static final Map<UUID, PlayerProfile> byUUID = new HashMap<>();
+    public static PlayerProfile get(UUID uuid) {
+        return byUUID.get(uuid);
+    }
+    private static final Map<String, PlayerProfile> byUsername = new HashMap<>();
+    public static PlayerProfile get(String username) {
+        return byUsername.get(username);
+    }
 
     public static PlayerProfile byUUIDString(String uuid) {
         try {
@@ -41,14 +50,13 @@ public class PlayerProfile extends DataCollection {
         }
     }
 
-    public static PlayerProfile byCommandSender(CommandSender sender) {
+    public static PlayerProfile get(Player player) {
+        return byUUID.get(player.getUniqueId());
+    }
+    public static PlayerProfile get(CommandSender sender) {
         if (!(sender instanceof Player player))
             return null;
         return get(player);
-    }
-
-    public static PlayerProfile get(Player player) {
-        return byUUID.get(player.getUniqueId());
     }
 
     public static void init() {
@@ -90,6 +98,16 @@ public class PlayerProfile extends DataCollection {
         }
     }
 
+    // returns number of playerprofiles purged
+    public static int purge() {
+        int count = 0;
+        for (PlayerProfile p : new ArrayList<>(all)) {
+            p.deregister();
+            count++;
+        }
+        return count;
+    }
+
     public void register() {
         add(this, all, displayName);
 
@@ -122,7 +140,7 @@ public class PlayerProfile extends DataCollection {
 
     public UUID citizenship = null;
     public Country getCitizenship() {
-        return Country.byUUID.get(citizenship);
+        return Country.get(citizenship);
     }
     public boolean hasCitizenship() {
         return citizenship != null;

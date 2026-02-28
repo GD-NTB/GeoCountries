@@ -11,7 +11,7 @@ public class gcCountry extends GeoCommand {
 
     public gcCountry(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Manages, edits, and views info about countries.";
+        this.helpString = "Manages and views info about countries.";
         this.childCommands = new LinkedHashMap<>() {{
             put("create", new gcCountryCreate("create", "/gc country create", "gc.country.create", ItemStack.of(Material.NETHER_STAR)));
             put("rename", new gcCountryRename("rename", "/gc country rename", "gc.country.rename", ItemStack.of(Material.NAME_TAG)));

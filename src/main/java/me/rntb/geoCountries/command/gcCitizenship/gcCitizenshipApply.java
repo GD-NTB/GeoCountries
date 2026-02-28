@@ -31,7 +31,7 @@ public class gcCitizenshipApply extends GeoCommand {
             return;
         }
 
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if already has citizenship, escape
         if (!ConfigState.debugMode && playerProfile.hasCitizenship()) {
@@ -40,7 +40,7 @@ public class gcCitizenshipApply extends GeoCommand {
         }
 
         String countryName = String.join(" ", args);
-        Country toCountry = Country.byName.get(countryName);
+        Country toCountry = Country.get(countryName);
 
         // if country not exist, escape
         if (toCountry == null) {
@@ -59,7 +59,7 @@ public class gcCitizenshipApply extends GeoCommand {
         if (cApplications != null) {
             // if sent too many applications, escape
             int cApplicationsCount = cApplications.size();
-            if (cApplicationsCount >= ConfigState.maxCitizenshipApplications) {
+            if (ConfigState.maxCitizenshipApplications != -1 && cApplicationsCount >= ConfigState.maxCitizenshipApplications) {
                 ChatUtil.sendPrefixedMessage(sender, "§cYou've already sent too many §f(" + cApplicationsCount + "/" + ConfigState.maxCitizenshipApplications + ")§c citizenship applications! Unsend one by doing §f/gc citizenship unsend [country]");
                 return;
             }
@@ -118,5 +118,15 @@ public class gcCitizenshipApply extends GeoCommand {
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         return args.length == 1 ? Country.allAsStrings(true) : List.of();
+    }
+
+    @Override
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        PlayerProfile player = PlayerProfile.get(sender);
+        if (player.hasCitizenship())
+            return false;
+
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.uuid);
+        return cApplications == null || cApplications.size() < ConfigState.maxCitizenshipApplications;
     }
 }

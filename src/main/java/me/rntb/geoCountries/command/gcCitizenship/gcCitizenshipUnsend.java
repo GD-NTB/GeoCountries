@@ -29,7 +29,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
         }
 
         String countryName = String.join(" ", args);
-        Country toCountry = Country.byName.get(countryName);
+        Country toCountry = Country.get(countryName);
 
         // if country not exist, escape
         if (toCountry == null) {
@@ -37,7 +37,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
             return;
         }
 
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.uuid);
 
@@ -67,11 +67,21 @@ public class gcCitizenshipUnsend extends GeoCommand {
         if (args.length != 1)
             return List.of();
 
-        PlayerProfile player = PlayerProfile.byUUID.get(UuidUtil.getUUIDOfCommandSender(sender));
+        PlayerProfile player = PlayerProfile.get(UuidUtil.getUUIDOfCommandSender(sender));
         if (player.rank != PlayerRank.LEADER)
             return List.of();
 
         return player.getCitizenship().citizens.stream()
-                                               .map(c -> PlayerProfile.byUUID.get(c).username).toList();
+                                               .map(p -> PlayerProfile.get(p).username).toList();
+    }
+
+    @Override
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        PlayerProfile player = PlayerProfile.get(sender);
+        if (player.hasCitizenship())
+            return false;
+
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.uuid);
+        return cApplications != null && !cApplications.isEmpty();
     }
 }

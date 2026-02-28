@@ -17,7 +17,6 @@ import java.util.List;
 
 public class MenuPage {
 
-    // todo: buttons that we don't have permission for (e.g. not the correct rank) need to be hidden (GeoCommand.isUsable?)
     public static Inventory createPage(ItemStack[] buttons, String title, Player player, boolean isBasePage)  {
         int buttonCount = buttons.length;
 

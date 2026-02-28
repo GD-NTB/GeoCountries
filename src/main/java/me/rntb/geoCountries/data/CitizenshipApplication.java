@@ -2,6 +2,7 @@ package me.rntb.geoCountries.data;
 
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 
@@ -12,22 +13,25 @@ import java.util.UUID;
 
 public class CitizenshipApplication extends DataCollection {
 
+    public static String filePath;
+    public static String displayName;
+
     // list of sent applications
     public static ArrayList<CitizenshipApplication> sentAll = null;
-    public static Map<UUID, CitizenshipApplication> sentByUUID = new HashMap<>();
-    public static Map<UUID, ArrayList<CitizenshipApplication>> sentByApplicant = new HashMap<>();
-    public static Map<UUID, ArrayList<CitizenshipApplication>> sentByToCountry = new HashMap<>();
+    public static final Map<UUID, CitizenshipApplication> sentByUUID = new HashMap<>();
+    public static final Map<UUID, ArrayList<CitizenshipApplication>> sentByApplicant = new HashMap<>();
+    public static final Map<UUID, ArrayList<CitizenshipApplication>> sentByToCountry = new HashMap<>();
 
     // list of all applications currently being written
-    public static ArrayList<CitizenshipApplication> openAll = new ArrayList<>();
-    public static Map<UUID, CitizenshipApplication> openByUUID = new HashMap<>();
-    public static Map<UUID, CitizenshipApplication> openByApplicant = new HashMap<>();
+    public static final ArrayList<CitizenshipApplication> openAll = new ArrayList<>();
+    public static final Map<UUID, CitizenshipApplication> openByUUID = new HashMap<>();
+    public static final Map<UUID, CitizenshipApplication> openByApplicant = new HashMap<>();
 
     public static void init() {
         filePath = "data/citizenshipapplications";
         displayName = "CitizenshipApplication";
 
-        sentAll = readFromFile(filePath, displayName, new TypeToken<ArrayList<CitizenshipApplication>>() {}.getType());
+        sentAll = readFromFile(CitizenshipApplication.filePath, displayName, new TypeToken<ArrayList<CitizenshipApplication>>() {}.getType());
         if (sentAll == null) {
             ChatUtil.sendPrefixedLogMessage("ReadFromFile(%s) was null, try deleting the file!"
                                             .formatted(filePath));
@@ -65,15 +69,25 @@ public class CitizenshipApplication extends DataCollection {
         }
     }
 
+    // returns number of citizenship applications purged
+    public static int purge() {
+        int count = 0;
+        for (CitizenshipApplication ca : new ArrayList<>(sentAll)) {
+            CitizenshipApplicationService.deleteSent(ca);
+            count++;
+        }
+        return count;
+    }
+
     // ---
 
     public UUID uuid;
 
     public UUID applicant;
-    public PlayerProfile getApplicant() { return PlayerProfile.byUUID.get(this.applicant); }
+    public PlayerProfile getApplicant() { return PlayerProfile.get(applicant); }
 
     public UUID toCountry;
-    public Country getToCountry() { return Country.byUUID.get(this.toCountry); }
+    public Country getToCountry() { return Country.get(this.toCountry); }
 
     public String reason;
 
@@ -87,8 +101,8 @@ public class CitizenshipApplication extends DataCollection {
 
     @Override
     public String toString() {
-        PlayerProfile applicant = PlayerProfile.byUUID.get(this.applicant);
+        PlayerProfile player = PlayerProfile.get(applicant);
         return "CitizenApplication(%s, %s)"
-                .formatted(applicant != null ? applicant.username : null, String.valueOf(this.uuid));
+                .formatted(player != null ? player.username : "null", String.valueOf(uuid));
     }
 }

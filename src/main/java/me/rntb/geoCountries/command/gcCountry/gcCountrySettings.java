@@ -18,12 +18,12 @@ public class gcCountrySettings extends GeoCommand {
 
     public gcCountrySettings(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Sets/lists your country's settings.";
+        this.helpString = "Lists/manages your country's settings.";
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if doesnt have citizenship, escape
         if (!playerProfile.hasCitizenship()) {
@@ -98,7 +98,10 @@ public class gcCountrySettings extends GeoCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        Country playerCountry = Country.byCommandSender(sender);
+        if (args.length > 2)
+            return List.of();
+
+        Country playerCountry = PlayerProfile.get(sender).getCitizenship();
         if (playerCountry == null)
             return List.of();
 
@@ -109,13 +112,13 @@ public class gcCountrySettings extends GeoCommand {
         // get setting typed before
         SettingData settingData = Country.settingsData.get(args[0]);
         if (settingData == null)
-            return  List.of();
+            return List.of();
         // return possible values for this settings
         return settingData.getTabCompletion();
     }
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return PlayerProfile.byCommandSender(sender).rank == PlayerRank.LEADER;
+        return PlayerProfile.get(sender).rank == PlayerRank.LEADER;
     }
 }

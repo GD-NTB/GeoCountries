@@ -15,7 +15,7 @@ public class gcCountryInfo extends GeoCommand {
 
     public gcCountryInfo(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Displays info about your/any particular country.";
+        this.helpString = "Displays info about your/any country.";
     }
 
     @Override
@@ -23,14 +23,14 @@ public class gcCountryInfo extends GeoCommand {
         Country country;
         // if no args, get player country
         if (args.length == 0) {
-            PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+            PlayerProfile playerProfile = PlayerProfile.get(sender);
             country = playerProfile.getCitizenship();
             if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
                                                      """
                                                      §6========== COUNTRY INFO ==========
                                                      §cYou do not have citizenship of any country.
-                                                     §cDo §f/gc country create§f to create a country, or
+                                                     §cDo §f/gc country create§c to create a country, or
                                                      §cdo §f/gc citizenship apply§c to apply to apply for citizenship of one.
                                                      §6=================================""");
                 return;
@@ -39,7 +39,7 @@ public class gcCountryInfo extends GeoCommand {
         // else get specific country
         else {
             String countryName = String.join(" ", args);
-            country = Country.byName.get(countryName);
+            country = Country.get(countryName);
             if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c does not exist!");
                 return;
@@ -76,6 +76,6 @@ public class gcCountryInfo extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return PlayerProfile.byCommandSender(sender).hasCitizenship();
+        return PlayerProfile.get(sender).hasCitizenship();
     }
 }

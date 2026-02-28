@@ -2,15 +2,12 @@ package me.rntb.geoCountries.command.gcPurge;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
-import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
 
 public class gcPurgeCitizenshipApplication extends GeoCommand {
 
@@ -30,12 +27,7 @@ public class gcPurgeCitizenshipApplication extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        int count = CitizenshipApplication.sentAll.size();
-
-        for (CitizenshipApplication ca : new ArrayList<>(CitizenshipApplication.sentAll)) { // new ArrayList as we are concurrently modifying
-            CitizenshipApplicationService.deleteSent(ca);
-        }
-
+        int count = CitizenshipApplication.purge();
         ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a CitizenshipApplication" + StringUtil.leadingS(count) + ".");
     }
 }

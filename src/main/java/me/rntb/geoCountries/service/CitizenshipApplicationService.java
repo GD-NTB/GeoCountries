@@ -156,13 +156,13 @@ public class CitizenshipApplicationService {
         if (playerProfile.rank != PlayerProfile.PlayerRank.NONE)
             return;
 
-        CitizenshipService.joinCountry(playerProfile, Country.byUUID.get(cApplication.toCountry));
+        CitizenshipService.joinCountry(playerProfile, Country.get(cApplication.toCountry));
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Accepted sent CitizenshipApplication");
 
         if (sendMessageToApplicant) {
-            Country country = Country.byUUID.get(cApplication.toCountry);
+            Country country = Country.get(cApplication.toCountry);
             Player player = playerProfile.getOnlinePlayer();
             ChatUtil.sendPrefixedNotificationMessage(player, """
                                                              §6Your citizenship application was §aaccepted§6.
@@ -187,7 +187,7 @@ public class CitizenshipApplicationService {
             ChatUtil.sendPrefixedLogMessage("Rejected sent CitizenshipApplication");
 
         if (sendMessageToApplicant) {
-            Country country = Country.byUUID.get(cApplication.toCountry);
+            Country country = Country.get(cApplication.toCountry);
             Player player = playerProfile.getOnlinePlayer();
             ChatUtil.sendPrefixedNotificationMessage(player, "§6Your citizenship application to §f" + country.name + "§6 was §crejected§6.");
         }

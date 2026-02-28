@@ -10,7 +10,7 @@ public class gcConfigReload extends GeoCommand {
 
     public gcConfigReload(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Reloads the config and updates the plugin's state.";
+        this.helpString = "Reloads the config from disk to memory.";
     }
 
     @Override

@@ -8,8 +8,6 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-
 public class gcPurgeCountry extends GeoCommand {
 
     public gcPurgeCountry(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
@@ -28,11 +26,7 @@ public class gcPurgeCountry extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        int count = Country.all.size();
-        for (Country cd : new ArrayList<>(Country.all)) { // new ArrayList as we are concurrently modifying
-            cd.deregister();
-        }
-
+        int count = Country.purge();
         ChatUtil.sendPrefixedMessage(sender, "§aPurged §f" + count + "§a Countr" + (count > 1 ? "ies" : "y") + ".");
     }
 }

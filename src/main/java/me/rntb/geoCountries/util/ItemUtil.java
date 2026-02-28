@@ -23,7 +23,6 @@ public class ItemUtil {
             case RED_CROSS -> "https://textures.minecraft.net/texture/beb588b21a6f98ad1ff4e085c552dcb050efc9cab427f46048f18fc803475f7";
         };
     }
-
     public static ItemStack getSkull(Skull skull)  {
         ItemStack skullItem = ItemStack.of(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) skullItem.getItemMeta();

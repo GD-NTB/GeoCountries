@@ -16,12 +16,12 @@ public class gcPlayerSettings extends GeoCommand {
 
     public gcPlayerSettings(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Sets/lists your settings.";
+        this.helpString = "Lists/manages your settings.";
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if setting a setting, set and escape
         if (args.length >= 2) {
@@ -79,7 +79,10 @@ public class gcPlayerSettings extends GeoCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        if (args.length > 2)
+            return List.of();
+
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
         if (playerProfile == null)
             return List.of();
 

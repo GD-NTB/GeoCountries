@@ -20,7 +20,6 @@ public class gcDump extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         ChatUtil.sendPrefixedMessage(sender, """
                                              %sPlayerProfile.all(%s)
-                                             byUsername(%s), byUUID(%s)
                                              ----------
                                              CitizenshipApplication.sentByApplicant(%s)
                                              ----------
@@ -30,7 +29,6 @@ public class gcDump extends GeoCommand {
                                              """
                                              .formatted(ChatUtil.newlineIfPrefixIsEmpty(),
                                                         PlayerProfile.all.size(),
-                                                        PlayerProfile.byUsername.size(), PlayerProfile.byUUID.size(),
                                                         CitizenshipApplication.sentByApplicant.size(),
                                                         Country.all.size(),
                                                         PlayerMetadata.isMenuOpen.get(UuidUtil.getUUIDOfCommandSender(sender))));

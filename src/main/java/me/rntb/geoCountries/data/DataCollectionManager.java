@@ -14,4 +14,10 @@ public class DataCollectionManager {
         Country.save();
         CitizenshipApplication.save();
     }
+
+    public static void purgeAll() {
+        PlayerProfile.purge();
+        Country.purge();
+        CitizenshipApplication.purge();
+    }
 }

@@ -18,7 +18,7 @@ public class gcCountryCitizens extends GeoCommand {
 
     public gcCountryCitizens(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Lists all citizens of your/any country, their rank, and how many.";
+        this.helpString = "Lists all citizens of your/any country.";
     }
 
     @Override
@@ -29,7 +29,7 @@ public class gcCountryCitizens extends GeoCommand {
 
         // if no args, country = player's country
         if (args.length == 0) {
-            PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+            PlayerProfile playerProfile = PlayerProfile.get(sender);
             country = playerProfile.getCitizenship();
             if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
@@ -59,7 +59,7 @@ public class gcCountryCitizens extends GeoCommand {
 
             countryName = String.join(" ", countryNameArgs);
 
-            country = Country.byName.get(countryName);
+            country = Country.get(countryName);
             if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c does not exist!");
                 return;
@@ -114,6 +114,6 @@ public class gcCountryCitizens extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return PlayerProfile.byCommandSender(sender).hasCitizenship();
+        return PlayerProfile.get(sender).hasCitizenship();
     }
 }

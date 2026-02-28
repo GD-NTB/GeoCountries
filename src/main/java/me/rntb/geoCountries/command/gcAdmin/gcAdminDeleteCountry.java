@@ -25,7 +25,7 @@ public class gcAdminDeleteCountry extends GeoCommand {
         }
 
         String countryName = String.join(" ", args).trim();
-        Country country = Country.byName.get(countryName);
+        Country country = Country.get(countryName);
         if (country == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c does not exist!");
             return;
@@ -40,7 +40,7 @@ public class gcAdminDeleteCountry extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        Country country = Country.byName.get(args[0]);
+        Country country = Country.get(args[0]);
         country.deregister();
 
         ChatUtil.sendPrefixedMessage(sender, "§aDeleted country!");

@@ -45,7 +45,7 @@ public class SettingData {
         switch (settingData.type) {
             case BOOL:
                 if (!toValueTrimmed.equals("true") && !toValueTrimmed.equals("false")) {
-                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (boolean) must either be §ftrue§c or §ffalse§c");
+                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (boolean) must either be §ftrue§c or §ffalse§c!");
                     return;
                 }
                 break;
@@ -84,7 +84,7 @@ public class SettingData {
 
             case CHAT_COLOUR:
                 if (!EnumUtil.enumToStringList(ChatUtil.ChatColour.class).contains(toValueTrimmed)) {
-                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (chat colour) must be one of the available chat colours (look at tab the autocomplete options)!");
+                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (chat colour) must be one of the available chat colours (look at the autocomplete options)!");
                     return;
                 }
                 break;

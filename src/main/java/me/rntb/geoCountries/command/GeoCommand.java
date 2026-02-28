@@ -112,7 +112,6 @@ public abstract class GeoCommand {
             return null;
 
         List<GeoCommand> allowedChildCommands = new ArrayList<>(allowedChildCommands(sender));
-        // if isRunnableBySender is not overridden, permission will have been checked twice, but this isnt an expensive operation (hopefully)
         allowedChildCommands.removeIf(c -> c.menuButtonItem == null || !c.isVisibleOnMenu(sender));
 
         ItemStack[] buttons = new ItemStack[allowedChildCommands.size()];
@@ -137,8 +136,9 @@ public abstract class GeoCommand {
         return buttons;
     }
 
+    // permission check not needed as based on allowedChildCommands
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return sender.hasPermission(permission);
+        return true;
     }
 
     public final List<GeoCommand> allowedChildCommands(CommandSender sender) {

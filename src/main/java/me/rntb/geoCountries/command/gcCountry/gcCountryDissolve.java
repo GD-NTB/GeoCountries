@@ -19,7 +19,7 @@ public class gcCountryDissolve extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if doesnt have citizenship, escape
         if (!playerProfile.hasCitizenship()) {
@@ -28,7 +28,7 @@ public class gcCountryDissolve extends GeoCommand {
         }
 
         // if not leader of country, escape
-        if (playerProfile.getLeaderOf() == null) {
+        if (playerProfile.rank != PlayerRank.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of your country to dissolve it!");
             return;
         }
@@ -42,7 +42,7 @@ public class gcCountryDissolve extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.byCommandSender(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
         Country country = playerProfile.getCitizenship();
 
         ChatUtil.sendPrefixedMessage(sender, "§aDissolved country §f" + country.name + "§a!");
@@ -56,6 +56,6 @@ public class gcCountryDissolve extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return PlayerProfile.byCommandSender(sender).rank == PlayerRank.LEADER;
+        return PlayerProfile.get(sender).rank == PlayerRank.LEADER;
     }
 }

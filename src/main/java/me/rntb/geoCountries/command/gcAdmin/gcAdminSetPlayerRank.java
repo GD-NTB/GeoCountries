@@ -32,7 +32,7 @@ public class gcAdminSetPlayerRank extends GeoCommand {
         }
 
         String playerName = args[0];
-        PlayerProfile player = PlayerProfile.byUsername.get(playerName);
+        PlayerProfile player = PlayerProfile.get(playerName);
 
         if (player == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + playerName + "§c could not be found!");
