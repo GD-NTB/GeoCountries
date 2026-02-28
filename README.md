@@ -8,6 +8,10 @@ It is intended to work in a similar way to many existing Factions plugins.
 
 ## Current features:
 
+* Visual GUI menu
+
+<img src="readme-stuff/commands-4.gif" width="250" alt="GIF showcasing /gc country commands">
+
 * Country management (`/gc country create`, `dissolve`, `rename`, etc)
 
 <img src="readme-stuff/commands-1.gif" width="250" alt="GIF showcasing /gc country commands">
@@ -29,10 +33,9 @@ It is intended to work in a similar way to many existing Factions plugins.
 ## To-do:
 
 ```
-// todo: gui
 // todo: in-country ranks
 // todo: promote command
-// todo: claiming (max chunks in config)
+// todo: claiming
 ```
 
 ## Current bugs:
@@ -40,4 +43,4 @@ It is intended to work in a similar way to many existing Factions plugins.
 * N/A - that I know of B)
 \
 \
-<img src="readme-stuff/globe.webp" width="150" height="150"/><img src="readme-stuff/globe.webp" width="150" height="150"/><img src="readme-stuff/globe.webp" width="150" height="150"/>
+<img src="readme-stuff/globe.webp" width="150" height="150"/>

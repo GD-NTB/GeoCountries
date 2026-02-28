@@ -18,7 +18,7 @@ import java.util.Objects;
 
 // todo: in-country ranks
 // todo: promote command
-// todo: claiming (max chunks in config)
+// todo: claiming
 public class GeoCountries extends JavaPlugin {
 
     public static String PluginName;
