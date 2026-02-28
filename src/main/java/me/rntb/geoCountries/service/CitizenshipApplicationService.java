@@ -91,21 +91,21 @@ public class CitizenshipApplicationService {
                     .append(Component.newline())
                     // [Accept] button
                     .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship accept " + applicant.username + "'>" +
-                                                    "<hover:show_text:'<dark_gray>Click to accept <white>" + applicant.username + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                                    "<hover:show_text:'<white>Click to accept " + applicant.username + "\\'s application.</white>'>" +
                                                     "<green><bold>[Accept]</bold></green>" +
                                                     "</hover></click>"
                     ))
                     .append(Component.text("  "))
                     // [View] button
                     .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship received " + applicant.username + "'>" +
-                                                    "<hover:show_text:'<dark_gray>Click to view <white>" + applicant.username + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                                    "<hover:show_text:'<white>Click to view " + applicant.username + "\\'s application.</white>'>" +
                                                     "<white><bold>[View]</bold></white>" +
                                                     "</hover></click>"
                     ))
                     .append(Component.text("  "))
                     // [Reject] button
                     .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship reject " + applicant.username + "'>" +
-                                                    "<hover:show_text:'<dark_gray>Click to reject <white>" + applicant.username + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                                    "<hover:show_text:'<white>Click to reject " + applicant.username + "\\'s application.</white>'>" +
                                                     "<red><bold>[Reject]</bold></red>" +
                                                     "</hover></click>"));
             // send message to leader

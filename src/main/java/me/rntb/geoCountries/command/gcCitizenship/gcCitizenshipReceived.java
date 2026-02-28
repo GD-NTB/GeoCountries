@@ -105,21 +105,21 @@ public class gcCitizenshipReceived extends GeoCommand {
                        .append(Component.newline())
                        // [Accept] button
                        .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship accept " + applicantName + "'>" +
-                                                       "<hover:show_text:'<gray>Click to accept</gray> <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
+                                                       "<hover:show_text:'<white>Click to accept " + applicantName + "\\'s application.</white>'>" +
                                                        "<green><bold>[Accept]</bold></green>" +
                                                        "</hover></click>"))
                        .append(Component.text("  "));
                 // [View All] button
                 if (wasTruncated) {
                     message.append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship received " + applicantName + "'>" +
-                                                           "<hover:show_text:'<dark_gray>Click to view</gray> <white>" + applicantName + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                                           "<hover:show_text:'<white>Click to view " + applicantName + "\\'s application.</white>'>" +
                                                            "<white><bold>[View All]</bold></white>" +
                                                            "</hover></click>"))
                            .append(Component.text("  "));
                 }
                 // [Reject] button
                 message.append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship reject " + applicantName + "'>" +
-                                                       "<hover:show_text:'<gray>Click to reject</gray> <white>" + applicantName + "</white><gray>\\'s application.</gray>'>" +
+                                                       "<hover:show_text:'<white>Click to reject " + applicantName + "\\'s application.</white>'>" +
                                                        "<red><bold>[Reject]</bold></red>" +
                                                        "</hover></click>"))
                        .append(Component.newline());
@@ -147,14 +147,14 @@ public class gcCitizenshipReceived extends GeoCommand {
                .append(Component.newline())
                // [Accept] button
                .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship accept " + applicantName + "'>" +
-                                               "<hover:show_text:'<dark_gray>Click to accept</dark_gray> <white>" + applicantName + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                               "<hover:show_text:'<white>Click to accept " + applicantName + "\\'s application.</white>'>" +
                                                "<green><bold>[Accept]</bold></green>" +
                                                "</hover></click>"
                ))
                .append(Component.text("  "))
                // [Reject] button
                .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship reject " + applicantName + "'>" +
-                                               "<hover:show_text:'<dark_gray>Click to reject</dark_gray> <white>" + applicantName + "</white><dark_gray>\\'s application.</dark_gray>'>" +
+                                               "<hover:show_text:'<white>Click to reject " + applicantName + "\\'s application.</white>'>" +
                                                "<red><bold>[Reject]</bold></red>" +
                                                "</hover></click>"
                ))

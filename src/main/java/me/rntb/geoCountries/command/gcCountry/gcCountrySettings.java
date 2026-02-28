@@ -76,7 +76,7 @@ public class gcCountrySettings extends GeoCommand {
             SettingData settingData = Country.settingsData.get(key);
             if (settingData == null)
                 continue;
-            message.append(Component.text("§f> " + settingData.toString(country.settings.get(key)) + " "));
+            message.append(Component.text("§f> " + settingData.toString(country.settings.get(key)) + "  "));
             if (isLeader)
                 message.append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
                                                                    "/gc country settings " + key + " " + settingData.defaultValue));
@@ -89,7 +89,7 @@ public class gcCountrySettings extends GeoCommand {
         SettingData settingData = Country.settingsData.get(key);
         if (settingData == null)
             return null;
-        TextComponent.Builder message = Component.text().append(Component.text(settingData.toStringFull(key, country.settings.get(key)) + " "));
+        TextComponent.Builder message = Component.text().append(Component.text(settingData.toStringFull(key, country.settings.get(key)) + "  "));
         if (isLeader)
             message.append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
                                                                "/gc country settings " + key + " " + settingData.defaultValue));

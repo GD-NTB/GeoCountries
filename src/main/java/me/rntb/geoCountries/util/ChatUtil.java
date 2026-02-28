@@ -61,7 +61,7 @@ public class ChatUtil {
         if (effectiveIndex > 1) {
             // [<<<] button
             message.append(mm.deserialize("<click:run_command:'" + commandForPrevious + "'>" +
-                                          "<hover:show_text:'<dark_gray>Click to go to previous page.</dark_gray>'>" +
+                                          "<hover:show_text:'<white>Click to go to previous page.</white>'>" +
                                           "<dark_gray><bold>[<<<]</bold></dark_gray>" +
                                           "</hover></click>"))
                    .append(Component.text("  "));
@@ -76,7 +76,7 @@ public class ChatUtil {
         if (effectiveIndex < pageCount) {
             // [>>>] button
             message.append(mm.deserialize("<click:run_command:'" + commandForNext + "'>" +
-                                          "<hover:show_text:'<dark_gray>Click to go to next page.</dark_gray>'>" +
+                                          "<hover:show_text:'<white>Click to go to next page.</white>'>" +
                                           "<dark_gray><bold>[>>>]</bold></dark_gray>" +
                                           "</hover></click>"));
         }

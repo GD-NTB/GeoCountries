@@ -44,7 +44,7 @@ public class gcCitizenshipSent extends GeoCommand {
                                               .formatted(country.name, reason)))
                        // [Unsend] button
                        .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship unsend " + country.name + "'>" +
-                                                       "<hover:show_text:'<dark_gray>Click to unsend this citizenship application.</dark_gray>'>" +
+                                                       "<hover:show_text:'<white>Click to unsend this citizenship application.</white>'>" +
                                                        "<red><bold>[Unsend]</bold></red>" +
                                                        "</hover></click>"))
                        .append(Component.newline());

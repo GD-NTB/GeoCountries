@@ -168,7 +168,7 @@ public class SettingData {
                         // [Edit] button
                         .append(ChatUtil.mm.deserialize(
                                 "<click:suggest_command:'" + editCommand + "'>" +
-                                "<hover:show_text:\"<dark_gray>Click to edit the setting's value.</dark_gray>\">" +
+                                "<hover:show_text:\"<white>Click to edit the setting's value.</white>\">" +
                                 "<dark_gray><bold>[Edit]</bold></dark_gray>" +
                                 "</hover></click>"
                         ))
@@ -176,7 +176,7 @@ public class SettingData {
                         // [Default] button
                         .append(ChatUtil.mm.deserialize(
                                 "<click:suggest_command:'" + defaultCommand + "'>" +
-                                "<hover:show_text:\"<dark_gray>Click to set to default value.</dark_gray>\">" +
+                                "<hover:show_text:\"<white>Click to set to default value.</white>\">" +
                                 "<dark_gray><bold>[Default]</bold></dark_gray>" +
                                 "</hover></click>"
                         ));

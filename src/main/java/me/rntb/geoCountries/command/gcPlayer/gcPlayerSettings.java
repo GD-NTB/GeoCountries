@@ -60,7 +60,7 @@ public class gcPlayerSettings extends GeoCommand {
             SettingData settingData = PlayerProfile.settingsData.get(key);
             if (settingData == null)
                 continue;
-            message.append(Component.text("§f> " + settingData.toString(player.settings.get(key)) + " "))
+            message.append(Component.text("§f> " + settingData.toString(player.settings.get(key)) + "  "))
                    .append(SettingData.getEditButtonComponents("/gc player settings " + key + " ",
                                                                "/gc player settings " + key + " " + settingData.defaultValue))
                    .append(Component.newline());
@@ -72,7 +72,7 @@ public class gcPlayerSettings extends GeoCommand {
         SettingData settingData = PlayerProfile.settingsData.get(key);
         if (settingData == null)
             return null;
-        return Component.text().append(Component.text(settingData.toStringFull(key, player.settings.get(key)) + " "))
+        return Component.text().append(Component.text(settingData.toStringFull(key, player.settings.get(key)) + "  "))
                                .append(SettingData.getEditButtonComponents("/gc player settings " + key + " ",
                                                                            "/gc player settings " + key + " " + settingData.defaultValue));
     }
