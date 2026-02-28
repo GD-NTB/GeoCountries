@@ -16,7 +16,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Path;
 import java.util.Objects;
 
-// todo: better tab autocomplete using String.startswith check for every suggestion
 // todo: use getters and setters instead of changing the state of internal variables?
 // todo: change colour of settings [edit] and [default]
 // todo: rewrite helper functions that dont need to be List to be type of Array

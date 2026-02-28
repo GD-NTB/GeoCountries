@@ -63,7 +63,7 @@ public class PlayerProfile extends DataCollection {
         filePath = "data/players";
         displayName = "PlayerProfile";
 
-        all = readFromFile(filePath, displayName, new TypeToken<ArrayList<PlayerProfile>>() {}.getType());
+        all = readFromFile(filePath, displayName, new TypeToken<ArrayList<PlayerProfile>>() { }.getType());
         if (all == null) {
             ChatUtil.sendPrefixedLogErrorMessage("ReadFromFile(%s) was null, try backing it up and deleting the file!"
                                                  .formatted(filePath));

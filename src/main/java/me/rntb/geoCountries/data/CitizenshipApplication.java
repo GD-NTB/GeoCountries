@@ -31,7 +31,7 @@ public class CitizenshipApplication extends DataCollection {
         filePath = "data/citizenshipapplications";
         displayName = "CitizenshipApplication";
 
-        sentAll = readFromFile(CitizenshipApplication.filePath, displayName, new TypeToken<ArrayList<CitizenshipApplication>>() {}.getType());
+        sentAll = readFromFile(CitizenshipApplication.filePath, displayName, new TypeToken<ArrayList<CitizenshipApplication>>() { }.getType());
         if (sentAll == null) {
             ChatUtil.sendPrefixedLogMessage("ReadFromFile(%s) was null, try deleting the file!"
                                             .formatted(filePath));

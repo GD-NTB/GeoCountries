@@ -42,7 +42,7 @@ public class Country extends DataCollection {
         filePath = "data/countries";
         displayName = "Country";
 
-        all = readFromFile(filePath, displayName, new TypeToken<ArrayList<Country>>() {}.getType());
+        all = readFromFile(filePath, displayName, new TypeToken<ArrayList<Country>>() { }.getType());
         if (all == null) {
             ChatUtil.sendPrefixedLogErrorMessage("ReadFromFile(%s) was null, try backing it up and deleting the file!"
                                                  .formatted(filePath));

@@ -98,21 +98,29 @@ public class gc extends GeoCommand implements TabExecutor  {
         if (args.length == 0 || !(sender instanceof Player player))
             return List.of();
 
+        List<String> completions;
         if (args.length == 1)
-            return getTabCompletion(player, new String[]{ });
+            completions = getTabCompletion(player, new String[] { });
+        else {
+            String commandName = args[0];
+            // convert alias to childCommand
+            String childCommandNameAlias = this.childCommandsAliases.get(commandName);
+            if (childCommandNameAlias != null)
+                commandName = childCommandNameAlias;
+            // find childCommand
+            GeoCommand childCommand = childCommands.get(commandName);
+            if (childCommand == null || !sender.hasPermission(childCommand.permission))
+                return List.of();
 
-        String commandName = args[0];
-        // convert alias to childCommand
-        String childCommandNameAlias = this.childCommandsAliases.get(commandName);
-        if (childCommandNameAlias != null)
-            commandName = childCommandNameAlias;
-        // find childCommand
-        GeoCommand childCommand = childCommands.get(commandName);
-        if (childCommand == null || !sender.hasPermission(childCommand.permission))
-            return List.of();
+            // get tab completion of childCommand
+            completions = childCommand.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));
+        }
 
-        // get tab completion of childCommand
-        return childCommand.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));
+        // remove entries not starting with what we've typed
+        List<String> completionsFiltered = new ArrayList<>(completions);
+        completionsFiltered.removeIf(c -> !c.startsWith(args[args.length-1]));
+
+        return completionsFiltered;
     }
 
     @Override
