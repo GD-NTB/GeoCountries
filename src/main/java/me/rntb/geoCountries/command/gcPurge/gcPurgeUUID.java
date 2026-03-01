@@ -35,7 +35,7 @@ public class gcPurgeUUID extends GeoCommand {
     private void onResponse(CommandSender sender, String uuidString) {
         PlayerProfile player = PlayerProfile.byUUIDString(uuidString);
         if (player == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§UUID §f" + uuidString + "§c could not be found!");
+            ChatUtil.sendPrefixedMessage(sender, "§cUUID §f" + uuidString + "§c could not be found!");
             return;
         }
 
