@@ -75,6 +75,9 @@ public abstract class GeoCommand {
     }
 
     public final void findAndExecuteChildCommand(CommandSender sender, String[] args) {
+        if (childCommands.isEmpty())
+            return;
+
         String mode = args[0].toLowerCase();
         GeoCommand childCommand = childCommands.get(mode);
         if (childCommand == null) {

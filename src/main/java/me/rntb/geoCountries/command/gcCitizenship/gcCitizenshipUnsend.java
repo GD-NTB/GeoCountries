@@ -83,8 +83,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
         if (player.position != Position.LEADER)
             return List.of();
 
-        return player.getCitizenship().citizens.stream()
-                                               .map(p -> PlayerProfile.get(p).username).toList();
+        return player.getSentCitizenshipApplicationsAsNames();
     }
 
     @Override

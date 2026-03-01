@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Path;
 import java.util.Objects;
 
+// todo: getters setters
 // todo: claiming
 // todo: in-country ranks
 // todo: promote command

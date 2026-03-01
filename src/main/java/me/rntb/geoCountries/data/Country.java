@@ -206,8 +206,6 @@ public class Country extends DataCollection {
                             .map(ca -> ca.getApplicant().username).toList();
     }
 
-    public Country() { }
-
     public Country(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;

@@ -2,11 +2,13 @@ package me.rntb.geoCountries.command;
 
 import me.rntb.geoCountries.command.gcAdmin.gcAdmin;
 import me.rntb.geoCountries.command.gcCitizenship.gcCitizenship;
+import me.rntb.geoCountries.command.gcClaim.gcClaim;
 import me.rntb.geoCountries.command.gcConfig.gcConfig;
 import me.rntb.geoCountries.command.gcCountry.gcCountry;
 import me.rntb.geoCountries.command.gcDebug.gcDebug;
 import me.rntb.geoCountries.command.gcPlayer.gcPlayer;
 import me.rntb.geoCountries.command.gcPurge.gcPurge;
+import me.rntb.geoCountries.command.gcUnclaim.gcUnclaim;
 import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
@@ -28,9 +30,11 @@ public class gc extends GeoCommand implements TabExecutor  {
         this.helpString = "The base command for GeoCountries. Opens the plugin's visual GUI menu.";
         this.childCommands = new LinkedHashMap<>() {{
             put("country", new gcCountry("country", "/gc country", "gc.country", ItemStack.of(Material.FILLED_MAP)));
+            put("claim", new gcClaim("claim", "/gc claim", "gc.claim", ItemStack.of(Material.GOLDEN_SHOVEL)));
+            put("unclaim", new gcUnclaim("unclaim", "/gc unclaim", "gc.claim.unclaim", null));
             put("player", new gcPlayer("player", "/gc player", "gc.player", ItemStack.of(Material.DEBUG_STICK))); // debug stick -> skull of player
             put("citizenship", new gcCitizenship("citizenship", "/gc citizenship", "gc.citizenship", ItemStack.of(Material.WRITABLE_BOOK)));
-            put("help", new gcHelp("help", "/gc help", "gc.help", ItemStack.of(Material.GRASS_BLOCK)));
+            put("help", new gcHelp("help", "/gc help", "gc.help", ItemStack.of(Material.KNOWLEDGE_BOOK)));
             put("admin", new gcAdmin("admin", "/gc admin", "gc.admin", ItemStack.of(Material.DIAMOND_BLOCK)));
             put("debug", new gcDebug("debug", "/gc debug", "gc.debug", ItemStack.of(Material.REDSTONE)));
             put("config", new gcConfig("config", "/gc config", "gc.config", ItemStack.of(Material.BOOK)));

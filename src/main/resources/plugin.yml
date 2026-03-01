@@ -46,7 +46,6 @@ permissions:
       gc.country.rename: true
       gc.country.dissolve: true
       gc.country.settings: true
-      gc.player.settings: true
       gc.citizenship: true
       gc.citizenship.apply: true
       gc.citizenship.sent: true
@@ -56,6 +55,11 @@ permissions:
       gc.citizenship.accept: true
       gc.citizenship.reject: true
       gc.citizenship.revoke: true
+      gc.player.settings: true
+      gc.claim: true
+      gc.claim.one: true
+      gc.unclaim: true
+      gc.unclaim.one: true
 
   # -------------------- ADMIN --------------------
   gc.group.admin:

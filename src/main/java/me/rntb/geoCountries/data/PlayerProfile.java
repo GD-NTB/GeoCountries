@@ -114,7 +114,7 @@ public class PlayerProfile extends DataCollection {
         byUsername.put(this.username, this);
         byUUID.put(this.uuid, this);
 
-        timeFirstJoined = System.currentTimeMillis();
+        timeCreated = System.currentTimeMillis();
 
         settings = buildDefaultSettings();
     }
@@ -151,6 +151,7 @@ public class PlayerProfile extends DataCollection {
         CITIZEN,
         LEADER
     }
+
     public Position position = Position.NONE;
     public String getPositionString() {
         return switch (position) {
@@ -177,23 +178,19 @@ public class PlayerProfile extends DataCollection {
     }};
     public static LinkedHashMap<String, String> buildDefaultSettings() {
         return settingsData.entrySet().stream()
-                                     .collect(LinkedHashMap::new,
-                                             (m, e) -> m.put(e.getKey(), e.getValue().defaultValue),
-                                             LinkedHashMap::putAll);
+                                      .collect(LinkedHashMap::new,
+                                              (m, e) -> m.put(e.getKey(), e.getValue().defaultValue),
+                                              LinkedHashMap::putAll);
     }
 
-    public long timeFirstJoined = 0;
+    public long timeCreated = 0;
     public String timeFirstJoinedAsString() {
-        Instant instant = Instant.ofEpochMilli(this.timeFirstJoined);
+        Instant instant = Instant.ofEpochMilli(this.timeCreated);
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         return dateTime.format(StringUtil.timeFormatter);
     }
 
-    public UUID getLeaderOf() {
-        return position == Position.LEADER ? this.citizenship : null;
-    }
-
-    public List<String> getSentCitizenshipApplicationsAsStrings() {
+    public List<String> getSentCitizenshipApplicationsAsNames() {
         List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(this.uuid);
         if (cApplications == null)
             return List.of();
@@ -207,8 +204,6 @@ public class PlayerProfile extends DataCollection {
     public OfflinePlayer getOfflinePlayer() {
         return Bukkit.getOfflinePlayer(uuid);
     }
-
-    public PlayerProfile() { }
 
     public PlayerProfile(Player player) {
         this.username = player.getName();

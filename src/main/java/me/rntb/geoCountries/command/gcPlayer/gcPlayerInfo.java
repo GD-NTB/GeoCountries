@@ -48,7 +48,7 @@ public class gcPlayerInfo extends GeoCommand {
             onlineString = "§cLast seen §f" + daysAgo + "§c days ago";
         }
 
-        long daysAgo = DateUtil.daysAgo(player.timeFirstJoined);
+        long daysAgo = DateUtil.daysAgo(player.timeCreated);
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
                          """
                          §6========== PLAYER INFO ==========

@@ -26,6 +26,10 @@ gc.group.player:
     gc.citizenship.reject
     gc.citizenship.revoke
     gc.player.settings
+    gc.claim
+    gc.claim.one
+    gc.unclaim
+    gc.unclaim.one
 
 gc.group.admin:
     gc.purge
