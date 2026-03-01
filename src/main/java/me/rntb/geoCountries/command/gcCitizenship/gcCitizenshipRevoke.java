@@ -3,7 +3,7 @@ package me.rntb.geoCountries.command.gcCitizenship;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.CitizenshipService;
 import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.type.Response;
@@ -26,7 +26,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
         PlayerProfile senderProfile = PlayerProfile.get(sender);
 
         // if doesnt have citizenship or isn't leader, escape
-        if (!senderProfile.hasCitizenship() || senderProfile.rank != PlayerRank.LEADER) {
+        if (!senderProfile.hasCitizenship() || senderProfile.position != Position.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to revoke a player's citizenship!");
             return;
         }
@@ -104,6 +104,6 @@ public class gcCitizenshipRevoke extends GeoCommand {
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
         PlayerProfile player = PlayerProfile.get(sender);
-        return player.rank == PlayerRank.LEADER && player.getCitizenship().citizenCount() > 1; // if 1, leader is the only citizen
+        return player.position == Position.LEADER && player.getCitizenship().citizenCount() > 1; // if 1, leader is the only citizen
     }
 }

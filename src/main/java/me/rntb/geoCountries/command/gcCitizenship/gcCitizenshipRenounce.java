@@ -3,7 +3,7 @@ package me.rntb.geoCountries.command.gcCitizenship;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.CitizenshipService;
 import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -29,7 +29,7 @@ public class gcCitizenshipRenounce extends GeoCommand {
         }
 
         // if leader of country, escape
-        if (player.rank == PlayerRank.LEADER) { // todo: this will eventually be replaced by a system where there is a chosen leader inheritor
+        if (player.position == Position.LEADER) { // todo: this will eventually be replaced by a system where there is a chosen leader inheritor
             ChatUtil.sendPrefixedMessage(sender, "§cYou can't renounce your citizenship if you are the leader of a country, you must either promote another player to leader (§f/gc country promote [player]§c) or dissolve the country (§f/gc country dissolve§c)!");
             return;
         }
@@ -57,6 +57,6 @@ public class gcCitizenshipRenounce extends GeoCommand {
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
         PlayerProfile player = PlayerProfile.get(sender);
-        return player.hasCitizenship() && player.rank != PlayerRank.LEADER;
+        return player.hasCitizenship() && player.position != Position.LEADER;
     }
 }

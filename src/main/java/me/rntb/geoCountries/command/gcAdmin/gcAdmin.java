@@ -14,7 +14,7 @@ public class gcAdmin extends GeoCommand {
         this.childCommands = new LinkedHashMap<>() {{
             put("deletecountry", new gcAdminDeleteCountry("deletecountry", "/gc admin deletecountry", "gc.admin", ItemStack.of(Material.REDSTONE_BLOCK)));
             put("setplayercountry", new gcAdminSetPlayerCountry("setplayercountry", "/gc admin setplayercountry", "gc.admin", ItemStack.of(Material.EMERALD_BLOCK)));
-            put("setplayerrank", new gcAdminSetPlayerRank("setplayerrank", "/gc admin setplayerrank", "gc.admin", ItemStack.of(Material.DIAMOND_BLOCK)));
+            put("setplayerposition", new gcAdminSetPlayerPosition("setplayerposition", "/gc admin setplayerposition", "gc.admin", ItemStack.of(Material.DIAMOND_BLOCK)));
         }};
     }
 }

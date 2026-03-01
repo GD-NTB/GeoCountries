@@ -4,7 +4,7 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.service.CitizenshipService;
-import me.rntb.geoCountries.service.RankService;
+import me.rntb.geoCountries.service.PositionService;
 import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
@@ -61,9 +61,9 @@ public class gcCountryCreate extends GeoCommand {
         // create country
         newCountry.register();
 
-        // set player citizenship and rank
+        // set player citizenship and position
         CitizenshipService.joinCountry(player, newCountry);
-        RankService.promoteToLeader(player);
+        PositionService.promoteToLeader(player);
 
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aCreated country §f" + countryName + "§a!");
 

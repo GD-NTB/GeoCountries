@@ -149,10 +149,10 @@ public class Country extends DataCollection {
                        .map(uuid -> PlayerProfile.get(uuid).username)
                        .toList();
     }
-    public List<PlayerProfile> citizensSortedByRank() {
+    public List<PlayerProfile> citizensSortedByPosition() {
         return citizens.stream()
                        .map(PlayerProfile::get)
-                       .sorted(Comparator.comparing(PlayerProfile::getRankLevel))
+                       .sorted(Comparator.comparing(PlayerProfile::getPositionLevel))
                        .toList().reversed();
     }
     public int citizenCount() {

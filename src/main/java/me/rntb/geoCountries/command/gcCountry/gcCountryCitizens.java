@@ -83,9 +83,9 @@ public class gcCountryCitizens extends GeoCommand {
             message.append(Component.text("§e%s§f has §e%d§f citizen%s:\n"
                       .formatted(country.name, citizenCount, StringUtil.leadingS(citizenCount))));
             StringBuilder citizensText = new StringBuilder();
-            for (PlayerProfile citizen : country.citizensSortedByRank()) {
+            for (PlayerProfile citizen : country.citizensSortedByPosition()) {
                 citizensText.append("§f> §a%s§f (§e%s§f)\n"
-                                    .formatted(citizen.username, citizen.getRankString()));
+                                    .formatted(citizen.username, citizen.getPositionString()));
             }
             // calculate page
             Pagination page = Pagination.paginate(String.valueOf(citizensText), "\n", index, 20);

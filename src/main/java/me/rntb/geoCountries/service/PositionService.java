@@ -5,7 +5,7 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 
-public class RankService {
+public class PositionService {
 
     public static void promoteToLeader(PlayerProfile player) {
         Country country = player.getCitizenship();
@@ -25,10 +25,10 @@ public class RankService {
         // demote old leader
         PlayerProfile oldLeader = country.getLeader();
         if (oldLeader != null)
-            oldLeader.rank = PlayerProfile.PlayerRank.CITIZEN;
+            oldLeader.position = PlayerProfile.Position.CITIZEN;
 
         country.leader = player.uuid;
-        player.rank = PlayerProfile.PlayerRank.LEADER;
+        player.position = PlayerProfile.Position.LEADER;
     }
 
     public static void demoteFromLeader(PlayerProfile player) {
@@ -49,6 +49,6 @@ public class RankService {
         }
 
         country.leader = null;
-        player.rank = PlayerProfile.PlayerRank.CITIZEN;
+        player.position = PlayerProfile.Position.CITIZEN;
     }
 }

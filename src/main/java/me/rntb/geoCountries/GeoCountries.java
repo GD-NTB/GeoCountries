@@ -16,9 +16,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Path;
 import java.util.Objects;
 
+// todo: claiming
 // todo: in-country ranks
 // todo: promote command
-// todo: claiming
 public class GeoCountries extends JavaPlugin {
 
     public static String PluginName;

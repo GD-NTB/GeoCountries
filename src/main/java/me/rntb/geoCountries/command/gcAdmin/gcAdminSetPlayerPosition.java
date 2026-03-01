@@ -2,9 +2,9 @@ package me.rntb.geoCountries.command.gcAdmin;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.CitizenshipService;
-import me.rntb.geoCountries.service.RankService;
+import me.rntb.geoCountries.service.PositionService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.EnumUtil;
 import org.bukkit.command.CommandSender;
@@ -13,22 +13,22 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 // todo: use Response for insufficient args
-public class gcAdminSetPlayerRank extends GeoCommand {
+public class gcAdminSetPlayerPosition extends GeoCommand {
 
-    public gcAdminSetPlayerRank(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+    public gcAdminSetPlayerPosition(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Sets a player's rank.";
+        this.helpString = "Sets a player's position.";
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the player you want to change the rank of!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the player you want to change the position of!");
             return;
         }
 
         if (args.length == 1) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the new rank you want the player to have!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the new position you want the player to have!");
             return;
         }
 
@@ -40,37 +40,37 @@ public class gcAdminSetPlayerRank extends GeoCommand {
             return;
         }
 
-        // get rank
-        PlayerRank rank;
+        // get position
+        Position position;
         try {
-            rank = PlayerRank.valueOf(args[1]);
+            position = Position.valueOf(args[1]);
         } catch (IllegalArgumentException e) {
-            ChatUtil.sendPrefixedMessage(sender, "§cRank §f" + args[1] + "§c could not be found!");
+            ChatUtil.sendPrefixedMessage(sender, "§cPosition §f" + args[1] + "§c could not be found!");
             return;
         }
 
-        // set rank
-        switch (rank) {
+        // set position
+        switch (position) {
             case LEADER:
-                RankService.promoteToLeader(player);
+                PositionService.promoteToLeader(player);
                 break;
             case CITIZEN:
-                if (player.rank == PlayerRank.LEADER)
-                    RankService.demoteFromLeader(player);
+                if (player.position == Position.LEADER)
+                    PositionService.demoteFromLeader(player);
                 break;
             case NONE:
                 CitizenshipService.leaveCountry(player);
                 break;
         }
 
-        ChatUtil.sendPrefixedMessage(sender, "§aSet player rank to §f" + rank.name() + "§a!");
+        ChatUtil.sendPrefixedMessage(sender, "§aSet player position to §f" + position.name() + "§a!");
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         return switch (args.length) {
             case 1 -> PlayerProfile.allAsUsernames(true);
-            case 2 -> EnumUtil.enumToStringList(PlayerRank.class);
+            case 2 -> EnumUtil.enumToStringList(Position.class);
             default -> List.of();
         };
     }

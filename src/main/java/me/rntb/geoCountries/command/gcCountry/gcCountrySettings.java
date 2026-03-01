@@ -3,7 +3,7 @@ package me.rntb.geoCountries.command.gcCountry;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
@@ -34,10 +34,10 @@ public class gcCountrySettings extends GeoCommand {
         Country country = player.getCitizenship();
 
         // if setting a setting, set and escape
-        boolean isLeader = player.rank == PlayerRank.LEADER;
+        boolean isLeader = player.position == Position.LEADER;
         if (args.length >= 2) {
             // if not leader, escape
-            if (player.rank != PlayerRank.LEADER) {
+            if (player.position != Position.LEADER) {
                 ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to change its settings!");
                 return;
             }
@@ -119,6 +119,6 @@ public class gcCountrySettings extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return PlayerProfile.get(sender).rank == PlayerRank.LEADER;
+        return PlayerProfile.get(sender).position == Position.LEADER;
     }
 }

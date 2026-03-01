@@ -153,7 +153,7 @@ public class CitizenshipApplicationService {
         deleteSent(cApplication);
 
         // don't do anything if already in country
-        if (player.rank != PlayerProfile.PlayerRank.NONE)
+        if (player.position != PlayerProfile.Position.NONE)
             return;
 
         CitizenshipService.joinCountry(player, Country.get(cApplication.toCountry));
@@ -179,7 +179,7 @@ public class CitizenshipApplicationService {
         deleteSent(cApplication);
 
         // don't do anything if already in country
-        if (player.rank != PlayerProfile.PlayerRank.NONE)
+        if (player.position != PlayerProfile.Position.NONE)
             return;
 
         if (ConfigState.debugLogging)

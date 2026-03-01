@@ -35,11 +35,11 @@ public class gcPlayerInfo extends GeoCommand {
             }
         }
 
-        String rankAndCountryString = "§cStateless";
+        String positionAndCountryString = "§cStateless";
         if (player.hasCitizenship()) {
             Country country = player.getCitizenship();
-            rankAndCountryString = "§e%s§f of §e%s"
-                                   .formatted(player.getRankString(), country != null ? country.name : "§cNone");
+            positionAndCountryString = "§e%s§f of §e%s"
+                                       .formatted(player.getPositionString(), country != null ? country.name : "§cNone");
         }
 
         String onlineString = "§aOnline";
@@ -58,7 +58,7 @@ public class gcPlayerInfo extends GeoCommand {
                          §6================================"""
                         .formatted(player.username,
                                    onlineString,
-                                   rankAndCountryString,
+                                   positionAndCountryString,
                                    player.timeFirstJoinedAsString(),
                                    daysAgo, StringUtil.leadingS(daysAgo));
         ChatUtil.sendPrefixedMessage(sender, message);

@@ -4,7 +4,7 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
@@ -30,7 +30,7 @@ public class gcCitizenshipReject extends GeoCommand {
         PlayerProfile player = PlayerProfile.get(sender);
 
         // if not leader, escape
-        if (player.rank != PlayerRank.LEADER && player.hasCitizenship()) {
+        if (player.position != Position.LEADER && player.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cOnly a leader of a country can reject citizenship applications!");
             return;
         }
@@ -78,7 +78,7 @@ public class gcCitizenshipReject extends GeoCommand {
             return List.of();
 
         PlayerProfile player = PlayerProfile.get(UuidUtil.getUUIDOfCommandSender(sender));
-        if (player.rank != PlayerRank.LEADER)
+        if (player.position != Position.LEADER)
             return List.of();
 
         return player.getCitizenship().getReceivedCitizenshipApplicationsAsUsernames();

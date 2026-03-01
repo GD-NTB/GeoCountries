@@ -3,7 +3,7 @@ package me.rntb.geoCountries.command.gcCountry;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
@@ -28,7 +28,7 @@ public class gcCountryDissolve extends GeoCommand {
         }
 
         // if not leader of country, escape
-        if (player.rank != PlayerRank.LEADER) {
+        if (player.position != Position.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of your country to dissolve it!");
             return;
         }
@@ -56,6 +56,6 @@ public class gcCountryDissolve extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return PlayerProfile.get(sender).rank == PlayerRank.LEADER;
+        return PlayerProfile.get(sender).position == Position.LEADER;
     }
 }

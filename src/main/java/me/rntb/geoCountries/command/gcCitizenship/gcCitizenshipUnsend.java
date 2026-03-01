@@ -4,7 +4,7 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.data.PlayerProfile.PlayerRank;
+import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -80,7 +80,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
             return List.of();
 
         PlayerProfile player = PlayerProfile.get(UuidUtil.getUUIDOfCommandSender(sender));
-        if (player.rank != PlayerRank.LEADER)
+        if (player.position != Position.LEADER)
             return List.of();
 
         return player.getCitizenship().citizens.stream()

@@ -146,21 +146,21 @@ public class PlayerProfile extends DataCollection {
         return citizenship != null;
     }
 
-    public enum PlayerRank {
+    public enum Position {
         NONE,
         CITIZEN,
         LEADER
     }
-    public PlayerRank rank = PlayerRank.NONE;
-    public String getRankString() {
-        return switch (rank) {
+    public Position position = Position.NONE;
+    public String getPositionString() {
+        return switch (position) {
             case NONE -> "None";
             case CITIZEN -> "Citizen";
             case LEADER -> "Leader";
         };
     }
-    public int getRankLevel() {
-        return rank.ordinal();
+    public int getPositionLevel() {
+        return position.ordinal();
     }
 
     // settings
@@ -190,7 +190,7 @@ public class PlayerProfile extends DataCollection {
     }
 
     public UUID getLeaderOf() {
-        return rank == PlayerRank.LEADER ? this.citizenship : null;
+        return position == Position.LEADER ? this.citizenship : null;
     }
 
     public List<String> getSentCitizenshipApplicationsAsStrings() {
