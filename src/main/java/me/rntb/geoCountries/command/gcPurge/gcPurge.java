@@ -18,6 +18,7 @@ public class gcPurge extends GeoCommand {
             put("username", new gcPurgeUsername("username", "/gc purge username", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
             put("uuid", new gcPurgeUUID("uuid", "/gc purge uuid", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
             put("citizenshipapplication", new gcPurgeCitizenshipApplication("citizenshipapplication", "/gc purge citizenshipapplication", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
+            put("claimchunk", new gcPurgeClaimChunk("claimchunk", "/gc purge claimchunk", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
         }};
     }
 }

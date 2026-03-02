@@ -6,6 +6,7 @@ import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -184,7 +185,7 @@ public class PlayerProfile extends DataCollection {
     }
 
     public long timeCreated = 0;
-    public String timeFirstJoinedAsString() {
+    public String timeCreatedAsString() {
         Instant instant = Instant.ofEpochMilli(this.timeCreated);
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         return dateTime.format(StringUtil.timeFormatter);
@@ -208,6 +209,12 @@ public class PlayerProfile extends DataCollection {
     public PlayerProfile(Player player) {
         this.username = player.getName();
         this.uuid = player.getUniqueId();
+    }
+
+    public String getChunkString() {
+        Chunk chunk = getOnlinePlayer().getChunk();
+        return "§8(%d, %d)§r"
+               .formatted(chunk.getX(), chunk.getZ());
     }
 
     @Override

@@ -58,6 +58,7 @@ permissions:
       gc.player.settings: true
       gc.claim: true
       gc.claim.one: true
+      gc.claim.map: true
       gc.unclaim: true
       gc.unclaim.one: true
 

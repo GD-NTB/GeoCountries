@@ -19,7 +19,7 @@ public class ClaimChunk extends DataCollection {
     public static String filePath;
     public static String displayName;
 
-    // list of all countries existing
+    // list of all claimchunks existing
     public static ArrayList<ClaimChunk> all = null;
 
     private static final Map<Long, ClaimChunk> byKey = new HashMap<>();
@@ -40,8 +40,8 @@ public class ClaimChunk extends DataCollection {
 
         // reset and populate hashmaps
         byKey.clear();
-        for (ClaimChunk country : all) {
-            byKey.put(country.key, country);
+        for (ClaimChunk claimChunk : all) {
+            byKey.put(claimChunk.key, claimChunk);
         }
 
         if (ConfigState.debugLogging)
@@ -55,7 +55,7 @@ public class ClaimChunk extends DataCollection {
             ChatUtil.sendPrefixedLogMessage("Saved " + all.size() + " ClaimChunks");
     }
 
-    // returns number of countries purged
+    // returns number of claimchunks purged
     public static int purge() {
         int count = 0;
         for (ClaimChunk c : new ArrayList<>(all)) {
@@ -92,6 +92,7 @@ public class ClaimChunk extends DataCollection {
     @SerializedName(value = "o", alternate = "owner")
     public UUID owner;
 
+    @SerializedName(value = "t", alternate = "timeCreated")
     public long timeCreated = 0;
     public String timeCreatedAsString() {
         Instant instant = Instant.ofEpochMilli(timeCreated);

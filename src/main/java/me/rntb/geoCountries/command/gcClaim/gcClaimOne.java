@@ -20,28 +20,32 @@ public class gcClaimOne extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        Player player = (Player) sender;
+        PlayerProfile playerProfile = PlayerProfile.get(player);
+        Country country = playerProfile.getCitizenship();
 
-        if (playerProfile.position != Position.LEADER) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to claim chunks!");
+        if (country == null || playerProfile.position != Position.LEADER) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to claim chunks! " + playerProfile.getChunkString());
             return;
         }
 
-        Country country = playerProfile.getCitizenship();
-        Player player = playerProfile.getOnlinePlayer();
         Chunk chunk = player.getChunk();
 
         long chunkKey = chunk.getChunkKey();
         ClaimChunk claimChunk = ClaimChunk.get(chunkKey);
         if (claimChunk != null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cThis chunk has already been claimed by §f" + Country.get(claimChunk.owner).name + "§c!");
+            ChatUtil.sendPrefixedMessage(sender, "§cThis chunk has already been claimed by §f" + Country.get(claimChunk.owner).name + "§c! " + playerProfile.getChunkString());
             return;
         }
 
         claimChunk = new ClaimChunk(chunk.getChunkKey(), chunk.getX(), chunk.getZ(), country.uuid);
         claimChunk.register();
 
-        ChatUtil.sendPrefixedMessage(sender, "§aClaimed the chunk!§6 (%d, %d)"
-                                             .formatted(claimChunk.x, claimChunk.z));
+        ChatUtil.sendPrefixedMessage(sender, "§aClaimed the chunk! " + playerProfile.getChunkString());
+    }
+
+    @Override
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        return PlayerProfile.get(sender).position == Position.LEADER;
     }
 }

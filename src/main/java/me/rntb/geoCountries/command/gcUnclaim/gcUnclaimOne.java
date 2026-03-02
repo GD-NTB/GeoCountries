@@ -20,27 +20,30 @@ public class gcUnclaimOne extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        Player player = (Player) sender;
+        PlayerProfile playerProfile = PlayerProfile.get(player);
+        Chunk chunk = player.getChunk();
+        long chunkKey = chunk.getChunkKey();
 
         if (playerProfile.position != Position.LEADER) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to unclaim chunks!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to unclaim chunks! " + playerProfile.getChunkString());
             return;
         }
 
         Country country = playerProfile.getCitizenship();
-        Player player = playerProfile.getOnlinePlayer();
-        Chunk chunk = player.getChunk();
-
-        long chunkKey = chunk.getChunkKey();
         ClaimChunk claimChunk = ClaimChunk.get(chunkKey);
-        if (claimChunk == null || claimChunk.owner != country.uuid) {
-            ChatUtil.sendPrefixedMessage(sender, "§cThis chunk is not part of your country's claim!");
+        if (claimChunk == null || !claimChunk.owner.equals(country.uuid)) {
+            ChatUtil.sendPrefixedMessage(sender, "§cThis chunk is not part of your country's claim! " + playerProfile.getChunkString());
             return;
         }
 
         claimChunk.deregister();
 
-        ChatUtil.sendPrefixedMessage(sender, "§aUnclaimed the chunk!§6 (%d, %d)"
-                .formatted(claimChunk.x, claimChunk.z));
+        ChatUtil.sendPrefixedMessage(sender, "§aUnclaimed the chunk! " + playerProfile.getChunkString());
+    }
+
+    @Override
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        return PlayerProfile.get(sender).position == Position.LEADER;
     }
 }
