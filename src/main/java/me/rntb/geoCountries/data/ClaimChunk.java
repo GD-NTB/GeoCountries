@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.integration.IntegrationState;
 import me.rntb.geoCountries.integration.pl3xmap.Pl3xMapIntegration;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
@@ -73,6 +74,9 @@ public class ClaimChunk extends DataCollection {
         byKey.put(key, this);
 
         this.timeCreated = System.currentTimeMillis();
+
+        // update maps
+        Pl3xMapIntegration.addClaim(this);
     }
 
     public void deregister() {
@@ -80,6 +84,9 @@ public class ClaimChunk extends DataCollection {
 
         // delete any associated applications
         // --
+
+        // update maps
+        Pl3xMapIntegration.clearClaim(this);
 
         delete(this, all, displayName);
     }
@@ -91,17 +98,22 @@ public class ClaimChunk extends DataCollection {
     public long getKey() {
         return key;
     }
+    public String getPl3xMapKey() {
+        return "ClaimChunk(" + x + ", " + z + ")";
+    }
 
     @SerializedName(value = "w", alternate = "world")
     private final UUID world;
-    public UUID getWorldUUID() {
+    public UUID getWorld() {
         return world;
     }
-    public World getWorld() {
+    public World getBukkitWorld() {
         return world == null ? null : GeoCountries.server.getWorld(world);
     }
     public net.pl3x.map.core.world.World getPl3xMapWorld() {
-        return Pl3xMapIntegration.api.getWorldRegistry().get(getWorld().getName());
+        if (!IntegrationState.isPl3xMapEnabled)
+            return null;
+        return Pl3xMapIntegration.api.getWorldRegistry().get(getBukkitWorld().getName());
     }
 
     private final int x;

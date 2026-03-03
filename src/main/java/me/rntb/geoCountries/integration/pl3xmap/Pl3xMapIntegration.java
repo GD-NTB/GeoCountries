@@ -2,6 +2,7 @@ package me.rntb.geoCountries.integration.pl3xmap;
 
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.ClaimChunk;
+import me.rntb.geoCountries.integration.IntegrationState;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.Point;
@@ -23,6 +24,9 @@ public class Pl3xMapIntegration {
     private static final Map<World, SimpleLayer> layers = new HashMap<>();
 
     public static void init() {
+        if (!IntegrationState.isPl3xMapEnabled)
+            return;
+
         api = Pl3xMap.api();
 
         if (ConfigState.debugLogging)
@@ -60,24 +64,27 @@ public class Pl3xMapIntegration {
         }
     }
 
-    private static void addClaim(ClaimChunk claimChunk) {
+    public static void addClaim(ClaimChunk claimChunk) {
+        if (!IntegrationState.isPl3xMapEnabled)
+            return;
+
         SimpleLayer layer = layers.get(claimChunk.getPl3xMapWorld());
 
         // build claim marker
-        String key = "CLAIMCHUNK_FILL(" + claimChunk.getX() + ", " + claimChunk.getZ() + ")";
+        // key = CLAIMCHUNK_FILL(x,z)
         Point corner1 = Point.of(claimChunk.getX() * 16, claimChunk.getZ() * 16);
         Point corner2 = Point.of((claimChunk.getX()+1) * 16, (claimChunk.getZ()+1) * 16);
-        Rectangle chunkMarker = new Rectangle(key, corner1, corner2);
+        Rectangle chunkMarker = new Rectangle(claimChunk.getPl3xMapKey(), corner1, corner2);
 
         int white = Colors.setAlpha(128, Colors.rgb(255, 255, 255));
         int black = Colors.rgb(0, 0, 0);
         chunkMarker.setOptions(Options.builder()
                                       .tooltipContent("tool tip content")
+                                      .stroke(true)
                                       .fillColor(white)
+                                      .fill(true)
                                       .strokeColor(black)
                                       .strokeWeight(255)
-                                      .fill(true)
-                                      .stroke(true)
                                       .build()
         );
 
@@ -91,5 +98,13 @@ public class Pl3xMapIntegration {
                 continue;
             layer.getMarkers().clear();
         }
+    }
+
+    public static void clearClaim(ClaimChunk claimChunk) {
+        if (!IntegrationState.isPl3xMapEnabled)
+            return;
+
+        SimpleLayer layer = layers.get(claimChunk.getPl3xMapWorld());
+        layer.removeMarker(claimChunk.getPl3xMapKey());
     }
 }
