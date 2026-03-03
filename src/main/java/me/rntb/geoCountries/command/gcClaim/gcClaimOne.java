@@ -34,11 +34,11 @@ public class gcClaimOne extends GeoCommand {
         long chunkKey = chunk.getChunkKey();
         ClaimChunk claimChunk = ClaimChunk.get(chunkKey);
         if (claimChunk != null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cThis chunk has already been claimed by §f" + Country.get(claimChunk.owner).name + "§c! " + playerProfile.getChunkString());
+            ChatUtil.sendPrefixedMessage(sender, "§cThis chunk has already been claimed by §f" + Country.get(claimChunk.getOwner()).name + "§c! " + playerProfile.getChunkString());
             return;
         }
 
-        claimChunk = new ClaimChunk(chunk.getChunkKey(), chunk.getX(), chunk.getZ(), country.uuid);
+        claimChunk = new ClaimChunk(chunk.getChunkKey(), chunk.getWorld().getUID(), chunk.getX(), chunk.getZ(), country.uuid);
         claimChunk.register();
 
         ChatUtil.sendPrefixedMessage(sender, "§aClaimed the chunk! " + playerProfile.getChunkString());

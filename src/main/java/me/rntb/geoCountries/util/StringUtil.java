@@ -21,6 +21,15 @@ public class StringUtil {
         return string.substring(0, 1).toUpperCase() + string.substring(1);
 
     }
+
+    public static String appendTrailingResetFormatter(String s) {
+        return s != null && s.endsWith("§r") ? s : s + "§r";
+    }
+
+    public static String stripTrailingResetFormatter(String s) {
+        return s != null && s.endsWith("§r") ? s.substring(0, s.length() - 2) : s;
+    }
+
     // ---------- string validation ----------
 
     // ----- country name -----

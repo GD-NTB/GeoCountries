@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 public class FileUtil {
 
     public static Path getFilePathFromDataFolder(String fileName, String extension) {
-        return Paths.get(GeoCountries.PluginAbsoluteDataFolderPath + File.separator + fileName + "." + extension);
+        return Paths.get(GeoCountries.pluginAbsoluteDataFolderPath + File.separator + fileName + "." + extension);
     }
 
     public static void createPathIfNotExist(Path path, String contents) {

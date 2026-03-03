@@ -20,7 +20,7 @@ public abstract class DataCollection {
     private static final Gson gson = new Gson();
 
     static <T> ArrayList<T> readFromFile(String filePath, String displayName, Type type) {
-        if (GeoCountries.PluginAbsoluteDataFolderPath == null)
+        if (GeoCountries.pluginAbsoluteDataFolderPath == null)
             return null;
 
         Path path = FileUtil.getFilePathFromDataFolder(filePath, "json");
@@ -43,7 +43,7 @@ public abstract class DataCollection {
     }
 
     static <T> void writeToFile(String filePath, String displayName, List<T> all) {
-        if (all == null || GeoCountries.PluginAbsoluteDataFolderPath == null)
+        if (all == null || GeoCountries.pluginAbsoluteDataFolderPath == null)
             return;
 
         Path path = FileUtil.getFilePathFromDataFolder(filePath, "json");

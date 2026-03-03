@@ -73,13 +73,13 @@ public class gcClaimMap extends GeoCommand {
                 }
 
                 // empty
-                if (claim == null || claim.owner == null) {
+                if (claim == null || claim.getOwner() == null) {
                     message.append("§8-");
                     continue;
                 }
 
                 // claim
-                if (playerCountry != null && claim.owner.equals(playerCountry.uuid))
+                if (playerCountry != null && claim.getOwner().equals(playerCountry.uuid))
                     message.append("§a#");
                 else
                     message.append("§f#");

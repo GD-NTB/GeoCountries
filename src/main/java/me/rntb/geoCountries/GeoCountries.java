@@ -1,16 +1,20 @@
 package me.rntb.geoCountries;
 
+import io.papermc.paper.plugin.configuration.PluginMeta;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.command.gc;
 import me.rntb.geoCountries.config.ConfigManager;
 import me.rntb.geoCountries.data.DataCollectionManager;
+import me.rntb.geoCountries.integration.IntegrationManager;
 import me.rntb.geoCountries.listener.ChatListener;
 import me.rntb.geoCountries.listener.InventoryListener;
 import me.rntb.geoCountries.listener.JoinListener;
 import me.rntb.geoCountries.listener.LeaveListener;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Server;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
@@ -22,13 +26,14 @@ import java.util.Objects;
 // todo: promote command
 public class GeoCountries extends JavaPlugin {
 
-    public static String PluginName;
-    public static String PluginVersion;
-    public static String PluginNameAndVersion;
+    public static JavaPlugin self; // plugin instance
 
-    public static Path PluginAbsoluteDataFolderPath;
+    public static Path pluginAbsoluteDataFolderPath;
 
-    public static JavaPlugin self; // instance
+    // shorthand
+    public static Server server;
+    public static PluginManager pluginManager;
+    public static PluginMeta pluginMeta;
 
     @Override
     public void onLoad() { }
@@ -37,25 +42,24 @@ public class GeoCountries extends JavaPlugin {
     public void onEnable() {
         self = this;
 
+        pluginAbsoluteDataFolderPath = getDataPath().toAbsolutePath();
+
+        server = getServer();
+        pluginManager = server.getPluginManager();
+        pluginMeta = getPluginMeta();
+
         // config
         ConfigManager.init();
 
         // register listeners
-        getServer().getPluginManager().registerEvents(new JoinListener(), this);
-        getServer().getPluginManager().registerEvents(new LeaveListener(), this);
-        getServer().getPluginManager().registerEvents(new ChatListener(), this);
-        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
+        pluginManager.registerEvents(new JoinListener(), this);
+        pluginManager.registerEvents(new LeaveListener(), this);
+        pluginManager.registerEvents(new ChatListener(), this);
+        pluginManager.registerEvents(new InventoryListener(), this);
 
         // initialise base command
         GeoCommand.baseCommand = new gc("gc", "/gc", null, null);
         Objects.requireNonNull(getCommand("gc")).setExecutor((CommandExecutor) GeoCommand.baseCommand);
-
-        // initialise globals
-        PluginName = getPluginMeta().getName();
-        PluginVersion = getPluginMeta().getVersion();
-        PluginNameAndVersion = PluginName + " [" + PluginVersion + "]";
-
-        PluginAbsoluteDataFolderPath = getDataPath().toAbsolutePath();
 
         GeoCommand.adminPermissionGroup = "gc.group.admin";
 
@@ -64,6 +68,9 @@ public class GeoCountries extends JavaPlugin {
 
         // set up bstats
         bStatsSetup();
+
+        // set up integrations
+        IntegrationManager.init();
 
         // done
         ChatUtil.sendPrefixedLogMessage("Plugin enabled!");

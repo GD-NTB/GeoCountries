@@ -2,9 +2,12 @@ package me.rntb.geoCountries.data;
 
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
+import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.integration.pl3xmap.Pl3xMapIntegration;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import org.bukkit.World;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -84,13 +87,37 @@ public class ClaimChunk extends DataCollection {
     // ---
 
     @SerializedName(value = "k", alternate = "key")
-    public long key;
+    private final long key;
+    public long getKey() {
+        return key;
+    }
 
-    public int x;
-    public int z;
+    @SerializedName(value = "w", alternate = "world")
+    private final UUID world;
+    public UUID getWorldUUID() {
+        return world;
+    }
+    public World getWorld() {
+        return world == null ? null : GeoCountries.server.getWorld(world);
+    }
+    public net.pl3x.map.core.world.World getPl3xMapWorld() {
+        return Pl3xMapIntegration.api.getWorldRegistry().get(getWorld().getName());
+    }
+
+    private final int x;
+    public int getX() {
+        return x;
+    }
+    private final int z;
+    public int getZ() {
+        return z;
+    }
 
     @SerializedName(value = "o", alternate = "owner")
-    public UUID owner;
+    private final UUID owner;
+    public UUID getOwner() {
+        return owner;
+    }
 
     @SerializedName(value = "t", alternate = "timeCreated")
     public long timeCreated = 0;
@@ -100,8 +127,9 @@ public class ClaimChunk extends DataCollection {
         return dateTime.format(StringUtil.timeFormatter);
     }
 
-    public ClaimChunk(long key, int x, int z, UUID owner) {
+    public ClaimChunk(long key, UUID world, int x, int z, UUID owner) {
         this.key = key;
+        this.world = world;
         this.x = x;
         this.z = z;
         this.owner = owner;
@@ -109,7 +137,7 @@ public class ClaimChunk extends DataCollection {
 
     @Override
     public String toString() {
-        return "ClaimChunk(x=%d, z=%d, owner=%s)"
-                .formatted(this.x, this.z, this.owner);
+        return "ClaimChunk(world=%s, x=%d, z=%d, owner=%s)"
+                .formatted(this.world, this.x, this.z, this.owner);
     }
 }

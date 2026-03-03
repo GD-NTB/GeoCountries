@@ -1,4 +1,6 @@
-config-version: 0.0208 # do not change
+config-version: 0.021 # do not change
+
+enable-Pl3xMap: true # enables the plugin to connect to the Pl3xMap plugin (if you have it installed)
 
 debug-logging: false # more logging in server console for debugging
 debug-mode: false # disables several checks and features for easier plugin development

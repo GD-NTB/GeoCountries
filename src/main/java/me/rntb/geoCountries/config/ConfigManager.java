@@ -2,6 +2,7 @@ package me.rntb.geoCountries.config;
 
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.StringUtil;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -55,12 +56,14 @@ public class ConfigManager {
     }
 
     private static void readStateFromFile() {
+        ConfigState.enableGcConfirm = config.getBoolean("enable-Pl3xMap");
+
         ConfigState.debugMode = config.getBoolean("debug-mode");
         ConfigState.debugLogging = config.getBoolean("debug-logging");
 
         ConfigState.enableGcConfirm = config.getBoolean("enable-gc-confirm");
 
-        ConfigState.chatPrefix = config.getString("chat-prefix") + "§r";
+        ConfigState.chatPrefix = StringUtil.appendTrailingResetFormatter(config.getString("chat-prefix"));
         ConfigState.chatPrefixComponent = legacySerialisation.deserialize(ConfigState.chatPrefix);
 
         ConfigState.countryPrefixEnabled = config.getBoolean("country-prefix-enabled");
@@ -81,15 +84,17 @@ public class ConfigManager {
     }
 
     private static void writeStateToFile() {
+        config.set("enable-Pl3xMap", ConfigState.enablePl3xMap);
+
         config.set("debug-mode", ConfigState.debugMode);
         config.set("debug-logging", ConfigState.debugLogging);
 
         config.set("enable-gc-confirm", ConfigState.enableGcConfirm);
 
-        config.set("chat-prefix", ConfigState.chatPrefix.replace("§r", ""));
+        config.set("chat-prefix", StringUtil.stripTrailingResetFormatter(ConfigState.chatPrefix));
 
         config.set("country-prefix-enabled", ConfigState.countryPrefixEnabled);
-        config.set("country-prefix-format", ConfigState.countryPrefixFormat.replace("§r", ""));
+        config.set("country-prefix-format", StringUtil.stripTrailingResetFormatter(ConfigState.countryPrefixFormat));
         config.set("country-prefix-min", ConfigState.countryPrefixMin);
         config.set("country-prefix-max", ConfigState.countryPrefixMax);
 
