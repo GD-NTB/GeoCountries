@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcPurgePlayerProfile extends GeoCommand {
 
-    public gcPurgePlayerProfile(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcPurgePlayerProfile(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Purges all PlayerProfile data collections.";
     }
 

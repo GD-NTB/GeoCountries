@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcPurgeCountry extends GeoCommand {
 
-    public gcPurgeCountry(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcPurgeCountry(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Purges all Country data collections.";
     }
 

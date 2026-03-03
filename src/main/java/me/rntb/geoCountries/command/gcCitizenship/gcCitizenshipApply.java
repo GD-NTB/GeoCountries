@@ -19,8 +19,8 @@ import java.util.UUID;
 
 public class gcCitizenshipApply extends GeoCommand {
 
-    public gcCitizenshipApply(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcCitizenshipApply(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Applies for citizenship to a country.";
     }
 

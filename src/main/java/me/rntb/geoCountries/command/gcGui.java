@@ -8,8 +8,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcGui extends GeoCommand {
 
-    public gcGui(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcGui(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Opens the GeoCountries visual GUI menu.";
     }
 
@@ -21,7 +21,7 @@ public class gcGui extends GeoCommand {
 
         // open base menu page
         PlayerMetadata.previousPage.put(player.getUniqueId(), GeoCommand.baseCommand.command);
-        MenuPage.openMenuPage(GeoCommand.baseCommand.getMenuButtons(player), GeoCommand.baseCommand.command, player, true);
+        MenuPage.openMenuPage(GeoCommand.baseCommand.getMenuButtons(player), GeoCommand.baseCommand, player, true);
 
     }
 }

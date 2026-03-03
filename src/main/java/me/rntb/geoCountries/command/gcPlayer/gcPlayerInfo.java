@@ -14,8 +14,8 @@ import java.util.List;
 
 public class gcPlayerInfo extends GeoCommand {
 
-    public gcPlayerInfo(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcPlayerInfo(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Displays info about a particular player.";
     }
 

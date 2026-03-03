@@ -16,12 +16,13 @@ public abstract class GeoCommand {
     
     public static GeoCommand baseCommand;
     public static String adminPermissionGroup;
-    
+
+    public GeoCommand parentCommand;
     public String name;
     public String command;
     public static HashMap<String, GeoCommand> getByCommandString = new HashMap<>();
     public String permission;
-    public ItemStack menuButtonItem; // ItemStack.of(Material.PLAYER_HEAD) gives skull with player's skin
+    public ItemStack menuButtonItem; // ItemStack.of(Material.DEBUG_STICK) gives skull with player's skin
 
     public String helpString = "No help available."; // shown in /gc help
     public String getHelpPage() {
@@ -39,7 +40,8 @@ public abstract class GeoCommand {
     public LinkedHashMap<String, GeoCommand> childCommands = new LinkedHashMap<>();
     // todo: implement childCommandsAliases
 
-    public GeoCommand(String name, String command, String permission, ItemStack menuButtonItem) {
+    public GeoCommand(GeoCommand parentCommand, String name, String command, String permission, ItemStack menuButtonItem) {
+        this.parentCommand = parentCommand;
         this.name = name;
         this.command = command;
         this.permission = permission;

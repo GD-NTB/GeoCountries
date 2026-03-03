@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcLoad extends GeoCommand {
 
-    public gcLoad(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcLoad(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Loads all plugin data from the disk to memory.";
     }
 

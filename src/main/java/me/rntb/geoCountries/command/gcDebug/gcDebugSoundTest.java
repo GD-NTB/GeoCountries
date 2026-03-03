@@ -7,8 +7,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcDebugSoundTest extends GeoCommand {
 
-    public gcDebugSoundTest(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcDebugSoundTest(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Plays a sound effect.";
     }
 

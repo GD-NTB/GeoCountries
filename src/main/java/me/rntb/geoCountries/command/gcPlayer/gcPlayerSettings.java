@@ -14,8 +14,8 @@ import java.util.List;
 
 public class gcPlayerSettings extends GeoCommand {
 
-    public gcPlayerSettings(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcPlayerSettings(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Lists/manages your settings.";
     }
 

@@ -13,8 +13,8 @@ import java.util.List;
 
 public class gcPurgeUsername extends GeoCommand {
 
-    public gcPurgeUsername(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcPurgeUsername(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Purges a PlayerProfile by username.";
     }
 

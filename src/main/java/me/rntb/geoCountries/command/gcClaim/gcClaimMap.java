@@ -13,8 +13,8 @@ import org.bukkit.inventory.ItemStack;
 // todo: use component for hover over and stuff
 public class gcClaimMap extends GeoCommand {
 
-    public gcClaimMap(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcClaimMap(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Claims the chunk where you are standing.";
     }
 

@@ -16,8 +16,8 @@ import java.util.List;
 
 public class gcCountrySettings extends GeoCommand {
 
-    public gcCountrySettings(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcCountrySettings(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Lists/manages your country's settings.";
     }
 

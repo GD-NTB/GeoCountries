@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcCountryList extends GeoCommand {
 
-    public gcCountryList(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcCountryList(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Lists all countries on the server.";
     }
 

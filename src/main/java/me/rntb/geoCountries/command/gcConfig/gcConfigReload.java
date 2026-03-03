@@ -8,8 +8,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcConfigReload extends GeoCommand {
 
-    public gcConfigReload(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcConfigReload(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Reloads the config from disk to memory.";
     }
 

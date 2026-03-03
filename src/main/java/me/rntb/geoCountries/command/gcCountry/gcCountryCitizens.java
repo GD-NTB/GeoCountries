@@ -16,8 +16,8 @@ import java.util.List;
 
 public class gcCountryCitizens extends GeoCommand {
 
-    public gcCountryCitizens(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcCountryCitizens(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Lists all citizens of your/any country.";
     }
 

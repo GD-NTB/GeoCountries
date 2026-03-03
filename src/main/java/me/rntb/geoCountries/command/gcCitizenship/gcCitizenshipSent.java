@@ -15,8 +15,8 @@ import java.util.List;
 
 public class gcCitizenshipSent extends GeoCommand {
 
-    public gcCitizenshipSent(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcCitizenshipSent(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Lists citizenship applications that you have sent.";
     }
 

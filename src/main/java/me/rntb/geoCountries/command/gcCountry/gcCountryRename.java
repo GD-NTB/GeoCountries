@@ -15,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 // todo: use chat response when just doing /gc country rename
 public class gcCountryRename extends GeoCommand {
 
-    public gcCountryRename(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcCountryRename(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Renames your country.";
     }
 

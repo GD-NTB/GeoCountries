@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcPurgeCitizenshipApplication extends GeoCommand {
 
-    public gcPurgeCitizenshipApplication(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcPurgeCitizenshipApplication(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Purges all citizenship applications in memory.";
     }
 

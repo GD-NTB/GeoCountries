@@ -16,8 +16,8 @@ import java.util.List;
 
 public class gcCitizenshipReceived extends GeoCommand {
 
-    public gcCitizenshipReceived(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcCitizenshipReceived(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Lists received citizenship applications to your country.";
     }
 

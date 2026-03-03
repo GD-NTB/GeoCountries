@@ -17,8 +17,8 @@ import java.util.List;
 
 public class gcCitizenshipUnsend extends GeoCommand {
 
-    public gcCitizenshipUnsend(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcCitizenshipUnsend(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Unsends a citizenship application that you previously sent.";
     }
 

@@ -5,22 +5,17 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.LinkedHashMap;
-
 public class gcCountry extends GeoCommand {
 
-    public gcCountry(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Manages and views info about countries.";
-        this.childCommands = new LinkedHashMap<>() {{
-            put("create", new gcCountryCreate("create", "/gc country create", "gc.country.create", ItemStack.of(Material.NETHER_STAR)));
-            put("rename", new gcCountryRename("rename", "/gc country rename", "gc.country.rename", ItemStack.of(Material.NAME_TAG)));
-            put("citizens", new gcCountryCitizens("citizens", "/gc country citizens", "gc.country.citizens", ItemStack.of(Material.TOTEM_OF_UNDYING)));
-            put("info", new gcCountryInfo("info", "/gc country info", "gc.country.info", ItemStack.of(Material.JUNGLE_HANGING_SIGN)));
-            put("list", new gcCountryList("list", "/gc country list", "gc.country.list", ItemStack.of(Material.MAP)));
-            put("dissolve", new gcCountryDissolve("dissolve", "/gc country dissolve", "gc.country.dissolve", ItemStack.of(Material.FLINT_AND_STEEL)));
-            put("settings", new gcCountrySettings("settings", "/gc country settings", "gc.country.settings", ItemStack.of(Material.WRITABLE_BOOK)));
-        }};
+    public gcCountry(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+        this.childCommands.put("create", new gcCountryCreate(this, "create", "/gc country create", "gc.country.create", ItemStack.of(Material.NETHER_STAR)));
+        this.childCommands.put("rename", new gcCountryRename(this, "rename", "/gc country rename", "gc.country.rename", ItemStack.of(Material.NAME_TAG)));
+        this.childCommands.put("citizens", new gcCountryCitizens(this, "citizens", "/gc country citizens", "gc.country.citizens", ItemStack.of(Material.TOTEM_OF_UNDYING)));
+        this.childCommands.put("info", new gcCountryInfo(this, "info", "/gc country info", "gc.country.info", ItemStack.of(Material.JUNGLE_HANGING_SIGN)));
+        this.childCommands.put("list", new gcCountryList(this, "list", "/gc country list", "gc.country.list", ItemStack.of(Material.MAP)));
+        this.childCommands.put("dissolve", new gcCountryDissolve(this, "dissolve", "/gc country dissolve", "gc.country.dissolve", ItemStack.of(Material.FLINT_AND_STEEL)));
+        this.childCommands.put("settings", new gcCountrySettings(this, "settings", "/gc country settings", "gc.country.settings", ItemStack.of(Material.WRITABLE_BOOK)));
     }
 
     @Override

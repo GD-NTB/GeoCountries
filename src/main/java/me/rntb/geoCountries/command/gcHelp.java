@@ -13,8 +13,8 @@ import java.util.List;
 // todo: rewrite using new Command.getHelpPage
 public class gcHelp extends GeoCommand {
 
-    public gcHelp(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcHelp(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Lists all info about all/any command.";
     }
 

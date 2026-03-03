@@ -16,8 +16,8 @@ import java.util.List;
 
 public class gcCitizenshipRevoke extends GeoCommand {
 
-    public gcCitizenshipRevoke(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcCitizenshipRevoke(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Removes the citizenship of a player of your country.";
     }
 

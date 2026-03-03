@@ -15,8 +15,8 @@ import java.util.List;
 // todo: use Response for insufficient args
 public class gcAdminSetPlayerPosition extends GeoCommand {
 
-    public gcAdminSetPlayerPosition(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcAdminSetPlayerPosition(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Sets a player's position.";
     }
 

@@ -14,8 +14,8 @@ import java.util.List;
 
 public class gcAdminDeleteCountry extends GeoCommand {
 
-    public gcAdminDeleteCountry(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcAdminDeleteCountry(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Deletes a country from the server.";
     }
 

@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcPurgeAll extends GeoCommand {
 
-    public gcPurgeAll(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcPurgeAll(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Purges all data collections.";
     }
 

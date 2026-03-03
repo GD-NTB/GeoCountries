@@ -53,7 +53,7 @@ public class InventoryListener implements Listener {
             command.onCommandEntered(player, new String[] { });
         }
         else {
-            MenuPage.openMenuPage(command.getMenuButtons(player), command.command, player, commandString.equals(GeoCommand.baseCommand.command));
+            MenuPage.openMenuPage(command.getMenuButtons(player), command, player, commandString.equals(GeoCommand.baseCommand.command));
             PlayerMetadata.previousPage.put(player.getUniqueId(), command.command);
         }
 

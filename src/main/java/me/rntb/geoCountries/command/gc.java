@@ -26,26 +26,24 @@ import java.util.stream.Stream;
 public class gc extends GeoCommand implements TabExecutor  {
 
     public gc(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+        super(null, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "The base command for GeoCountries. Opens the plugin's visual GUI menu.";
-        this.childCommands = new LinkedHashMap<>() {{
-            put("country", new gcCountry("country", "/gc country", "gc.country", ItemStack.of(Material.FILLED_MAP)));
-            put("claim", new gcClaim("claim", "/gc claim", "gc.claim", ItemStack.of(Material.GOLDEN_SHOVEL)));
-            put("unclaim", new gcUnclaim("unclaim", "/gc unclaim", "gc.claim.unclaim", null));
-            put("player", new gcPlayer("player", "/gc player", "gc.player", ItemStack.of(Material.DEBUG_STICK))); // debug stick -> skull of player
-            put("citizenship", new gcCitizenship("citizenship", "/gc citizenship", "gc.citizenship", ItemStack.of(Material.WRITABLE_BOOK)));
-            put("help", new gcHelp("help", "/gc help", "gc.help", ItemStack.of(Material.KNOWLEDGE_BOOK)));
-            put("admin", new gcAdmin("admin", "/gc admin", "gc.admin", ItemStack.of(Material.DIAMOND_BLOCK)));
-            put("debug", new gcDebug("debug", "/gc debug", "gc.debug", ItemStack.of(Material.REDSTONE)));
-            put("config", new gcConfig("config", "/gc config", "gc.config", ItemStack.of(Material.BOOK)));
-            put("purge", new gcPurge("purge", "/gc purge", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
-            put("dump", new gcDump("dump", "/gc dump", "gc.dump", ItemStack.of(Material.BAKED_POTATO)));
-            put("save", new gcSave("save", "/gc save", "gc.save", ItemStack.of(Material.CAMPFIRE)));
-            put("load", new gcLoad("load", "/gc load", "gc.load", ItemStack.of(Material.CARROT_ON_A_STICK)));
-            put("gui", new gcGui("gui", "/gc gui", "gc.gui", null));
-            put("confirm", new gcConfirm("confirm", "/gc confirm", "gc.confirm", null));
-            put("cancel", new gcCancel("cancel", "/gc cancel", "gc.cancel", null));
-        }};
+        this.childCommands.put("country", new gcCountry(this, "country", "/gc country", "gc.country", ItemStack.of(Material.FILLED_MAP)));
+        this.childCommands.put("claim", new gcClaim(this, "claim", "/gc claim", "gc.claim", ItemStack.of(Material.GOLDEN_SHOVEL)));
+        this.childCommands.put("unclaim", new gcUnclaim(this, "unclaim", "/gc unclaim", "gc.claim.unclaim", null));
+        this.childCommands.put("player", new gcPlayer(this, "player", "/gc player", "gc.player", ItemStack.of(Material.DEBUG_STICK))); // debug stick -> skull of player
+        this.childCommands.put("citizenship", new gcCitizenship(this, "citizenship", "/gc citizenship", "gc.citizenship", ItemStack.of(Material.WRITABLE_BOOK)));
+        this.childCommands.put("help", new gcHelp(this, "help", "/gc help", "gc.help", ItemStack.of(Material.KNOWLEDGE_BOOK)));
+        this.childCommands.put("admin", new gcAdmin(this, "admin", "/gc admin", "gc.admin", ItemStack.of(Material.DIAMOND_BLOCK)));
+        this.childCommands.put("debug", new gcDebug(this, "debug", "/gc debug", "gc.debug", ItemStack.of(Material.REDSTONE)));
+        this.childCommands.put("config", new gcConfig(this, "config", "/gc config", "gc.config", ItemStack.of(Material.BOOK)));
+        this.childCommands.put("purge", new gcPurge(this, "purge", "/gc purge", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
+        this.childCommands.put("dump", new gcDump(this, "dump", "/gc dump", "gc.dump", ItemStack.of(Material.BAKED_POTATO)));
+        this.childCommands.put("save", new gcSave(this, "save", "/gc save", "gc.save", ItemStack.of(Material.CAMPFIRE)));
+        this.childCommands.put("load", new gcLoad(this, "load", "/gc load", "gc.load", ItemStack.of(Material.CARROT_ON_A_STICK)));
+        this.childCommands.put("gui", new gcGui(this, "gui", "/gc gui", "gc.gui", null));
+        this.childCommands.put("confirm", new gcConfirm(gc.this, "confirm", "/gc confirm", "gc.confirm", null));
+        this.childCommands.put("cancel", new gcCancel(this, "cancel", "/gc cancel", "gc.cancel", null));
     }
 
     public Map<String, String> childCommandsAliases = Map.ofEntries(

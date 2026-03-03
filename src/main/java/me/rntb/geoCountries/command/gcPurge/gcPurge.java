@@ -4,21 +4,17 @@ import me.rntb.geoCountries.command.GeoCommand;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.LinkedHashMap;
-
 public class gcPurge extends GeoCommand {
 
-    public gcPurge(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcPurge(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Purges (deletes) plugin data - should be used very rarely!";
-        this.childCommands = new LinkedHashMap<>() {{
-            put("all", new gcPurgeAll("all", "/gc purge all", "gc.purge", ItemStack.of(Material.TNT)));
-            put("country", new gcPurgeCountry("country", "/gc purge country", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
-            put("playerprofile", new gcPurgePlayerProfile("playerprofile", "/gc purge playerprofile", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
-            put("username", new gcPurgeUsername("username", "/gc purge username", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
-            put("uuid", new gcPurgeUUID("uuid", "/gc purge uuid", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
-            put("citizenshipapplication", new gcPurgeCitizenshipApplication("citizenshipapplication", "/gc purge citizenshipapplication", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
-            put("claimchunk", new gcPurgeClaimChunk("claimchunk", "/gc purge claimchunk", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
-        }};
+        this.childCommands.put("all", new gcPurgeAll(this, "all", "/gc purge all", "gc.purge", ItemStack.of(Material.TNT)));
+        this.childCommands.put("country", new gcPurgeCountry(this, "country", "/gc purge country", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
+        this.childCommands.put("playerprofile", new gcPurgePlayerProfile(this, "playerprofile", "/gc purge playerprofile", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
+        this.childCommands.put("username", new gcPurgeUsername(this, "username", "/gc purge username", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
+        this.childCommands.put("uuid", new gcPurgeUUID(this, "uuid", "/gc purge uuid", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
+        this.childCommands.put("citizenshipapplication", new gcPurgeCitizenshipApplication(this, "citizenshipapplication", "/gc purge citizenshipapplication", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
+        this.childCommands.put("claimchunk", new gcPurgeClaimChunk(this, "claimchunk", "/gc purge claimchunk", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
     }
 }

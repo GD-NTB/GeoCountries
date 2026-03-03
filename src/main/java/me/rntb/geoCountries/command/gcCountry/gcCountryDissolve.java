@@ -12,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcCountryDissolve extends GeoCommand {
 
-    public gcCountryDissolve(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcCountryDissolve(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Dissolves (deletes) your country.";
     }
 

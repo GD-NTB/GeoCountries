@@ -7,16 +7,12 @@ import me.rntb.geoCountries.util.ItemUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.LinkedHashMap;
-
 public class gcUnclaim extends GeoCommand {
 
-    public gcUnclaim(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcUnclaim(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Unclaims your country's chunks.";
-        this.childCommands = new LinkedHashMap<>() {{
-            put("one", new gcUnclaimOne("one", "/gc unclaim one", "gc.unclaim.one", ItemUtil.getSkull(ItemUtil.Skull.RED_ONE)));
-        }};
+        this.childCommands.put("one", new gcUnclaimOne(this, "one", "/gc unclaim one", "gc.unclaim.one", ItemUtil.getSkull(ItemUtil.Skull.RED_ONE)));
     }
 
     @Override

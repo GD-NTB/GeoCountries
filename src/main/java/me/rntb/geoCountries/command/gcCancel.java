@@ -11,8 +11,8 @@ import java.util.UUID;
 
 public class gcCancel extends GeoCommand {
 
-    public gcCancel(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcCancel(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Cancels a pending command/action.";
     }
 

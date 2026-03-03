@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcSave extends GeoCommand {
 
-    public gcSave(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcSave(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Saves all plugin data in memory to the disk.";
     }
 

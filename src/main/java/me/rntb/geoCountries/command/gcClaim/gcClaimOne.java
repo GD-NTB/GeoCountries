@@ -13,8 +13,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcClaimOne extends GeoCommand {
 
-    public gcClaimOne(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcClaimOne(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Claims the chunk where you are standing.";
     }
 

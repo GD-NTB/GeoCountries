@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.menu;
 
 import me.rntb.geoCountries.GeoCountries;
+import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.metadata.ItemMetadata;
 import me.rntb.geoCountries.metadata.PlayerMetadata;
 import me.rntb.geoCountries.util.ItemUtil;
@@ -17,13 +18,13 @@ import java.util.List;
 
 public class MenuPage {
 
-    public static Inventory createPage(ItemStack[] buttons, String title, Player player, boolean isBasePage)  {
+    public static Inventory createPage(ItemStack[] buttons, GeoCommand command, Player player, boolean isBasePage)  {
         int buttonCount = buttons.length;
 
         int rows = 2 + (Math.ceilDiv(buttonCount, 7));
         int slots = 9 * rows;
 
-        Inventory inventory = Bukkit.createInventory(player, slots, Component.text("§8" + title));
+        Inventory inventory = Bukkit.createInventory(player, slots, Component.text("§8" + command.command));
 
         // 6 commands per row, padded left and right
         int childCommandIndex = 0;
@@ -51,7 +52,7 @@ public class MenuPage {
                             inventory.setItem(flatIndex, createButton(ItemStack.of(Material.BARRIER), "§cClose", null, "GUI_CLOSE", false));
                         // set back button
                         else
-                            inventory.setItem(flatIndex, createButton(ItemStack.of(Material.ARROW), "§fGo Back", null, PlayerMetadata.previousPage.get(player.getUniqueId()), false));
+                            inventory.setItem(flatIndex, createButton(ItemStack.of(Material.ARROW), "§fGo Back", null, command.parentCommand.command, false));
                         continue;
                     }
 
@@ -109,8 +110,8 @@ public class MenuPage {
         return newItem;
     }
 
-    public static void openMenuPage(ItemStack[] buttons, String title, Player player, boolean isBasePage)  {
-        player.openInventory(createPage(buttons, title, player, isBasePage));
+    public static void openMenuPage(ItemStack[] buttons, GeoCommand command, Player player, boolean isBasePage)  {
+        player.openInventory(createPage(buttons, command, player, isBasePage));
         PlayerMetadata.isMenuOpen.put(player.getUniqueId(), true);
     }
 

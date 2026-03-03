@@ -15,8 +15,8 @@ import java.util.List;
 
 public class gcCitizenshipReject extends GeoCommand {
 
-    public gcCitizenshipReject(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcCitizenshipReject(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Rejects a player's citizenship application to your country.";
     }
 

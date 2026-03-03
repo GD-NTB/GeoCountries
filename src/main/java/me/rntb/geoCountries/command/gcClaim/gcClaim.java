@@ -7,18 +7,14 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.LinkedHashMap;
-
 public class gcClaim extends GeoCommand {
 
-    public gcClaim(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcClaim(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Manages your country's claims and claims chunks.";
-        this.childCommands = new LinkedHashMap<>() {{
-            put("one", new gcClaimOne("one", "/gc claim one", "gc.claim.one", ItemUtil.getSkull(ItemUtil.Skull.ONE)));
-            put("map", new gcClaimMap("map", "/gc claim map", "gc.claim.map", ItemStack.of(Material.FILLED_MAP)));
-            put("unclaim", new gcUnclaim("unclaim", "/gc claim unclaim", "gc.unclaim", ItemStack.of(Material.COPPER_SHOVEL)));
-        }};
+        this.childCommands.put("one", new gcClaimOne(this, "one", "/gc claim one", "gc.claim.one", ItemUtil.getSkull(ItemUtil.Skull.ONE)));
+        this.childCommands.put("map", new gcClaimMap(this, "map", "/gc claim map", "gc.claim.map", ItemStack.of(Material.FILLED_MAP)));
+        this.childCommands.put("unclaim", new gcUnclaim(this, "unclaim", "/gc claim unclaim", "gc.unclaim", ItemStack.of(Material.COPPER_SHOVEL)));
     }
 
     @Override

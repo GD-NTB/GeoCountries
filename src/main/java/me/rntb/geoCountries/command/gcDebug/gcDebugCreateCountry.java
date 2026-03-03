@@ -13,8 +13,8 @@ import java.util.UUID;
 
 public class gcDebugCreateCountry extends GeoCommand {
 
-    public gcDebugCreateCountry(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(name, displayName, requiredPermission, menuButtonItem);
+    public gcDebugCreateCountry(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Creates a test country.";
     }
 
