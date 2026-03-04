@@ -4,7 +4,9 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,6 +16,7 @@ import static org.bukkit.Bukkit.getServer;
 public class ChatUtil {
 
     public static final MiniMessage mm = MiniMessage.miniMessage();
+    public static final LegacyComponentSerializer legacySerialisation = LegacyComponentSerializer.legacySection();
 
     public enum ChatColour {
         BLACK,
@@ -52,6 +55,11 @@ public class ChatUtil {
             case YELLOW -> "e";
             case WHITE -> "f";
         };
+    }
+
+    public static String getColouredString(String string, int hexCode) {
+        TextColor textColour = TextColor.color(hexCode);
+        return legacySerialisation.serialize(Component.text(string, textColour));
     }
 
     // not centred automatically, you will need to prepend whitespace before appending these buttons

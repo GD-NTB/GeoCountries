@@ -81,6 +81,9 @@ public class GeoCountries extends JavaPlugin {
         // save data collections
         DataCollectionManager.save();
 
+        // do integration shutdown stuff
+        IntegrationManager.disable();
+
         ChatUtil.sendPrefixedLogMessage("Plugin disabled!");
     }
 

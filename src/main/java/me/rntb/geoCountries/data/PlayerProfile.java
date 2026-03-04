@@ -112,8 +112,8 @@ public class PlayerProfile extends DataCollection {
     public void register() {
         add(this, all, displayName);
 
-        byUsername.put(this.username, this);
-        byUUID.put(this.uuid, this);
+        byUsername.put(username, this);
+        byUUID.put(uuid, this);
 
         timeCreated = System.currentTimeMillis();
 
@@ -186,13 +186,13 @@ public class PlayerProfile extends DataCollection {
 
     public long timeCreated = 0;
     public String timeCreatedAsString() {
-        Instant instant = Instant.ofEpochMilli(this.timeCreated);
+        Instant instant = Instant.ofEpochMilli(timeCreated);
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         return dateTime.format(StringUtil.timeFormatter);
     }
 
     public List<String> getSentCitizenshipApplicationsAsNames() {
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(this.uuid);
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(uuid);
         if (cApplications == null)
             return List.of();
         return cApplications.stream()
@@ -220,6 +220,6 @@ public class PlayerProfile extends DataCollection {
     @Override
     public String toString() {
         return "PlayerProfile(%s, %s)"
-               .formatted(this.username, String.valueOf(this.uuid));
+               .formatted(username, String.valueOf(uuid));
     }
 }

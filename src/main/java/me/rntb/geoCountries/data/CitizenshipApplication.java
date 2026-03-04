@@ -84,10 +84,14 @@ public class CitizenshipApplication extends DataCollection {
     public UUID uuid;
 
     public UUID applicant;
-    public PlayerProfile getApplicant() { return PlayerProfile.get(applicant); }
+    public PlayerProfile getApplicant() {
+        return PlayerProfile.get(applicant);
+    }
 
     public UUID toCountry;
-    public Country getToCountry() { return Country.get(this.toCountry); }
+    public Country getToCountry() {
+        return Country.get(toCountry);
+    }
 
     public String reason;
 

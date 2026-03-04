@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 
 public class ConfigState {
 
-    public static final double CONFIG_VERSION = 0.021; // increment whenever config.yml is changed
+    public static final double CONFIG_VERSION = 0.022; // increment whenever config.yml is changed
 
     public static boolean enablePl3xMap = true;
 

@@ -3,7 +3,6 @@ package me.rntb.geoCountries.config;
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 
 // when editing config options, update readStateFromFile and writeStateToFile methods
@@ -11,7 +10,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class ConfigManager {
 
     private static FileConfiguration config;
-    private static final LegacyComponentSerializer legacySerialisation = LegacyComponentSerializer.legacySection();
 
     public static void init() {
         GeoCountries.self.saveResource("config.yml", false); // create from resources/config.yml if not exist
@@ -64,7 +62,7 @@ public class ConfigManager {
         ConfigState.enableGcConfirm = config.getBoolean("enable-gc-confirm");
 
         ConfigState.chatPrefix = StringUtil.appendTrailingResetFormatter(config.getString("chat-prefix"));
-        ConfigState.chatPrefixComponent = legacySerialisation.deserialize(ConfigState.chatPrefix);
+        ConfigState.chatPrefixComponent = ChatUtil.legacySerialisation.deserialize(ConfigState.chatPrefix);
 
         ConfigState.countryPrefixEnabled = config.getBoolean("country-prefix-enabled");
         ConfigState.countryPrefixFormat = config.getString("country-prefix-format") + "§r";

@@ -109,7 +109,7 @@ public class Response {
         this.playerSentMessageMessage = null;
         this.cancelMessage = "§aCancelled!";
         this.timeoutMessage = "§cTimed out because you didn't type anything in chat after §f%d second%s§c!"
-                              .formatted(this.timeoutAfterSeconds, StringUtil.leadingS(this.timeoutAfterSeconds));
+                              .formatted(timeoutAfterSeconds, StringUtil.leadingS(timeoutAfterSeconds));
     }
 }
 

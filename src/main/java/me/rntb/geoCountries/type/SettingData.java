@@ -20,7 +20,8 @@ public class SettingData {
         STRING,
         COUNTRY_PREFIX,
         CHAT_COLOUR,
-        COUNTRY_MOTTO
+        COUNTRY_MOTTO,
+        COLOUR
     }
     public Type type;
     public String name;
@@ -96,6 +97,24 @@ public class SettingData {
                     return;
                 }
                 break;
+
+            case COLOUR:
+                if (!toValueTrimmed.startsWith("#")) {
+                    ChatUtil.sendPrefixedMessage(sender, "§cThe hex code for this setting (colour) must start with a hash (#)!");
+                    return;
+                }
+                String valueHexPart = toValueTrimmed.replace("#", "");
+                if (valueHexPart.length() != 6) {
+                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (colour) must be a valid colour hex code!");
+                    return;
+                }
+                try {
+                    Integer.parseInt(valueHexPart, 16);
+                } catch (NumberFormatException e) {
+                    ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (colour) must be a hex code!");
+                    return;
+                }
+                break;
         }
 
         settingsRef.put(key, toValueTrimmed);
@@ -118,20 +137,20 @@ public class SettingData {
 
     public String toString(String value) {
         return "§e%s: %s"
-               .formatted(this.name,
-                          getValueColour(value) + value);
+               .formatted(name,
+                          getValueChatColour(value, type) + value);
     }
 
     public String toStringFull(String key, String value) {
         return "§e%s §8(%s)§f - %s: %s"
-               .formatted(this.name,
+               .formatted(name,
                           key,
-                          this.description,
-                          getValueColour(value) + value);
+                          description,
+                          getValueChatColour(value, type) + value);
     }
 
-    public String getValueColour(String value) {
-        return switch (this.type) {
+    public String getValueChatColour(String value, Type type) {
+        return switch (type) {
             case Type.BOOL -> {
                 if (value.equals("true"))
                     yield "§a";
@@ -151,6 +170,7 @@ public class SettingData {
                 }
                 yield ChatUtil.getChatColourByEnum(chatColour);
             }
+            case COLOUR -> ChatUtil.getColouredString("", Integer.parseInt(value.replace("#", ""), 16));
         };
     }
 
@@ -160,6 +180,7 @@ public class SettingData {
             case STRING, COUNTRY_PREFIX, COUNTRY_MOTTO -> List.of("null");
             case CHAT_COLOUR -> EnumUtil.enumToStringList(ChatUtil.ChatColour.class);
             case INT -> List.of();
+            case COLOUR -> List.of("#000000", "#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF", "#FFFFFF");
         };
     }
 

@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Stream;
 
+// todo: claim chunk count field?
 public class Country extends DataCollection {
 
     public static String filePath;
@@ -88,10 +89,10 @@ public class Country extends DataCollection {
         byName.put(name, this);
         byUUID.put(uuid, this);
 
-        this.timeCreated = System.currentTimeMillis();
+        timeCreated = System.currentTimeMillis();
 
         // create settings
-        this.settings = buildDefaultSettings();
+        settings = buildDefaultSettings();
     }
 
     public void deregister() {
@@ -118,7 +119,7 @@ public class Country extends DataCollection {
     public String name;
     public void setName(String name) {
         byName.put(name, this);
-        this.name = name;
+        name = name;
     }
 
     public UUID leader = null;
@@ -161,6 +162,10 @@ public class Country extends DataCollection {
 
     public LinkedHashMap<String, String> settings = new LinkedHashMap<>();
     public static final LinkedHashMap<String, SettingData> settingsData = new LinkedHashMap<>() {{
+        put("mapcolour", new SettingData("#FF0000",
+                                         SettingData.Type.COLOUR,
+                                         "Map Colour",
+                                         "The colour of the country's claims on map plugins."));
         put("motto", new SettingData("null",
                                      SettingData.Type.COUNTRY_MOTTO,
                                      "Motto",
@@ -196,6 +201,13 @@ public class Country extends DataCollection {
         Instant instant = Instant.ofEpochMilli(timeCreated);
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         return dateTime.format(StringUtil.timeFormatter);
+    }
+
+    // expensive when theres many claims on server!!
+    public ClaimChunk[] getClaimChunks() {
+        return ClaimChunk.all.stream()
+                             .filter(cc -> cc.getOwner().equals(uuid))
+                             .toArray(ClaimChunk[]::new);
     }
 
     public List<String> getReceivedCitizenshipApplicationsAsUsernames() {

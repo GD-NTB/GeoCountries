@@ -17,6 +17,10 @@ public class IntegrationManager {
     private static void detectPlugins() {
         if (GeoCountries.pluginManager.isPluginEnabled("Pl3xMap"))
             IntegrationState.isPl3xMapEnabled = true;
+    }
 
+    public static void disable() {
+        if (ConfigState.enablePl3xMap)
+            Pl3xMapIntegration.clearAllClaims();
     }
 }

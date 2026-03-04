@@ -130,6 +130,9 @@ public class ClaimChunk extends DataCollection {
     public UUID getOwner() {
         return owner;
     }
+    public Country getOwnerCountry() {
+        return Country.get(owner);
+    }
 
     @SerializedName(value = "t", alternate = "timeCreated")
     public long timeCreated = 0;

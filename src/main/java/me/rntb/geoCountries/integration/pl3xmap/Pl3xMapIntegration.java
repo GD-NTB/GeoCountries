@@ -2,11 +2,13 @@ package me.rntb.geoCountries.integration.pl3xmap;
 
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.ClaimChunk;
+import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.integration.IntegrationState;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.layer.SimpleLayer;
+import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.marker.Rectangle;
 import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.registry.Registry;
@@ -17,11 +19,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Pl3xMapIntegration {
+public class  Pl3xMapIntegration {
+
+    // todo: queue
 
     public static Pl3xMap api;
 
-    private static final Map<World, SimpleLayer> layers = new HashMap<>();
+    private static final Map<World, SimpleLayer> layersByPl3xMapWorld = new HashMap<>();
 
     public static void init() {
         if (!IntegrationState.isPl3xMapEnabled)
@@ -54,46 +58,56 @@ public class Pl3xMapIntegration {
 
             world.getLayerRegistry().register(layer);
 
-            layers.put(world, layer);
+            layersByPl3xMapWorld.put(world, layer);
         }
     }
 
-    private static void addAllClaims() {
+    public static void addAllClaims() {
+        if (!IntegrationState.isPl3xMapEnabled)
+            return;
+
         for (ClaimChunk claimChunk : ClaimChunk.all) {
             addClaim(claimChunk);
         }
+    }
+
+    private static Options buildMarkerSettings(String tooltip, String colour, int fillAlpha) {
+        int colourHex = Colors.fromHex(colour);
+        return Options.builder()
+                      .tooltipContent(tooltip)
+                      .stroke(true)
+                      .strokeColor(colourHex)
+                      .fill(true)
+                      .fillColor(Colors.setAlpha(fillAlpha, colourHex))
+                      .build();
     }
 
     public static void addClaim(ClaimChunk claimChunk) {
         if (!IntegrationState.isPl3xMapEnabled)
             return;
 
-        SimpleLayer layer = layers.get(claimChunk.getPl3xMapWorld());
+        Country owner = claimChunk.getOwnerCountry();
+
+        SimpleLayer layer = layersByPl3xMapWorld.get(claimChunk.getPl3xMapWorld());
 
         // build claim marker
-        // key = CLAIMCHUNK_FILL(x,z)
+        // key = claimChunk(x,z)
         Point corner1 = Point.of(claimChunk.getX() * 16, claimChunk.getZ() * 16);
         Point corner2 = Point.of((claimChunk.getX()+1) * 16, (claimChunk.getZ()+1) * 16);
         Rectangle chunkMarker = new Rectangle(claimChunk.getPl3xMapKey(), corner1, corner2);
 
-        int white = Colors.setAlpha(128, Colors.rgb(255, 255, 255));
-        int black = Colors.rgb(0, 0, 0);
-        chunkMarker.setOptions(Options.builder()
-                                      .tooltipContent("tool tip content")
-                                      .stroke(true)
-                                      .fillColor(white)
-                                      .fill(true)
-                                      .strokeColor(black)
-                                      .strokeWeight(255)
-                                      .build()
-        );
-
+        chunkMarker.setOptions(buildMarkerSettings("insert stuff here",
+                                                   owner.settings.get("mapcolour"),
+                                                   128));
 
         layer.addMarker(chunkMarker);
     }
 
-    private static void clearAllClaims() {
-        for (SimpleLayer layer : layers.values()) {
+    public static void clearAllClaims() {
+        if (!IntegrationState.isPl3xMapEnabled)
+            return;
+
+        for (SimpleLayer layer : layersByPl3xMapWorld.values()) {
             if (layer == null)
                 continue;
             layer.getMarkers().clear();
@@ -104,7 +118,32 @@ public class Pl3xMapIntegration {
         if (!IntegrationState.isPl3xMapEnabled)
             return;
 
-        SimpleLayer layer = layers.get(claimChunk.getPl3xMapWorld());
+        SimpleLayer layer = layersByPl3xMapWorld.get(claimChunk.getPl3xMapWorld());
         layer.removeMarker(claimChunk.getPl3xMapKey());
+    }
+
+    public static void reloadClaimColour(ClaimChunk claimChunk) {
+        // get chunk
+        SimpleLayer layer = layersByPl3xMapWorld.get(claimChunk.getPl3xMapWorld());
+        Marker<?> marker = layer.registeredMarkers().get(claimChunk.getPl3xMapKey());
+        if (marker == null)
+            return;
+
+        Country owner = claimChunk.getOwnerCountry();
+
+        marker.setOptions(buildMarkerSettings("insert stuff here",
+                                              owner.settings.get("mapcolour"),
+                                              128));
+    }
+
+    // expensive!!
+    // todo: queue!!!!!
+    public static void reloadClaimsColourOfCountry(Country country) {
+        if (!IntegrationState.isPl3xMapEnabled)
+            return;
+
+        for (ClaimChunk claimChunk : country.getClaimChunks()) {
+            reloadClaimColour(claimChunk);
+        }
     }
 }
