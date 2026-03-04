@@ -9,6 +9,7 @@ public class gcCountry extends GeoCommand {
 
     public gcCountry(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Manages and views info about countries.";
         this.childCommands.put("create", new gcCountryCreate(this, "create", "/gc country create", "gc.country.create", ItemStack.of(Material.NETHER_STAR)));
         this.childCommands.put("rename", new gcCountryRename(this, "rename", "/gc country rename", "gc.country.rename", ItemStack.of(Material.NAME_TAG)));
         this.childCommands.put("citizens", new gcCountryCitizens(this, "citizens", "/gc country citizens", "gc.country.citizens", ItemStack.of(Material.TOTEM_OF_UNDYING)));
