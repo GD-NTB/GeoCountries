@@ -1,31 +1,30 @@
 package me.rntb.geoCountries.integration.pl3xmap;
 
 import me.rntb.geoCountries.config.ConfigState;
-import me.rntb.geoCountries.data.ClaimChunk;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.integration.IntegrationState;
+import me.rntb.geoCountries.integration.pl3xmap.type.*;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.layer.SimpleLayer;
-import net.pl3x.map.core.markers.marker.Marker;
-import net.pl3x.map.core.markers.marker.Rectangle;
+import net.pl3x.map.core.markers.marker.MultiPolygon;
+import net.pl3x.map.core.markers.marker.Polygon;
 import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.registry.Registry;
 import net.pl3x.map.core.util.Colors;
 import net.pl3x.map.core.world.World;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class  Pl3xMapIntegration {
+public class Pl3xMapIntegration {
 
     // todo: queue
 
     public static Pl3xMap api;
 
-    private static final Map<World, SimpleLayer> layersByPl3xMapWorld = new HashMap<>();
+    private static final Map<World, SimpleLayer> layers = new HashMap<>();
 
     public static void init() {
         if (!IntegrationState.isPl3xMapEnabled)
@@ -37,17 +36,24 @@ public class  Pl3xMapIntegration {
             ChatUtil.sendPrefixedLogMessage("Pl3xMapIntegration started!");
 
         long startTime = System.nanoTime();
-        clearAllClaims();
-
         createLayers();
-        addAllClaims();
+        clearAndDrawAll();
         long endTime = System.nanoTime();
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Finished Pl3xMapIntegration: " + (endTime - startTime) * 0.000001 + "ms");
     }
 
+    public static void clearAndDrawAll() {
+        clearAllClaims();
+        for (Country country : Country.all) {
+            renderCountry(country);
+        }
+    }
+
     private static void createLayers() {
+        layers.clear();
+
         Registry<@NotNull World> worlds = api.getWorldRegistry();
 
         for (World world : worlds.values()) {
@@ -58,92 +64,133 @@ public class  Pl3xMapIntegration {
 
             world.getLayerRegistry().register(layer);
 
-            layersByPl3xMapWorld.put(world, layer);
+            layers.put(world, layer);
         }
     }
 
-    public static void addAllClaims() {
-        if (!IntegrationState.isPl3xMapEnabled)
-            return;
-
-        for (ClaimChunk claimChunk : ClaimChunk.all) {
-            addClaim(claimChunk);
-        }
-    }
-
-    private static Options buildMarkerSettings(String tooltip, String colour, int fillAlpha) {
-        int colourHex = Colors.fromHex(colour);
+    private static Options buildMarkerSettings(Country country) {
+        int colour = Colors.fromHex(country.settings.get("mapcolour"));
         return Options.builder()
-                      .tooltipContent(tooltip)
+                      .tooltipContent("this is a polygon")
                       .stroke(true)
-                      .strokeColor(colourHex)
+                      .strokeColor(colour)
                       .fill(true)
-                      .fillColor(Colors.setAlpha(fillAlpha, colourHex))
+                      .fillColor(Colors.setAlpha(128, colour))
                       .build();
     }
 
-    public static void addClaim(ClaimChunk claimChunk) {
-        if (!IntegrationState.isPl3xMapEnabled)
+    private static void renderCountry(Country country) {
+        RenderCountry rCountry = RenderCountry.from(country);
+
+        if (!rCountry.hasAnyWorldChunks())
             return;
 
-        Country owner = claimChunk.getOwnerCountry();
+        for (Map.Entry<String, List<RenderClaimChunk>> worldChunkEntry : rCountry.getWorldChunks().entrySet()) {
+            // get layer
+            String worldName = worldChunkEntry.getKey();
+            World world = api.getWorldRegistry().get(worldName);
+            SimpleLayer layer = layers.get(world);
+            if (layer == null)
+                continue;
 
-        SimpleLayer layer = layersByPl3xMapWorld.get(claimChunk.getPl3xMapWorld());
+            // get chunks
+            List<RenderClaimChunk> rClaimChunks = worldChunkEntry.getValue();
 
-        // build claim marker
-        // key = claimChunk(x,z)
-        Point corner1 = Point.of(claimChunk.getX() * 16, claimChunk.getZ() * 16);
-        Point corner2 = Point.of((claimChunk.getX()+1) * 16, (claimChunk.getZ()+1) * 16);
-        Rectangle chunkMarker = new Rectangle(claimChunk.getPl3xMapKey(), corner1, corner2);
+            // convert chunks to clusters
+            List<RenderCluster> clusters = RenderCluster.find(rClaimChunks);
 
-        chunkMarker.setOptions(buildMarkerSettings("insert stuff here",
-                                                   owner.settings.get("mapcolour"),
-                                                   128));
+            List<MultiPolygonPart> polygonParts = new ArrayList<>();
 
-        layer.addMarker(chunkMarker);
+            // convert clusters to polygons
+            for (RenderCluster cluster : clusters) {
+                // calculate negative space
+                List<RenderClaimChunk> holeChunks = cluster.findNegativeSpace();
+
+                // convert holes to polygons
+                List<List<Point>> holesPolygons = new ArrayList<>();
+                if (!holeChunks.isEmpty()) {
+                    List<RenderCluster> holeClusters = RenderCluster.find(holeChunks);
+
+                    holesPolygons = holeClusters.stream()
+                                                .map(Pl3xMapIntegration::buildPolygonFromCluster)
+                                                .filter(Objects::nonNull)
+                                                .map(Pl3xMapIntegration::mergeCollinearPoints).toList();
+                }
+
+                List<Point> mainPolygon = buildPolygonFromCluster(cluster);
+                if (mainPolygon == null) {
+                    ChatUtil.sendPrefixedLogErrorMessage("Pl3xMapIntegration: Error drawing polygon of country " + country.name);
+                    continue;
+                }
+
+                int before = mainPolygon.size();
+                mainPolygon = mergeCollinearPoints(mainPolygon);
+                int after = mainPolygon.size();
+
+                if (ConfigState.debugLogging)
+                    ChatUtil.sendPrefixedLogMessage("Pl3xMapIntegration: Polygon simplified: " + before + " -> " + after);
+
+                polygonParts.add(new MultiPolygonPart(mainPolygon, holesPolygons));
+            }
+
+            // if there is no polygon, don't try to draw anything
+            if (polygonParts.isEmpty())
+                continue;
+
+            // assemble polygons into final multipolygons
+            List<Polygon> polygons = MultiPolygonPart.toPolygons(polygonParts);
+            MultiPolygon multiPolygon = MultiPolygon.of("MultiPolygon(" + country.name + ")", polygons);
+
+            multiPolygon.setOptions(buildMarkerSettings(country));
+
+            // FINALLY draw the multipolygons
+            layer.addMarker(multiPolygon);
+        }
+    }
+
+    private static List<Point> buildPolygonFromCluster(RenderCluster cluster) {
+        Map<Point,List<Point>> graph = RenderEdge.buildEdgeGraphFromCluster(cluster);
+
+        List<List<Point>> polygons = RenderEdge.extractPolygonsFromEdgeGraph(graph);
+
+        // largest polygon will be outer boundary
+        polygons.sort((a,b)->Integer.compare(b.size(), a.size()));
+
+        return polygons.isEmpty() ? Collections.emptyList() : polygons.getFirst();
+    }
+
+    public static List<Point> mergeCollinearPoints(List<Point> points) {
+        int size = points.size();
+
+        // can't merge if less than 3 points
+        if (size < 3)
+            return points;
+
+        List<Point> result = new ArrayList<>(size);
+
+        for (int i = 0; i < size; i++) {
+            Point previous = points.get((i - 1 + size) % size);
+            Point current = points.get(i);
+            Point next = points.get((i + 1) % size);
+
+            boolean horizontal = previous.x() == current.x() && current.x() == next.x();
+            boolean vertical = previous.z() == current.z() && current.z() == next.z();
+
+            if (!horizontal && !vertical)
+                result.add(current);
+        }
+
+        return result;
     }
 
     public static void clearAllClaims() {
         if (!IntegrationState.isPl3xMapEnabled)
             return;
 
-        for (SimpleLayer layer : layersByPl3xMapWorld.values()) {
+        for (SimpleLayer layer : layers.values()) {
             if (layer == null)
                 continue;
             layer.getMarkers().clear();
-        }
-    }
-
-    public static void clearClaim(ClaimChunk claimChunk) {
-        if (!IntegrationState.isPl3xMapEnabled)
-            return;
-
-        SimpleLayer layer = layersByPl3xMapWorld.get(claimChunk.getPl3xMapWorld());
-        layer.removeMarker(claimChunk.getPl3xMapKey());
-    }
-
-    public static void reloadClaimColour(ClaimChunk claimChunk) {
-        // get chunk
-        SimpleLayer layer = layersByPl3xMapWorld.get(claimChunk.getPl3xMapWorld());
-        Marker<?> marker = layer.registeredMarkers().get(claimChunk.getPl3xMapKey());
-        if (marker == null)
-            return;
-
-        Country owner = claimChunk.getOwnerCountry();
-
-        marker.setOptions(buildMarkerSettings("insert stuff here",
-                                              owner.settings.get("mapcolour"),
-                                              128));
-    }
-
-    // expensive!!
-    // todo: queue!!!!!
-    public static void reloadClaimsColourOfCountry(Country country) {
-        if (!IntegrationState.isPl3xMapEnabled)
-            return;
-
-        for (ClaimChunk claimChunk : country.getClaimChunks()) {
-            reloadClaimColour(claimChunk);
         }
     }
 }

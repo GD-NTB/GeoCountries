@@ -64,7 +64,7 @@ public class gcClaimMap extends GeoCommand {
             for (int off_x = -halfWidth; off_x < halfWidth + 1; off_x++) {
                 int x = chunk.getX() + off_x;
                 int z = chunk.getZ() + off_z;
-                ClaimChunk claim = ClaimChunk.get(Chunk.getChunkKey(x, z));
+                ClaimChunk claim = ClaimChunk.get(x, z);
 
                 // player marker
                 if (off_x == 0 && off_z == 0) {

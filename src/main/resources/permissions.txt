@@ -29,7 +29,7 @@ gc.group.player:
     gc.claim
     gc.claim.one
     gc.claim.map
-    gc.claim.updatemapcolour
+    gc.claim.reloadmap
     gc.unclaim
     gc.unclaim.one
 

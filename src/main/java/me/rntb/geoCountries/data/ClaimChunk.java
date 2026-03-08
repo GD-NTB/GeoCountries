@@ -8,6 +8,7 @@ import me.rntb.geoCountries.integration.IntegrationState;
 import me.rntb.geoCountries.integration.pl3xmap.Pl3xMapIntegration;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import org.bukkit.Chunk;
 import org.bukkit.World;
 
 import java.time.Instant;
@@ -30,6 +31,14 @@ public class ClaimChunk extends DataCollection {
     public static ClaimChunk get(Long key) {
         return byKey.get(key);
     }
+    public static ClaimChunk get(int x, int z) {
+        return get(calculateKey(x, z));
+    }
+
+    public static Long calculateKey(int x, int z) {
+        // (long) x & 4294967295L | ((long) z & 4294967295L) << 32;
+        return Chunk.getChunkKey(x, z);
+    }
 
     public static void init() {
         filePath = "data/claimchunks";
@@ -46,6 +55,9 @@ public class ClaimChunk extends DataCollection {
         byKey.clear();
         for (ClaimChunk claimChunk : all) {
             byKey.put(claimChunk.key, claimChunk);
+
+            // add claimchunk to country
+            claimChunk.getOwnerCountry().addClaimChunk(claimChunk.key);
         }
 
         if (ConfigState.debugLogging)
@@ -73,20 +85,26 @@ public class ClaimChunk extends DataCollection {
         add(this, all, displayName);
         byKey.put(key, this);
 
+        // add this claimchunk to country
+        getOwnerCountry().addClaimChunk(key);
+
         this.timeCreated = System.currentTimeMillis();
 
-        // update maps
-        Pl3xMapIntegration.addClaim(this);
+//        // update maps
+//        Pl3xMapIntegration.addClaim(this);
     }
 
     public void deregister() {
         byKey.remove(key);
 
+        // remove this claimchunk from country
+        getOwnerCountry().removeClaimChunk(key);
+
         // delete any associated applications
         // --
 
-        // update maps
-        Pl3xMapIntegration.clearClaim(this);
+//        // update maps
+//        Pl3xMapIntegration.clearClaim(this);
 
         delete(this, all, displayName);
     }
@@ -116,6 +134,7 @@ public class ClaimChunk extends DataCollection {
         return Pl3xMapIntegration.api.getWorldRegistry().get(getBukkitWorld().getName());
     }
 
+    // todo: dont serialise these, they can be unpacked from the key
     private final int x;
     public int getX() {
         return x;
@@ -153,6 +172,6 @@ public class ClaimChunk extends DataCollection {
     @Override
     public String toString() {
         return "ClaimChunk(world=%s, x=%d, z=%d, owner=%s)"
-                .formatted(this.world, this.x, this.z, this.owner);
+               .formatted(this.world, this.x, this.z, this.owner);
     }
 }

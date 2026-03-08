@@ -15,7 +15,6 @@ import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Stream;
 
-// todo: claim chunk count field?
 public class Country extends DataCollection {
 
     public static String filePath;
@@ -119,7 +118,6 @@ public class Country extends DataCollection {
     public String name;
     public void setName(String name) {
         byName.put(name, this);
-        name = name;
     }
 
     public UUID leader = null;
@@ -147,8 +145,7 @@ public class Country extends DataCollection {
     }
     public List<String> citizensAsStrings() {
         return citizens.stream()
-                       .map(uuid -> PlayerProfile.get(uuid).username)
-                       .toList();
+                       .map(uuid -> PlayerProfile.get(uuid).username).toList();
     }
     public List<PlayerProfile> citizensSortedByPosition() {
         return citizens.stream()
@@ -196,18 +193,32 @@ public class Country extends DataCollection {
                                               LinkedHashMap::putAll);
     }
 
+    // loaded in ClaimChunk.init
+    private transient List<Long> claimChunks = new ArrayList<>();
+    public List<Long> getClaimChunks() {
+        if (claimChunks == null)
+            claimChunks = new ArrayList<>();
+        return Collections.unmodifiableList(claimChunks);
+    }
+    public void addClaimChunk(long claimChunkKey) {
+        if (claimChunks == null)
+            claimChunks = new ArrayList<>();
+        claimChunks.add(claimChunkKey);
+    }
+    public void removeClaimChunk(long claimChunkKey) {
+        if (claimChunks == null)
+            return;
+        claimChunks.remove(claimChunkKey);
+    }
+    public boolean hasAnyClaimChunks() {
+        return claimChunks != null && !claimChunks.isEmpty() ;
+    }
+
     public long timeCreated = 0;
     public String timeCreatedAsString() {
         Instant instant = Instant.ofEpochMilli(timeCreated);
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         return dateTime.format(StringUtil.timeFormatter);
-    }
-
-    // expensive when theres many claims on server!!
-    public ClaimChunk[] getClaimChunks() {
-        return ClaimChunk.all.stream()
-                             .filter(cc -> cc.getOwner().equals(uuid))
-                             .toArray(ClaimChunk[]::new);
     }
 
     public List<String> getReceivedCitizenshipApplicationsAsUsernames() {
@@ -226,6 +237,6 @@ public class Country extends DataCollection {
     @Override
     public String toString() {
         return "Country(name=%s, leader=%s, citizens=%d)"
-                .formatted(this.name, this.getLeader().username, this.citizenCount());
+               .formatted(this.name, this.getLeader().username, this.citizenCount());
     }
 }

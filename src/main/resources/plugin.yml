@@ -59,7 +59,7 @@ permissions:
       gc.claim: true
       gc.claim.one: true
       gc.claim.map: true
-      gc.claim.updatemapcolour: true
+      gc.claim.reloadmap: true
       gc.unclaim: true
       gc.unclaim.one: true
 
