@@ -9,7 +9,6 @@ import me.rntb.geoCountries.integration.IntegrationState;
 import me.rntb.geoCountries.integration.pl3xmap.Pl3xMapIntegration;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
-import org.bukkit.Chunk;
 import org.bukkit.World;
 
 import java.time.Instant;
@@ -33,13 +32,16 @@ public class ClaimChunk extends DataCollection {
         return byKey.get(key);
     }
     public static ClaimChunk get(int x, int z) {
-        return get(calculateKey(x, z));
+        return get(packToKey(x, z));
     }
 
-    public static Long calculateKey(int x, int z) {
-        // (long) x & 4294967295L | ((long) z & 4294967295L) << 32;
-        return Chunk.getChunkKey(x, z);
+    public static Long packToKey(int x, int z) {
+        return (long) x & 4294967295L | ((long) z & 4294967295L) << 32; // Chunk.getChunkKey(x, z)
     }
+    public static int[] unpackFromKey(long key) {
+        return new int[] { (int) (key & 0xFFFFFFFFL), (int) (key >>> 32) };
+    }
+
 
     public static void init() {
         filePath = "data/claimchunks";
@@ -59,6 +61,11 @@ public class ClaimChunk extends DataCollection {
 
             // add claimchunk to country
             claimChunk.getOwnerCountry().addClaimChunk(claimChunk.key);
+
+            // unpack key into coordinates
+            int[] coords = unpackFromKey(claimChunk.key);
+            claimChunk.x = coords[0];
+            claimChunk.z = coords[1];
         }
 
         if (ConfigState.debugLogging)
@@ -118,9 +125,6 @@ public class ClaimChunk extends DataCollection {
     public long getKey() {
         return key;
     }
-    public String getPl3xMapKey() {
-        return "ClaimChunk(" + x + ", " + z + ")";
-    }
 
     @Expose
     @SerializedName(value = "w", alternate = "world")
@@ -138,16 +142,14 @@ public class ClaimChunk extends DataCollection {
     }
 
     // todo: dont serialise these, they can be unpacked from the key
-    @Expose
-    @SerializedName(value = "x")
-    private final int x;
+    @Expose(serialize = false, deserialize = false)
+    private int x;
     public int getX() {
         return x;
     }
 
-    @Expose
-    @SerializedName(value = "z")
-    private final int z;
+    @Expose(serialize = false, deserialize = false)
+    private int z;
     public int getZ() {
         return z;
     }
