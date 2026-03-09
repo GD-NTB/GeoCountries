@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.data;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
@@ -57,6 +58,8 @@ public class Country extends DataCollection {
             byName.put(country.name, country);
 
             // load settings by defaultSettings
+            if (country.settings == null)
+                country.settings = new LinkedHashMap<>();
             LinkedHashMap<String, String> orderedSettings = new LinkedHashMap<>();
             settingsData.forEach((key, settingData) -> orderedSettings.put(key, country.settings.getOrDefault(key, settingData.defaultValue)));
             country.settings = orderedSettings;
@@ -113,18 +116,22 @@ public class Country extends DataCollection {
 
     // ---
 
+    @Expose
     public UUID uuid;
 
+    @Expose
     public String name;
     public void setName(String name) {
         byName.put(name, this);
     }
 
+    @Expose
     public UUID leader = null;
     public PlayerProfile getLeader() {
         return PlayerProfile.get(leader);
     }
 
+    @Expose
     public ArrayList<UUID> citizens = new ArrayList<>();
     public List<Player> getOnlineCitizens() {
         List<Player> players = new ArrayList<>();
@@ -157,6 +164,7 @@ public class Country extends DataCollection {
         return citizens.size();
     }
 
+    @Expose
     public LinkedHashMap<String, String> settings = new LinkedHashMap<>();
     public static final LinkedHashMap<String, SettingData> settingsData = new LinkedHashMap<>() {{
         put("mapcolour", new SettingData("#FF0000",
@@ -194,26 +202,22 @@ public class Country extends DataCollection {
     }
 
     // loaded in ClaimChunk.init
-    private transient List<Long> claimChunks = new ArrayList<>();
+    @Expose(serialize = false, deserialize = false)
+    private List<Long> claimChunks;
     public List<Long> getClaimChunks() {
-        if (claimChunks == null)
-            claimChunks = new ArrayList<>();
         return Collections.unmodifiableList(claimChunks);
     }
     public void addClaimChunk(long claimChunkKey) {
-        if (claimChunks == null)
-            claimChunks = new ArrayList<>();
         claimChunks.add(claimChunkKey);
     }
     public void removeClaimChunk(long claimChunkKey) {
-        if (claimChunks == null)
-            return;
         claimChunks.remove(claimChunkKey);
     }
     public boolean hasAnyClaimChunks() {
-        return claimChunks != null && !claimChunks.isEmpty() ;
+        return !claimChunks.isEmpty();
     }
 
+    @Expose
     public long timeCreated = 0;
     public String timeCreatedAsString() {
         Instant instant = Instant.ofEpochMilli(timeCreated);
@@ -227,6 +231,11 @@ public class Country extends DataCollection {
             return List.of();
         return cApplications.stream()
                             .map(ca -> ca.getApplicant().username).toList();
+    }
+
+    // gson constructor
+    public Country() {
+        claimChunks = new ArrayList<>();
     }
 
     public Country(UUID uuid, String name) {

@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.data;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.type.SettingData;
@@ -79,6 +80,8 @@ public class PlayerProfile extends DataCollection {
             byUUID.put(player.uuid, player);
 
             // load settings by defaultSettings
+            if (player.settings == null)
+                player.settings = new LinkedHashMap<>();
             LinkedHashMap<String, String> orderedSettings = new LinkedHashMap<>();
             settingsData.forEach((key, settingData) -> orderedSettings.put(key, player.settings.getOrDefault(key, settingData.defaultValue)));
             player.settings = orderedSettings;
@@ -135,10 +138,13 @@ public class PlayerProfile extends DataCollection {
 
     // ---
 
+    @Expose
     public UUID uuid;
 
+    @Expose
     public String username; // last known username
 
+    @Expose
     public UUID citizenship = null;
     public Country getCitizenship() {
         return Country.get(citizenship);
@@ -153,6 +159,7 @@ public class PlayerProfile extends DataCollection {
         LEADER
     }
 
+    @Expose
     public Position position = Position.NONE;
     public String getPositionString() {
         return switch (position) {
@@ -165,7 +172,7 @@ public class PlayerProfile extends DataCollection {
         return position.ordinal();
     }
 
-    // settings
+    @Expose
     public LinkedHashMap<String, String> settings = new LinkedHashMap<>();
     public static final LinkedHashMap<String, SettingData> settingsData = new LinkedHashMap<>() {{
         put("soundeffects", new SettingData("true",
@@ -184,6 +191,7 @@ public class PlayerProfile extends DataCollection {
                                               LinkedHashMap::putAll);
     }
 
+    @Expose
     public long timeCreated = 0;
     public String timeCreatedAsString() {
         Instant instant = Instant.ofEpochMilli(timeCreated);

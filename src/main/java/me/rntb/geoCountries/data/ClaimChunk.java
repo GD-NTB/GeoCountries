@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.data;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.GeoCountries;
@@ -111,6 +112,7 @@ public class ClaimChunk extends DataCollection {
 
     // ---
 
+    @Expose
     @SerializedName(value = "k", alternate = "key")
     private final long key;
     public long getKey() {
@@ -120,6 +122,7 @@ public class ClaimChunk extends DataCollection {
         return "ClaimChunk(" + x + ", " + z + ")";
     }
 
+    @Expose
     @SerializedName(value = "w", alternate = "world")
     private final UUID world;
     public UUID getWorld() {
@@ -135,15 +138,21 @@ public class ClaimChunk extends DataCollection {
     }
 
     // todo: dont serialise these, they can be unpacked from the key
+    @Expose
+    @SerializedName(value = "x")
     private final int x;
     public int getX() {
         return x;
     }
+
+    @Expose
+    @SerializedName(value = "z")
     private final int z;
     public int getZ() {
         return z;
     }
 
+    @Expose
     @SerializedName(value = "o", alternate = "owner")
     private final UUID owner;
     public UUID getOwner() {
@@ -153,6 +162,7 @@ public class ClaimChunk extends DataCollection {
         return Country.get(owner);
     }
 
+    @Expose
     @SerializedName(value = "t", alternate = "timeCreated")
     public long timeCreated = 0;
     public String timeCreatedAsString() {

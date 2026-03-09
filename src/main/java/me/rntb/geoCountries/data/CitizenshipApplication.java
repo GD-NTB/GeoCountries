@@ -1,5 +1,6 @@
 package me.rntb.geoCountries.data;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
@@ -81,20 +82,25 @@ public class CitizenshipApplication extends DataCollection {
 
     // ---
 
+    @Expose
     public UUID uuid;
 
+    @Expose
     public UUID applicant;
     public PlayerProfile getApplicant() {
         return PlayerProfile.get(applicant);
     }
 
+    @Expose
     public UUID toCountry;
     public Country getToCountry() {
         return Country.get(toCountry);
     }
 
+    @Expose
     public String reason;
 
+    @Expose
     public long timeCreated = 0;
 
     public CitizenshipApplication(UUID uuid, UUID applicant, UUID toCountry) {

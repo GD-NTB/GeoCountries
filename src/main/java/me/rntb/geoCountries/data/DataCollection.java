@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.data;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -17,7 +18,8 @@ import java.util.List;
 
 public abstract class DataCollection {
 
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+                                                      .create();
 
     static <T> ArrayList<T> readFromFile(String filePath, String displayName, Type type) {
         if (GeoCountries.pluginAbsoluteDataFolderPath == null)
