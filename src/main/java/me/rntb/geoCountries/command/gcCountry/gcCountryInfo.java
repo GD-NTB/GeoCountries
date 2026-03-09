@@ -4,7 +4,7 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.DateUtil;
+import me.rntb.geoCountries.util.TimeUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
@@ -47,7 +47,7 @@ public class gcCountryInfo extends GeoCommand {
         }
 
         PlayerProfile leader = country.getLeaderPlayerProfile();
-        long daysAgo = DateUtil.daysAgo(country.getTimeCreated());
+        long daysAgo = TimeUtil.daysAgo(country.getTimeCreated());
 
         String countryMotto = country.getSettings().get("motto");
 

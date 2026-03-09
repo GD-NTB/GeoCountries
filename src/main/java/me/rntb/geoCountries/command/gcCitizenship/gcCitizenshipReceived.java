@@ -6,6 +6,8 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.StringUtil;
+import me.rntb.geoCountries.util.TimeUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -98,11 +100,13 @@ public class gcCitizenshipReceived extends GeoCommand {
                 }
 
                 String applicantName = cApplication.getApplicantPlayerProfile().getUsername();
+                long daysAgo = TimeUtil.daysAgo(cApplication.getTimeCreated());
 
-                message.append(Component.text("§f> §aFrom§f: §e" + applicantName))
+                message.append(Component.text("§f> §aFrom§f: §e" + applicantName + " §8(" + daysAgo + " day" + StringUtil.leadingS(daysAgo) + " ago)"))
                        .append(Component.newline())
                        .append(Component.text("§f> §aReason§f: " + reason))
                        .append(Component.newline())
+
                        // [Accept] button
                        .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship accept " + applicantName + "'>" +
                                                        "<hover:show_text:'<white>Click to accept " + applicantName + "\\'s application.</white>'>" +

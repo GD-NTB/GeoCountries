@@ -4,7 +4,7 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.DateUtil;
+import me.rntb.geoCountries.util.TimeUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -44,11 +44,11 @@ public class gcPlayerInfo extends GeoCommand {
 
         String onlineString = "§aOnline";
         if (Bukkit.getPlayer(player.getUsername()) == null) {
-            long daysAgo = DateUtil.daysAgo(player.getOfflinePlayer().getLastSeen());
+            long daysAgo = TimeUtil.daysAgo(player.getOfflinePlayer().getLastSeen());
             onlineString = "§cLast seen §f" + daysAgo + "§c days ago";
         }
 
-        long daysAgo = DateUtil.daysAgo(player.getTimeCreated());
+        long daysAgo = TimeUtil.daysAgo(player.getTimeCreated());
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
                          """
                          §6========== PLAYER INFO ==========

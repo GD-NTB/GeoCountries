@@ -7,8 +7,8 @@ import com.google.gson.annotations.SerializedName;
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.FileUtil;
 import me.rntb.geoCountries.util.TimeUtil;
+import me.rntb.geoCountries.util.FileUtil;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
