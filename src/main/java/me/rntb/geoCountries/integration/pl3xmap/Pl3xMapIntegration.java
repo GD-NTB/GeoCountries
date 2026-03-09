@@ -69,7 +69,7 @@ public class Pl3xMapIntegration {
     }
 
     private static Options buildMarkerSettings(Country country) {
-        int colour = Colors.fromHex(country.settings.get("mapcolour"));
+        int colour = Colors.fromHex(country.getSettings().get("mapcolour"));
         return Options.builder()
                       .tooltipContent("this is a polygon")
                       .stroke(true)
@@ -119,7 +119,7 @@ public class Pl3xMapIntegration {
 
                 List<Point> mainPolygon = buildPolygonFromCluster(cluster);
                 if (mainPolygon == null) {
-                    ChatUtil.sendPrefixedLogErrorMessage("Pl3xMapIntegration: Error drawing polygon of country " + country.name);
+                    ChatUtil.sendPrefixedLogErrorMessage("Pl3xMapIntegration: Error drawing polygon of country " + country.getName());
                     continue;
                 }
 
@@ -139,7 +139,7 @@ public class Pl3xMapIntegration {
 
             // assemble polygons into final multipolygons
             List<Polygon> polygons = MultiPolygonPart.toPolygons(polygonParts);
-            MultiPolygon multiPolygon = MultiPolygon.of("MultiPolygon(" + country.name + ")", polygons);
+            MultiPolygon multiPolygon = MultiPolygon.of("MultiPolygon(" + country.getName() + ")", polygons);
 
             multiPolygon.setOptions(buildMarkerSettings(country));
 

@@ -20,8 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Path;
 import java.util.Objects;
 
-// todo: getters setters
-// todo: claiming
+// todo: finish claiming
 // todo: in-country ranks
 // todo: promote command
 public class GeoCountries extends JavaPlugin {
@@ -29,6 +28,9 @@ public class GeoCountries extends JavaPlugin {
     public static JavaPlugin self; // plugin instance
 
     public static Path pluginAbsoluteDataFolderPath;
+
+    // prevents potentially overwriting data with shite if error on startup
+    public static boolean willSaveData = false;
 
     // shorthand
     public static Server server;
@@ -74,12 +76,15 @@ public class GeoCountries extends JavaPlugin {
 
         // done
         ChatUtil.sendPrefixedLogMessage("Plugin enabled!");
+
+        willSaveData = true;
     }
 
     @Override
     public void onDisable() {
         // save data collections
-        DataCollectionManager.save();
+        if (willSaveData)
+            DataCollectionManager.save();
 
         // do integration shutdown stuff
         IntegrationManager.disable();

@@ -14,8 +14,8 @@ import java.util.UUID;
 
 public class CitizenshipApplication extends DataCollection {
 
-    public static String filePath;
-    public static String displayName;
+    public static final String FILE_PATH = "data/citizenshipapplications";
+    public static final String DISPLAY_NAME = "CitizenshipApplication";
 
     // list of sent applications
     public static ArrayList<CitizenshipApplication> sentAll = null;
@@ -29,13 +29,10 @@ public class CitizenshipApplication extends DataCollection {
     public static final Map<UUID, CitizenshipApplication> openByApplicant = new HashMap<>();
 
     public static void init() {
-        filePath = "data/citizenshipapplications";
-        displayName = "CitizenshipApplication";
-
-        sentAll = readFromFile(CitizenshipApplication.filePath, displayName, new TypeToken<ArrayList<CitizenshipApplication>>() { }.getType());
+        sentAll = readFromFile(CitizenshipApplication.FILE_PATH, DISPLAY_NAME, new TypeToken<ArrayList<CitizenshipApplication>>() { }.getType());
         if (sentAll == null) {
             ChatUtil.sendPrefixedLogMessage("ReadFromFile(%s) was null, try deleting the file!"
-                                            .formatted(filePath));
+                                            .formatted(FILE_PATH));
             return;
         }
         openAll.clear();
@@ -62,7 +59,7 @@ public class CitizenshipApplication extends DataCollection {
     }
 
     public static void save() {
-        writeToFile(filePath, displayName, sentAll);
+        writeToFile(FILE_PATH, DISPLAY_NAME, sentAll);
 
         if (sentAll != null && ConfigState.debugLogging) {
             int count = sentAll.size();
@@ -83,25 +80,47 @@ public class CitizenshipApplication extends DataCollection {
     // ---
 
     @Expose
-    public UUID uuid;
+    private final UUID uuid;
+    public UUID getUUID() {
+        return uuid;
+    }
 
     @Expose
-    public UUID applicant;
-    public PlayerProfile getApplicant() {
+    private final UUID applicant;
+    public UUID getApplicant() {
+        return applicant;
+    }
+    public PlayerProfile getApplicantPlayerProfile() {
         return PlayerProfile.get(applicant);
     }
 
     @Expose
-    public UUID toCountry;
-    public Country getToCountry() {
+    private final UUID toCountry;
+    public UUID getToCountry() {
+        return toCountry;
+    }
+    public Country getToCountryCountry() {
         return Country.get(toCountry);
     }
 
     @Expose
-    public String reason;
+    private String reason;
+    public String getReason() {
+        return reason;
+    }
+    public void setReason(String value) {
+        reason = value;
+    }
 
+    // todo: use this value
     @Expose
-    public long timeCreated = 0;
+    private long timeCreated = 0;
+    public long getTimeCreated() {
+        return timeCreated;
+    }
+    public void setTimeCreated(long value) {
+        timeCreated = value;
+    }
 
     public CitizenshipApplication(UUID uuid, UUID applicant, UUID toCountry) {
         this.uuid = uuid;
@@ -110,9 +129,24 @@ public class CitizenshipApplication extends DataCollection {
     }
 
     @Override
+    public boolean equals(Object otherObject) {
+        if (this == otherObject)
+            return true;
+        if (otherObject == null || getClass() != otherObject.getClass())
+            return false;
+
+        CitizenshipApplication other = (CitizenshipApplication) otherObject;
+
+        if (uuid == null || other.uuid == null)
+            return false;
+
+        return uuid.equals(other.uuid);
+    }
+
+    @Override
     public String toString() {
         PlayerProfile player = PlayerProfile.get(applicant);
         return "CitizenApplication(%s, %s)"
-                .formatted(player != null ? player.username : "null", String.valueOf(uuid));
+               .formatted(player != null ? player.getUsername() : "null", String.valueOf(uuid));
     }
 }

@@ -21,6 +21,6 @@ public class JoinListener implements Listener {
         }
 
         // update last known username to their current username
-        playerProfile.username = player.getName();
+        playerProfile.setUsername(player.getName());
     }
 }

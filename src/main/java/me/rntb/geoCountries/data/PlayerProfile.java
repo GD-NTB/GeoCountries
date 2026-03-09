@@ -20,8 +20,8 @@ import java.util.stream.Stream;
 
 public class PlayerProfile extends DataCollection {
 
-    public static String filePath;
-    public static String displayName;
+    public static final String FILE_PATH = "data/players";
+    public static final String DISPLAY_NAME = "PlayerProfile";
 
     // list of every player to have ever joined the server
     public static ArrayList<PlayerProfile> all = null;
@@ -62,13 +62,10 @@ public class PlayerProfile extends DataCollection {
     }
 
     public static void init() {
-        filePath = "data/players";
-        displayName = "PlayerProfile";
-
-        all = readFromFile(filePath, displayName, new TypeToken<ArrayList<PlayerProfile>>() { }.getType());
+        all = readFromFile(FILE_PATH, DISPLAY_NAME, new TypeToken<ArrayList<PlayerProfile>>() { }.getType());
         if (all == null) {
             ChatUtil.sendPrefixedLogErrorMessage("ReadFromFile(%s) was null, try backing it up and deleting the file!"
-                                                 .formatted(filePath));
+                                                 .formatted(FILE_PATH));
             return;
         }
 
@@ -94,7 +91,7 @@ public class PlayerProfile extends DataCollection {
     }
 
     public static void save() {
-        writeToFile(filePath, displayName, all);
+        writeToFile(FILE_PATH, DISPLAY_NAME, all);
 
         if (all != null && ConfigState.debugLogging) {
             int count = all.size();
@@ -113,7 +110,7 @@ public class PlayerProfile extends DataCollection {
     }
 
     public void register() {
-        add(this, all, displayName);
+        add(this, all, DISPLAY_NAME);
 
         byUsername.put(username, this);
         byUUID.put(uuid, this);
@@ -126,27 +123,44 @@ public class PlayerProfile extends DataCollection {
     public void deregister() {
         // remove all mentions of this player profile from all countries
         for (Country c : me.rntb.geoCountries.data.Country.all) {
-            if (c.leader != null && c.leader.equals(uuid)) { c.leader = null; }
-            c.citizens.remove(uuid);
+            if (c.getLeader() != null && c.getLeader().equals(uuid))
+                c.setLeaderInternal(null);
+            c.getCitizens().remove(uuid);
         }
 
         byUsername.remove(username);
         byUUID.remove(uuid);
 
-        delete(this, all, displayName);
+        delete(this, all, DISPLAY_NAME);
     }
 
     // ---
 
     @Expose
-    public UUID uuid;
+    private final UUID uuid;
+    public UUID getUUID() {
+        return uuid;
+    }
 
     @Expose
-    public String username; // last known username
+    private String username; // last known username
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String value) {
+        username = value;
+        byUsername.put(value, this);
+    }
 
     @Expose
-    public UUID citizenship = null;
-    public Country getCitizenship() {
+    private UUID citizenship = null;
+    public UUID getCitizenship() {
+        return citizenship;
+    }
+    public void setCitizenshipInternal(UUID value) {
+        citizenship = value;
+    }
+    public Country getCitizenshipCountry() {
         return Country.get(citizenship);
     }
     public boolean hasCitizenship() {
@@ -158,9 +172,14 @@ public class PlayerProfile extends DataCollection {
         CITIZEN,
         LEADER
     }
-
     @Expose
-    public Position position = Position.NONE;
+    private Position position = Position.NONE;
+    public Position getPosition() {
+        return position;
+    }
+    public void setPositionInternal(Position value) {
+        position = value;
+    }
     public String getPositionString() {
         return switch (position) {
             case NONE -> "None";
@@ -173,7 +192,10 @@ public class PlayerProfile extends DataCollection {
     }
 
     @Expose
-    public LinkedHashMap<String, String> settings = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> settings = new LinkedHashMap<>();
+    public LinkedHashMap<String, String> getSettings() {
+        return settings;
+    }
     public static final LinkedHashMap<String, SettingData> settingsData = new LinkedHashMap<>() {{
         put("soundeffects", new SettingData("true",
                                             SettingData.Type.BOOL,
@@ -192,8 +214,11 @@ public class PlayerProfile extends DataCollection {
     }
 
     @Expose
-    public long timeCreated = 0;
-    public String timeCreatedAsString() {
+    private long timeCreated = 0;
+    public long getTimeCreated() {
+        return timeCreated;
+    }
+    public String getTimeCreatedAsString() {
         Instant instant = Instant.ofEpochMilli(timeCreated);
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         return dateTime.format(StringUtil.timeFormatter);
@@ -204,7 +229,7 @@ public class PlayerProfile extends DataCollection {
         if (cApplications == null)
             return List.of();
         return cApplications.stream()
-                            .map(ca -> ca.getToCountry().name).toList();
+                            .map(ca -> ca.getToCountryCountry().getName()).toList();
     }
 
     public Player getOnlinePlayer() {
@@ -223,6 +248,21 @@ public class PlayerProfile extends DataCollection {
         Chunk chunk = getOnlinePlayer().getChunk();
         return "§8(%d, %d)§r"
                .formatted(chunk.getX(), chunk.getZ());
+    }
+
+    @Override
+    public boolean equals(Object otherObject) {
+        if (this == otherObject)
+            return true;
+        if (otherObject == null || getClass() != otherObject.getClass())
+            return false;
+
+        PlayerProfile other = (PlayerProfile) otherObject;
+
+        if (this.uuid == null || other.uuid == null)
+            return false;
+
+        return this.uuid.equals(other.uuid);
     }
 
     @Override

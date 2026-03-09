@@ -11,6 +11,7 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,18 +32,18 @@ public class gcCountrySettings extends GeoCommand {
             return;
         }
 
-        Country country = player.getCitizenship();
+        Country country = player.getCitizenshipCountry();
 
         // if setting a setting, set and escape
-        boolean isLeader = player.position == Position.LEADER;
+        boolean isLeader = player.getPosition() == Position.LEADER;
         if (args.length >= 2) {
             // if not leader, escape
-            if (player.position != Position.LEADER) {
+            if (player.getPosition() != Position.LEADER) {
                 ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to change its settings!");
                 return;
             }
             String toValue = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-            SettingData.setSetting(sender, args[0], toValue, Country.settingsData, country.settings);
+            SettingData.setSetting(sender, args[0], toValue, Country.settingsData, country.getSettings());
             return;
         }
         // else list all/specific setting
@@ -72,11 +73,11 @@ public class gcCountrySettings extends GeoCommand {
 
     private TextComponent.Builder getMessageAll(Country country, boolean isLeader) {
         TextComponent.Builder message = Component.text();
-        for (String key : country.settings.keySet()) {
+        for (String key : country.getSettings().keySet()) {
             SettingData settingData = Country.settingsData.get(key);
             if (settingData == null)
                 continue;
-            message.append(Component.text("§f> " + settingData.toString(country.settings.get(key)) + "  "));
+            message.append(Component.text("§f> " + settingData.toString(country.getSettings().get(key)) + "  "));
             if (isLeader)
                 message.append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
                                                                    "/gc country settings " + key + " " + settingData.defaultValue));
@@ -89,7 +90,7 @@ public class gcCountrySettings extends GeoCommand {
         SettingData settingData = Country.settingsData.get(key);
         if (settingData == null)
             return null;
-        TextComponent.Builder message = Component.text().append(Component.text(settingData.toStringFull(key, country.settings.get(key)) + "  "));
+        TextComponent.Builder message = Component.text().append(Component.text(settingData.toStringFull(key, country.getSettings().get(key)) + "  "));
         if (isLeader)
             message.append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
                                                                "/gc country settings " + key + " " + settingData.defaultValue));
@@ -101,13 +102,13 @@ public class gcCountrySettings extends GeoCommand {
         if (args.length > 2)
             return List.of();
 
-        Country playerCountry = PlayerProfile.get(sender).getCitizenship();
+        Country playerCountry = PlayerProfile.get(sender).getCitizenshipCountry();
         if (playerCountry == null)
             return List.of();
 
         // if no setting mentioned, return all settings as strings
         if (args.length == 1)
-            return playerCountry.settings.keySet().stream().toList();
+            return new ArrayList<>(playerCountry.getSettings().keySet());
 
         // get setting typed before
         SettingData settingData = Country.settingsData.get(args[0]);
@@ -119,6 +120,6 @@ public class gcCountrySettings extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return PlayerProfile.get(sender).position == Position.LEADER;
+        return PlayerProfile.get(sender).getPosition() == Position.LEADER;
     }
 }

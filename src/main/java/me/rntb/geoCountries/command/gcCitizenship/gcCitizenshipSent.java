@@ -34,16 +34,16 @@ public class gcCitizenshipSent extends GeoCommand {
         }
         else {
             for (CitizenshipApplication cApplication : cApplications) {
-                Country country = cApplication.getToCountry();
-                String reason = cApplication.reason;
+                Country country = cApplication.getToCountryCountry();
+                String reason = cApplication.getReason();
                 // truncate
                 if (reason.length() >= 30)
-                    reason = cApplication.reason.substring(0, 20) + "...";
+                    reason = cApplication.getReason().substring(0, 20) + "...";
 
                 message.append(Component.text("§a%s§f (§eReason§f: %s§f) "
-                                              .formatted(country.name, reason)))
+                                              .formatted(country.getName(), reason)))
                        // [Unsend] button
-                       .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship unsend " + country.name + "'>" +
+                       .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship unsend " + country.getName() + "'>" +
                                                        "<hover:show_text:'<white>Click to unsend this citizenship application.</white>'>" +
                                                        "<red><bold>[Unsend]</bold></red>" +
                                                        "</hover></click>"))
@@ -60,7 +60,7 @@ public class gcCitizenshipSent extends GeoCommand {
         if (player.hasCitizenship())
             return false;
 
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.uuid);
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.getUUID());
         return cApplications != null && !cApplications.isEmpty();
     }
 }

@@ -18,8 +18,8 @@ import java.util.stream.Stream;
 
 public class Country extends DataCollection {
 
-    public static String filePath;
-    public static String displayName;
+    public static final String FILE_PATH = "data/countries";
+    public static final String DISPLAY_NAME = "Country";
 
     // list of all countries existing
     public static ArrayList<Country> all = null;
@@ -40,13 +40,10 @@ public class Country extends DataCollection {
     }
 
     public static void init() {
-        filePath = "data/countries";
-        displayName = "Country";
-
-        all = readFromFile(filePath, displayName, new TypeToken<ArrayList<Country>>() { }.getType());
+        all = readFromFile(FILE_PATH, DISPLAY_NAME, new TypeToken<ArrayList<Country>>() { }.getType());
         if (all == null) {
             ChatUtil.sendPrefixedLogErrorMessage("ReadFromFile(%s) was null, try backing it up and deleting the file!"
-                                                 .formatted(filePath));
+                                                 .formatted(FILE_PATH));
             return;
         }
 
@@ -70,7 +67,7 @@ public class Country extends DataCollection {
     }
 
     public static void save() {
-        writeToFile(Country.filePath, Country.displayName, all);
+        writeToFile(Country.FILE_PATH, Country.DISPLAY_NAME, all);
 
         if (all != null && ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Saved " + all.size() + " Countries");
@@ -87,7 +84,7 @@ public class Country extends DataCollection {
     }
 
     public void register() {
-        add(this, all, displayName);
+        add(this, all, DISPLAY_NAME);
         byName.put(name, this);
         byUUID.put(uuid, this);
 
@@ -111,28 +108,44 @@ public class Country extends DataCollection {
         // delete any associated applications
         CitizenshipApplicationService.deleteAllSentByToCountry(this);
 
-        delete(this, all, displayName);
+        delete(this, all, DISPLAY_NAME);
     }
 
     // ---
 
     @Expose
-    public UUID uuid;
-
-    @Expose
-    public String name;
-    public void setName(String name) {
-        byName.put(name, this);
+    private UUID uuid;
+    public UUID getUUID() {
+        return uuid;
     }
 
     @Expose
-    public UUID leader = null;
-    public PlayerProfile getLeader() {
+    private String name;
+    public String getName() {
+        return name;
+    }
+    public void setName(String value) {
+        name = value;
+        byName.put(value, this);
+    }
+
+    @Expose
+    private UUID leader = null;
+    public UUID getLeader() {
+      return leader;
+    }
+    public PlayerProfile getLeaderPlayerProfile() {
         return PlayerProfile.get(leader);
     }
+    public void setLeaderInternal(UUID value) {
+        leader = value;
+    }
 
     @Expose
-    public ArrayList<UUID> citizens = new ArrayList<>();
+    private final ArrayList<UUID> citizens = new ArrayList<>();
+    public ArrayList<UUID> getCitizens() {
+        return citizens;
+    }
     public List<Player> getOnlineCitizens() {
         List<Player> players = new ArrayList<>();
 
@@ -150,22 +163,25 @@ public class Country extends DataCollection {
 
         return players;
     }
-    public List<String> citizensAsStrings() {
+    public List<String> getCitizensAsStrings() {
         return citizens.stream()
-                       .map(uuid -> PlayerProfile.get(uuid).username).toList();
+                       .map(uuid -> PlayerProfile.get(uuid).getUsername()).toList();
     }
-    public List<PlayerProfile> citizensSortedByPosition() {
+    public List<PlayerProfile> getCitizensSortedByPosition() {
         return citizens.stream()
                        .map(PlayerProfile::get)
                        .sorted(Comparator.comparing(PlayerProfile::getPositionLevel))
                        .toList().reversed();
     }
-    public int citizenCount() {
+    public int getCitizenCount() {
         return citizens.size();
     }
 
     @Expose
-    public LinkedHashMap<String, String> settings = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> settings = new LinkedHashMap<>();
+    public LinkedHashMap<String, String> getSettings() {
+        return settings;
+    }
     public static final LinkedHashMap<String, SettingData> settingsData = new LinkedHashMap<>() {{
         put("mapcolour", new SettingData("#FF0000",
                                          SettingData.Type.COLOUR,
@@ -205,21 +221,15 @@ public class Country extends DataCollection {
     @Expose(serialize = false, deserialize = false)
     private List<Long> claimChunks;
     public List<Long> getClaimChunks() {
-        return Collections.unmodifiableList(claimChunks);
-    }
-    public void addClaimChunk(long claimChunkKey) {
-        claimChunks.add(claimChunkKey);
-    }
-    public void removeClaimChunk(long claimChunkKey) {
-        claimChunks.remove(claimChunkKey);
-    }
-    public boolean hasAnyClaimChunks() {
-        return !claimChunks.isEmpty();
+        return claimChunks;
     }
 
     @Expose
-    public long timeCreated = 0;
-    public String timeCreatedAsString() {
+    private long timeCreated = 0;
+    public long getTimeCreated() {
+        return timeCreated;
+    }
+    public String getTimeCreatedAsString() {
         Instant instant = Instant.ofEpochMilli(timeCreated);
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         return dateTime.format(StringUtil.timeFormatter);
@@ -230,7 +240,7 @@ public class Country extends DataCollection {
         if (cApplications == null)
             return List.of();
         return cApplications.stream()
-                            .map(ca -> ca.getApplicant().username).toList();
+                            .map(ca -> ca.getApplicantPlayerProfile().getUsername()).toList();
     }
 
     // gson constructor
@@ -244,8 +254,23 @@ public class Country extends DataCollection {
     }
 
     @Override
+    public boolean equals(Object otherObject) {
+        if (this == otherObject)
+            return true;
+        if (otherObject == null || getClass() != otherObject.getClass())
+            return false;
+
+        Country other = (Country) otherObject;
+
+        if (uuid == null || other.uuid == null)
+            return false;
+
+        return uuid.equals(other.uuid);
+    }
+
+    @Override
     public String toString() {
         return "Country(name=%s, leader=%s, citizens=%d)"
-               .formatted(this.name, this.getLeader().username, this.citizenCount());
+               .formatted(name, getLeaderPlayerProfile().getUsername(), getCitizenCount());
     }
 }

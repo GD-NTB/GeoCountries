@@ -10,26 +10,26 @@ public class CitizenshipService {
         leaveCountry(player);
 
         // add to new country
-        country.citizens.add(player.uuid);
+        country.getCitizens().add(player.getUUID());
 
-        player.citizenship = country.uuid;
-        player.position = Position.CITIZEN;
+        player.setCitizenshipInternal(country.getUUID());
+        player.setPositionInternal(Position.CITIZEN);
 
         // remove all pending citizenship applications
         CitizenshipApplicationService.deleteAllSentByApplicant(player);
     }
 
     public static void leaveCountry(PlayerProfile player) {
-        Country currentCountry = player.getCitizenship();
+        Country currentCountry = player.getCitizenshipCountry();
         if (currentCountry == null)
             return;
 
-        if (player.uuid.equals(currentCountry.leader))
+        if (player.getUUID().equals(currentCountry.getLeader()))
             PositionService.demoteFromLeader(player);
 
-        currentCountry.citizens.remove(player.uuid);
+        currentCountry.getCitizens().remove(player.getUUID());
 
-        player.citizenship = null;
-        player.position = Position.NONE;
+        player.setCitizenshipInternal(null);
+        player.setPositionInternal(Position.NONE);
     }
 }

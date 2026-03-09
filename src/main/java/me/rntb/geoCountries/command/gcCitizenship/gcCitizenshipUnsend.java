@@ -29,7 +29,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§6To what country was the citizenship application sent to which you want to unsend?");
             // start waiting for response
-            Response.startWaiting(player.uuid,
+            Response.startWaiting(player.getUUID(),
                                   new Response(this::onResponse,
                                                sender),
                                   true);
@@ -51,7 +51,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
             return;
         }
 
-        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.uuid);
+        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.getUUID());
 
         // if doesnt have any pending applications, escape
         if (cApplications == null) {
@@ -60,7 +60,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
         }
 
         CitizenshipApplication cApplication = cApplications.stream()
-                                                           .filter(ca -> ca.toCountry.equals(toCountry.uuid))
+                                                           .filter(ca -> ca.getToCountry().equals(toCountry.getUUID()))
                                                            .findFirst().orElse(null);
 
         // if havent sent application to this country, escape
@@ -80,7 +80,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
             return List.of();
 
         PlayerProfile player = PlayerProfile.get(UuidUtil.getUUIDOfCommandSender(sender));
-        if (player.position != Position.LEADER)
+        if (player.getPosition() != Position.LEADER)
             return List.of();
 
         return player.getSentCitizenshipApplicationsAsNames();
@@ -92,7 +92,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
         if (player.hasCitizenship())
             return false;
 
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.uuid);
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.getUUID());
         return cApplications != null && !cApplications.isEmpty();
     }
 }

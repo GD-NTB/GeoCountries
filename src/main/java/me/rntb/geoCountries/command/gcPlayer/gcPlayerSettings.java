@@ -9,6 +9,7 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class gcPlayerSettings extends GeoCommand {
         // if setting a setting, set and escape
         if (args.length >= 2) {
             String toValue = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-            SettingData.setSetting(sender, args[0], toValue, PlayerProfile.settingsData, player.settings);
+            SettingData.setSetting(sender, args[0], toValue, PlayerProfile.settingsData, player.getSettings());
             return;
         }
         // else list all/specific setting
@@ -56,11 +57,11 @@ public class gcPlayerSettings extends GeoCommand {
 
     private TextComponent.Builder getMessageAll(PlayerProfile player) {
         TextComponent.Builder message = Component.text();
-        for (String key : player.settings.keySet()) {
+        for (String key : player.getSettings().keySet()) {
             SettingData settingData = PlayerProfile.settingsData.get(key);
             if (settingData == null)
                 continue;
-            message.append(Component.text("§f> " + settingData.toString(player.settings.get(key)) + "  "))
+            message.append(Component.text("§f> " + settingData.toString(player.getSettings().get(key)) + "  "))
                    .append(SettingData.getEditButtonComponents("/gc player settings " + key + " ",
                                                                "/gc player settings " + key + " " + settingData.defaultValue))
                    .append(Component.newline());
@@ -72,7 +73,7 @@ public class gcPlayerSettings extends GeoCommand {
         SettingData settingData = PlayerProfile.settingsData.get(key);
         if (settingData == null)
             return null;
-        return Component.text().append(Component.text(settingData.toStringFull(key, player.settings.get(key)) + "  "))
+        return Component.text().append(Component.text(settingData.toStringFull(key, player.getSettings().get(key)) + "  "))
                                .append(SettingData.getEditButtonComponents("/gc player settings " + key + " ",
                                                                            "/gc player settings " + key + " " + settingData.defaultValue));
     }
@@ -88,7 +89,7 @@ public class gcPlayerSettings extends GeoCommand {
 
         // if no setting mentioned, return all settings as strings
         if (args.length == 1)
-            return player.settings.keySet().stream().toList();
+            return new ArrayList<>(player.getSettings().keySet());
 
         // get setting typed before
         SettingData settingData = PlayerProfile.settingsData.get(args[0]);

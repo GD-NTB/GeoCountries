@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class RenderCountry {
 
     private final UUID uuid;
-    public UUID getUuid() {
+    public UUID getUUID() {
         return uuid;
     }
 
@@ -40,9 +40,9 @@ public class RenderCountry {
     }
 
     public static RenderCountry from(Country country) {
-        return new RenderCountry(country.uuid,
-                                 country.name,
-                                 country.settings.get("mapcolour"),
+        return new RenderCountry(country.getUUID(),
+                                 country.getName(),
+                                 country.getSettings().get("mapcolour"),
                                  "hover text",
                                  "click text",
                                  country.getClaimChunks());

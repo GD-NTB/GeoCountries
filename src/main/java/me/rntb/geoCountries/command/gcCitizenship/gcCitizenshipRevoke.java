@@ -26,7 +26,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
         PlayerProfile senderProfile = PlayerProfile.get(sender);
 
         // if doesnt have citizenship or isn't leader, escape
-        if (!senderProfile.hasCitizenship() || senderProfile.position != Position.LEADER) {
+        if (!senderProfile.hasCitizenship() || senderProfile.getPosition() != Position.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to revoke a player's citizenship!");
             return;
         }
@@ -34,7 +34,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§6What is the name of the player you want to revoke the citizenship of?");
             // start waiting for response
-            Response.startWaiting(senderProfile.uuid,
+            Response.startWaiting(senderProfile.getUUID(),
                                   new Response(this::onResponse,
                                                sender),
                                   true);
@@ -47,7 +47,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
         PlayerProfile senderProfile = PlayerProfile.get(sender);
 
         // if revoking own citizenship, escape
-        if (playerName.equals(senderProfile.username)) {
+        if (playerName.equals(senderProfile.getUsername())) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou can't revoke your own citizenship, use §f/gc citizenship renounce§c instead!");
             return;
         }
@@ -60,8 +60,8 @@ public class gcCitizenshipRevoke extends GeoCommand {
         }
 
         // if player is not citizen of sender's country, escape
-        if (!player.citizenship.equals(senderProfile.citizenship)) {
-            ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + player.username + "§c is not a citizen of your country!");
+        if (!player.getCitizenship().equals(senderProfile.getCitizenship())) {
+            ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + player.getUsername() + "§c is not a citizen of your country!");
             return;
         }
 
@@ -71,7 +71,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                                    sender,
-                                                   new String[] { player.username }),
+                                                   new String[] { player.getUsername() }),
                                   true);
 
     }
@@ -79,14 +79,14 @@ public class gcCitizenshipRevoke extends GeoCommand {
     private void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile player = PlayerProfile.get(args[0]);
 
-        Country country = player.getCitizenship();
+        Country country = player.getCitizenshipCountry();
 
         CitizenshipService.leaveCountry(player);
 
-        ChatUtil.sendPrefixedMessage(sender, "§aRevoked the citizenship of §f" + country.name + "§a!");
+        ChatUtil.sendPrefixedMessage(sender, "§aRevoked the citizenship of §f" + country.getName() + "§a!");
 
         // broadcast notif to country
-        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + player.username + "§6 is no longer a citizen of §f" + country.name + "§6!", true);
+        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + player.getUsername() + "§6 is no longer a citizen of §f" + country.getName() + "§6!", true);
     }
 
     @Override
@@ -94,16 +94,16 @@ public class gcCitizenshipRevoke extends GeoCommand {
         if (args.length != 1)
             return List.of();
 
-        Country country = PlayerProfile.get(sender).getCitizenship();
+        Country country = PlayerProfile.get(sender).getCitizenshipCountry();
         if (country == null)
             return List.of();
 
-        return country.citizensAsStrings();
+        return country.getCitizensAsStrings();
     }
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
         PlayerProfile player = PlayerProfile.get(sender);
-        return player.position == Position.LEADER && player.getCitizenship().citizenCount() > 1; // if 1, leader is the only citizen
+        return player.getPosition() == Position.LEADER && player.getCitizenshipCountry().getCitizenCount() > 1; // if 1, leader is the only citizen
     }
 }

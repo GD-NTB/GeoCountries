@@ -27,26 +27,26 @@ public class ChatListener implements Listener {
     }
 
     private void doPrefixLogic(AsyncChatEvent event, PlayerProfile player) {
-        Country playerCountry = player.getCitizenship();
+        Country playerCountry = player.getCitizenshipCountry();
         // if not enabled in config, player doesnt have country, country has prefix disabled, or country prefix is null, escape
-        if (!ConfigState.countryPrefixEnabled || playerCountry == null || playerCountry.settings.get("prefixenabled").equals("false") || playerCountry.settings.get("prefix").equals("null"))
+        if (!ConfigState.countryPrefixEnabled || playerCountry == null || playerCountry.getSettings().get("prefixenabled").equals("false") || playerCountry.getSettings().get("prefix").equals("null"))
             return;
 
         // build prefix and prepend
         ChatUtil.ChatColour chatColour = ChatUtil.ChatColour.WHITE;
         try {
-            chatColour = ChatUtil.ChatColour.valueOf(playerCountry.settings.get("prefixcolour"));
+            chatColour = ChatUtil.ChatColour.valueOf(playerCountry.getSettings().get("prefixcolour"));
         } catch (IllegalArgumentException ignored) { }
         Component prefix = Component.text((ConfigState.countryPrefixFormat + " ")
                                           .formatted(ChatUtil.getChatColourByEnum(chatColour),
-                                                     playerCountry.settings.get("prefix")));
+                                                     playerCountry.getSettings().get("prefix")));
         event.renderer((source, sourceDisplayName, message, viewer) ->
                 prefix.append(Component.text("§r")).append(sourceDisplayName).append(Component.text(": ")).append(message)
         );
     }
 
     private void doResponseLogic(AsyncChatEvent event, PlayerProfile player) {
-        UUID uuid = player.uuid;
+        UUID uuid = player.getUUID();
 
         // if wasn't waiting for response, escape
         if (!Response.isWaiting(uuid))

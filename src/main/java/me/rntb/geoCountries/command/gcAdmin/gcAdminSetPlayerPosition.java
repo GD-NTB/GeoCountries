@@ -55,7 +55,7 @@ public class gcAdminSetPlayerPosition extends GeoCommand {
                 PositionService.promoteToLeader(player);
                 break;
             case CITIZEN:
-                if (player.position == Position.LEADER)
+                if (player.getPosition() == Position.LEADER)
                     PositionService.demoteFromLeader(player);
                 break;
             case NONE:

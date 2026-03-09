@@ -23,7 +23,7 @@ public class gcDebugCreateCountry extends GeoCommand {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§6What do you want the name of the new country to be?");
             // start waiting for response
-            Response.startWaiting(PlayerProfile.get(sender).uuid,
+            Response.startWaiting(PlayerProfile.get(sender).getUUID(),
                                   new Response(this::onResponse,
                                                sender),
                                   true);
@@ -43,7 +43,7 @@ public class gcDebugCreateCountry extends GeoCommand {
         }
 
         Country newCountry = new Country(UUID.randomUUID(), countryName);
-        newCountry.leader = null;
+        newCountry.setLeaderInternal(null);
 
         // create country
         newCountry.register();

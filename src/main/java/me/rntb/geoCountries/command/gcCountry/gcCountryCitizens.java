@@ -30,7 +30,7 @@ public class gcCountryCitizens extends GeoCommand {
         // if no args, country = player's country
         if (args.length == 0) {
             PlayerProfile player = PlayerProfile.get(sender);
-            country = player.getCitizenship();
+            country = player.getCitizenshipCountry();
             if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
                                                      """
@@ -75,17 +75,17 @@ public class gcCountryCitizens extends GeoCommand {
         int effectiveIndex = 0, pageCount = 0;
         String commandForPrevious = "", commandForNext = "";
 
-        int citizenCount = country.citizenCount();
+        int citizenCount = country.getCitizenCount();
         if (citizenCount == 0) {
             message.append(Component.text("§cThere are no citizens of this country.\n"));
         }
         else {
             message.append(Component.text("§e%s§f has §e%d§f citizen%s:\n"
-                      .formatted(country.name, citizenCount, StringUtil.leadingS(citizenCount))));
+                      .formatted(country.getName(), citizenCount, StringUtil.leadingS(citizenCount))));
             StringBuilder citizensText = new StringBuilder();
-            for (PlayerProfile citizen : country.citizensSortedByPosition()) {
+            for (PlayerProfile citizen : country.getCitizensSortedByPosition()) {
                 citizensText.append("§f> §a%s§f (§e%s§f)\n"
-                                    .formatted(citizen.username, citizen.getPositionString()));
+                                    .formatted(citizen.getUsername(), citizen.getPositionString()));
             }
             // calculate page
             Pagination page = Pagination.paginate(String.valueOf(citizensText), "\n", index, 20);
@@ -93,8 +93,8 @@ public class gcCountryCitizens extends GeoCommand {
                    .append(Component.newline());
             pageCount = page.pageCount;
             effectiveIndex = page.index;
-            commandForPrevious = "/gc country citizens " + (effectiveIndex-1) + " " + country.name;
-            commandForNext = "/gc country citizens " + (effectiveIndex+1) + " " + country.name;
+            commandForPrevious = "/gc country citizens " + (effectiveIndex-1) + " " + country.getName();
+            commandForNext = "/gc country citizens " + (effectiveIndex+1) + " " + country.getName();
         }
 
         message.append(Component.text("§6====================================="))

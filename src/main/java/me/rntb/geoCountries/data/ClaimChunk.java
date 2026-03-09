@@ -21,8 +21,8 @@ import java.util.UUID;
 
 public class ClaimChunk extends DataCollection {
 
-    public static String filePath;
-    public static String displayName;
+    public static String FILE_PATH = "data/claimchunks";
+    public static String DISPLAY_NAME = "ClaimChunk";
 
     // list of all claimchunks existing
     public static ArrayList<ClaimChunk> all = null;
@@ -44,13 +44,10 @@ public class ClaimChunk extends DataCollection {
 
 
     public static void init() {
-        filePath = "data/claimchunks";
-        displayName = "ClaimChunk";
-
-        all = readFromFile(filePath, displayName, new TypeToken<ArrayList<ClaimChunk>>() { }.getType());
+        all = readFromFile(FILE_PATH, DISPLAY_NAME, new TypeToken<ArrayList<ClaimChunk>>() { }.getType());
         if (all == null) {
             ChatUtil.sendPrefixedLogErrorMessage("ReadFromFile(%s) was null, try backing it up and deleting the file!"
-                                                 .formatted(filePath));
+                                                 .formatted(FILE_PATH));
             return;
         }
 
@@ -60,7 +57,7 @@ public class ClaimChunk extends DataCollection {
             byKey.put(claimChunk.key, claimChunk);
 
             // add claimchunk to country
-            claimChunk.getOwnerCountry().addClaimChunk(claimChunk.key);
+            claimChunk.getOwnerCountry().getClaimChunks().add(claimChunk.key);
 
             // unpack key into coordinates
             int[] coords = unpackFromKey(claimChunk.key);
@@ -73,7 +70,7 @@ public class ClaimChunk extends DataCollection {
     }
 
     public static void save() {
-        writeToFile(ClaimChunk.filePath, ClaimChunk.displayName, all);
+        writeToFile(ClaimChunk.FILE_PATH, ClaimChunk.DISPLAY_NAME, all);
 
         if (all != null && ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Saved " + all.size() + " ClaimChunks");
@@ -90,11 +87,11 @@ public class ClaimChunk extends DataCollection {
     }
 
     public void register() {
-        add(this, all, displayName);
+        add(this, all, DISPLAY_NAME);
         byKey.put(key, this);
 
         // add this claimchunk to country
-        getOwnerCountry().addClaimChunk(key);
+        getOwnerCountry().getClaimChunks().add(key);
 
         this.timeCreated = System.currentTimeMillis();
 
@@ -106,7 +103,7 @@ public class ClaimChunk extends DataCollection {
         byKey.remove(key);
 
         // remove this claimchunk from country
-        getOwnerCountry().removeClaimChunk(key);
+        getOwnerCountry().getClaimChunks().remove(key);
 
         // delete any associated applications
         // --
@@ -114,7 +111,7 @@ public class ClaimChunk extends DataCollection {
 //        // update maps
 //        Pl3xMapIntegration.clearClaim(this);
 
-        delete(this, all, displayName);
+        delete(this, all, DISPLAY_NAME);
     }
 
     // ---
@@ -141,7 +138,6 @@ public class ClaimChunk extends DataCollection {
         return Pl3xMapIntegration.api.getWorldRegistry().get(getBukkitWorld().getName());
     }
 
-    // todo: dont serialise these, they can be unpacked from the key
     @Expose(serialize = false, deserialize = false)
     private int x;
     public int getX() {
@@ -166,7 +162,10 @@ public class ClaimChunk extends DataCollection {
 
     @Expose
     @SerializedName(value = "t", alternate = "timeCreated")
-    public long timeCreated = 0;
+    private long timeCreated = 0;
+    public long getTimeCreated() {
+        return timeCreated;
+    }
     public String timeCreatedAsString() {
         Instant instant = Instant.ofEpochMilli(timeCreated);
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
@@ -182,8 +181,20 @@ public class ClaimChunk extends DataCollection {
     }
 
     @Override
+    public boolean equals(Object otherObject) {
+        if (this == otherObject)
+            return true;
+        if (otherObject == null || getClass() != otherObject.getClass())
+            return false;
+
+        ClaimChunk other = (ClaimChunk) otherObject;
+
+        return key == other.key;
+    }
+
+    @Override
     public String toString() {
         return "ClaimChunk(world=%s, x=%d, z=%d, owner=%s)"
-               .formatted(this.world, this.x, this.z, this.owner);
+               .formatted(world, x, z, owner);
     }
 }

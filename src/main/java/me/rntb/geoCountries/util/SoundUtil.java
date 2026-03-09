@@ -16,7 +16,7 @@ public class SoundUtil {
         if (!ConfigState.soundEffects || player == null)
             return;
         PlayerProfile toPlayerProfile = PlayerProfile.get(player);
-        if (toPlayerProfile == null || toPlayerProfile.settings.get("soundeffects").equals("false"))
+        if (toPlayerProfile == null || toPlayerProfile.getSettings().get("soundeffects").equals("false"))
             return;
 
         Sound sound;
@@ -29,7 +29,7 @@ public class SoundUtil {
                 break;
 
             case CHAT_NOTIF:
-                if (toPlayerProfile.settings.get("chatnotificationsounds").equals("false"))
+                if (toPlayerProfile.getSettings().get("chatnotificationsounds").equals("false"))
                     return;
                 sound = Sound.BLOCK_NOTE_BLOCK_HARP;
                 pitch = 2.0f;

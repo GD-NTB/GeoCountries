@@ -23,7 +23,7 @@ public class gcPurgeUsername extends GeoCommand {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§6What is the username of the player you want to purge?");
             // start waiting for response
-            Response.startWaiting(PlayerProfile.get(sender).uuid,
+            Response.startWaiting(PlayerProfile.get(sender).getUUID(),
                                   new Response(this::onResponse,
                                                sender),
                                   true);
@@ -51,7 +51,7 @@ public class gcPurgeUsername extends GeoCommand {
         PlayerProfile player = PlayerProfile.get(args[0]);
         player.deregister();
 
-        ChatUtil.sendPrefixedMessage(sender, "§aPurged player §f" + player.username + "§a.");
+        ChatUtil.sendPrefixedMessage(sender, "§aPurged player §f" + player.getUsername() + "§a.");
     }
 
     @Override

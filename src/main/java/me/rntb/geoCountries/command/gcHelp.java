@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // todo: rewrite using new Command.getHelpPage
@@ -107,7 +108,7 @@ public class gcHelp extends GeoCommand {
         if (sender instanceof Player player)
             childCommands = GeoCommand.baseCommand.allowedChildCommands(player);
         else
-            childCommands = GeoCommand.baseCommand.childCommands.values().stream().toList();
+            childCommands = new ArrayList<>(GeoCommand.baseCommand.childCommands.values());
 
         // append help for each command
         for (GeoCommand command : childCommands) {

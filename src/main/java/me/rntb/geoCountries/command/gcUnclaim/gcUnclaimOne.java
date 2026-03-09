@@ -25,14 +25,14 @@ public class gcUnclaimOne extends GeoCommand {
         Chunk chunk = player.getChunk();
         long chunkKey = chunk.getChunkKey();
 
-        if (playerProfile.position != Position.LEADER) {
+        if (playerProfile.getPosition() != Position.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to unclaim chunks! " + playerProfile.getChunkString());
             return;
         }
 
-        Country country = playerProfile.getCitizenship();
+        Country country = playerProfile.getCitizenshipCountry();
         ClaimChunk claimChunk = ClaimChunk.get(chunkKey);
-        if (claimChunk == null || !claimChunk.getOwner().equals(country.uuid)) {
+        if (claimChunk == null || !claimChunk.getOwner().equals(country.getUUID())) {
             ChatUtil.sendPrefixedMessage(sender, "§cThis chunk is not part of your country's claim! " + playerProfile.getChunkString());
             return;
         }
@@ -44,6 +44,6 @@ public class gcUnclaimOne extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return PlayerProfile.get(sender).position == Position.LEADER;
+        return PlayerProfile.get(sender).getPosition() == Position.LEADER;
     }
 }

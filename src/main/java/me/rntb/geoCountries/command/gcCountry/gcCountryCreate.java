@@ -26,15 +26,15 @@ public class gcCountryCreate extends GeoCommand {
 
         // already has citizenship
         if (player.hasCitizenship()) {
-            Country country = player.getCitizenship();
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must first renounce your citizenship of §f" + country.name + "§c using §f/gc citizenship renounce§c before creating a country!");
+            Country country = player.getCitizenshipCountry();
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must first renounce your citizenship of §f" + country.getName() + "§c using §f/gc citizenship renounce§c before creating a country!");
             return;
         }
 
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§6What do you want the name of your new country to be?");
             // start waiting for response
-            Response.startWaiting(player.uuid,
+            Response.startWaiting(player.getUUID(),
                                   new Response(this::onResponse,
                                                sender),
                                   true);

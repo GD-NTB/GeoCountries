@@ -24,7 +24,7 @@ public class gcCountryInfo extends GeoCommand {
         // if no args, get player country
         if (args.length == 0) {
             PlayerProfile player = PlayerProfile.get(sender);
-            country = player.getCitizenship();
+            country = player.getCitizenshipCountry();
             if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
                                                      """
@@ -46,10 +46,10 @@ public class gcCountryInfo extends GeoCommand {
             }
         }
 
-        PlayerProfile leader = country.getLeader();
-        long daysAgo = DateUtil.daysAgo(country.timeCreated);
+        PlayerProfile leader = country.getLeaderPlayerProfile();
+        long daysAgo = DateUtil.daysAgo(country.getTimeCreated());
 
-        String countryMotto = country.settings.get("motto");
+        String countryMotto = country.getSettings().get("motto");
 
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
                          """
@@ -60,11 +60,11 @@ public class gcCountryInfo extends GeoCommand {
                          §f> §eCitizens§f: %s
                          §f> Created on §2%s §8(%s day%s ago)
                          §6================================="""
-                         .formatted(country.name,
+                         .formatted(country.getName(),
                                     !countryMotto.equals("null") ? countryMotto : "§cNone",
-                                    leader != null ? leader.username : "§cNone",
-                                    country.citizenCount(),
-                                    country.timeCreatedAsString(),
+                                    leader != null ? leader.getUsername() : "§cNone",
+                                    country.getCitizenCount(),
+                                    country.getTimeCreatedAsString(),
                                     daysAgo, StringUtil.leadingS(daysAgo));
         ChatUtil.sendPrefixedMessage(sender, message);
     }

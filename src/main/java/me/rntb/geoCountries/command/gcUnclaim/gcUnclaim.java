@@ -26,6 +26,6 @@ public class gcUnclaim extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return PlayerProfile.get(sender).position == Position.LEADER;
+        return PlayerProfile.get(sender).getPosition() == Position.LEADER;
     }
 }

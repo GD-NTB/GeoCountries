@@ -24,7 +24,7 @@ public class gcAdminDeleteCountry extends GeoCommand {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§6What is the name of the country you want to delete?");
             // start waiting for response
-            Response.startWaiting(PlayerProfile.get(sender).uuid,
+            Response.startWaiting(PlayerProfile.get(sender).getUUID(),
                                   new Response(this::onResponse,
                                                sender),
                                   true);

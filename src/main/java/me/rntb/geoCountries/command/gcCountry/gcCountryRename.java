@@ -31,7 +31,7 @@ public class gcCountryRename extends GeoCommand {
         }
 
         // if not leader of country, escape
-        if (player.position != Position.LEADER) {
+        if (player.getPosition() != Position.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to change its name!");
             return;
         }
@@ -39,7 +39,7 @@ public class gcCountryRename extends GeoCommand {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§6What do you want the new name of your country to be?");
             // start waiting for response
-            Response.startWaiting(player.uuid,
+            Response.startWaiting(player.getUUID(),
                                   new Response(this::onResponse,
                                                sender),
                                   true);
@@ -69,13 +69,13 @@ public class gcCountryRename extends GeoCommand {
     private void onConfirm(CommandSender sender, String[] args) {
         String countryName = args[0];
         PlayerProfile player = PlayerProfile.get(sender);
-        Country country = player.getCitizenship();
+        Country country = player.getCitizenshipCountry();
 
         country.setName(countryName);
 
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aRenamed country to §f" + countryName + "§a!");
 
-        ChatUtil.broadcastPrefixedMessage("§6The country of §f" + country.name + "§6 has been renamed to §f" + countryName + "§6!");
+        ChatUtil.broadcastPrefixedMessage("§6The country of §f" + country.getName() + "§6 has been renamed to §f" + countryName + "§6!");
 
         // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has now been renamed to §f" + countryName + "§6!", true);
@@ -83,6 +83,6 @@ public class gcCountryRename extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return PlayerProfile.get(sender).position == Position.LEADER;
+        return PlayerProfile.get(sender).getPosition() == Position.LEADER;
     }
 }
