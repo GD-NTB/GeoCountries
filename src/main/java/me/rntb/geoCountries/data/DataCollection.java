@@ -2,10 +2,13 @@ package me.rntb.geoCountries.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.FileUtil;
+import me.rntb.geoCountries.util.TimeUtil;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -20,6 +23,16 @@ public abstract class DataCollection {
 
     private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
                                                       .create();
+
+    @Expose
+    @SerializedName(value = "t", alternate = "timeCreated")
+    long timeCreated;
+    public long getTimeCreated() {
+        return timeCreated;
+    }
+    public String getTimeCreatedAsString() {
+        return TimeUtil.converTimeToString(timeCreated);
+    }
 
     static <T> ArrayList<T> readFromFile(String filePath, String displayName, Type type) {
         if (GeoCountries.pluginAbsoluteDataFolderPath == null)
@@ -71,14 +84,16 @@ public abstract class DataCollection {
     }
 
     // register new datacollection to all
-    public static <T> void add(T dataCollection, List<T> all, String displayName) {
+    public static <T extends DataCollection> void add(T dataCollection, List<T> all, String displayName) {
+        dataCollection.timeCreated = System.currentTimeMillis();
+
         all.add(dataCollection);
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Added new " + displayName + ".");
     }
 
     // delete datacollection from all
-    public static <T> void delete(T dataCollection, List<T> all, String displayName) {
+    public static <T extends DataCollection> void delete(T dataCollection, List<T> all, String displayName) {
         all.remove(dataCollection);
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Deleted " + displayName + ".");

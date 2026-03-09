@@ -69,8 +69,6 @@ public class CitizenshipApplicationService {
         // add to sentByToCountry
         CitizenshipApplication.sentByToCountry.computeIfAbsent(cApplication.getToCountry(), v -> new ArrayList<>()).add(cApplication);
 
-        cApplication.setTimeCreated(System.currentTimeMillis());
-
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Sent open CitizenshipApplication");
 

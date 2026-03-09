@@ -12,9 +12,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -115,8 +112,6 @@ public class PlayerProfile extends DataCollection {
         byUsername.put(username, this);
         byUUID.put(uuid, this);
 
-        timeCreated = System.currentTimeMillis();
-
         settings = buildDefaultSettings();
     }
 
@@ -211,17 +206,6 @@ public class PlayerProfile extends DataCollection {
                                       .collect(LinkedHashMap::new,
                                               (m, e) -> m.put(e.getKey(), e.getValue().defaultValue),
                                               LinkedHashMap::putAll);
-    }
-
-    @Expose
-    private long timeCreated = 0;
-    public long getTimeCreated() {
-        return timeCreated;
-    }
-    public String getTimeCreatedAsString() {
-        Instant instant = Instant.ofEpochMilli(timeCreated);
-        LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        return dateTime.format(StringUtil.timeFormatter);
     }
 
     public List<String> getSentCitizenshipApplicationsAsNames() {

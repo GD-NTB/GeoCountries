@@ -7,12 +7,8 @@ import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.service.CitizenshipService;
 import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.entity.Player;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -87,8 +83,6 @@ public class Country extends DataCollection {
         add(this, all, DISPLAY_NAME);
         byName.put(name, this);
         byUUID.put(uuid, this);
-
-        timeCreated = System.currentTimeMillis();
 
         // create settings
         settings = buildDefaultSettings();
@@ -222,17 +216,6 @@ public class Country extends DataCollection {
     private List<Long> claimChunks;
     public List<Long> getClaimChunks() {
         return claimChunks;
-    }
-
-    @Expose
-    private long timeCreated = 0;
-    public long getTimeCreated() {
-        return timeCreated;
-    }
-    public String getTimeCreatedAsString() {
-        Instant instant = Instant.ofEpochMilli(timeCreated);
-        LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        return dateTime.format(StringUtil.timeFormatter);
     }
 
     public List<String> getReceivedCitizenshipApplicationsAsUsernames() {

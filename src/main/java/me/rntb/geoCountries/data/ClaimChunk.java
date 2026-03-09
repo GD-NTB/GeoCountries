@@ -8,12 +8,8 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.integration.IntegrationState;
 import me.rntb.geoCountries.integration.pl3xmap.Pl3xMapIntegration;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.World;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -93,8 +89,6 @@ public class ClaimChunk extends DataCollection {
         // add this claimchunk to country
         getOwnerCountry().getClaimChunks().add(key);
 
-        this.timeCreated = System.currentTimeMillis();
-
 //        // update maps
 //        Pl3xMapIntegration.addClaim(this);
     }
@@ -158,18 +152,6 @@ public class ClaimChunk extends DataCollection {
     }
     public Country getOwnerCountry() {
         return Country.get(owner);
-    }
-
-    @Expose
-    @SerializedName(value = "t", alternate = "timeCreated")
-    private long timeCreated = 0;
-    public long getTimeCreated() {
-        return timeCreated;
-    }
-    public String timeCreatedAsString() {
-        Instant instant = Instant.ofEpochMilli(timeCreated);
-        LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        return dateTime.format(StringUtil.timeFormatter);
     }
 
     public ClaimChunk(long key, UUID world, int x, int z, UUID owner) {

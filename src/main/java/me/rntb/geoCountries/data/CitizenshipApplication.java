@@ -112,16 +112,6 @@ public class CitizenshipApplication extends DataCollection {
         reason = value;
     }
 
-    // todo: use this value
-    @Expose
-    private long timeCreated = 0;
-    public long getTimeCreated() {
-        return timeCreated;
-    }
-    public void setTimeCreated(long value) {
-        timeCreated = value;
-    }
-
     public CitizenshipApplication(UUID uuid, UUID applicant, UUID toCountry) {
         this.uuid = uuid;
         this.applicant = applicant;
