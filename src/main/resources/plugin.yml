@@ -33,6 +33,7 @@ permissions:
       gc.player: true
       gc.player.info: true
       gc.gui: true
+      gc.claim.info: true
 
   # -------------------- PLAYER -------------------
   gc.group.player:

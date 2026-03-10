@@ -8,6 +8,7 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.integration.IntegrationState;
 import me.rntb.geoCountries.integration.pl3xmap.Pl3xMapIntegration;
 import me.rntb.geoCountries.util.ChatUtil;
+import org.bukkit.Chunk;
 import org.bukkit.World;
 
 import java.util.ArrayList;
@@ -29,6 +30,9 @@ public class ClaimChunk extends DataCollection {
     }
     public static ClaimChunk get(int x, int z) {
         return get(packToKey(x, z));
+    }
+    public static ClaimChunk get(Chunk bukkitChunk) {
+        return get(bukkitChunk.getChunkKey());
     }
 
     public static Long packToKey(int x, int z) {

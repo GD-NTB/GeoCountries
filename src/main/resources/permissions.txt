@@ -7,6 +7,7 @@ gc.group.essential:
     gc.country.citizens
     gc.player
     gc.player.info
+    gc.claim.info
     gc.gui
 
 gc.group.player:

@@ -228,6 +228,18 @@ public class PlayerProfile extends DataCollection {
         this.uuid = player.getUniqueId();
     }
 
+    public Chunk getBukkitChunk() {
+        Player player = getOnlinePlayer();
+        if (player == null)
+            return null;
+        return player.getChunk();
+    }
+    public ClaimChunk getClaimChunk() {
+        Player player = getOnlinePlayer();
+        if (player == null)
+            return null;
+        return ClaimChunk.get(player.getChunk());
+    }
     public String getChunkString() {
         Chunk chunk = getOnlinePlayer().getChunk();
         return "§8(%d, %d)§r"

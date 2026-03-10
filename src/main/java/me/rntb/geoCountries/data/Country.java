@@ -91,9 +91,9 @@ public class Country extends DataCollection {
     public void deregister() {
         // clear all citizen's citizenships
         for (UUID uuid : new ArrayList<>(citizens)) { // new arraylist while we're modifying
-            PlayerProfile player = PlayerProfile.get(uuid);
-            if (player != null)
-                CitizenshipService.leaveCountry(player);
+            PlayerProfile playerProfile = PlayerProfile.get(uuid);
+            if (playerProfile != null)
+                CitizenshipService.leaveCountry(playerProfile);
         }
 
         byName.remove(name);
