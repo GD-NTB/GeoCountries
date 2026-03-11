@@ -20,6 +20,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Path;
 import java.util.Objects;
 
+// todo: toolbar when walking into claim chunk
+// todo: hashsets
 // todo: finish claiming
 // todo: in-country ranks
 // todo: promote command

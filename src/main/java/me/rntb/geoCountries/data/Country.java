@@ -217,6 +217,9 @@ public class Country extends DataCollection {
     public List<Long> getClaimChunks() {
         return claimChunks;
     }
+    public int getClaimChunksCount() {
+        return claimChunks.size();
+    }
 
     public List<String> getReceivedCitizenshipApplicationsAsUsernames() {
         List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(uuid);

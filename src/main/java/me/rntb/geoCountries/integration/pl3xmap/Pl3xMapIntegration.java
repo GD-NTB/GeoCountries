@@ -2,9 +2,11 @@ package me.rntb.geoCountries.integration.pl3xmap;
 
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.integration.IntegrationState;
 import me.rntb.geoCountries.integration.pl3xmap.type.*;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.StringUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.layer.SimpleLayer;
@@ -70,10 +72,25 @@ public class Pl3xMapIntegration {
 
     private static Options buildMarkerSettings(Country country) {
         int colour = Colors.fromHex(country.getSettings().get("mapcolour"));
+        String motto = country.getSettings().get("motto");
+        PlayerProfile leader = country.getLeaderPlayerProfile();
+        int size = country.getClaimChunksCount();
         return Options.builder()
-                      .tooltipContent("this is a polygon")
+                      .tooltipContent("""
+                                      <span style="font-size:20px"><b>%s</b></span><br>
+                                      <i>%s</i><br>
+                                      <br>
+                                      <b>Leader</b>: %s<br>
+                                      <b>Citizens</b>: %d<br>
+                                      <b>Size</b>: %d chunk%s"""
+                                      .formatted(country.getName(),
+                                                 motto.equals("null") ? "No motto" : motto,
+                                                 leader == null ? "No leader" : leader.getUsername(),
+                                                 country.getCitizenCount(),
+                                                 size, StringUtil.leadingS(size)))
                       .stroke(true)
-                      .strokeColor(colour)
+                      .strokeColor(Colors.setAlpha(255, colour))
+                      .strokeWeight(4)
                       .fill(true)
                       .fillColor(Colors.setAlpha(128, colour))
                       .build();
@@ -154,7 +171,7 @@ public class Pl3xMapIntegration {
         List<List<Point>> polygons = RenderEdge.extractPolygonsFromEdgeGraph(graph);
 
         // largest polygon will be outer boundary
-        polygons.sort((a,b)->Integer.compare(b.size(), a.size()));
+        polygons.sort((a, b) -> Integer.compare(b.size(), a.size()));
 
         return polygons.isEmpty() ? Collections.emptyList() : polygons.getFirst();
     }

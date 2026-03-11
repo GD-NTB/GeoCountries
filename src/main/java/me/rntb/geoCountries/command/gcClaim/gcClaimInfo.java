@@ -24,7 +24,7 @@ public class gcClaimInfo extends GeoCommand {
         ClaimChunk claimChunk = playerProfile.getClaimChunk();
 
         if (claimChunk == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou are not standing on a claimed chunk! " + playerProfile.getChunkString());
+            ChatUtil.sendPrefixedMessage(sender, "§cYou are not standing in any claim! " + playerProfile.getChunkString());
             return;
         }
 
