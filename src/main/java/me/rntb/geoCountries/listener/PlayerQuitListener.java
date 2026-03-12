@@ -10,14 +10,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.UUID;
 
-public class LeaveListener implements Listener {
+public class PlayerQuitListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
 
-        // stop pending /gc confirm
+        // stop pending any pending confirmation or response
         Confirmation.stopWaiting(uuid, Confirmation.StopWaitingEvent.CANCELLED, false);
         Response.stopWaiting(uuid, Response.StopWaitingEvent.CANCELLED, false);
 

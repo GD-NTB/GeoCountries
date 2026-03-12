@@ -1,0 +1,34 @@
+package me.rntb.geoCountries.listener;
+
+import io.papermc.paper.event.player.AsyncChatEvent;
+import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.util.ChatUtil;
+import net.kyori.adventure.text.Component;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+
+public class PrefixChatListener implements Listener {
+
+    @EventHandler
+    public void onPlayerChat(AsyncChatEvent event) {
+        PlayerProfile player = PlayerProfile.get(event.getPlayer());
+
+        Country playerCountry = player.getCitizenshipCountry();
+        // if not enabled in config, player doesnt have country, country has prefix disabled, or country prefix is null, escape
+        if (!ConfigState.countryPrefixEnabled || playerCountry == null || playerCountry.getSettings().get("prefixenabled").equals("false") || playerCountry.getSettings().get("prefix").equals("null"))
+            return;
+
+        // build prefix and prepend
+        ChatUtil.ChatColour chatColour = ChatUtil.ChatColour.WHITE;
+        try {
+            chatColour = ChatUtil.ChatColour.valueOf(playerCountry.getSettings().get("prefixcolour"));
+        } catch (IllegalArgumentException ignored) { }
+        Component prefix = Component.text((ConfigState.countryPrefixFormat + " ")
+                                           .formatted(ChatUtil.getChatColourByEnum(chatColour),
+                                                      playerCountry.getSettings().get("prefix")));
+        event.renderer((source, sourceDisplayName, message, viewer) ->
+                prefix.append(Component.text("§r")).append(sourceDisplayName).append(Component.text(": ")).append(message));
+    }
+}

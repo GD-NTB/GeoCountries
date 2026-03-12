@@ -206,9 +206,9 @@ public class Country extends DataCollection {
     }};
     public static LinkedHashMap<String, String> buildDefaultSettings() {
         return settingsData.entrySet().stream()
-                                     .collect(LinkedHashMap::new,
-                                              (m, e) -> m.put(e.getKey(), e.getValue().defaultValue),
-                                              LinkedHashMap::putAll);
+                                      .collect(LinkedHashMap::new,
+                                               (m, e) -> m.put(e.getKey(), e.getValue().defaultValue),
+                                               LinkedHashMap::putAll);
     }
 
     // loaded in ClaimChunk.init
@@ -216,7 +216,7 @@ public class Country extends DataCollection {
     private List<Long> claimChunks;
     public List<Long> getClaimChunks() {
         return claimChunks;
-    }
+    } // todo: hashset
     public int getClaimChunksCount() {
         return claimChunks.size();
     }

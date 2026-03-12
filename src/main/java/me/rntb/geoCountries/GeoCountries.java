@@ -6,10 +6,7 @@ import me.rntb.geoCountries.command.gc;
 import me.rntb.geoCountries.config.ConfigManager;
 import me.rntb.geoCountries.data.DataCollectionManager;
 import me.rntb.geoCountries.integration.IntegrationManager;
-import me.rntb.geoCountries.listener.ChatListener;
-import me.rntb.geoCountries.listener.InventoryListener;
-import me.rntb.geoCountries.listener.JoinListener;
-import me.rntb.geoCountries.listener.LeaveListener;
+import me.rntb.geoCountries.listener.*;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
@@ -56,10 +53,11 @@ public class GeoCountries extends JavaPlugin {
         ConfigManager.init();
 
         // register listeners
-        pluginManager.registerEvents(new JoinListener(), this);
-        pluginManager.registerEvents(new LeaveListener(), this);
-        pluginManager.registerEvents(new ChatListener(), this);
-        pluginManager.registerEvents(new InventoryListener(), this);
+        pluginManager.registerEvents(new PlayerJoinListener(), this);
+        pluginManager.registerEvents(new PlayerQuitListener(), this);
+        pluginManager.registerEvents(new PrefixChatListener(), this);
+        pluginManager.registerEvents(new InventoryGUIListener(), this);
+        pluginManager.registerEvents(new PlayerChunkEnterListener(), this);
 
         // initialise base command
         GeoCommand.baseCommand = new gc("gc", "/gc", null, null);

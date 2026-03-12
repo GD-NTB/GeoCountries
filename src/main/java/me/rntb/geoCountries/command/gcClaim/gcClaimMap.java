@@ -87,7 +87,7 @@ public class gcClaimMap extends GeoCommand {
             message.append("\n");
         }
 
-        message.append("§6==============================");
+        message.append("§6===============================");
 
         ChatUtil.sendPrefixedMessage(sender, String.valueOf(message));
     }
