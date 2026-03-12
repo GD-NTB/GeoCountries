@@ -16,7 +16,6 @@ public record MultiPolygonPart(List<Point> outer, List<List<Point>> holes) {
         this.holes = holes == null ? Collections.emptyList() : holes;
     }
 
-
     public static List<Polygon> toPolygons(List<MultiPolygonPart> parts) {
         List<Polygon> polygons = new ArrayList<>();
 

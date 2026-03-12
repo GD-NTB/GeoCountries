@@ -83,7 +83,7 @@ public class PlayerProfile extends DataCollection {
 
         if (ConfigState.debugLogging) {
             int count = all.size();
-            ChatUtil.sendPrefixedLogMessage("Loaded " + count + " PlayerProfile" + StringUtil.leadingS(count) + ".");
+            ChatUtil.sendPrefixedLogMessage("Loaded " + count + " " + DISPLAY_NAME + StringUtil.leadingS(count) + ".");
         }
     }
 
@@ -92,7 +92,7 @@ public class PlayerProfile extends DataCollection {
 
         if (all != null && ConfigState.debugLogging) {
             int count = all.size();
-            ChatUtil.sendPrefixedLogMessage("Saved " + count + " PlayerProfile" + StringUtil.leadingS(count) + ".");
+            ChatUtil.sendPrefixedLogMessage("Saved " + count + " " + DISPLAY_NAME + StringUtil.leadingS(count) + ".");
         }
     }
 

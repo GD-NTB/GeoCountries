@@ -20,7 +20,7 @@ public abstract class GeoCommand {
     public GeoCommand parentCommand;
     public String name;
     public String command;
-    public static HashMap<String, GeoCommand> getByCommandString = new HashMap<>();
+    public static Map<String, GeoCommand> getByCommandString = new HashMap<>();
     public String permission;
     public ItemStack menuButtonItem; // ItemStack.of(Material.DEBUG_STICK) gives skull with player's skin
 

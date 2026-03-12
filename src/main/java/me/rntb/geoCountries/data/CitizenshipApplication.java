@@ -54,7 +54,7 @@ public class CitizenshipApplication extends DataCollection {
 
         if (ConfigState.debugLogging) {
             int count = sentAll.size();
-            ChatUtil.sendPrefixedLogMessage("Loaded " + count + " CitizenApplication" + StringUtil.leadingS(count) + ".");
+            ChatUtil.sendPrefixedLogMessage("Loaded " + count + " " + DISPLAY_NAME + StringUtil.leadingS(count) + ".");
         }
     }
 
@@ -63,7 +63,7 @@ public class CitizenshipApplication extends DataCollection {
 
         if (sentAll != null && ConfigState.debugLogging) {
             int count = sentAll.size();
-            ChatUtil.sendPrefixedLogMessage("Saved " + count + " CitizenApplication" + StringUtil.leadingS(count) + ".");
+            ChatUtil.sendPrefixedLogMessage("Saved " + count + " " + DISPLAY_NAME + StringUtil.leadingS(count) + ".");
         }
     }
 

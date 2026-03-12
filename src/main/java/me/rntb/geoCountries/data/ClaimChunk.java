@@ -8,6 +8,7 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.integration.IntegrationState;
 import me.rntb.geoCountries.integration.pl3xmap.Pl3xMapIntegration;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 
@@ -65,15 +66,19 @@ public class ClaimChunk extends DataCollection {
             claimChunk.z = coords[1];
         }
 
-        if (ConfigState.debugLogging)
-            ChatUtil.sendPrefixedLogMessage("Loaded " + all.size() + " ClaimChunks");
+        if (ConfigState.debugLogging) {
+            int count = all.size();
+            ChatUtil.sendPrefixedLogMessage("Loaded " + count + " " + DISPLAY_NAME + StringUtil.leadingS(count) + ".");
+        }
     }
 
     public static void save() {
         writeToFile(ClaimChunk.FILE_PATH, ClaimChunk.DISPLAY_NAME, all);
 
-        if (all != null && ConfigState.debugLogging)
-            ChatUtil.sendPrefixedLogMessage("Saved " + all.size() + " ClaimChunks");
+        if (all != null && ConfigState.debugLogging) {
+            int count = all.size();
+            ChatUtil.sendPrefixedLogMessage("Saved " + count + " " + DISPLAY_NAME + StringUtil.leadingS(count) + ".");
+        }
     }
 
     // returns number of claimchunks purged

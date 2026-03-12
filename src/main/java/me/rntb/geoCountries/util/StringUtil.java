@@ -19,7 +19,6 @@ public class StringUtil {
 
     public static String sentenceCase(String string) {
         return string.substring(0, 1).toUpperCase() + string.substring(1);
-
     }
 
     public static String appendTrailingResetFormatter(String s) {
