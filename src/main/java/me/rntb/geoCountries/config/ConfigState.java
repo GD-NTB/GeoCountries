@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 
 public class ConfigState {
 
-    public static final double CONFIG_VERSION = 0.022; // increment whenever config.yml is changed
+    public static final double CONFIG_VERSION = 0.023; // increment whenever config.yml is changed
 
     public static boolean enablePl3xMap = true;
 
@@ -28,7 +28,9 @@ public class ConfigState {
     public static int chatResponseMin = 1;
     public static int chatResponseMax = 150;
     public static int countryNameMin = 2;
-    public static int countryNameMax = 35;
+    public static int countryNameMax = 40;
     public static int countryMottoMin = 1;
     public static int countryMottoMax = 50;
+    public static int factionNameMin = 4;
+    public static int factionNameMax = 40;
 }

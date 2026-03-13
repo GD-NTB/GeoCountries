@@ -16,21 +16,6 @@ public class RenderCountry {
         return uuid;
     }
 
-    private final String name;
-    public String getName() {
-        return name;
-    }
-
-    private final String mapColour;
-    public String getMapColour() {
-        return mapColour;
-    }
-
-    private final String clickTooltip;
-    public String getClickTooltip() {
-        return clickTooltip;
-    }
-
     private final Map<String, List<RenderClaimChunk>> worldChunks;
     public Map<String, List<RenderClaimChunk>> getWorldChunks() {
         return Collections.unmodifiableMap(worldChunks);
@@ -40,20 +25,11 @@ public class RenderCountry {
     }
 
     public static RenderCountry from(Country country) {
-        return new RenderCountry(country.getUUID(),
-                                 country.getName(),
-                                 country.getSettings().get("mapcolour"),
-                                 "hover text",
-                                 "click text",
-                                 country.getClaimChunks());
+        return new RenderCountry(country.getUUID(), country.getClaimChunks());
     }
 
-    public RenderCountry(UUID uuid, String name, String mapColour, String hoverText, String clickTooltip, List<Long> claimChunks) {
+    public RenderCountry(UUID uuid, List<Long> claimChunks) {
         this.uuid = uuid;
-        this.name = name;
-        this.mapColour = mapColour;
-        this.clickTooltip = clickTooltip;
-
         this.worldChunks = buildWorldChunksHashMap(claimChunks.stream()
                                                               .map(ClaimChunk::get).toList());
     }

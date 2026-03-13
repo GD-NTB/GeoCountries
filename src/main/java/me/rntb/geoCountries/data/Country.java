@@ -20,7 +20,7 @@ public class Country extends DataCollection {
 
     // list of all countries existing
     public static ArrayList<Country> all = null;
-    public static List<String> allAsStrings(boolean alphabetical) {
+    public static List<String> allAsNames(boolean alphabetical) {
         Stream<String> countries = byName.keySet().stream();
         if (!alphabetical)
             return countries.toList();
@@ -74,7 +74,6 @@ public class Country extends DataCollection {
         };
     }
 
-    // returns number of countries purged
     public static int purge() {
         int count = 0;
         for (Country c : new ArrayList<>(all)) {
@@ -104,8 +103,14 @@ public class Country extends DataCollection {
         byName.remove(name);
         byUUID.remove(uuid);
 
+        // delete claimed chunks
+        for (Long claimChunkKey : claimChunks) {
+            ClaimChunk.get(claimChunkKey).deregister();
+        }
+
         // delete any associated applications
         CitizenshipApplicationService.deleteAllSentByToCountry(this);
+
 
         delete(this, all, DISPLAY_NAME);
     }
@@ -225,6 +230,22 @@ public class Country extends DataCollection {
     } // todo: hashset
     public int getClaimChunksCount() {
         return claimChunks.size();
+    }
+
+    // loaded in Faction.init
+    @Expose(serialize = false, deserialize = false)
+    private UUID faction;
+    public UUID getFaction() {
+        return faction;
+    }
+    public Faction getFactionFaction() {
+        return Faction.get(faction);
+    }
+    public void setFactionInternal(UUID value) {
+        faction = value;
+    }
+    public boolean hasFaction() {
+        return faction != null;
     }
 
     public List<String> getReceivedCitizenshipApplicationsAsUsernames() {

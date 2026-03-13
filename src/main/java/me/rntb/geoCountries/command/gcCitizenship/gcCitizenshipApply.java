@@ -130,7 +130,7 @@ public class gcCitizenshipApply extends GeoCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return args.length == 1 ? Country.allAsStrings(true) : List.of();
+        return args.length == 1 ? Country.allAsNames(true) : List.of();
     }
 
     @Override

@@ -67,7 +67,6 @@ public class CitizenshipApplication extends DataCollection {
         }
     }
 
-    // returns number of citizenship applications purged
     public static int purge() {
         int count = 0;
         for (CitizenshipApplication ca : new ArrayList<>(sentAll)) {

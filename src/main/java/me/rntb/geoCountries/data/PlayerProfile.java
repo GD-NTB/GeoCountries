@@ -96,7 +96,6 @@ public class PlayerProfile extends DataCollection {
         }
     }
 
-    // returns number of playerprofiles purged
     public static int purge() {
         int count = 0;
         for (PlayerProfile p : new ArrayList<>(all)) {
@@ -152,11 +151,11 @@ public class PlayerProfile extends DataCollection {
     public UUID getCitizenship() {
         return citizenship;
     }
-    public void setCitizenshipInternal(UUID value) {
-        citizenship = value;
-    }
     public Country getCitizenshipCountry() {
         return Country.get(citizenship);
+    }
+    public void setCitizenshipInternal(UUID value) {
+        citizenship = value;
     }
     public boolean hasCitizenship() {
         return citizenship != null;

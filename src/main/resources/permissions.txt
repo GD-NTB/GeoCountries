@@ -7,8 +7,11 @@ gc.group.essential:
     gc.country.citizens
     gc.player
     gc.player.info
+    gc.claim
     gc.claim.info
     gc.gui
+    gc.faction
+    gc.faction.info
 
 gc.group.player:
     gc.confirm
@@ -27,12 +30,12 @@ gc.group.player:
     gc.citizenship.reject
     gc.citizenship.revoke
     gc.player.settings
-    gc.claim
     gc.claim.one
     gc.claim.map
     gc.claim.reloadmap
     gc.unclaim
     gc.unclaim.one
+    gc.faction.create
 
 gc.group.admin:
     gc.purge

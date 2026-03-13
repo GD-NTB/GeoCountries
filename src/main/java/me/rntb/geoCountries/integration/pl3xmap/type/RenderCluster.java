@@ -34,11 +34,6 @@ public class RenderCluster {
         claimChunks.put(hash, rClaimChunk);
     }
 
-    public RenderClaimChunk findAny() {
-        return claimChunks.values().stream()
-                                   .findAny().orElse(null);
-    }
-
     public Collection<RenderClaimChunk> getClaimChunks() {
         return Collections.unmodifiableCollection(claimChunks.values());
     }

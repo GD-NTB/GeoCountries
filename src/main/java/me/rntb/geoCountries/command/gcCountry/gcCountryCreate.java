@@ -40,7 +40,7 @@ public class gcCountryCreate extends GeoCommand {
                                   true);
         }
         else {
-            String countryName = String.join(" ", args).trim();
+            String countryName = String.join(" ", args);
             onResponse(sender, countryName);
         }
     }
@@ -48,13 +48,13 @@ public class gcCountryCreate extends GeoCommand {
     private void onResponse(CommandSender sender, String countryName) {
         PlayerProfile player = PlayerProfile.get(sender);
 
+        countryName = countryName.trim();
         // validation check
         String validationString = StringUtil.validateCountryName(countryName, true);
         if (validationString != null) { // validation.OK -> null
             ChatUtil.sendPrefixedMessage(sender, validationString);
             return;
         }
-
 
         Country newCountry = new Country(UUID.randomUUID(), countryName);
 

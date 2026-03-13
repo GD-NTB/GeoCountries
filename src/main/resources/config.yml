@@ -1,4 +1,4 @@
-config-version: 0.022 # do not change
+config-version: 0.023 # do not change
 
 enable-Pl3xMap: true # REQUIRES RESTART: enables the plugin to connect to the Pl3xMap plugin (if you have it installed)
 
@@ -21,6 +21,8 @@ max-citizenship-applications: 10 # max number of sent citizenship applications a
 chat-response-min: 1 # min allowed length of chat message when player asked to type in chat
 chat-response-max: 150  # max allowed length of chat message when player asked to type in chat
 country-name-min: 2 # min allowed length of new country names
-country-name-max: 35 # max allowed length of new country names
+country-name-max: 40 # max allowed length of new country names
 country-motto-min: 1 # min allowed length of country mottos
 country-motto-max: 50 # max allowed length of country mottos
+faction-name-min: 4 # min allowed length of new faction names
+faction-name-max: 40 # max allowed length of new faction names

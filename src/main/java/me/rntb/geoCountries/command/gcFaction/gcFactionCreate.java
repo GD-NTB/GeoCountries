@@ -1,0 +1,90 @@
+package me.rntb.geoCountries.command.gcFaction;
+
+import me.rntb.geoCountries.command.GeoCommand;
+import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.Faction;
+import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.data.PlayerProfile.Position;
+import me.rntb.geoCountries.type.Response;
+import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.StringUtil;
+import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.UUID;
+
+public class gcFactionCreate extends GeoCommand {
+
+    public gcFactionCreate(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+        this.helpString = "Creates a new faction.";
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
+        PlayerProfile player = PlayerProfile.get(sender);
+
+        Country country = player.getCitizenshipCountry();
+        // doesn't have country
+        if (country == null) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to create a faction!");
+            return;
+        }
+        // is not leader
+        if (player.getPosition() != Position.LEADER) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to create a faction!");
+            return;
+        }
+
+        // already has faction
+        if (country.hasFaction()) {
+            // must transfer ownership then leave
+            if (player.getPosition() == Position.LEADER)
+                ChatUtil.sendPrefixedMessage(sender, "§cYou must first transfer leadership of your current faction §f" + country.getFactionFaction().getName() + "§c using §f/gc faction transfer§c, then leave it using §c/gc faction leave§c before you can create a faction!");
+            // must leave faction
+            else
+                ChatUtil.sendPrefixedMessage(sender, "§cYou must first leave your current faction §f" + country.getFactionFaction().getName() + "§c §c/gc faction leave§f before you can create a faction!");
+            return;
+        }
+
+        if (args.length == 0) {
+            ChatUtil.sendPrefixedMessage(sender, "§6What do you want the name of your new faction to be?");
+            // start waiting for response
+            Response.startWaiting(player.getUUID(),
+                                  new Response(this::onResponse,
+                                               sender),
+                                  true);
+        }
+        else {
+            String factionName = String.join(" ", args);
+            onResponse(sender, factionName);
+        }
+    }
+
+    private void onResponse(CommandSender sender, String factionName) {
+        PlayerProfile player = PlayerProfile.get(sender);
+
+        factionName = factionName.trim();
+        // validation check
+        String validationString = StringUtil.validateFactionName(factionName, true);
+        if (validationString != null) { // validation.OK -> null
+            ChatUtil.sendPrefixedMessage(sender, validationString);
+            return;
+        }
+
+        Faction newFaction = new Faction(UUID.randomUUID(), factionName, player.getCitizenship());
+
+        // create faction
+        newFaction.register();
+
+        ChatUtil.sendPrefixedNotificationMessage(sender, "§aCreated faction §f" + factionName + "§a!");
+
+        ChatUtil.broadcastPrefixedMessage("§6A new faction §f" + factionName + "§6 has just been created!");
+    }
+
+    @Override
+    public boolean isVisibleOnMenu(CommandSender sender) {
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        return !playerProfile.getCitizenshipCountry().hasFaction() && playerProfile.getPosition() == Position.LEADER;
+    }
+}

@@ -2,10 +2,11 @@ package me.rntb.geoCountries.command.gcCountry;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.Faction;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.TimeUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import me.rntb.geoCountries.util.TimeUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,7 +32,7 @@ public class gcCountryInfo extends GeoCommand {
                                                      §6========== COUNTRY INFO ==========
                                                      §cYou do not have citizenship of any country.
                                                      §cDo §f/gc country create§c to create a country, or
-                                                     §cdo §f/gc citizenship apply§c to apply to apply for citizenship of one.
+                                                     §cdo §f/gc citizenship apply§c to apply for citizenship of one.
                                                      §6=================================""");
                 return;
             }
@@ -47,31 +48,35 @@ public class gcCountryInfo extends GeoCommand {
         }
 
         PlayerProfile leader = country.getLeaderPlayerProfile();
+        Faction faction = country.getFactionFaction();
         long daysAgo = TimeUtil.daysAgo(country.getTimeCreated());
 
         String countryMotto = country.getSettings().get("motto");
 
+        // todo: indicator if we are leader or not of faction
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
                          """
                          §6========== COUNTRY INFO ==========
                          §a%s§f
                          §f> §eMotto§f: %s
+                         §f> §eFaction§f: %s
                          §f> §eLeader§f: %s
                          §f> §eCitizens§f: %s
                          §f> Created on §2%s §8(%s day%s ago)
                          §6================================="""
                          .formatted(country.getName(),
                                     !countryMotto.equals("null") ? countryMotto : "§cNone",
+                                    faction != null ? faction.getName() : "§cNone",
                                     leader != null ? leader.getUsername() : "§cNone",
                                     country.getCitizenCount(),
-                                    country.getTimeCreatedAsString(),
-                                    daysAgo, StringUtil.leadingS(daysAgo));
+                                    country.getTimeCreatedAsString(), daysAgo, StringUtil.leadingS(daysAgo));
+
         ChatUtil.sendPrefixedMessage(sender, message);
     }
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return args.length == 1 ? Country.allAsStrings(true) : List.of();
+        return args.length == 1 ? Country.allAsNames(true) : List.of();
     }
 
     @Override

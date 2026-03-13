@@ -31,6 +31,7 @@ public class SettingData {
     public int min;
     public int max;
 
+    // todo: create service
     public static void setSetting(CommandSender sender, String key, String toValue, Map<String, SettingData> settingsData, Map<String, String> settingsRef) {
         SettingData settingData = settingsData.get(key);
         // if in settingsDataMapRef, should be in settingsMapRef, if not it's gonna be .put anyway (?!)

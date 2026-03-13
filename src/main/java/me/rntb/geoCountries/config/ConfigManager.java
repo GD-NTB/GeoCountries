@@ -79,6 +79,8 @@ public class ConfigManager {
         ConfigState.countryNameMax = config.getInt("country-name-max");
         ConfigState.countryMottoMin = config.getInt("country-motto-min");
         ConfigState.countryMottoMax = config.getInt("country-motto-max");
+        ConfigState.factionNameMin = config.getInt("faction-name-min");
+        ConfigState.factionNameMax = config.getInt("faction-name-max");
     }
 
     private static void writeStateToFile() {
@@ -106,5 +108,7 @@ public class ConfigManager {
         config.set("country-name-max", ConfigState.countryNameMax);
         config.set("country-motto-min", ConfigState.countryMottoMin);
         config.set("country-motto-max", ConfigState.countryMottoMax);
+        config.set("faction-name-min", ConfigState.factionNameMin);
+        config.set("faction-name-max", ConfigState.factionNameMax);
     }
 }

@@ -33,7 +33,10 @@ permissions:
       gc.player: true
       gc.player.info: true
       gc.gui: true
+      gc.claim: true
       gc.claim.info: true
+      gc.faction: true
+      gc.faction.info: true
 
   # -------------------- PLAYER -------------------
   gc.group.player:
@@ -57,12 +60,12 @@ permissions:
       gc.citizenship.reject: true
       gc.citizenship.revoke: true
       gc.player.settings: true
-      gc.claim: true
       gc.claim.one: true
       gc.claim.map: true
       gc.claim.reloadmap: true
       gc.unclaim: true
       gc.unclaim.one: true
+      gc.faction.create: true
 
   # -------------------- ADMIN --------------------
   gc.group.admin:

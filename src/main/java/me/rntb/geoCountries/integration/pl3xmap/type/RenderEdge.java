@@ -6,8 +6,6 @@ import java.util.*;
 
 public record RenderEdge(Point a, Point b) {
 
-    private static final int[][] DIRS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-
     // O(n)
     public static Map<Point, List<Point>> buildEdgeGraphFromCluster(RenderCluster cluster) {
         Map<Point, List<Point>> graph = new HashMap<>();

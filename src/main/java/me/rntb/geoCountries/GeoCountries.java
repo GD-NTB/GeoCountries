@@ -17,8 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Path;
 import java.util.Objects;
 
-// todo: toolbar when walking into claim chunk
-// todo: hashsets
+// todo: factions
 // todo: finish claiming
 // todo: in-country ranks
 // todo: promote command
@@ -53,11 +52,12 @@ public class GeoCountries extends JavaPlugin {
         ConfigManager.init();
 
         // register listeners
+        pluginManager.registerEvents(new InventoryGUIListener(), this);
+        pluginManager.registerEvents(new PlayerChunkEnterListener(), this);
         pluginManager.registerEvents(new PlayerJoinListener(), this);
         pluginManager.registerEvents(new PlayerQuitListener(), this);
         pluginManager.registerEvents(new PrefixChatListener(), this);
-        pluginManager.registerEvents(new InventoryGUIListener(), this);
-        pluginManager.registerEvents(new PlayerChunkEnterListener(), this);
+        pluginManager.registerEvents(new ResponseChatListener(), this);
 
         // initialise base command
         GeoCommand.baseCommand = new gc("gc", "/gc", null, null);

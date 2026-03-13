@@ -2,6 +2,7 @@ package me.rntb.geoCountries.util;
 
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.Faction;
 
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
@@ -31,6 +32,27 @@ public class StringUtil {
 
     // ---------- string validation ----------
 
+    // ----- response -----
+    // response should be trimmed beforehand
+    public static String validateResponse(String response) {
+        if (!(ConfigState.chatResponseMin <= response.length() && response.length() <= ConfigState.chatResponseMax))
+            return "§cChat message must be between §f%d and %d§c characters!§r"
+                    .formatted(ConfigState.chatResponseMin, ConfigState.chatResponseMax);
+
+        // illegal characters
+        Matcher m = Pattern.compile("[^\\p{L}\\p{N} ,.?!;:£$%^&*'()=+_#\\[\\]/\\-]").matcher(response);
+        Set<String> illegalChars = new LinkedHashSet<>();
+        while (m.find())
+            illegalChars.add(m.group());
+        if (!illegalChars.isEmpty())
+            return "§cThe following character(s) are not allowed: §r" + String.join("", illegalChars);
+        if (response.chars().anyMatch(ch -> ch < 32))
+            return "§cChat message must not contain any control characters!";
+
+        // response is valid
+        return null;
+    }
+
     // ----- country name -----
     // country name should be trimmed beforehand
     public static String validateCountryName(String countryName, boolean alreadyExistsInvalid) {
@@ -51,27 +73,6 @@ public class StringUtil {
             return "§cCountry name must not contain any control characters!";
 
         // country name is valid
-        return null;
-    }
-
-    // ----- response -----
-    // response should be trimmed beforehand
-    public static String validateResponse(String response) {
-        if (!(ConfigState.chatResponseMin <= response.length() && response.length() <= ConfigState.chatResponseMax))
-            return "§cChat message must be between §f%d and %d§c characters!§r"
-                   .formatted(ConfigState.chatResponseMin, ConfigState.chatResponseMax);
-
-        // illegal characters
-        Matcher m = Pattern.compile("[^\\p{L}\\p{N} ,.?!;:£$%^&*'()=+_#\\[\\]/\\-]").matcher(response);
-        Set<String> illegalChars = new LinkedHashSet<>();
-        while (m.find())
-            illegalChars.add(m.group());
-        if (!illegalChars.isEmpty())
-            return "§cThe following character(s) are not allowed: §r" + String.join("", illegalChars);
-        if (response.chars().anyMatch(ch -> ch < 32))
-            return "§cChat message must not contain any control characters!";
-
-        // response is valid
         return null;
     }
 
@@ -114,6 +115,29 @@ public class StringUtil {
             return "§cCountry motto must not contain any control characters!";
 
         // country prefix is valid
+        return null;
+    }
+
+    // ----- faction name -----
+    // faction name should be trimmed beforehand
+    public static String validateFactionName(String factionName, boolean alreadyExistsInvalid) {
+        if (!(ConfigState.factionNameMin <= factionName.length() && factionName.length() <= ConfigState.factionNameMax))
+            return "§cFaction name must be between §f%d and %d§c characters!§r"
+                    .formatted(ConfigState.factionNameMin, ConfigState.factionNameMax);
+        if (alreadyExistsInvalid && Faction.get(factionName) != null)
+            return "§cA faction with that name already exists!§r";
+
+        // illegal characters
+        Matcher m = Pattern.compile("[^\\p{L}0-9', ()./_-]").matcher(factionName);
+        Set<String> illegalChars = new LinkedHashSet<>();
+        while (m.find())
+            illegalChars.add(m.group());
+        if (!illegalChars.isEmpty())
+            return "§cThe following characters are not allowed in a faction name: §r" + String.join("", illegalChars);
+        if (factionName.chars().anyMatch(ch -> ch < 32))
+            return "§cFaction name must not contain any control characters!";
+
+        // faction name is valid
         return null;
     }
 }

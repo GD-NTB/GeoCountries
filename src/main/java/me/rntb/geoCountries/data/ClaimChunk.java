@@ -81,7 +81,6 @@ public class ClaimChunk extends DataCollection {
         }
     }
 
-    // returns number of claimchunks purged
     public static int purge() {
         int count = 0;
         for (ClaimChunk c : new ArrayList<>(all)) {
@@ -107,9 +106,6 @@ public class ClaimChunk extends DataCollection {
 
         // remove this claimchunk from country
         getOwnerCountry().getClaimChunks().remove(key);
-
-        // delete any associated applications
-        // --
 
 //        // update maps
 //        Pl3xMapIntegration.clearClaim(this);

@@ -8,6 +8,7 @@ public class DataCollectionManager {
         Country.init();
         CitizenshipApplication.init();
         ClaimChunk.init();
+        Faction.init();
     }
 
     public static void save() {
@@ -15,6 +16,7 @@ public class DataCollectionManager {
         Country.save();
         CitizenshipApplication.save();
         ClaimChunk.save();
+        Faction.save();
     }
 
     public static void purgeAll() {
@@ -22,5 +24,6 @@ public class DataCollectionManager {
         Country.purge();
         CitizenshipApplication.purge();
         ClaimChunk.purge();
+        Faction.purge();
     }
 }

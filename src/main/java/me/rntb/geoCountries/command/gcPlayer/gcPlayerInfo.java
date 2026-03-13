@@ -59,8 +59,8 @@ public class gcPlayerInfo extends GeoCommand {
                         .formatted(player.getUsername(),
                                    onlineString,
                                    positionAndCountryString,
-                                   player.getTimeCreatedAsString(),
-                                   daysAgo, StringUtil.leadingS(daysAgo));
+                                   player.getTimeCreatedAsString(), daysAgo, StringUtil.leadingS(daysAgo));
+
         ChatUtil.sendPrefixedMessage(sender, message);
     }
 

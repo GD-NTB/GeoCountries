@@ -2,6 +2,7 @@ package me.rntb.geoCountries.integration.pl3xmap;
 
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.Faction;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.integration.IntegrationState;
 import me.rntb.geoCountries.integration.pl3xmap.type.*;
@@ -59,7 +60,7 @@ public class Pl3xMapIntegration {
         Registry<@NotNull World> worlds = api.getWorldRegistry();
 
         for (World world : worlds.values()) {
-            SimpleLayer layer = new SimpleLayer("geocountries_claims_" + world.getName(), () -> "GeoCountries Regions");
+            SimpleLayer layer = new SimpleLayer("geocountries_claims_" + world.getName(), () -> "GeoCountries Overlay");
             layer.setPriority(1);
             layer.setZIndex(1);
             layer.setLiveUpdate(true);
@@ -74,18 +75,21 @@ public class Pl3xMapIntegration {
         int colour = Colors.fromHex(country.getSettings().get("mapcolour"));
         String motto = country.getSettings().get("motto");
         PlayerProfile leader = country.getLeaderPlayerProfile();
+        Faction faction = country.getFactionFaction();
         int size = country.getClaimChunksCount();
         return Options.builder()
                       .tooltipContent("""
                                       <span style="font-size:20px"><b>%s</b></span><br>
                                       <i>%s</i><br>
                                       <br>
+                                      <b>Faction</b>: %s<br>
                                       <b>Leader</b>: %s<br>
                                       <b>Citizens</b>: %d<br>
                                       <b>Size</b>: %d chunk%s"""
                                       .formatted(country.getName(),
                                                  motto.equals("null") ? "No motto" : motto,
-                                                 leader == null ? "No leader" : leader.getUsername(),
+                                                 faction == null ? "None" : faction.getName(),
+                                                 leader == null ? "None" : leader.getUsername(),
                                                  country.getCitizenCount(),
                                                  size, StringUtil.leadingS(size)))
                       .stroke(true)
