@@ -7,16 +7,16 @@ import me.rntb.geoCountries.util.ChatUtil;
 
 public class PositionService {
 
-    public static void promoteToLeader(PlayerProfile player) {
-        Country country = player.getCitizenshipCountry();
+    public static void promoteToLeader(PlayerProfile playerProfile) {
+        Country country = playerProfile.getCitizenshipCountry();
         if (country == null)
             return;
 
-        if (country.getLeader() != null && country.getLeader().equals(player.getUUID()))
+        if (country.getLeader() != null && country.getLeader().equals(playerProfile.getUUID()))
             return;
 
         // ensure player is citizen
-        if (!country.getCitizens().contains(player.getUUID()) ) {
+        if (!country.getCitizens().contains(playerProfile.getUUID()) ) {
             if (ConfigState.debugLogging)
                 ChatUtil.sendPrefixedLogErrorMessage("Tried to promote player to leader to a country they're not a citizen of!");
             return;
@@ -27,12 +27,12 @@ public class PositionService {
         if (oldLeader != null)
             oldLeader.setPositionInternal(PlayerProfile.Position.CITIZEN);
 
-        country.setLeaderInternal(player.getUUID());
-        player.setPositionInternal(PlayerProfile.Position.LEADER);
+        country.setLeaderInternal(playerProfile.getUUID());
+        playerProfile.setPositionInternal(PlayerProfile.Position.LEADER);
     }
 
-    public static void demoteFromLeader(PlayerProfile player) {
-        Country country = player.getCitizenshipCountry();
+    public static void demoteFromLeader(PlayerProfile playerProfile) {
+        Country country = playerProfile.getCitizenshipCountry();
         if (country == null)
             return;
 
@@ -42,13 +42,13 @@ public class PositionService {
             return;
         }
 
-        if (!player.getUUID().equals(country.getLeader())) {
+        if (!playerProfile.getUUID().equals(country.getLeader())) {
             if (ConfigState.debugLogging)
                 ChatUtil.sendPrefixedLogErrorMessage("Tried to demote player from leader in a country when they weren't the leader!");
             return;
         }
 
         country.setLeaderInternal(null);
-        player.setPositionInternal(PlayerProfile.Position.CITIZEN);
+        playerProfile.setPositionInternal(PlayerProfile.Position.CITIZEN);
     }
 }

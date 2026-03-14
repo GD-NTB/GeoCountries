@@ -26,10 +26,10 @@ public class gcCitizenshipApply extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile player = PlayerProfile.get(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if already has citizenship, escape
-        if (!ConfigState.debugMode && player.hasCitizenship()) {
+        if (!ConfigState.debugMode && playerProfile.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou can't apply for citizenship of country whilst being a citizen of another!");
             return;
         }
@@ -37,7 +37,7 @@ public class gcCitizenshipApply extends GeoCommand {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§6What country do you want to apply for citizenship to?");
             // start waiting for response
-            Response.startWaiting(player.getUUID(),
+            Response.startWaiting(playerProfile.getUUID(),
                                   new Response(this::onResponseCountryName,
                                                sender),
                                   true);
@@ -49,7 +49,7 @@ public class gcCitizenshipApply extends GeoCommand {
     }
 
     private void onResponseCountryName(CommandSender sender, String countryName) {
-        PlayerProfile player = PlayerProfile.get(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         Country toCountry = Country.get(countryName);
         // if country not exist, escape
@@ -60,14 +60,14 @@ public class gcCitizenshipApply extends GeoCommand {
         }
 
         // if already has open application, escape
-        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(player.getUUID());
+        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(playerProfile.getUUID());
         if (cApplication != null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou're already writing a citizenship application to §f" + cApplication.getToCountryCountry().getName() + "§c!");
             ChatUtil.sendPrefixedMessage(sender, "§aCancelled the citizenship application!");
             return;
         }
 
-        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.getUUID());
+        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID());
         if (cApplications != null) {
             // if sent too many applications, escape
             int cApplicationsCount = cApplications.size();
@@ -83,7 +83,7 @@ public class gcCitizenshipApply extends GeoCommand {
         }
 
         // create new application
-        UUID playerUUID = player.getUUID();
+        UUID playerUUID = playerProfile.getUUID();
         cApplication = new CitizenshipApplication(UUID.randomUUID(),
                                                   playerUUID,
                                                   toCountry.getUUID()); // reuse variable
@@ -95,7 +95,7 @@ public class gcCitizenshipApply extends GeoCommand {
             CitizenshipApplicationService.cancel(cApplication, false); // cancel open application
             CitizenshipApplicationService.accept(cApplication, true); // send sent application
             // broadcast notif to country
-            ChatUtil.broadcastPrefixedMessageToCountry(toCountry, "§f" + player.getUsername() + "§6 is now a citizen of §f" + toCountry.getName() + "§6!", false);
+            ChatUtil.broadcastPrefixedMessageToCountry(toCountry, "§f" + playerProfile.getUsername() + "§6 is now a citizen of §f" + toCountry.getName() + "§6!", false);
             return;
         }
 
@@ -135,11 +135,11 @@ public class gcCitizenshipApply extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        PlayerProfile player = PlayerProfile.get(sender);
-        if (player.hasCitizenship())
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        if (playerProfile.hasCitizenship())
             return false;
 
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.getUUID());
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID());
         return cApplications == null || cApplications.size() < ConfigState.maxCitizenshipApplications;
     }
 }

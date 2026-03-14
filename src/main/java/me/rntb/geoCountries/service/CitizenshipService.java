@@ -6,30 +6,30 @@ import me.rntb.geoCountries.data.PlayerProfile.Position;
 
 public class CitizenshipService {
 
-    public static void joinCountry(PlayerProfile player, Country country) {
-        leaveCountry(player);
+    public static void joinCountry(PlayerProfile playerProfile, Country country) {
+        leaveCountry(playerProfile);
 
         // add to new country
-        country.getCitizens().add(player.getUUID());
+        country.getCitizens().add(playerProfile.getUUID());
 
-        player.setCitizenshipInternal(country.getUUID());
-        player.setPositionInternal(Position.CITIZEN);
+        playerProfile.setCitizenshipInternal(country.getUUID());
+        playerProfile.setPositionInternal(Position.CITIZEN);
 
         // remove all pending citizenship applications
-        CitizenshipApplicationService.deleteAllSentByApplicant(player);
+        CitizenshipApplicationService.deleteAllSentByApplicant(playerProfile);
     }
 
-    public static void leaveCountry(PlayerProfile player) {
-        Country currentCountry = player.getCitizenshipCountry();
+    public static void leaveCountry(PlayerProfile playerProfile) {
+        Country currentCountry = playerProfile.getCitizenshipCountry();
         if (currentCountry == null)
             return;
 
-        if (player.getUUID().equals(currentCountry.getLeader()))
-            PositionService.demoteFromLeader(player);
+        if (playerProfile.getUUID().equals(currentCountry.getLeader()))
+            PositionService.demoteFromLeader(playerProfile);
 
-        currentCountry.getCitizens().remove(player.getUUID());
+        currentCountry.getCitizens().remove(playerProfile.getUUID());
 
-        player.setCitizenshipInternal(null);
-        player.setPositionInternal(Position.NONE);
+        playerProfile.setCitizenshipInternal(null);
+        playerProfile.setPositionInternal(Position.NONE);
     }
 }

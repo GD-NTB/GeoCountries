@@ -56,11 +56,11 @@ public class gcCitizenshipSent extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        PlayerProfile player = PlayerProfile.get(sender);
-        if (player.hasCitizenship())
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        if (playerProfile.hasCitizenship())
             return false;
 
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.getUUID());
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID());
         return cApplications != null && !cApplications.isEmpty();
     }
 }

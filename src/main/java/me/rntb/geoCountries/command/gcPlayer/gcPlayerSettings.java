@@ -22,12 +22,12 @@ public class gcPlayerSettings extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile player = PlayerProfile.get(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if setting a setting, set and escape
         if (args.length >= 2) {
             String toValue = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-            SettingData.setSetting(sender, args[0], toValue, PlayerProfile.settingsData, player.getSettings());
+            SettingData.setSetting(sender, args[0], toValue, PlayerProfile.settingsData, playerProfile.getSettings());
             return;
         }
         // else list all/specific setting
@@ -39,11 +39,11 @@ public class gcPlayerSettings extends GeoCommand {
 
         // if no args, list all settings
         if (args.length == 0)
-            message.append(getMessageAll(player));
+            message.append(getMessageAll(playerProfile));
         // else list specific setting
         else {
             String key = args[0];
-            TextComponent.Builder messageSpecificComponent = getMessageSpecific(key, player);
+            TextComponent.Builder messageSpecificComponent = getMessageSpecific(key, playerProfile);
             if (messageSpecificComponent == null)
                 message.append(Component.text("§cSetting §f" + key + "§c could not be found!"));
             else
@@ -55,13 +55,13 @@ public class gcPlayerSettings extends GeoCommand {
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 
-    private TextComponent.Builder getMessageAll(PlayerProfile player) {
+    private TextComponent.Builder getMessageAll(PlayerProfile playerProfile) {
         TextComponent.Builder message = Component.text();
-        for (String key : player.getSettings().keySet()) {
+        for (String key : playerProfile.getSettings().keySet()) {
             SettingData settingData = PlayerProfile.settingsData.get(key);
             if (settingData == null)
                 continue;
-            message.append(Component.text("§f> " + settingData.toString(player.getSettings().get(key)) + "  "))
+            message.append(Component.text("§f> " + settingData.toString(playerProfile.getSettings().get(key)) + "  "))
                    .append(SettingData.getEditButtonComponents("/gc player settings " + key + " ",
                                                                "/gc player settings " + key + " " + settingData.defaultValue))
                    .append(Component.newline());
@@ -69,11 +69,11 @@ public class gcPlayerSettings extends GeoCommand {
         return message;
     }
 
-    private TextComponent.Builder getMessageSpecific(String key, PlayerProfile player) {
+    private TextComponent.Builder getMessageSpecific(String key, PlayerProfile playerProfile) {
         SettingData settingData = PlayerProfile.settingsData.get(key);
         if (settingData == null)
             return null;
-        return Component.text().append(Component.text(settingData.toStringFull(key, player.getSettings().get(key)) + "  "))
+        return Component.text().append(Component.text(settingData.toStringFull(key, playerProfile.getSettings().get(key)) + "  "))
                                .append(SettingData.getEditButtonComponents("/gc player settings " + key + " ",
                                                                            "/gc player settings " + key + " " + settingData.defaultValue));
     }
@@ -83,13 +83,13 @@ public class gcPlayerSettings extends GeoCommand {
         if (args.length > 2)
             return List.of();
 
-        PlayerProfile player = PlayerProfile.get(sender);
-        if (player == null)
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        if (playerProfile == null)
             return List.of();
 
         // if no setting mentioned, return all settings as strings
         if (args.length == 1)
-            return new ArrayList<>(player.getSettings().keySet());
+            return new ArrayList<>(playerProfile.getSettings().keySet());
 
         // get setting typed before
         SettingData settingData = PlayerProfile.settingsData.get(args[0]);

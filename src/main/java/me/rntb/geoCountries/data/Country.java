@@ -8,6 +8,7 @@ import me.rntb.geoCountries.service.CitizenshipService;
 import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -133,6 +134,7 @@ public class Country extends DataCollection {
         byName.put(value, this);
     }
 
+    // todo: this doesn't really have to be serialised
     @Expose
     private UUID leader = null;
     public UUID getLeader() {
@@ -144,7 +146,13 @@ public class Country extends DataCollection {
     public void setLeaderInternal(UUID value) {
         leader = value;
     }
+    public boolean isLeaderOnline() {
+        if (leader == null)
+            return false;
+        return Bukkit.getPlayer(PlayerProfile.get(leader).getUsername()) != null;
+    }
 
+    // todo: this also doesn't really have to be serialised
     @Expose
     private final ArrayList<UUID> citizens = new ArrayList<>();
     public ArrayList<UUID> getCitizens() {
@@ -241,7 +249,7 @@ public class Country extends DataCollection {
     public Faction getFactionFaction() {
         return Faction.get(faction);
     }
-    public void setFactionInternal(UUID value) {
+    public void setFaction(UUID value) {
         faction = value;
     }
     public boolean hasFaction() {

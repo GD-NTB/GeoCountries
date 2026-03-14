@@ -45,7 +45,7 @@ public class StringUtil {
         while (m.find())
             illegalChars.add(m.group());
         if (!illegalChars.isEmpty())
-            return "§cThe following character(s) are not allowed: §r" + String.join("", illegalChars);
+            return "§cThe following character(s) are not allowed: §r" + String.join("", illegalChars) + "§r";
         if (response.chars().anyMatch(ch -> ch < 32))
             return "§cChat message must not contain any control characters!";
 
@@ -68,7 +68,7 @@ public class StringUtil {
         while (m.find())
             illegalChars.add(m.group());
         if (!illegalChars.isEmpty())
-            return "§cThe following characters are not allowed in a country name: §r" + String.join("", illegalChars);
+            return "§cThe following characters are not allowed in a country name: §r" + String.join("", illegalChars) + "§r";
         if (countryName.chars().anyMatch(ch -> ch < 32))
             return "§cCountry name must not contain any control characters!";
 
@@ -89,7 +89,7 @@ public class StringUtil {
         while (m.find())
             illegalChars.add(m.group());
         if (!illegalChars.isEmpty())
-            return "§cThe following character(s) are not allowed in a country prefix: §r" + String.join("", illegalChars);
+            return "§cThe following character(s) are not allowed in a country prefix: §r" + String.join("", illegalChars) + "§r";
         if (prefix.chars().anyMatch(ch -> ch < 32))
             return "§cCountry prefix must not contain any control characters!";
 
@@ -110,7 +110,7 @@ public class StringUtil {
         while (m.find())
             illegalChars.add(m.group());
         if (!illegalChars.isEmpty())
-            return "§cThe following character(s) are not allowed in a country motto: §r" + String.join("", illegalChars);
+            return "§cThe following character(s) are not allowed in a country motto: §r" + String.join("", illegalChars) + "§r";
         if (motto.chars().anyMatch(ch -> ch < 32))
             return "§cCountry motto must not contain any control characters!";
 
@@ -133,7 +133,7 @@ public class StringUtil {
         while (m.find())
             illegalChars.add(m.group());
         if (!illegalChars.isEmpty())
-            return "§cThe following characters are not allowed in a faction name: §r" + String.join("", illegalChars);
+            return "§cThe following characters are not allowed in a faction name: §r" + String.join("", illegalChars) + "§r";
         if (factionName.chars().anyMatch(ch -> ch < 32))
             return "§cFaction name must not contain any control characters!";
 

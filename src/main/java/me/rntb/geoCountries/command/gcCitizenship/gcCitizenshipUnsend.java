@@ -24,12 +24,12 @@ public class gcCitizenshipUnsend extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile player = PlayerProfile.get(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§6To what country was the citizenship application sent to which you want to unsend?");
             // start waiting for response
-            Response.startWaiting(player.getUUID(),
+            Response.startWaiting(playerProfile.getUUID(),
                                   new Response(this::onResponse,
                                                sender),
                                   true);
@@ -42,7 +42,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
     }
 
     private void onResponse(CommandSender sender, String countryName) {
-        PlayerProfile player = PlayerProfile.get(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
         Country toCountry = Country.get(countryName);
 
         // if country not exist, escape
@@ -51,7 +51,7 @@ public class gcCitizenshipUnsend extends GeoCommand {
             return;
         }
 
-        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.getUUID());
+        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID());
 
         // if doesnt have any pending applications, escape
         if (cApplications == null) {
@@ -79,20 +79,20 @@ public class gcCitizenshipUnsend extends GeoCommand {
         if (args.length != 1)
             return List.of();
 
-        PlayerProfile player = PlayerProfile.get(UuidUtil.getUUIDOfCommandSender(sender));
-        if (player.getPosition() != Position.LEADER)
+        PlayerProfile playerProfile = PlayerProfile.get(UuidUtil.getUUIDOfCommandSender(sender));
+        if (playerProfile.getPosition() != Position.LEADER)
             return List.of();
 
-        return player.getSentCitizenshipApplicationsAsNames();
+        return playerProfile.getSentCitizenshipApplicationsAsNames();
     }
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        PlayerProfile player = PlayerProfile.get(sender);
-        if (player.hasCitizenship())
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        if (playerProfile.hasCitizenship())
             return false;
 
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(player.getUUID());
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID());
         return cApplications != null && !cApplications.isEmpty();
     }
 }

@@ -22,11 +22,11 @@ public class gcCountryCreate extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile player = PlayerProfile.get(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // already has citizenship
-        if (player.hasCitizenship()) {
-            Country country = player.getCitizenshipCountry();
+        if (playerProfile.hasCitizenship()) {
+            Country country = playerProfile.getCitizenshipCountry();
             ChatUtil.sendPrefixedMessage(sender, "§cYou must first renounce your citizenship of §f" + country.getName() + "§c using §f/gc citizenship renounce§c before creating a country!");
             return;
         }
@@ -34,7 +34,7 @@ public class gcCountryCreate extends GeoCommand {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§6What do you want the name of your new country to be?");
             // start waiting for response
-            Response.startWaiting(player.getUUID(),
+            Response.startWaiting(playerProfile.getUUID(),
                                   new Response(this::onResponse,
                                                sender),
                                   true);
@@ -46,7 +46,7 @@ public class gcCountryCreate extends GeoCommand {
     }
 
     private void onResponse(CommandSender sender, String countryName) {
-        PlayerProfile player = PlayerProfile.get(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         countryName = countryName.trim();
         // validation check
@@ -62,8 +62,8 @@ public class gcCountryCreate extends GeoCommand {
         newCountry.register();
 
         // set player citizenship and position
-        CitizenshipService.joinCountry(player, newCountry);
-        PositionService.promoteToLeader(player);
+        CitizenshipService.joinCountry(playerProfile, newCountry);
+        PositionService.promoteToLeader(playerProfile);
 
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aCreated country §f" + countryName + "§a!");
 

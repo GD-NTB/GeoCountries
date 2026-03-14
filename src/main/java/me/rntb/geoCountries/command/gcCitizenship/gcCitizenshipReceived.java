@@ -173,20 +173,20 @@ public class gcCitizenshipReceived extends GeoCommand {
         if (args.length != 1)
             return List.of();
 
-        PlayerProfile player = PlayerProfile.get(UuidUtil.getUUIDOfCommandSender(sender));
-        if (player.getPosition() != Position.LEADER)
+        PlayerProfile playerProfile = PlayerProfile.get(UuidUtil.getUUIDOfCommandSender(sender));
+        if (playerProfile.getPosition() != Position.LEADER)
             return List.of();
 
-        return player.getCitizenshipCountry().getReceivedCitizenshipApplicationsAsUsernames();
+        return playerProfile.getCitizenshipCountry().getReceivedCitizenshipApplicationsAsUsernames();
     }
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        PlayerProfile player = PlayerProfile.get(sender);
-        if (!player.hasCitizenship() || player.getPosition() != Position.LEADER)
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        if (!playerProfile.hasCitizenship() || playerProfile.getPosition() != Position.LEADER)
             return false;
 
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(player.getCitizenship());
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(playerProfile.getCitizenship());
         return cApplications != null && !cApplications.isEmpty();
     }
 }

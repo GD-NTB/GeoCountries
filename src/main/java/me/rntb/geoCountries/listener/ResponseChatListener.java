@@ -13,9 +13,9 @@ public class ResponseChatListener implements Listener {
 
     @EventHandler
     public void onPlayerChat(AsyncChatEvent event) {
-        PlayerProfile player = PlayerProfile.get(event.getPlayer());
+        PlayerProfile playerProfile = PlayerProfile.get(event.getPlayer());
 
-        UUID uuid = player.getUUID();
+        UUID uuid = playerProfile.getUUID();
 
         // if wasn't waiting for response, escape
         if (!Response.isWaiting(uuid))

@@ -29,8 +29,8 @@ public class gcCountryCitizens extends GeoCommand {
 
         // if no args, country = player's country
         if (args.length == 0) {
-            PlayerProfile player = PlayerProfile.get(sender);
-            country = player.getCitizenshipCountry();
+            PlayerProfile playerProfile = PlayerProfile.get(sender);
+            country = playerProfile.getCitizenshipCountry();
             if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
                                                      """

@@ -69,16 +69,16 @@ public class PlayerProfile extends DataCollection {
         // reset and populate hashmaps, load settings
         byUUID.clear();
         byUsername.clear();
-        for (PlayerProfile player : all) {
-            byUsername.put(player.username, player);
-            byUUID.put(player.uuid, player);
+        for (PlayerProfile playerProfile : all) {
+            byUsername.put(playerProfile.username, playerProfile);
+            byUUID.put(playerProfile.uuid, playerProfile);
 
             // load settings by defaultSettings
-            if (player.settings == null)
-                player.settings = new LinkedHashMap<>();
+            if (playerProfile.settings == null)
+                playerProfile.settings = new LinkedHashMap<>();
             LinkedHashMap<String, String> orderedSettings = new LinkedHashMap<>();
-            settingsData.forEach((key, settingData) -> orderedSettings.put(key, player.settings.getOrDefault(key, settingData.defaultValue)));
-            player.settings = orderedSettings;
+            settingsData.forEach((key, settingData) -> orderedSettings.put(key, playerProfile.settings.getOrDefault(key, settingData.defaultValue)));
+            playerProfile.settings = orderedSettings;
         }
 
         if (ConfigState.debugLogging) {
@@ -220,6 +220,9 @@ public class PlayerProfile extends DataCollection {
     }
     public OfflinePlayer getOfflinePlayer() {
         return Bukkit.getOfflinePlayer(uuid);
+    }
+    public boolean isOnline() {
+        return Bukkit.getPlayer(getUsername()) != null;
     }
 
     public PlayerProfile(Player player) {

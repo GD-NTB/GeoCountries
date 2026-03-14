@@ -33,8 +33,8 @@ public class gcPurgeUsername extends GeoCommand {
     }
 
     private void onResponse(CommandSender sender, String username) {
-        PlayerProfile player = PlayerProfile.get(username);
-        if (player == null) {
+        PlayerProfile playerProfile = PlayerProfile.get(username);
+        if (playerProfile == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + username + "§c could not be found!");
             return;
         }
@@ -48,10 +48,10 @@ public class gcPurgeUsername extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        PlayerProfile player = PlayerProfile.get(args[0]);
-        player.deregister();
+        PlayerProfile playerProfile = PlayerProfile.get(args[0]);
+        playerProfile.deregister();
 
-        ChatUtil.sendPrefixedMessage(sender, "§aPurged player §f" + player.getUsername() + "§a.");
+        ChatUtil.sendPrefixedMessage(sender, "§aPurged player §f" + playerProfile.getUsername() + "§a.");
     }
 
     @Override

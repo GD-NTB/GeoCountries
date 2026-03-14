@@ -190,11 +190,11 @@ public class CitizenshipApplicationService {
     }
 
     // delete all SENT applications by applicant
-    public static void deleteAllSentByApplicant(PlayerProfile player) {
-        if (player == null)
+    public static void deleteAllSentByApplicant(PlayerProfile playerProfile) {
+        if (playerProfile == null)
             return;
 
-        List<CitizenshipApplication> cApplicationsSent = CitizenshipApplication.sentByApplicant.get(player.getUUID());
+        List<CitizenshipApplication> cApplicationsSent = CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID());
         if (cApplicationsSent == null)
             return;
         for (CitizenshipApplication cApplication : new ArrayList<>(cApplicationsSent)) {

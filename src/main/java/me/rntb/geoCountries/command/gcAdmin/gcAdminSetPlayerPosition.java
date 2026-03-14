@@ -33,9 +33,9 @@ public class gcAdminSetPlayerPosition extends GeoCommand {
         }
 
         String playerName = args[0];
-        PlayerProfile player = PlayerProfile.get(playerName);
+        PlayerProfile playerProfile = PlayerProfile.get(playerName);
 
-        if (player == null) {
+        if (playerProfile == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + playerName + "§c could not be found!");
             return;
         }
@@ -52,14 +52,14 @@ public class gcAdminSetPlayerPosition extends GeoCommand {
         // set position
         switch (position) {
             case LEADER:
-                PositionService.promoteToLeader(player);
+                PositionService.promoteToLeader(playerProfile);
                 break;
             case CITIZEN:
-                if (player.getPosition() == Position.LEADER)
-                    PositionService.demoteFromLeader(player);
+                if (playerProfile.getPosition() == Position.LEADER)
+                    PositionService.demoteFromLeader(playerProfile);
                 break;
             case NONE:
-                CitizenshipService.leaveCountry(player);
+                CitizenshipService.leaveCountry(playerProfile);
                 break;
         }
 

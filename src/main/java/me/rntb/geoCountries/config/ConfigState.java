@@ -31,6 +31,6 @@ public class ConfigState {
     public static int countryNameMax = 40;
     public static int countryMottoMin = 1;
     public static int countryMottoMax = 50;
-    public static int factionNameMin = 4;
+    public static int factionNameMin = 2;
     public static int factionNameMax = 40;
 }

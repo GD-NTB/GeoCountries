@@ -48,7 +48,7 @@ public class Faction extends DataCollection {
             byName.put(faction.name, faction);
 
             // set faction of member country
-            faction.getLeaderCountry().setFactionInternal(faction.uuid);
+            faction.getLeaderCountry().setFaction(faction.uuid);
         }
 
         if (ConfigState.debugLogging) {
@@ -81,7 +81,7 @@ public class Faction extends DataCollection {
         byName.put(name, this);
 
         // set faction of member countries
-        getLeaderCountry().setFactionInternal(uuid);
+        getLeaderCountry().setFaction(uuid);
     }
 
     public void deregister() {
@@ -89,7 +89,7 @@ public class Faction extends DataCollection {
         byName.remove(name);
 
         // unset this faction from member countries
-        getLeaderCountry().setFactionInternal(uuid);
+        getLeaderCountry().setFaction(uuid);
 
         delete(this, all, DISPLAY_NAME);
     }
@@ -123,6 +123,16 @@ public class Faction extends DataCollection {
     public void setLeaderInternal(UUID value) {
         leader = value;
     }
+
+    @Expose
+    private List<UUID> members;
+    public List<UUID> getMembers() {
+        return members;
+    }
+    public int getMemberCount() {
+        return members.size();
+    }
+
 
     public Faction(UUID uuid, String name, UUID leader) {
         this.uuid = uuid;

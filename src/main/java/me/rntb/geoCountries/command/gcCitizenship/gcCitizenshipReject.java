@@ -27,10 +27,10 @@ public class gcCitizenshipReject extends GeoCommand {
             return;
         }
 
-        PlayerProfile player = PlayerProfile.get(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if not leader, escape
-        if (player.getPosition() != Position.LEADER && player.hasCitizenship()) {
+        if (playerProfile.getPosition() != Position.LEADER && playerProfile.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cOnly a leader of a country can reject citizenship applications!");
             return;
         }
@@ -44,7 +44,7 @@ public class gcCitizenshipReject extends GeoCommand {
         }
 
         // get country
-        Country country = player.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipCountry();
         if (otherPlayer.getCitizenship() != null && otherPlayer.getCitizenship().equals(country.getUUID())) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + otherPlayerName + "§c is already a citizen of your country!");
             return;
@@ -59,7 +59,7 @@ public class gcCitizenshipReject extends GeoCommand {
 
         // get the citizenship application to the sender's country
         CitizenshipApplication cApplication = cApplications.stream()
-                                                           .filter(ca -> ca.getToCountry().equals(player.getCitizenship()))
+                                                           .filter(ca -> ca.getToCountry().equals(playerProfile.getCitizenship()))
                                                            .findFirst().orElse(null);
         if (cApplication == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + otherPlayerName + "§c has not sent a citizen application to your country!");
@@ -77,10 +77,10 @@ public class gcCitizenshipReject extends GeoCommand {
         if (args.length != 1)
             return List.of();
 
-        PlayerProfile player = PlayerProfile.get(UuidUtil.getUUIDOfCommandSender(sender));
-        if (player.getPosition() != Position.LEADER)
+        PlayerProfile playerProfile = PlayerProfile.get(UuidUtil.getUUIDOfCommandSender(sender));
+        if (playerProfile.getPosition() != Position.LEADER)
             return List.of();
 
-        return player.getCitizenshipCountry().getReceivedCitizenshipApplicationsAsUsernames();
+        return playerProfile.getCitizenshipCountry().getReceivedCitizenshipApplicationsAsUsernames();
     }
 }

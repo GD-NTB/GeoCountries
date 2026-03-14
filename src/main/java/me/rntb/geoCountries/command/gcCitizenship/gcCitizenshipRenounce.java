@@ -20,16 +20,16 @@ public class gcCitizenshipRenounce extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile player = PlayerProfile.get(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if doesnt have citizenship, escape
-        if (!player.hasCitizenship()) {
+        if (!playerProfile.hasCitizenship()) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must have citizenship of a country in order to renounce it!");
             return;
         }
 
         // if leader of country, escape
-        if (player.getPosition() == Position.LEADER) { // todo: this will eventually be replaced by a system where there is a chosen leader inheritor
+        if (playerProfile.getPosition() == Position.LEADER) { // todo: this will eventually be replaced by a system where there is a chosen leader inheritor
             ChatUtil.sendPrefixedMessage(sender, "§cYou can't renounce your citizenship if you are the leader of a country, you must either promote another player to leader (§f/gc country promote [player]§c) or dissolve the country (§f/gc country dissolve§c)!");
             return;
         }
@@ -43,20 +43,20 @@ public class gcCitizenshipRenounce extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        PlayerProfile player = PlayerProfile.get(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
-        Country country = player.getCitizenshipCountry();
-        CitizenshipService.leaveCountry(player);
+        Country country = playerProfile.getCitizenshipCountry();
+        CitizenshipService.leaveCountry(playerProfile);
 
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aRenounced your citizenship of §f" + country.getName() + "§a!");
 
         // broadcast notif to country
-        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + player.getUsername() + "§6 is no longer a citizen of §f" + country.getName() + "§6!", true);
+        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.getUsername() + "§6 is no longer a citizen of §f" + country.getName() + "§6!", true);
     }
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        PlayerProfile player = PlayerProfile.get(sender);
-        return player.hasCitizenship() && player.getPosition() != Position.LEADER;
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        return playerProfile.hasCitizenship() && playerProfile.getPosition() != Position.LEADER;
     }
 }

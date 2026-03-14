@@ -33,9 +33,9 @@ public class gcAdminSetPlayerCountry extends GeoCommand {
         }
 
         String playerName = args[0];
-        PlayerProfile player = PlayerProfile.get(playerName);
+        PlayerProfile playerProfile = PlayerProfile.get(playerName);
 
-        if (player == null) {
+        if (playerProfile == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + playerName + "§c could not be found!");
             return;
         }
@@ -44,7 +44,7 @@ public class gcAdminSetPlayerCountry extends GeoCommand {
 
         // set country
         if (countryName.equals("null"))
-            CitizenshipService.leaveCountry(player);
+            CitizenshipService.leaveCountry(playerProfile);
         else {
             Country country = Country.get(countryName);
             if (country == null) {
@@ -53,7 +53,7 @@ public class gcAdminSetPlayerCountry extends GeoCommand {
             }
 
             // set country
-            CitizenshipService.joinCountry(player, country);
+            CitizenshipService.joinCountry(playerProfile, country);
         }
 
         ChatUtil.sendPrefixedMessage(sender, "§aSet player country!");

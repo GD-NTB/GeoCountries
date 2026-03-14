@@ -134,8 +134,8 @@ public class CitizenshipApplication extends DataCollection {
 
     @Override
     public String toString() {
-        PlayerProfile player = PlayerProfile.get(applicant);
+        PlayerProfile playerProfile = PlayerProfile.get(applicant);
         return "CitizenApplication(%s, %s)"
-               .formatted(player != null ? player.getUsername() : "null", String.valueOf(uuid));
+               .formatted(playerProfile != null ? playerProfile.getUsername() : "null", String.valueOf(uuid));
     }
 }

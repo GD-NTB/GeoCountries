@@ -22,16 +22,16 @@ public class gcFactionCreate extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile player = PlayerProfile.get(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
-        Country country = player.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipCountry();
         // doesn't have country
         if (country == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to create a faction!");
             return;
         }
         // is not leader
-        if (player.getPosition() != Position.LEADER) {
+        if (playerProfile.getPosition() != Position.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to create a faction!");
             return;
         }
@@ -39,7 +39,7 @@ public class gcFactionCreate extends GeoCommand {
         // already has faction
         if (country.hasFaction()) {
             // must transfer ownership then leave
-            if (player.getPosition() == Position.LEADER)
+            if (playerProfile.getPosition() == Position.LEADER)
                 ChatUtil.sendPrefixedMessage(sender, "§cYou must first transfer leadership of your current faction §f" + country.getFactionFaction().getName() + "§c using §f/gc faction transfer§c, then leave it using §c/gc faction leave§c before you can create a faction!");
             // must leave faction
             else
@@ -50,7 +50,7 @@ public class gcFactionCreate extends GeoCommand {
         if (args.length == 0) {
             ChatUtil.sendPrefixedMessage(sender, "§6What do you want the name of your new faction to be?");
             // start waiting for response
-            Response.startWaiting(player.getUUID(),
+            Response.startWaiting(playerProfile.getUUID(),
                                   new Response(this::onResponse,
                                                sender),
                                   true);
@@ -62,7 +62,7 @@ public class gcFactionCreate extends GeoCommand {
     }
 
     private void onResponse(CommandSender sender, String factionName) {
-        PlayerProfile player = PlayerProfile.get(sender);
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         factionName = factionName.trim();
         // validation check
@@ -72,7 +72,7 @@ public class gcFactionCreate extends GeoCommand {
             return;
         }
 
-        Faction newFaction = new Faction(UUID.randomUUID(), factionName, player.getCitizenship());
+        Faction newFaction = new Faction(UUID.randomUUID(), factionName, playerProfile.getCitizenship());
 
         // create faction
         newFaction.register();
