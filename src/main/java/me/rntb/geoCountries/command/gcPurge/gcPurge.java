@@ -17,5 +17,7 @@ public class gcPurge extends GeoCommand {
         this.childCommands.put("citizenshipapplication", new gcPurgeCitizenshipApplication(this, "citizenshipapplication", "/gc purge citizenshipapplication", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
         this.childCommands.put("claimchunk", new gcPurgeClaimChunk(this, "claimchunk", "/gc purge claimchunk", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
         this.childCommands.put("faction", new gcPurgeFaction(this, "faction", "/gc purge faction", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
+        this.childCommands.put("factioninvite", new gcPurgeFactionInvite(this, "factioninvite", "/gc purge factioninvite", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
+
     }
 }

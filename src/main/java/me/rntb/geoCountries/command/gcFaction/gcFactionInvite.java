@@ -2,10 +2,7 @@ package me.rntb.geoCountries.command.gcFaction;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.config.ConfigState;
-import me.rntb.geoCountries.data.Country;
-import me.rntb.geoCountries.data.Faction;
-import me.rntb.geoCountries.data.FactionInvite;
-import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.data.*;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.FactionInviteService;
 import me.rntb.geoCountries.type.Response;
@@ -13,6 +10,7 @@ import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -72,15 +70,23 @@ public class gcFactionInvite extends GeoCommand {
             ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c is already in faction §f " + toCountry.getFactionFaction().getName() + "§c!");
             return;
         }
-        // if leader of country not online, escape
-        if (!toCountry.isLeaderOnline()) {
-            ChatUtil.sendPrefixedMessage(sender, "§cThe leader §f" + toCountry.getLeaderPlayerProfile().getUsername() + "§c of that country is not online!");
-            return;
-        }
-
         PlayerProfile playerProfile = PlayerProfile.get(sender);
         Faction faction = playerProfile.getCitizenshipCountry().getFactionFaction();
-        PlayerProfile leader = toCountry.getLeaderPlayerProfile();
+
+        ArrayList<FactionInvite> fInvites = FactionInvite.byFromFaction.get(faction.getUUID());
+        if (fInvites != null) {
+            // if sent too many applications, escape
+            int cApplicationsCount = fInvites.size();
+            if (ConfigState.maxFactionInvites != -1 && cApplicationsCount >= ConfigState.maxFactionInvites) {
+                ChatUtil.sendPrefixedMessage(sender, "§cYou've already sent too many §f(" + cApplicationsCount + "/" + ConfigState.maxFactionInvites + ")§c faction invites! Unsend one by doing §f/gc faction unsend [country]");
+                return;
+            }
+            // if already sent application to this country, escape
+            if (!ConfigState.debugMode && fInvites.stream().anyMatch(ca -> ca.getToCountry().equals(toCountry.getUUID()))) {
+                ChatUtil.sendPrefixedMessage(sender, "§cYou already have a pending faction invite to §f" + countryName + "§c!");
+                return;
+            }
+        }
 
         // create new invite and send
         FactionInvite factionInvite = new FactionInvite(UUID.randomUUID(),

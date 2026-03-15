@@ -44,7 +44,7 @@ public class FactionInviteService {
             // build message
             TextComponent.Builder message = Component.text();
 
-            message.append(ChatUtil.mm.deserialize("<gold>Country <white>" + factionLeader.getName() + "<gold> has sent your country an invite to join faction <white>" + faction.getName() + "<gold>!"))
+            message.append(ChatUtil.mm.deserialize("<white>" + factionLeader.getName() + "<gold> has sent your country an invite to join their faction <white>" + faction.getName() + "<gold>!"))
                    .append(Component.newline())
                    // [Accept] button
                    .append(ChatUtil.mm.deserialize("<click:run_command:'/gc faction accept " + faction.getName() + "'>" +

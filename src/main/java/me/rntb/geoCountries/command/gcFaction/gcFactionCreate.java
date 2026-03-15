@@ -40,7 +40,7 @@ public class gcFactionCreate extends GeoCommand {
         if (country.hasFaction()) {
             // must transfer ownership then leave
             if (playerProfile.getPosition() == Position.LEADER)
-                ChatUtil.sendPrefixedMessage(sender, "§cYou must first transfer leadership of your current faction §f" + country.getFactionFaction().getName() + "§c using §f/gc faction transfer§c, then leave it using §c/gc faction leave§c before you can create a faction!");
+                ChatUtil.sendPrefixedMessage(sender, "§cYou must first transfer leadership of your current faction §f" + country.getFactionFaction().getName() + "§c using §f/gc faction transfer§c, then leave it using §f/gc faction leave§c before you can create a faction!");
             // must leave faction
             else
                 ChatUtil.sendPrefixedMessage(sender, "§cYou must first leave your current faction §f" + country.getFactionFaction().getName() + "§c §c/gc faction leave§f before you can create a faction!");

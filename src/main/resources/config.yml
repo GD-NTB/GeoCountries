@@ -16,7 +16,8 @@ country-prefix-max: 10 # max allowed length of a country's prefix
 
 sound-effects: true # play notification sound effects (on war declared, chat notif, etc)
 
-max-citizenship-applications: 10 # max number of sent citizenship applications allowed per person, -1=infinite
+max-citizenship-applications: 10 # max number of sent citizenship applications allowed per player, -1=infinite
+max-faction-invites: 10 # max number of sent pending faction invites allowed per faction, -1=infinite
 
 chat-response-min: 1 # min allowed length of chat message when player asked to type in chat
 chat-response-max: 150  # max allowed length of chat message when player asked to type in chat

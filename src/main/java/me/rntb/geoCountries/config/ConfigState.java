@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 
 public class ConfigState {
 
-    public static final double CONFIG_VERSION = 0.023; // increment whenever config.yml is changed
+    public static final double CONFIG_VERSION = 0.024; // increment whenever config.yml is changed
 
     public static boolean enablePl3xMap = true;
 
@@ -24,6 +24,7 @@ public class ConfigState {
     public static boolean soundEffects = true;
 
     public static int maxCitizenshipApplications = 10;
+    public static int maxFactionInvites = 10;
 
     public static int chatResponseMin = 1;
     public static int chatResponseMax = 150;

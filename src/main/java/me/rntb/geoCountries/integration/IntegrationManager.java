@@ -1,7 +1,6 @@
 package me.rntb.geoCountries.integration;
 
 import me.rntb.geoCountries.GeoCountries;
-import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.integration.pl3xmap.Pl3xMapIntegration;
 
 public class IntegrationManager {
@@ -10,7 +9,7 @@ public class IntegrationManager {
     public static void init() {
         detectPlugins();
 
-        if (ConfigState.enablePl3xMap)
+        if (IntegrationState.isPl3xMapEnabled)
             Pl3xMapIntegration.init();
     }
 
@@ -20,7 +19,7 @@ public class IntegrationManager {
     }
 
     public static void disable() {
-        if (ConfigState.enablePl3xMap)
+        if (IntegrationState.isPl3xMapEnabled)
             Pl3xMapIntegration.clearAllClaims();
     }
 }
