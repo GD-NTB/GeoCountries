@@ -61,7 +61,7 @@ public class gcFactionSent extends GeoCommand {
                 String toCountryName = fInvite.getToCountryCountry().getName();
                 long daysAgo = TimeUtil.daysAgo(fInvite.getTimeCreated());
 
-                message.append(Component.text("§a" + country.getName() + "§f §8(" + daysAgo + " day" + StringUtil.leadingS(daysAgo) + " ago) "))
+                message.append(Component.text("§a" + toCountryName + "§f §8(" + daysAgo + " day" + StringUtil.leadingS(daysAgo) + " ago) "))
                        // [Uninvite] button
                        .append(ChatUtil.mm.deserialize("<click:run_command:'/gc faction uninvite " + toCountryName + "'>" +
                                                        "<hover:show_text:'<white>Click to unsend this faction invite.</white>'>" +

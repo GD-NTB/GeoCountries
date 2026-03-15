@@ -1,7 +1,9 @@
 package me.rntb.geoCountries.service;
 
 import me.rntb.geoCountries.config.ConfigState;
-import me.rntb.geoCountries.data.*;
+import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.Faction;
+import me.rntb.geoCountries.data.FactionInvite;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -150,7 +152,7 @@ public class FactionInviteService {
     }
 
     // delete all faction invites sent by faction
-    public static void deleteAllSentByFaction(Country byFaction) {
+    public static void deleteAllSentByFaction(Faction byFaction) {
         if (byFaction == null)
             return;
 
@@ -173,5 +175,16 @@ public class FactionInviteService {
         for (FactionInvite fInvite : new ArrayList<>(fInvitesSent)) {
             FactionInviteService.unsend(fInvite);
         }
+    }
+
+    public static boolean countryHasFactionInviteFromFaction(Faction fromFaction, Country toCountry) {
+        if (fromFaction == null || toCountry == null)
+            return false;
+
+        List<FactionInvite> fInvites = FactionInvite.byFromFaction.get(fromFaction.getUUID());
+        if (fInvites == null || fInvites.isEmpty())
+            return false;
+
+        return fInvites.stream().anyMatch(fi -> fi.getToCountry().equals(toCountry.getUUID()));
     }
 }

@@ -38,7 +38,7 @@ public class Response {
         // timeout after x seconds
         BukkitTask timeoutTask = Bukkit.getScheduler().runTaskLater(GeoCountries.self,
                                                                     () -> stopWaiting(uuid, StopWaitingEvent.TIMED_OUT, true),
-                                                                    response.timeoutAfterSeconds *20); // 20 ticks = 1 second
+                                                                    response.timeoutAfterSeconds * 20); // 20 ticks = 1 second
 
         // add to timeout tasks dict
         timeoutTasks.put(uuid, timeoutTask);
@@ -84,6 +84,7 @@ public class Response {
         }
 
         // cancel whatever was going to use the response
+        // todo: this is retarded: make a onstopwaiting field or something
         if (stopWaitingEvent != StopWaitingEvent.PLAYER_SENT_MESSAGE)
             CitizenshipApplicationService.cancel(CitizenshipApplication.openByApplicant.get(uuid), true);
 

@@ -3,6 +3,7 @@ package me.rntb.geoCountries.data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.service.FactionInviteService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 
@@ -32,7 +33,6 @@ public class Faction extends DataCollection {
         return byName.get(name);
     }
 
-
     public static void init() {
         all = readFromFile(FILE_PATH, DISPLAY_NAME, new TypeToken<ArrayList<Faction>>() { }.getType());
         if (all == null) {
@@ -47,8 +47,14 @@ public class Faction extends DataCollection {
             byUUID.put(faction.uuid, faction);
             byName.put(faction.name, faction);
 
-            // set faction of member country
-            faction.getLeaderCountry().setFaction(faction.uuid);
+            // set faction of member countries
+            if (faction.members == null) {
+                faction.members = new ArrayList<>();
+                faction.members.add(faction.leader);
+            }
+            for (UUID memberUUID : faction.members) {
+                Country.get(memberUUID).setFaction(faction.uuid);
+            }
         }
 
         if (ConfigState.debugLogging) {
@@ -81,15 +87,22 @@ public class Faction extends DataCollection {
         byName.put(name, this);
 
         // set faction of member countries
-        getLeaderCountry().setFaction(uuid);
+        for (UUID memberUUID : members) {
+            Country.get(memberUUID).setFaction(uuid);
+        }
     }
 
     public void deregister() {
         byUUID.remove(uuid);
         byName.remove(name);
 
-        // unset this faction from member countries
-        getLeaderCountry().setFaction(uuid);
+        // remove members
+        for (UUID memberUUID : members) {
+            Country.get(memberUUID).setFaction(null);
+        }
+
+        // delete all sent faction invites
+        FactionInviteService.deleteAllSentByFaction(this);
 
         delete(this, all, DISPLAY_NAME);
     }
@@ -120,24 +133,36 @@ public class Faction extends DataCollection {
     public Country getLeaderCountry() {
         return Country.get(leader);
     }
-    public void setLeaderInternal(UUID value) {
-        leader = value;
+    public void setLeader(UUID leaderUUID) {
+        leader = leaderUUID;
+        addMember(leaderUUID);
     }
 
     @Expose
-    private List<UUID> members;
+    private List<UUID> members = new ArrayList<>();
     public List<UUID> getMembers() {
         return members;
     }
     public int getMemberCount() {
         return members.size();
     }
-
+    public void addMember(UUID countryUUID) {
+        if (!members.contains(countryUUID))
+            members.add(countryUUID);
+        Country.get(countryUUID).setFaction(uuid);
+        // delete all pending faction invites to this country
+        FactionInviteService.deleteAllSentToCountry(Country.get(countryUUID));
+    }
+    public void removeMember(UUID countryUUID) {
+        members.remove(countryUUID);
+        Country.get(countryUUID).setFaction(null);
+    }
 
     public Faction(UUID uuid, String name, UUID leader) {
         this.uuid = uuid;
         this.name = name;
         this.leader = leader;
+        setLeader(leader);
     }
 
     @Override
@@ -154,7 +179,7 @@ public class Faction extends DataCollection {
 
     @Override
     public String toString() {
-        return "Faction(leader=%s)"
-               .formatted(leader);
+        return "Faction(leader=%s, members=%d)"
+               .formatted(leader, getMemberCount());
     }
 }

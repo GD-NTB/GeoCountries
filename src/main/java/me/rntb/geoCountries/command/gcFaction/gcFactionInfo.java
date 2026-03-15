@@ -56,10 +56,12 @@ public class gcFactionInfo extends GeoCommand {
                          §6========== FACTION INFO ==========
                          §a%s§f
                          §f> §eLeader§f: %s
+                         §f> §eMembers§f: %d
                          §f> Created on §2%s §8(%s day%s ago)
                          §6================================="""
                          .formatted(faction.getName(),
                                     leader != null ? leader.getName() : "§cNone",
+                                    faction.getMemberCount(),
                                     faction.getTimeCreatedAsString(), daysAgo, StringUtil.leadingS(daysAgo));
 
         ChatUtil.sendPrefixedMessage(sender, message);

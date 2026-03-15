@@ -1,16 +1,19 @@
 package me.rntb.geoCountries.command.gcFaction;
 
 import me.rntb.geoCountries.command.GeoCommand;
-import me.rntb.geoCountries.data.*;
+import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.Faction;
+import me.rntb.geoCountries.data.FactionInvite;
+import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.FactionInviteService;
-import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.function.Predicate;
 
 public class gcFactionUninvite extends GeoCommand {
 
@@ -21,25 +24,33 @@ public class gcFactionUninvite extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
-
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§6What country was previously invited that you now want to uninvite?");
-            // start waiting for response
-            Response.startWaiting(playerProfile.getUUID(),
-                                  new Response(this::onResponse,
-                                               sender),
-                                  true);
-        }
-        else {
-            String countryName = String.join(" ", args);
-            onResponse(sender, countryName);
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you want to uninvite from your faction!");
+            return;
         }
 
-    }
-
-    private void onResponse(CommandSender sender, String countryName) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
+
+        // if not in country, escape
+        Country country = playerProfile.getCitizenshipCountry();
+        if (country == null) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou are not the leader of a faction!");
+            return;
+        }
+
+        Faction faction = country.getFactionFaction();
+        // if not in faction, escape
+        if (faction == null) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou are not the leader of a faction!");
+            return;
+        }
+        // if not leader of faction, escape
+        if (playerProfile.getPosition() != Position.LEADER) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou are not the leader of your faction!");
+            return;
+        }
+
+        String countryName = String.join(" ", args);
         Country toCountry = Country.get(countryName);
 
         // if country not exist, escape
@@ -71,28 +82,45 @@ public class gcFactionUninvite extends GeoCommand {
         ChatUtil.sendPrefixedMessage(sender, "§aUnsent faction invite!");
     }
 
+    private Predicate<Country> includeCountryPredicate(Faction faction) {
+        return (c) -> FactionInviteService.countryHasFactionInviteFromFaction(faction, c);
+    }
+
+    @Override
+    public ItemStack[] getMenuButtons(CommandSender sender) {
+        Faction faction = PlayerProfile.get(sender).getCitizenshipCountry().getFactionFaction();
+        if (faction == null)
+            return null;
+
+        return Country.getAllAsMenuButtons(includeCountryPredicate(faction),
+                                           (c) -> "§fUninvite §6" + c.getName() + "§f from your faction.",
+                                           (c) -> "gc faction uninvite " + c.getName());
+    }
+
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         if (args.length != 1)
             return List.of();
 
-        Country country = PlayerProfile.get(sender).getCitizenshipCountry();
-        if (country == null)
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        if (playerProfile.getCitizenship() == null)
             return List.of();
-        UUID factionUUID = country.getFaction();
-        if (factionUUID == null)
-            return List.of();
-
-        List<FactionInvite> fInvitesSent = FactionInvite.byFromFaction.get(factionUUID);
-        if (fInvitesSent == null)
+        Faction faction = playerProfile.getCitizenshipCountry().getFactionFaction();
+        if (faction == null)
             return List.of();
 
-        return fInvitesSent.stream()
-                           .map(fi -> fi.getToCountryCountry().getName()).toList();
+        return Country.all.stream()
+                          .filter(includeCountryPredicate(faction))
+                          .map(Country::getName)
+                          .toList();
     }
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return !getTabCompletion(sender, new String[] { "" }).isEmpty();
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        if (playerProfile.getPosition() != PlayerProfile.Position.LEADER)
+            return false;
+        Faction faction = playerProfile.getCitizenshipCountry().getFactionFaction();
+        return faction != null && faction.getLeader().equals(playerProfile.getCitizenship());
     }
 }

@@ -33,9 +33,17 @@ public class InventoryGUIListener implements Listener {
         if (commandString == null)
             return;
 
-        // these are hardcoded "command" commands
         // GUI_CLOSE
         if (commandString.equals("GUI_CLOSE")) {
+            player.closeInventory();
+            SoundUtil.playSound(player, SoundUtil.SoundEffect.MENU_CLICK);
+            return;
+        }
+
+        // if starts with GUI_RUN_COMMAND:, implicitly execute the rest of the string
+        if (commandString.startsWith("GUI_RUN_COMMAND:")) {
+            String command = commandString.substring(16);
+            player.performCommand(command);
             player.closeInventory();
             SoundUtil.playSound(player, SoundUtil.SoundEffect.MENU_CLICK);
             return;

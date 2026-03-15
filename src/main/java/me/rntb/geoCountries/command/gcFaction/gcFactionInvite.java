@@ -2,10 +2,12 @@ package me.rntb.geoCountries.command.gcFaction;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.config.ConfigState;
-import me.rntb.geoCountries.data.*;
+import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.Faction;
+import me.rntb.geoCountries.data.FactionInvite;
+import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.FactionInviteService;
-import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
@@ -13,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class gcFactionInvite extends GeoCommand {
 
@@ -23,6 +26,11 @@ public class gcFactionInvite extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you want to invite to your faction!");
+            return;
+        }
+
         PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if not in country, escape
@@ -44,21 +52,7 @@ public class gcFactionInvite extends GeoCommand {
             return;
         }
 
-        if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§6What country do you want to invite to your faction?");
-            // start waiting for response
-            Response.startWaiting(playerProfile.getUUID(),
-                                  new Response(this::onResponseCountryName,
-                                               sender),
-                                  true);
-        }
-        else {
-            String countryName = String.join(" ", args);
-            onResponseCountryName(sender, countryName);
-        }
-    }
-
-    private void onResponseCountryName(CommandSender sender, String countryName) {
+        String countryName = String.join(" ", args);
         Country toCountry = Country.get(countryName);
         // if country not exist, escape
         if (toCountry == null) {
@@ -70,8 +64,6 @@ public class gcFactionInvite extends GeoCommand {
             ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c is already in faction §f " + toCountry.getFactionFaction().getName() + "§c!");
             return;
         }
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Faction faction = playerProfile.getCitizenshipCountry().getFactionFaction();
 
         ArrayList<FactionInvite> fInvites = FactionInvite.byFromFaction.get(faction.getUUID());
         if (fInvites != null) {
@@ -82,7 +74,7 @@ public class gcFactionInvite extends GeoCommand {
                 return;
             }
             // if already sent application to this country, escape
-            if (!ConfigState.debugMode && fInvites.stream().anyMatch(ca -> ca.getToCountry().equals(toCountry.getUUID()))) {
+            if (fInvites.stream().anyMatch(ca -> ca.getToCountry().equals(toCountry.getUUID()))) {
                 ChatUtil.sendPrefixedMessage(sender, "§cYou already have a pending faction invite to §f" + countryName + "§c!");
                 return;
             }
@@ -99,12 +91,35 @@ public class gcFactionInvite extends GeoCommand {
             ChatUtil.sendPrefixedLogMessage("Sent faction invite from " + faction.getName());
     }
 
+    private Predicate<Country> includeCountryPredicate(Faction faction) {
+        return (c) -> !c.hasFaction() && !faction.getMembers().contains(c.getUUID()) && !FactionInviteService.countryHasFactionInviteFromFaction(faction, c);
+    }
+
+    @Override
+    public ItemStack[] getMenuButtons(CommandSender sender) {
+        Faction faction = PlayerProfile.get(sender).getCitizenshipCountry().getFactionFaction();
+        if (faction == null)
+            return null;
+
+        return Country.getAllAsMenuButtons(includeCountryPredicate(faction),
+                                           (c) -> "§fInvite §6" + c.getName() + "§f to your faction.",
+                                           (c) -> "gc faction invite " + c.getName());
+    }
+
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         if (args.length != 1)
             return List.of();
+
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        if (playerProfile.getCitizenship() == null)
+            return List.of();
+        Faction faction = playerProfile.getCitizenshipCountry().getFactionFaction();
+        if (faction == null)
+            return List.of();
+
         return Country.all.stream()
-                          .filter(c -> !c.hasFaction())
+                          .filter(includeCountryPredicate(faction))
                           .map(Country::getName)
                           .toList();
     }

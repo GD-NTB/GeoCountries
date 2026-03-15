@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-// todo: use Response for insufficient args
 public class gcAdminSetPlayerPosition extends GeoCommand {
 
     public gcAdminSetPlayerPosition(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {

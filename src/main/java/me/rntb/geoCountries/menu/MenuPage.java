@@ -8,6 +8,7 @@ import me.rntb.geoCountries.util.ItemUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -82,7 +83,7 @@ public class MenuPage {
         return createButton(ItemStack.of(Material.LIME_STAINED_GLASS_PANE), "", null, null, false);
     }
 
-    public static ItemStack createButtonOfPlayerSkull(Player player, String name, String description, String command, Boolean isAdminCommand) {
+    public static ItemStack createButtonOfPlayerSkull(OfflinePlayer player, String name, String description, String command, Boolean isAdminCommand) {
         ItemStack skullItem = ItemStack.of(Material.PLAYER_HEAD);
         skullItem.editMeta(meta -> ((SkullMeta) meta).setOwningPlayer(player));
         return createButton(skullItem, name, description, command, isAdminCommand);

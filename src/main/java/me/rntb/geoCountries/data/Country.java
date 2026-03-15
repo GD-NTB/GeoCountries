@@ -3,6 +3,7 @@ package me.rntb.geoCountries.data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.menu.MenuPage;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.service.CitizenshipService;
 import me.rntb.geoCountries.type.SettingData;
@@ -10,8 +11,11 @@ import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class Country extends DataCollection {
@@ -26,6 +30,35 @@ public class Country extends DataCollection {
         if (!alphabetical)
             return countries.toList();
         return countries.sorted().toList();
+    }
+    // todo: make this an abstract(?) method of DataCollection
+    // todo: filter predicate
+    public static ItemStack[] getAllAsMenuButtons(Predicate<Country> filter, Function<Country, String> helpStringGetter, Function<Country, String> commandGetter) {
+        ItemStack[] buttons = new ItemStack[all.size()];
+        int i = 0;
+        for (Country country : all) {
+            // this should never trigger!
+            if (country.getLeader() == null)
+                continue;
+
+            // if fails filter predicate, skip
+            if (!filter.test(country))
+                continue;
+
+            // display head of country leader
+            buttons[i] = MenuPage.createButtonOfPlayerSkull(country.getLeaderPlayerProfile().getOfflinePlayer(),
+                                                            country.getName(),
+                                                            helpStringGetter.apply(country),
+                                                            "GUI_RUN_COMMAND:" + commandGetter.apply(country),
+                                                            false);
+
+            i++;
+        }
+
+        // truncate nulls because im lazy
+        return Arrays.stream(buttons)
+                     .filter(Objects::nonNull)
+                     .toArray(ItemStack[]::new);
     }
 
     private static final Map<UUID, Country> byUUID = new HashMap<>();
@@ -235,7 +268,7 @@ public class Country extends DataCollection {
     private List<Long> claimChunks;
     public List<Long> getClaimChunks() {
         return claimChunks;
-    } // todo: hashset
+    }
     public int getClaimChunksCount() {
         return claimChunks.size();
     }
