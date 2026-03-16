@@ -3,15 +3,44 @@ package me.rntb.geoCountries.service;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.util.ChatUtil;
 
-public class PositionService {
+public class CountryService {
+
+    public static void joinCountry(PlayerProfile playerProfile, Country country) {
+        leaveCountry(playerProfile);
+
+        // add to new country
+        country.getCitizens().add(playerProfile.getUUID());
+
+        playerProfile.setCitizenshipInternal(country.getUUID());
+        playerProfile.setPositionInternal(Position.CITIZEN);
+
+        // remove all pending citizenship applications
+        CitizenshipApplicationService.deleteAllSentByApplicant(playerProfile);
+    }
+
+    public static void leaveCountry(PlayerProfile playerProfile) {
+        Country currentCountry = playerProfile.getCitizenshipCountry();
+        if (currentCountry == null)
+            return;
+
+        if (playerProfile.getUUID().equals(currentCountry.getLeader()))
+            demoteFromLeader(playerProfile);
+
+        currentCountry.getCitizens().remove(playerProfile.getUUID());
+
+        playerProfile.setCitizenshipInternal(null);
+        playerProfile.setPositionInternal(Position.NONE);
+    }
 
     public static void promoteToLeader(PlayerProfile playerProfile) {
         Country country = playerProfile.getCitizenshipCountry();
         if (country == null)
             return;
 
+        // if already leader, dont do anything
         if (country.getLeader() != null && country.getLeader().equals(playerProfile.getUUID()))
             return;
 
@@ -31,6 +60,7 @@ public class PositionService {
         playerProfile.setPositionInternal(PlayerProfile.Position.LEADER);
     }
 
+    // todo: replace with inheritor when i finally do that shit
     public static void demoteFromLeader(PlayerProfile playerProfile) {
         Country country = playerProfile.getCitizenshipCountry();
         if (country == null)

@@ -3,8 +3,7 @@ package me.rntb.geoCountries.command.gcAdmin;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
-import me.rntb.geoCountries.service.CitizenshipService;
-import me.rntb.geoCountries.service.PositionService;
+import me.rntb.geoCountries.service.CountryService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.EnumUtil;
 import org.bukkit.command.CommandSender;
@@ -51,14 +50,14 @@ public class gcAdminSetPlayerPosition extends GeoCommand {
         // set position
         switch (position) {
             case LEADER:
-                PositionService.promoteToLeader(playerProfile);
+                CountryService.promoteToLeader(playerProfile);
                 break;
             case CITIZEN:
                 if (playerProfile.getPosition() == Position.LEADER)
-                    PositionService.demoteFromLeader(playerProfile);
+                    CountryService.demoteFromLeader(playerProfile);
                 break;
             case NONE:
-                CitizenshipService.leaveCountry(playerProfile);
+                CountryService.leaveCountry(playerProfile);
                 break;
         }
 

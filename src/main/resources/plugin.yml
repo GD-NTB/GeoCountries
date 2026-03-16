@@ -67,7 +67,10 @@ permissions:
       gc.unclaim.one: true
       gc.faction.create: true
       gc.faction.invite: true
+      gc.faction.sent: true
       gc.faction.uninvite: true
+      gc.faction.received: true
+      gc.faction.accept: true
 
   # -------------------- ADMIN --------------------
   gc.group.admin:

@@ -61,7 +61,7 @@ public class gcFactionInvite extends GeoCommand {
         }
         // if country is already in faction
         if (toCountry.hasFaction()) {
-            ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c is already in faction §f " + toCountry.getFactionFaction().getName() + "§c!");
+            ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c is already in faction §f" + toCountry.getFactionFaction().getName() + "§c!");
             return;
         }
 

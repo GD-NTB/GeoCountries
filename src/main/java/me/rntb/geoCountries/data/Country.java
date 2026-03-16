@@ -4,7 +4,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
-import me.rntb.geoCountries.service.CitizenshipService;
+import me.rntb.geoCountries.service.CountryService;
+import me.rntb.geoCountries.service.FactionInviteService;
 import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
@@ -98,7 +99,7 @@ public class Country extends DataCollection {
         for (UUID uuid : new ArrayList<>(citizens)) { // new arraylist while we're modifying
             PlayerProfile playerProfile = PlayerProfile.get(uuid);
             if (playerProfile != null)
-                CitizenshipService.leaveCountry(playerProfile);
+                CountryService.leaveCountry(playerProfile);
         }
 
         byName.remove(name);
@@ -111,7 +112,8 @@ public class Country extends DataCollection {
 
         // delete any associated applications
         CitizenshipApplicationService.deleteAllSentByToCountry(this);
-
+        // delete all sent faction invites
+        FactionInviteService.deleteAllSentToCountry(this);
 
         delete(this, all, DISPLAY_NAME);
     }
@@ -255,7 +257,7 @@ public class Country extends DataCollection {
     public Faction getFactionFaction() {
         return Faction.get(faction);
     }
-    public void setFaction(UUID value) {
+    public void setFactionInternal(UUID value) {
         faction = value;
     }
     public boolean hasFaction() {

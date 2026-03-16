@@ -37,7 +37,10 @@ gc.group.player:
     gc.unclaim.one
     gc.faction.create
     gc.faction.invite
+    gc.faction.sent
     gc.faction.uninvite
+    gc.faction.received
+    gc.faction.accept
 
 gc.group.admin:
     gc.purge

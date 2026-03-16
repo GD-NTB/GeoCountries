@@ -53,7 +53,7 @@ public class Faction extends DataCollection {
                 faction.members.add(faction.leader);
             }
             for (UUID memberUUID : faction.members) {
-                Country.get(memberUUID).setFaction(faction.uuid);
+                Country.get(memberUUID).setFactionInternal(faction.uuid);
             }
         }
 
@@ -88,7 +88,7 @@ public class Faction extends DataCollection {
 
         // set faction of member countries
         for (UUID memberUUID : members) {
-            Country.get(memberUUID).setFaction(uuid);
+            Country.get(memberUUID).setFactionInternal(uuid);
         }
     }
 
@@ -98,7 +98,7 @@ public class Faction extends DataCollection {
 
         // remove members
         for (UUID memberUUID : members) {
-            Country.get(memberUUID).setFaction(null);
+            Country.get(memberUUID).setFactionInternal(null);
         }
 
         // delete all sent faction invites
@@ -133,9 +133,8 @@ public class Faction extends DataCollection {
     public Country getLeaderCountry() {
         return Country.get(leader);
     }
-    public void setLeader(UUID leaderUUID) {
-        leader = leaderUUID;
-        addMember(leaderUUID);
+    public void setLeaderInternal(UUID value) {
+        leader = value;
     }
 
     @Expose
@@ -146,23 +145,11 @@ public class Faction extends DataCollection {
     public int getMemberCount() {
         return members.size();
     }
-    public void addMember(UUID countryUUID) {
-        if (!members.contains(countryUUID))
-            members.add(countryUUID);
-        Country.get(countryUUID).setFaction(uuid);
-        // delete all pending faction invites to this country
-        FactionInviteService.deleteAllSentToCountry(Country.get(countryUUID));
-    }
-    public void removeMember(UUID countryUUID) {
-        members.remove(countryUUID);
-        Country.get(countryUUID).setFaction(null);
-    }
 
     public Faction(UUID uuid, String name, UUID leader) {
         this.uuid = uuid;
         this.name = name;
         this.leader = leader;
-        setLeader(leader);
     }
 
     @Override

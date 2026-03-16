@@ -31,7 +31,7 @@ public abstract class DataCollection {
         return timeCreated;
     }
     public String getTimeCreatedAsString() {
-        return TimeUtil.converTimeToString(timeCreated);
+        return TimeUtil.convertTimeToString(timeCreated);
     }
 
     static <T> ArrayList<T> readFromFile(String filePath, String displayName, Type type) {

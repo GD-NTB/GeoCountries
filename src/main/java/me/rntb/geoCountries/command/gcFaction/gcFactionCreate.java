@@ -5,6 +5,7 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.Faction;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
+import me.rntb.geoCountries.service.FactionService;
 import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
@@ -72,10 +73,13 @@ public class gcFactionCreate extends GeoCommand {
             return;
         }
 
-        Faction newFaction = new Faction(UUID.randomUUID(), factionName, playerProfile.getCitizenship());
+        Country country = playerProfile.getCitizenshipCountry();
+        Faction newFaction = new Faction(UUID.randomUUID(), factionName, country.getUUID());
 
         // create faction
         newFaction.register();
+        FactionService.joinFaction(country, newFaction);
+        FactionService.promoteToLeader(country);
 
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aCreated faction §f" + factionName + "§a!");
 

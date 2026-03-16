@@ -3,6 +3,7 @@ package me.rntb.geoCountries.data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
@@ -133,6 +134,9 @@ public class PlayerProfile extends DataCollection {
 
         byUsername.remove(username);
         byUUID.remove(uuid);
+
+        // delete any associated applications
+        CitizenshipApplicationService.deleteAllSentByApplicant(this);
 
         delete(this, all, DISPLAY_NAME);
     }

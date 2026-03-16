@@ -4,7 +4,7 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
-import me.rntb.geoCountries.service.CitizenshipService;
+import me.rntb.geoCountries.service.CountryService;
 import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
@@ -72,7 +72,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
 
         Country country = playerProfile.getCitizenshipCountry();
 
-        CitizenshipService.leaveCountry(playerProfile);
+        CountryService.leaveCountry(playerProfile);
 
         ChatUtil.sendPrefixedMessage(sender, "§aRevoked the citizenship of §f" + country.getName() + "§a!");
 

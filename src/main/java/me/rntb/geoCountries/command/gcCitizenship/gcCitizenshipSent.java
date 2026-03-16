@@ -24,6 +24,11 @@ public class gcCitizenshipSent extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         TextComponent.Builder message = Component.text();
 
+        if (PlayerProfile.get(sender).hasCitizenship()) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou already have a country!");
+            return;
+        }
+
         message.append(ChatUtil.newlineIfPrefixIsEmptyComponent())
                .append(Component.text("§6========== CITIZENSHIP APPLICATIONS =========="))
                .append(Component.newline());
@@ -34,17 +39,17 @@ public class gcCitizenshipSent extends GeoCommand {
         }
         else {
             for (CitizenshipApplication cApplication : cApplications) {
-                Country country = cApplication.getToCountryCountry();
+                Country otherCountry = cApplication.getToCountryCountry();
                 String reason = cApplication.getReason();
                 // truncate
                 if (reason.length() >= 30)
                     reason = cApplication.getReason().substring(0, 20) + "...";
 
-                message.append(Component.text("§a%s§f (§eReason§f: %s§f) "
-                                              .formatted(country.getName(), reason)))
+                message.append(Component.text("§a%s§f (§eReason§f: %s§f)  "
+                                              .formatted(otherCountry.getName(), reason)))
                        // [Unapply] button
-                       .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship unapply " + country.getName() + "'>" +
-                                                       "<hover:show_text:'<white>Click to unapply this citizenship application.</white>'>" +
+                       .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship unapply " + otherCountry.getName() + "'>" +
+                                                       "<hover:show_text:'<white>Click to unsend this citizenship application.</white>'>" +
                                                        "<red><bold>[Unapply]</bold></red>" +
                                                        "</hover></click>"))
                        .append(Component.newline());
