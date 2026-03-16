@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.List;
 
+// todo: display time last online
 public class gcCountryCitizens extends GeoCommand {
 
     public gcCountryCitizens(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {

@@ -31,8 +31,7 @@ public class gcFactionInfo extends GeoCommand {
                                                      """
                                                      §6========== FACTION INFO ==========
                                                      §cYou are not in a faction.
-                                                     §cDo §f/gc faction create§c to create a faction, or
-                                                     §cdo §f/gc faction apply§c to apply to join one.
+                                                     §cDo §f/gc faction create§c to create one.
                                                      §6================================""");
                 return;
             }
@@ -49,18 +48,22 @@ public class gcFactionInfo extends GeoCommand {
         }
 
         Country leader = faction.getLeaderCountry();
+        PlayerProfile leaderOfLeader = null;
+        if (leader != null)
+            leaderOfLeader = leader.getLeaderPlayerProfile();
         long daysAgo = TimeUtil.daysAgo(faction.getTimeCreated());
 
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
                          """
                          §6========== FACTION INFO ==========
-                         §a%s§f
-                         §f> §eLeader§f: %s
+                         §3%s§f
+                         §f> §eLeader§f: %s §f(§e%s§f)
                          §f> §eMembers§f: %d
                          §f> Created on §2%s §8(%s day%s ago)
                          §6================================="""
                          .formatted(faction.getName(),
                                     leader != null ? leader.getName() : "§cNone",
+                                    leaderOfLeader != null ? leaderOfLeader.getUsername() : "§cNone",
                                     faction.getMemberCount(),
                                     faction.getTimeCreatedAsString(), daysAgo, StringUtil.leadingS(daysAgo));
 

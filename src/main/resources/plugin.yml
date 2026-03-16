@@ -53,7 +53,7 @@ permissions:
       gc.citizenship: true
       gc.citizenship.apply: true
       gc.citizenship.sent: true
-      gc.citizenship.unsend: true
+      gc.citizenship.unapply: true
       gc.citizenship.renounce: true
       gc.citizenship.received: true
       gc.citizenship.accept: true

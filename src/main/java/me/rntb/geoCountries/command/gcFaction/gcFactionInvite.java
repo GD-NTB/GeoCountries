@@ -7,6 +7,7 @@ import me.rntb.geoCountries.data.Faction;
 import me.rntb.geoCountries.data.FactionInvite;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
+import me.rntb.geoCountries.menu.MenuPage;
 import me.rntb.geoCountries.service.FactionInviteService;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
@@ -15,7 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Predicate;
 
 public class gcFactionInvite extends GeoCommand {
 
@@ -91,19 +91,30 @@ public class gcFactionInvite extends GeoCommand {
             ChatUtil.sendPrefixedLogMessage("Sent faction invite from " + faction.getName());
     }
 
-    private Predicate<Country> includeCountryPredicate(Faction faction) {
-        return (c) -> !c.hasFaction() && !faction.getMembers().contains(c.getUUID()) && !FactionInviteService.countryHasFactionInviteFromFaction(faction, c);
-    }
-
     @Override
     public ItemStack[] getMenuButtons(CommandSender sender) {
         Faction faction = PlayerProfile.get(sender).getCitizenshipCountry().getFactionFaction();
+        // should never trigger!
         if (faction == null)
             return null;
 
-        return Country.getAllAsMenuButtons(includeCountryPredicate(faction),
-                                           (c) -> "§fInvite §6" + c.getName() + "§f to your faction.",
-                                           (c) -> "gc faction invite " + c.getName());
+        List<Country> invalidCountries;
+        List<FactionInvite> fInvites = FactionInvite.byFromFaction.get(faction.getUUID());
+        // if sent no invites, no invalid countries
+        if (fInvites == null || fInvites.isEmpty())
+            invalidCountries = List.of();
+        // else exclude countries which we invited before
+        else
+            invalidCountries = fInvites.stream()
+                                       .map(FactionInvite::getToCountryCountry).toList();
+        // negate
+        List<Country> validCountries = Country.all.stream()
+                                                  .filter(c -> !invalidCountries.contains(c)).toList();
+
+        return MenuPage.createSkullMenuButtons(validCountries, country -> country.getLeaderPlayerProfile().getOfflinePlayer(),
+                                                               country -> "§a" + country.getName(),
+                                                               country -> "Invite §6" + country.getName(),
+                                                               country -> "gc faction invite " + country.getName());
     }
 
     @Override
@@ -119,7 +130,9 @@ public class gcFactionInvite extends GeoCommand {
             return List.of();
 
         return Country.all.stream()
-                          .filter(includeCountryPredicate(faction))
+                          .filter((c) -> !c.hasFaction() &&
+                                         !faction.getMembers().contains(c.getUUID()) &&
+                                         !FactionInviteService.countryHasFactionInviteFromFaction(faction, c))
                           .map(Country::getName)
                           .toList();
     }

@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class MenuPage {
 
@@ -121,5 +122,33 @@ public class MenuPage {
             return;
         Bukkit.getScheduler().runTask(GeoCountries.self, () -> player.closeInventory()); // 1 tick delay
         PlayerMetadata.isMenuOpen.put(player.getUniqueId(), false);
+    }
+
+    public static <T> ItemStack[] createSkullMenuButtons(List<T> list, Function<T, OfflinePlayer> player,
+                                                                       Function<T, String> name,
+                                                                       Function<T, String> description,
+                                                                       Function<T, String> command) {
+        ItemStack[] buttons = new ItemStack[list.size()];
+        int i = 0;
+        for (T item : list) {
+            try {
+                buttons[i] = MenuPage.createButtonOfPlayerSkull(player.apply(item),
+                                                                name.apply(item),
+                                                                description.apply(item),
+                                                                "GUI_RUN_COMMAND:" + command.apply(item),
+                                                                false);
+            } catch (Exception e) {
+                buttons[i] = MenuPage.createButton(ItemStack.of(Material.BARRIER),
+                                                                "§cInvalid Entry",
+                                                                e.toString(),
+                                                                "",
+                                                                false);
+            }
+
+            i++;
+        }
+
+        // truncate nulls because im lazy
+        return buttons;
     }
 }

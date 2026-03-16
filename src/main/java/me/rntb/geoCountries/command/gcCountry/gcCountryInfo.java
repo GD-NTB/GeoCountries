@@ -48,12 +48,21 @@ public class gcCountryInfo extends GeoCommand {
         }
 
         PlayerProfile leader = country.getLeaderPlayerProfile();
-        Faction faction = country.getFactionFaction();
+
+        String factionString;
+        if (country.hasFaction()) {
+            Faction faction = country.getFactionFaction();
+            factionString = "%s §f(§e%s§f)"
+                    .formatted(faction.getName(),
+                               faction.getLeader().equals(country.getUUID()) ? "LEADER" : "Member");
+        }
+        else
+            factionString = "§cNone";
+
         long daysAgo = TimeUtil.daysAgo(country.getTimeCreated());
 
         String countryMotto = country.getSettings().get("motto");
 
-        // todo: indicator if we are leader or not of faction
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
                          """
                          §6========== COUNTRY INFO ==========
@@ -64,9 +73,9 @@ public class gcCountryInfo extends GeoCommand {
                          §f> §eCitizens§f: %s
                          §f> Created on §2%s §8(%s day%s ago)
                          §6================================="""
-                         .formatted(country.getName(),
+                         .formatted(country.getFullDisplayName(),
                                     !countryMotto.equals("null") ? countryMotto : "§cNone",
-                                    faction != null ? faction.getName() : "§cNone",
+                                    factionString,
                                     leader != null ? leader.getUsername() : "§cNone",
                                     country.getCitizenCount(),
                                     country.getTimeCreatedAsString(), daysAgo, StringUtil.leadingS(daysAgo));

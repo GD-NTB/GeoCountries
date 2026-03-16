@@ -6,6 +6,7 @@ import me.rntb.geoCountries.data.Faction;
 import me.rntb.geoCountries.data.FactionInvite;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
+import me.rntb.geoCountries.menu.MenuPage;
 import me.rntb.geoCountries.service.FactionInviteService;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
@@ -89,12 +90,22 @@ public class gcFactionUninvite extends GeoCommand {
     @Override
     public ItemStack[] getMenuButtons(CommandSender sender) {
         Faction faction = PlayerProfile.get(sender).getCitizenshipCountry().getFactionFaction();
+        // should never trigger!
         if (faction == null)
             return null;
 
-        return Country.getAllAsMenuButtons(includeCountryPredicate(faction),
-                                           (c) -> "§fUninvite §6" + c.getName() + "§f from your faction.",
-                                           (c) -> "gc faction uninvite " + c.getName());
+        List<Country> validCountries;
+        List<FactionInvite> fInvites = FactionInvite.byFromFaction.get(faction.getUUID());
+        if (fInvites == null || fInvites.isEmpty())
+            validCountries = Country.all;
+        else
+            validCountries = fInvites.stream()
+                                     .map(FactionInvite::getToCountryCountry).toList();
+
+        return MenuPage.createSkullMenuButtons(validCountries, country -> country.getLeaderPlayerProfile().getOfflinePlayer(),
+                                                               country -> "§a" + country.getName(),
+                                                               country -> "Uninvite §6" + country.getName(),
+                                                               country -> "gc faction uninvite " + country.getName());
     }
 
     @Override
@@ -120,7 +131,12 @@ public class gcFactionUninvite extends GeoCommand {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
         if (playerProfile.getPosition() != PlayerProfile.Position.LEADER)
             return false;
+
         Faction faction = playerProfile.getCitizenshipCountry().getFactionFaction();
-        return faction != null && faction.getLeader().equals(playerProfile.getCitizenship());
+        if (faction == null || !faction.getLeader().equals(playerProfile.getCitizenship()))
+            return false;
+
+        List<FactionInvite> fInvites = FactionInvite.byFromFaction.get(faction.getUUID());
+        return fInvites != null && !fInvites.isEmpty();
     }
 }

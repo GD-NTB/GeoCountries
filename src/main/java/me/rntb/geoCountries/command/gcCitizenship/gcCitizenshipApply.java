@@ -5,10 +5,12 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.menu.MenuPage;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,6 +28,11 @@ public class gcCitizenshipApply extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you want to apply to get citizenship of!");
+            return;
+        }
+
         PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if already has citizenship, escape
@@ -34,22 +41,7 @@ public class gcCitizenshipApply extends GeoCommand {
             return;
         }
 
-        if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§6What country do you want to apply for citizenship to?");
-            // start waiting for response
-            Response.startWaiting(playerProfile.getUUID(),
-                                  new Response(this::onResponseCountryName,
-                                               sender),
-                                  true);
-        }
-        else {
-            String countryName = String.join(" ", args);
-            onResponseCountryName(sender, countryName);
-        }
-    }
-
-    private void onResponseCountryName(CommandSender sender, String countryName) {
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        String countryName = String.join(" ", args);
 
         Country toCountry = Country.get(countryName);
         // if country not exist, escape
@@ -72,7 +64,7 @@ public class gcCitizenshipApply extends GeoCommand {
             // if sent too many applications, escape
             int cApplicationsCount = cApplications.size();
             if (ConfigState.maxCitizenshipApplications != -1 && cApplicationsCount >= ConfigState.maxCitizenshipApplications) {
-                ChatUtil.sendPrefixedMessage(sender, "§cYou've already sent too many §f(" + cApplicationsCount + "/" + ConfigState.maxCitizenshipApplications + ")§c citizenship applications! Unsend one by doing §f/gc citizenship unsend [country]");
+                ChatUtil.sendPrefixedMessage(sender, "§cYou've already sent too many §f(" + cApplicationsCount + "/" + ConfigState.maxCitizenshipApplications + ")§c citizenship applications! Unsend one by doing §f/gc citizenship unapply [country]");
                 return;
             }
             // if already sent application to this country, escape
@@ -129,6 +121,27 @@ public class gcCitizenshipApply extends GeoCommand {
     }
 
     @Override
+    public ItemStack[] getMenuButtons(CommandSender sender) {
+        List<Country> invalidCountries;
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(UuidUtil.getUUIDOfCommandSender(sender));
+        // if sent no applications, no invalid countries
+        if (cApplications == null || cApplications.isEmpty())
+            invalidCountries = List.of();
+        // else exclude countries which we applied to before
+        else
+            invalidCountries = cApplications.stream()
+                                            .map(CitizenshipApplication::getToCountryCountry).toList();
+        // negate
+        List<Country> validCountries = Country.all.stream()
+                                                  .filter(c -> !invalidCountries.contains(c)).toList();
+
+        return MenuPage.createSkullMenuButtons(validCountries, country -> country.getLeaderPlayerProfile().getOfflinePlayer(),
+                                                               country -> "§a" + country.getName(),
+                                                               country -> "Apply to §6" + country.getName(),
+                                                               country -> "gc citizenship apply " + country.getName());
+    }
+
+    @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         return args.length == 1 ? Country.allAsNames(true) : List.of();
     }
@@ -139,7 +152,6 @@ public class gcCitizenshipApply extends GeoCommand {
         if (playerProfile.hasCitizenship())
             return false;
 
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID());
-        return cApplications == null || cApplications.size() < ConfigState.maxCitizenshipApplications;
+        return CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID()) == null;
     }
 }

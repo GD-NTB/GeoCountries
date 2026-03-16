@@ -1,11 +1,10 @@
 package me.rntb.geoCountries.command.gcPlayer;
 
 import me.rntb.geoCountries.command.GeoCommand;
-import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.TimeUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import me.rntb.geoCountries.util.TimeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
@@ -34,31 +33,32 @@ public class gcPlayerInfo extends GeoCommand {
             }
         }
 
-        String positionAndCountryString = "§cStateless";
-        if (playerProfile.hasCitizenship()) {
-            Country country = playerProfile.getCitizenshipCountry();
+        String positionAndCountryString;
+        if (playerProfile.hasCitizenship())
             positionAndCountryString = "§e%s§f of §e%s"
-                                       .formatted(playerProfile.getPositionString(), country != null ? country.getName() : "§cNone");
-        }
+                                       .formatted(playerProfile.getPositionString(),
+                                                  playerProfile.getCitizenshipCountry().getFullDisplayName());
+        else
+            positionAndCountryString = "§cStateless";
 
         String onlineString = "§aOnline";
         if (Bukkit.getPlayer(playerProfile.getUsername()) == null) {
-            long daysAgo = TimeUtil.daysAgo(playerProfile.getOfflinePlayer().getLastSeen());
-            onlineString = "§cLast seen §f" + daysAgo + "§c days ago";
+            long onlineDaysAgo = TimeUtil.daysAgo(playerProfile.getOfflinePlayer().getLastSeen());
+            onlineString = "§cLast online §f" + onlineDaysAgo + "§c day" + StringUtil.leadingS(onlineDaysAgo) + " ago";
         }
 
-        long daysAgo = TimeUtil.daysAgo(playerProfile.getTimeCreated());
+        long createdDaysAgo = TimeUtil.daysAgo(playerProfile.getTimeCreated());
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
                          """
                          §6========== PLAYER INFO ==========
                          §a%s§f (%s§f)
-                         §f> %s
+                         §f> §e%s
                          §f> Joined on §2%s §8(%s day%s ago)
                          §6================================"""
                         .formatted(playerProfile.getUsername(),
                                    onlineString,
                                    positionAndCountryString,
-                                   playerProfile.getTimeCreatedAsString(), daysAgo, StringUtil.leadingS(daysAgo));
+                                   playerProfile.getTimeCreatedAsString(), createdDaysAgo, StringUtil.leadingS(createdDaysAgo));
 
         ChatUtil.sendPrefixedMessage(sender, message);
     }

@@ -42,10 +42,10 @@ public class gcCitizenshipSent extends GeoCommand {
 
                 message.append(Component.text("§a%s§f (§eReason§f: %s§f) "
                                               .formatted(country.getName(), reason)))
-                       // [Unsend] button
-                       .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship unsend " + country.getName() + "'>" +
-                                                       "<hover:show_text:'<white>Click to unsend this citizenship application.</white>'>" +
-                                                       "<red><bold>[Unsend]</bold></red>" +
+                       // [Unapply] button
+                       .append(ChatUtil.mm.deserialize("<click:run_command:'/gc citizenship unapply " + country.getName() + "'>" +
+                                                       "<hover:show_text:'<white>Click to unapply this citizenship application.</white>'>" +
+                                                       "<red><bold>[Unapply]</bold></red>" +
                                                        "</hover></click>"))
                        .append(Component.newline());
             }

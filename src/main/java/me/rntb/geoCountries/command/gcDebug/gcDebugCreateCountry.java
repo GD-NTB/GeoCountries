@@ -2,8 +2,6 @@ package me.rntb.geoCountries.command.gcDebug;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
-import me.rntb.geoCountries.data.PlayerProfile;
-import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.command.CommandSender;
@@ -20,21 +18,8 @@ public class gcDebugCreateCountry extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§6What do you want the name of the new country to be?");
-            // start waiting for response
-            Response.startWaiting(PlayerProfile.get(sender).getUUID(),
-                                  new Response(this::onResponse,
-                                               sender),
-                                  true);
-        }
-        else {
-            String countryName = String.join(" ", args).trim();
-            onResponse(sender, countryName);
-        }
-    }
+        String countryName = String.join(" ", args).trim();
 
-    private void onResponse(CommandSender sender, String countryName) {
         // validation check
         String validationString = StringUtil.validateCountryName(countryName, true);
         if (validationString != null) { // validation.OK -> null

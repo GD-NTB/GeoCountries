@@ -5,8 +5,8 @@ import me.rntb.geoCountries.data.CitizenshipApplication;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
+import me.rntb.geoCountries.menu.MenuPage;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
-import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -15,34 +15,23 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class gcCitizenshipUnsend extends GeoCommand {
+public class gcCitizenshipUnapply extends GeoCommand {
 
-    public gcCitizenshipUnsend(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+    public gcCitizenshipUnapply(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Unsends a citizenship application that you previously sent.";
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
-
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§6To what country was the citizenship application sent to which you want to unsend?");
-            // start waiting for response
-            Response.startWaiting(playerProfile.getUUID(),
-                                  new Response(this::onResponse,
-                                               sender),
-                                  true);
-        }
-        else {
-            String countryName = String.join(" ", args);
-            onResponse(sender, countryName);
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you sent the citizenship application to!");
+            return;
         }
 
-    }
-
-    private void onResponse(CommandSender sender, String countryName) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
+
+        String countryName = String.join(" ", args);
         Country toCountry = Country.get(countryName);
 
         // if country not exist, escape
@@ -72,6 +61,19 @@ public class gcCitizenshipUnsend extends GeoCommand {
         CitizenshipApplicationService.deleteSent(cApplication);
 
         ChatUtil.sendPrefixedMessage(sender, "§aUnsent citizenship application!");
+    }
+
+    @Override
+    public ItemStack[] getMenuButtons(CommandSender sender) {
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(UuidUtil.getUUIDOfCommandSender(sender));
+
+        List<Country> validCountries = cApplications.stream()
+                                                    .map(CitizenshipApplication::getToCountryCountry).toList();
+
+        return MenuPage.createSkullMenuButtons(validCountries, country -> country.getLeaderPlayerProfile().getOfflinePlayer(),
+                                                               country -> "§a" + country.getName(),
+                                                               country -> "Unapply from §6" + country.getName(),
+                                                               country -> "gc citizenship unapply " + country.getName());
     }
 
     @Override

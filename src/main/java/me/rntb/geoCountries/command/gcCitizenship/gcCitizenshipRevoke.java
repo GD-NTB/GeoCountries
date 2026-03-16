@@ -6,7 +6,6 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.CitizenshipService;
 import me.rntb.geoCountries.type.Confirmation;
-import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -32,19 +31,11 @@ public class gcCitizenshipRevoke extends GeoCommand {
         }
 
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§6What is the name of the player you want to revoke the citizenship of?");
-            // start waiting for response
-            Response.startWaiting(senderProfile.getUUID(),
-                                  new Response(this::onResponse,
-                                               sender),
-                                  true);
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must be put the name of the player whose citizenship you want to revoke!");
+            return;
         }
-        else
-            onResponse(sender, args[0]);
-    }
 
-    private void onResponse(CommandSender sender, String playerName) {
-        PlayerProfile senderProfile = PlayerProfile.get(sender);
+        String playerName = args[0];
 
         // if revoking own citizenship, escape
         if (playerName.equals(senderProfile.getUsername())) {

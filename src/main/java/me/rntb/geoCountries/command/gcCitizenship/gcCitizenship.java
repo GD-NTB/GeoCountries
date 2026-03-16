@@ -4,8 +4,6 @@ import me.rntb.geoCountries.command.GeoCommand;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.LinkedHashMap;
-
 public class gcCitizenship extends GeoCommand {
 
     public gcCitizenship(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
@@ -18,6 +16,6 @@ public class gcCitizenship extends GeoCommand {
         this.childCommands.put("reject", new gcCitizenshipReject(this, "reject", "/gc citizenship reject", "gc.citizenship.reject", null));
         this.childCommands.put("received", new gcCitizenshipReceived(this, "received", "/gc citizenship received", "gc.citizenship.received", ItemStack.of(Material.CHEST)));
         this.childCommands.put("sent", new gcCitizenshipSent(this, "sent", "/gc citizenship sent", "gc.citizenship.sent", ItemStack.of(Material.BOOK)));
-        this.childCommands.put("unsend", new gcCitizenshipUnsend(this, "unsend", "/gc citizenship unsend", "gc.citizenship.unsend", ItemStack.of(Material.CARROT_ON_A_STICK)));
+        this.childCommands.put("unapply", new gcCitizenshipUnapply(this, "unapply", "/gc citizenship unapply", "gc.citizenship.unapply", ItemStack.of(Material.CARROT_ON_A_STICK)));
     }
 }

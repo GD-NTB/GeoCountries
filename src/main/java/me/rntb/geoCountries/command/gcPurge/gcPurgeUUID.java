@@ -3,7 +3,6 @@ package me.rntb.geoCountries.command.gcPurge;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.type.Confirmation;
-import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -21,18 +20,12 @@ public class gcPurgeUUID extends GeoCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§6What is the UUID of the player you want to purge?");
-            // start waiting for response
-            Response.startWaiting(PlayerProfile.get(sender).getUUID(),
-                                  new Response(this::onResponse,
-                                               sender),
-                                  true);
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must be put the UUID of the player who you want to purge!");
+            return;
         }
-        else
-            onResponse(sender, args[0]);
-    }
 
-    private void onResponse(CommandSender sender, String uuidString) {
+        String uuidString = args[0];
+
         PlayerProfile playerProfile = PlayerProfile.byUUIDString(uuidString);
         if (playerProfile == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cUUID §f" + uuidString + "§c could not be found!");

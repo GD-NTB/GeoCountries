@@ -2,9 +2,7 @@ package me.rntb.geoCountries.command.gcAdmin;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
-import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.type.Confirmation;
-import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
@@ -22,20 +20,12 @@ public class gcAdminDeleteCountry extends GeoCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§6What is the name of the country you want to delete?");
-            // start waiting for response
-            Response.startWaiting(PlayerProfile.get(sender).getUUID(),
-                                  new Response(this::onResponse,
-                                               sender),
-                                  true);
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must be put the name of the country you want to delete!");
+            return;
         }
-        else {
-            String countryName = String.join(" ", args).trim();
-            onResponse(sender, countryName);
-        }
-    }
 
-    private void onResponse(CommandSender sender, String countryName) {
+        String countryName = String.join(" ", args).trim();
+
         Country country = Country.get(countryName);
         if (country == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c does not exist!");
