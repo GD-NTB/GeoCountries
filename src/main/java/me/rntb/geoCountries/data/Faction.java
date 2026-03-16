@@ -145,6 +145,12 @@ public class Faction extends DataCollection {
     public int getMemberCount() {
         return members.size();
     }
+    public List<Country> getMembersSorted() {
+        return Stream.concat(Stream.of(getLeaderCountry()),
+                             members.stream().filter(m -> !m.equals(leader))
+                                             .map(Country::get))
+                     .toList();
+    }
 
     public Faction(UUID uuid, String name, UUID leader) {
         this.uuid = uuid;

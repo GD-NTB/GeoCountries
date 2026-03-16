@@ -89,7 +89,7 @@ public class gcFactionUninvite extends GeoCommand {
 
     @Override
     public ItemStack[] getMenuButtons(CommandSender sender) {
-        Faction faction = PlayerProfile.get(sender).getCitizenshipCountry().getFactionFaction();
+        Faction faction = PlayerProfile.get(sender).getFaction();
         // should never trigger!
         if (faction == null)
             return null;
@@ -116,7 +116,7 @@ public class gcFactionUninvite extends GeoCommand {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
         if (playerProfile.getCitizenship() == null)
             return List.of();
-        Faction faction = playerProfile.getCitizenshipCountry().getFactionFaction();
+        Faction faction = playerProfile.getFaction();
         if (faction == null)
             return List.of();
 
@@ -132,7 +132,7 @@ public class gcFactionUninvite extends GeoCommand {
         if (playerProfile.getPosition() != PlayerProfile.Position.LEADER)
             return false;
 
-        Faction faction = playerProfile.getCitizenshipCountry().getFactionFaction();
+        Faction faction = playerProfile.getFaction();
         if (faction == null || !faction.getLeader().equals(playerProfile.getCitizenship()))
             return false;
 

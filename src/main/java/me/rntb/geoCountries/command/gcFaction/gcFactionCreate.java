@@ -89,6 +89,6 @@ public class gcFactionCreate extends GeoCommand {
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        return !playerProfile.getCitizenshipCountry().hasFaction() && playerProfile.getPosition() == Position.LEADER;
+        return !playerProfile.hasFaction() && playerProfile.getPosition() == Position.LEADER;
     }
 }

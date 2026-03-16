@@ -31,16 +31,16 @@ public class gcCountryCitizens extends GeoCommand {
         // if no args, country = player's country
         if (args.length == 0) {
             PlayerProfile playerProfile = PlayerProfile.get(sender);
-            country = playerProfile.getCitizenshipCountry();
-            if (country == null) {
+            if (!playerProfile.hasCitizenship()) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
                                                      """
                                                      §6========== COUNTRY CITIZENS ==========
                                                      §cYou do not have citizenship of any country.
                                                      §cDo §f/gc country citizens [country]§c to get a list of a country's citizens.
-                                                     §6=================================""");
+                                                     §6=====================================""");
                 return;
             }
+            country = playerProfile.getCitizenshipCountry();
         }
         else {
             // if greater than 2, we have a page number and country name
@@ -82,7 +82,7 @@ public class gcCountryCitizens extends GeoCommand {
         }
         else {
             message.append(Component.text("§e%s§f has §e%d§f citizen%s:\n"
-                      .formatted(country.getName(), citizenCount, StringUtil.leadingS(citizenCount))));
+                                          .formatted(country.getName(), citizenCount, StringUtil.leadingS(citizenCount))));
             StringBuilder citizensText = new StringBuilder();
             for (PlayerProfile citizen : country.getCitizensSortedByPosition()) {
                 citizensText.append("§f> §a%s§f (§e%s§f)\n"

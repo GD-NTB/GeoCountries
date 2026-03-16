@@ -25,8 +25,8 @@ public class gcFactionInfo extends GeoCommand {
         // if no args, get player faction
         if (args.length == 0) {
             PlayerProfile playerProfile = PlayerProfile.get(sender);
-            Country country = playerProfile.getCitizenshipCountry();
-            if (country == null || country.getFaction() == null) {
+            faction = playerProfile.getFaction();
+            if (faction == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
                                                      """
                                                      §6========== FACTION INFO ==========
@@ -35,7 +35,6 @@ public class gcFactionInfo extends GeoCommand {
                                                      §6================================""");
                 return;
             }
-            faction = country.getFactionFaction();
         }
         // else get specific faction
         else {
@@ -77,6 +76,6 @@ public class gcFactionInfo extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        return PlayerProfile.get(sender).getCitizenshipCountry().hasFaction();
+        return PlayerProfile.get(sender).hasFaction();
     }
 }

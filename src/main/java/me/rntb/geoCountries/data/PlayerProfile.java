@@ -198,6 +198,20 @@ public class PlayerProfile extends DataCollection {
         return position.ordinal();
     }
 
+    public Faction getFaction() {
+        if (!hasCitizenship())
+            return null;
+        Country country = getCitizenshipCountry();
+        if (!country.hasFaction())
+            return null;
+        return country.getFactionFaction();
+    }
+    public boolean hasFaction() {
+        if (!hasCitizenship())
+            return false;
+        return getCitizenshipCountry().hasFaction();
+    }
+
     @Expose
     private LinkedHashMap<String, String> settings = new LinkedHashMap<>();
     public LinkedHashMap<String, String> getSettings() {

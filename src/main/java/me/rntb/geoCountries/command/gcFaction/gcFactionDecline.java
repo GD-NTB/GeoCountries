@@ -1,7 +1,10 @@
 package me.rntb.geoCountries.command.gcFaction;
 
 import me.rntb.geoCountries.command.GeoCommand;
-import me.rntb.geoCountries.data.*;
+import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.Faction;
+import me.rntb.geoCountries.data.FactionInvite;
+import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.FactionInviteService;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -11,17 +14,17 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class gcFactionAccept extends GeoCommand {
+public class gcFactionDecline extends GeoCommand {
 
-    public gcFactionAccept(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+    public gcFactionDecline(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Accepts a player's invite to their faction.";
+        this.helpString = "Declines a player's invite to their faction.";
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the faction you want to accept the faction invite of!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the faction you want to decline the faction invite of!");
             return;
         }
 
@@ -29,14 +32,10 @@ public class gcFactionAccept extends GeoCommand {
 
         // if not leader, escape
         if (playerProfile.getPosition() != Position.LEADER && playerProfile.hasCitizenship()) {
-            ChatUtil.sendPrefixedMessage(sender, "§cOnly a leader of a country can accept faction invites!");
+            ChatUtil.sendPrefixedMessage(sender, "§cOnly a leader of a country can decline faction invites!");
             return;
         }
         Country country = playerProfile.getCitizenshipCountry();
-        if (country.hasFaction()) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou are already in a faction!");
-            return;
-        }
 
         // get faction
         String factionName = String.join(" ", args);
@@ -63,12 +62,9 @@ public class gcFactionAccept extends GeoCommand {
         }
 
         // accept the application
-        FactionInviteService.accept(fInvite, true);
+        FactionInviteService.decline(fInvite, true);
 
-        ChatUtil.sendPrefixedNotificationMessage(sender, "§aAccepted the faction invite!");
-
-        // broadcast notif to country
-        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + country.getName() + "§6 is now a member of your faction §f" + faction.getName() + "§6!", false);
+        ChatUtil.sendPrefixedMessage(sender, "§aDeclined §f" + factionName + "§a's citizenship application.");
     }
 
     @Override

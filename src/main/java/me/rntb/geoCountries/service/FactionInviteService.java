@@ -143,7 +143,7 @@ public class FactionInviteService {
             Player fromCountryLeader = fInvite.getFromCountryCountry().getLeaderPlayerProfile().getOnlinePlayer();
             if (fromCountryLeader == null)
                 return;
-            ChatUtil.sendPrefixedNotificationMessage(fromCountryLeader, "§6Your faction invite to country §f" + toCountry.getName() + "§6 was §cdeclined§6");
+            ChatUtil.sendPrefixedNotificationMessage(fromCountryLeader, "§6Your faction invite to country §f" + toCountry.getName() + "§6 was §cdeclined§6.");
         }
     }
 
