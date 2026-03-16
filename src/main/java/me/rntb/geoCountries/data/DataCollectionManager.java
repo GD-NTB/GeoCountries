@@ -4,8 +4,8 @@ public class DataCollectionManager {
 
     // called in GeoCountries.onEnable()
     public static void init() {
-        PlayerProfile.init();
         Country.init();
+        PlayerProfile.init();
         CitizenshipApplication.init();
         ClaimChunk.init();
         Faction.init();

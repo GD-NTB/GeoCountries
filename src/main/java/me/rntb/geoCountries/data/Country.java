@@ -142,8 +142,7 @@ public class Country extends DataCollection {
             return getName();
     }
 
-    // todo: this doesn't really have to be serialised
-    @Expose
+    @Expose(serialize = false, deserialize = false)
     private UUID leader = null;
     public UUID getLeader() {
       return leader;
@@ -160,8 +159,7 @@ public class Country extends DataCollection {
         return Bukkit.getPlayer(PlayerProfile.get(leader).getUsername()) != null;
     }
 
-    // todo: this also doesn't really have to be serialised
-    @Expose
+    @Expose(serialize = false, deserialize = false)
     private final ArrayList<UUID> citizens = new ArrayList<>();
     public ArrayList<UUID> getCitizens() {
         return citizens;

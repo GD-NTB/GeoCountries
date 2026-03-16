@@ -79,6 +79,15 @@ public class PlayerProfile extends DataCollection {
             LinkedHashMap<String, String> orderedSettings = new LinkedHashMap<>();
             settingsData.forEach((key, settingData) -> orderedSettings.put(key, playerProfile.settings.getOrDefault(key, settingData.defaultValue)));
             playerProfile.settings = orderedSettings;
+
+            // set Country fields
+            Country country = playerProfile.getCitizenshipCountry();
+            if (country != null) {
+                country.getCitizens().add(playerProfile.getUUID());
+                if (playerProfile.position == Position.LEADER) {
+                    country.setLeaderInternal(playerProfile.uuid);
+                }
+            }
         }
 
         if (ConfigState.debugLogging) {
