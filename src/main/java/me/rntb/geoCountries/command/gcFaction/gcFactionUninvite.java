@@ -25,11 +25,6 @@ public class gcFactionUninvite extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you want to uninvite from your faction!");
-            return;
-        }
-
         PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if not in country, escape
@@ -48,6 +43,11 @@ public class gcFactionUninvite extends GeoCommand {
         // if not leader of faction, escape
         if (playerProfile.getPosition() != Position.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou are not the leader of your faction!");
+            return;
+        }
+
+        if (args.length == 0) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must put the name of the country you want to uninvite from your faction!");
             return;
         }
 

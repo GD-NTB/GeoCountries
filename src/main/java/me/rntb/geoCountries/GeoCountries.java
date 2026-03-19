@@ -17,10 +17,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Path;
 import java.util.Objects;
 
+// todo: transfer ownership commands
 // todo: factions
 // todo: finish claiming
-// todo: in-country ranks
-// todo: promote command
+// todo: leader inheritance
+// todo: javadocs eventually
 public class GeoCountries extends JavaPlugin {
 
     public static JavaPlugin self; // plugin instance

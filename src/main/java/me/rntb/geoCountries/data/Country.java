@@ -3,9 +3,10 @@ package me.rntb.geoCountries.data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
-import me.rntb.geoCountries.service.CountryService;
 import me.rntb.geoCountries.service.FactionInviteService;
+import me.rntb.geoCountries.service.FactionService;
 import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
@@ -95,15 +96,17 @@ public class Country extends DataCollection {
     }
 
     public void deregister() {
+        // clear from factions
+        FactionService.leaveFaction(this);
+
         // clear all citizen's citizenships
         for (UUID uuid : new ArrayList<>(citizens)) { // new arraylist while we're modifying
             PlayerProfile playerProfile = PlayerProfile.get(uuid);
-            if (playerProfile != null)
-                CountryService.leaveCountry(playerProfile);
+            if (playerProfile != null) {
+                playerProfile.setCitizenshipInternal(null);
+                playerProfile.setPositionInternal(Position.NONE);
+            }
         }
-
-        byName.remove(name);
-        byUUID.remove(uuid);
 
         // delete claimed chunks
         for (Long claimChunkKey : claimChunks) {
@@ -114,6 +117,9 @@ public class Country extends DataCollection {
         CitizenshipApplicationService.deleteAllSentByToCountry(this);
         // delete all sent faction invites
         FactionInviteService.deleteAllSentToCountry(this);
+
+        byName.remove(name);
+        byUUID.remove(uuid);
 
         delete(this, all, DISPLAY_NAME);
     }

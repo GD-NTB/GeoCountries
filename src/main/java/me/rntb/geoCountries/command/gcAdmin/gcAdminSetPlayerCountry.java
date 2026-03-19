@@ -3,6 +3,7 @@ package me.rntb.geoCountries.command.gcAdmin;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.CountryService;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bukkit.command.CommandSender;
@@ -42,8 +43,11 @@ public class gcAdminSetPlayerCountry extends GeoCommand {
         String countryName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
         // set country
-        if (countryName.equals("null"))
+        if (countryName.equals("null")) {
+            if (playerProfile.getPosition() == Position.LEADER)
+                ChatUtil.sendPrefixedMessage(sender, "§aSet new leader to random citizen or dissolved.");
             CountryService.leaveCountry(playerProfile);
+        }
         else {
             Country country = Country.get(countryName);
             if (country == null) {

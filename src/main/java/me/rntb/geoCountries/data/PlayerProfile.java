@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
+import me.rntb.geoCountries.service.CountryService;
 import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
@@ -125,12 +126,8 @@ public class PlayerProfile extends DataCollection {
     }
 
     public void deregister() {
-        // remove all mentions of this player profile from all countries
-        for (Country c : me.rntb.geoCountries.data.Country.all) {
-            if (c.getLeader() != null && c.getLeader().equals(uuid))
-                c.setLeaderInternal(null);
-            c.getCitizens().remove(uuid);
-        }
+        // clear from countries
+        CountryService.leaveCountry(this);
 
         byUsername.remove(username);
         byUUID.remove(uuid);

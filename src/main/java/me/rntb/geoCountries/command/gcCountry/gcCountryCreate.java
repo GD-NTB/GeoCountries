@@ -25,8 +25,7 @@ public class gcCountryCreate extends GeoCommand {
 
         // already has citizenship
         if (playerProfile.hasCitizenship()) {
-            Country country = playerProfile.getCitizenshipCountry();
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must first renounce your citizenship of §f" + country.getName() + "§c using §f/gc citizenship renounce§c before creating a country!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou can't create a country when you're already have citizenship of another country!");
             return;
         }
 

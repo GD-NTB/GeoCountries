@@ -53,8 +53,10 @@ public class gcAdminSetPlayerPosition extends GeoCommand {
                 CountryService.promoteToLeader(playerProfile);
                 break;
             case CITIZEN:
-                if (playerProfile.getPosition() == Position.LEADER)
-                    CountryService.demoteFromLeader(playerProfile);
+                if (playerProfile.getPosition() == Position.LEADER) {
+                    CountryService.demoteFromLeader(playerProfile, null);
+                    ChatUtil.sendPrefixedMessage(sender, "§aSet new leader to random citizen or dissolved.");
+                }
                 break;
             case NONE:
                 CountryService.leaveCountry(playerProfile);

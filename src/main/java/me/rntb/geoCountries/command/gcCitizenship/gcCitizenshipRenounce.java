@@ -28,9 +28,9 @@ public class gcCitizenshipRenounce extends GeoCommand {
             return;
         }
 
-        // if leader of country, escape
-        if (playerProfile.getPosition() == Position.LEADER) { // todo: this will eventually be replaced by a system where there is a chosen leader inheritor
-            ChatUtil.sendPrefixedMessage(sender, "§cYou can't renounce your citizenship if you are the leader of a country, you must either promote another player to leader (§f/gc country promote [player]§c) or dissolve the country (§f/gc country dissolve§c)!");
+        //  must transfer leadership of country first
+        if (playerProfile.getPosition() == Position.LEADER) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must transfer leadership of your country using §f/gc country transfer [player]§c first before you can renounce your citizenship!");
             return;
         }
 
@@ -51,12 +51,12 @@ public class gcCitizenshipRenounce extends GeoCommand {
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aRenounced your citizenship of §f" + country.getName() + "§a!");
 
         // broadcast notif to country
-        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.getUsername() + "§6 is no longer a citizen of §f" + country.getName() + "§6!", true);
+        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.getUsername() + "§6 is no longer a citizen of §f" + country.getName() + "§6!", false);
     }
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        return playerProfile.hasCitizenship() && playerProfile.getPosition() != Position.LEADER;
+        return playerProfile.hasCitizenship();
     }
 }

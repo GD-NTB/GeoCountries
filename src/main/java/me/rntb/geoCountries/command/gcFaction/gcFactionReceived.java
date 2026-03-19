@@ -77,7 +77,7 @@ public class gcFactionReceived extends GeoCommand {
             }
         }
 
-        message.append(Component.text("§6==========================================="));
+        message.append(Component.text("§6==================================="));
 
 
         ChatUtil.sendPrefixedMessage(sender, message.build());

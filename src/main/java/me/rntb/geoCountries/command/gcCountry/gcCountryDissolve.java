@@ -4,6 +4,7 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
+import me.rntb.geoCountries.service.CountryService;
 import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
@@ -46,12 +47,8 @@ public class gcCountryDissolve extends GeoCommand {
         Country country = playerProfile.getCitizenshipCountry();
 
         ChatUtil.sendPrefixedMessage(sender, "§aDissolved country §f" + country.getName() + "§a!");
-        ChatUtil.broadcastPrefixedMessage("§6The country §f" + country.getName() + "§6 has just been dissolved!");
 
-        // broadcast notif to country
-        ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has just been dissolved! §cYou are no longer a citizen of any country.", true);
-
-        country.deregister();
+        CountryService.dissolve(country);
     }
 
     @Override

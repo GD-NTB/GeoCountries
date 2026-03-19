@@ -19,16 +19,16 @@ public class FactionService {
         FactionInviteService.deleteAllSentToCountry(country);
     }
 
+    // if was leader, sets new leader to random member, so make sure to demote first!
     public static void leaveFaction(Country country) {
         Faction currentFaction = country.getFactionFaction();
         if (currentFaction == null)
             return;
 
         if (country.getUUID().equals(currentFaction.getLeader()))
-            FactionService.demoteFromLeader(country);
+            FactionService.demoteFromLeader(country, null);
 
         currentFaction.getMembers().remove(country.getUUID());
-
         country.setFactionInternal(null);
     }
 
@@ -42,7 +42,7 @@ public class FactionService {
             return;
 
         // ensure country is member
-        if (!faction.getMembers().contains(country.getUUID()) ) {
+        if (!faction.getMembers().contains(country.getUUID())) {
             if (ConfigState.debugLogging)
                 ChatUtil.sendPrefixedLogErrorMessage("Tried to promote country to leader of a faction they're not a citizen of!");
             return;
@@ -51,8 +51,8 @@ public class FactionService {
         faction.setLeaderInternal(country.getUUID());
     }
 
-    // todo: replace with inheritor when i finally do that shit
-    public static void demoteFromLeader(Country country) {
+    // if newLeader = null, a random other member is chosen to be the new leader
+    public static void demoteFromLeader(Country country, Country newLeader) {
         Faction faction = country.getFactionFaction();
         if (faction == null)
             return;
@@ -69,6 +69,27 @@ public class FactionService {
             return;
         }
 
-        country.setLeaderInternal(null);
+        // if new leader null, set random other member country to new leader
+        if (newLeader == null) {
+            Country newRandomLeader = Country.get(faction.getMembers().stream()
+                                                                      .filter(c -> !c.equals(country.getUUID()))
+                                                                      .findFirst().orElse(null));
+            // if no others, disband
+            if (newRandomLeader == null)
+                disband(faction);
+            else
+                promoteToLeader(newRandomLeader);
+        }
+        else
+            promoteToLeader(newLeader);
+    }
+
+    public static void disband(Faction faction) {
+        faction.deregister();
+
+        ChatUtil.broadcastPrefixedMessage("§6The faction §f" + faction.getName() + "§6 has just been disbanded!");
+
+        // broadcast notif to country
+        ChatUtil.broadcastPrefixedMessageToFaction(faction, "§6Your faction has just been dissolved! §cYou are no longer a member of any faction.", true);
     }
 }

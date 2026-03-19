@@ -102,13 +102,13 @@ public class ClaimChunk extends DataCollection {
     }
 
     public void deregister() {
-        byKey.remove(key);
-
         // remove this claimchunk from country
         getOwnerCountry().getClaimChunks().remove(key);
 
 //        // update maps
 //        Pl3xMapIntegration.clearClaim(this);
+
+        byKey.remove(key);
 
         delete(this, all, DISPLAY_NAME);
     }

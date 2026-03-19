@@ -2,6 +2,7 @@ package me.rntb.geoCountries.util;
 
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.Faction;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
@@ -10,6 +11,8 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 import static org.bukkit.Bukkit.getServer;
 
@@ -109,6 +112,18 @@ public class ChatUtil {
     public static void broadcastPrefixedMessage(Component message) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             sendPrefixedMessage(player, message);
+        }
+    }
+
+    // faction
+    public static void broadcastPrefixedMessageToFaction(Faction faction, String message, boolean playSound) {
+        for (UUID countryUUID : faction.getMembers()) {
+            broadcastPrefixedMessageToCountry(Country.get(countryUUID), message, playSound);
+        }
+    }
+    public static void broadcastPrefixedMessageToFaction(Faction faction, Component message, boolean playSound) {
+        for (UUID countryUUID : faction.getMembers()) {
+            broadcastPrefixedMessageToCountry(Country.get(countryUUID), message, playSound);
         }
     }
 

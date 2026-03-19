@@ -42,6 +42,8 @@ gc.group.player:
     gc.faction.received
     gc.faction.accept
     gc.faction.decline
+    gc.faction.members
+    gc.faction.leave
 
 gc.group.admin:
     gc.purge

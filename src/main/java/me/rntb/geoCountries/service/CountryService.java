@@ -21,13 +21,15 @@ public class CountryService {
         CitizenshipApplicationService.deleteAllSentByApplicant(playerProfile);
     }
 
+    // if was leader, sets new leader to random citizen, so make sure to demote first!
+    // todo: inheritance message
     public static void leaveCountry(PlayerProfile playerProfile) {
         Country currentCountry = playerProfile.getCitizenshipCountry();
         if (currentCountry == null)
             return;
 
         if (playerProfile.getUUID().equals(currentCountry.getLeader()))
-            demoteFromLeader(playerProfile);
+            demoteFromLeader(playerProfile, null);
 
         currentCountry.getCitizens().remove(playerProfile.getUUID());
 
@@ -60,8 +62,8 @@ public class CountryService {
         playerProfile.setPositionInternal(PlayerProfile.Position.LEADER);
     }
 
-    // todo: replace with inheritor when i finally do that shit
-    public static void demoteFromLeader(PlayerProfile playerProfile) {
+    // if newLeader = null, a random other citizen is chosen to be the new leader
+    public static void demoteFromLeader(PlayerProfile playerProfile, PlayerProfile newLeader) {
         Country country = playerProfile.getCitizenshipCountry();
         if (country == null)
             return;
@@ -78,7 +80,29 @@ public class CountryService {
             return;
         }
 
-        country.setLeaderInternal(null);
         playerProfile.setPositionInternal(PlayerProfile.Position.CITIZEN);
+
+        // if new leader null, set random other member country to new leader
+        if (newLeader == null) {
+            PlayerProfile newRandomLeader = PlayerProfile.get(country.getCitizens().stream()
+                                                                                   .filter(p -> !p.equals(playerProfile.getUUID()))
+                                                                                   .findFirst().orElse(null));
+            // if no others, disband
+            if (newRandomLeader == null)
+                dissolve(country);
+            else
+                promoteToLeader(newRandomLeader);
+        }
+        else
+            promoteToLeader(newLeader);
+    }
+
+    public static void dissolve(Country country) {
+        ChatUtil.broadcastPrefixedMessage("§6The country §f" + country.getName() + "§6 has just been dissolved!");
+
+        // broadcast notif to country
+        ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has just been dissolved! §cYou are no longer a citizen of any country.", true);
+
+        country.deregister();
     }
 }

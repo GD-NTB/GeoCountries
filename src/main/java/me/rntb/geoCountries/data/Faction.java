@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.service.FactionInviteService;
+import me.rntb.geoCountries.service.FactionService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 
@@ -93,16 +94,16 @@ public class Faction extends DataCollection {
     }
 
     public void deregister() {
-        byUUID.remove(uuid);
-        byName.remove(name);
-
         // remove members
-        for (UUID memberUUID : members) {
-            Country.get(memberUUID).setFactionInternal(null);
+        for (UUID memberUUID : new ArrayList<>(members)) {
+            FactionService.leaveFaction(Country.get(memberUUID));
         }
 
         // delete all sent faction invites
         FactionInviteService.deleteAllSentByFaction(this);
+
+        byUUID.remove(uuid);
+        byName.remove(name);
 
         delete(this, all, DISPLAY_NAME);
     }
