@@ -70,14 +70,14 @@ public class gcCountryRename extends GeoCommand {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
         Country country = playerProfile.getCitizenshipCountry();
 
-        country.setName(countryName);
-
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aRenamed country to §f" + countryName + "§a!");
 
-        ChatUtil.broadcastPrefixedMessage("§6The country of §f" + country.getName() + "§6 has been renamed to §f" + countryName + "§6!");
+        ChatUtil.broadcastPrefixedMessage("§6The country §f" + country.getName() + "§6 has been renamed to §f" + countryName + "§6!");
 
         // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your country has now been renamed to §f" + countryName + "§6!", true);
+
+        country.setName(countryName);
     }
 
     @Override

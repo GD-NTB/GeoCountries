@@ -12,7 +12,7 @@ public class gcFaction extends GeoCommand {
         super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Manages and views info about factions.";
         this.childCommands.put("create", new gcFactionCreate(this, "create", "/gc faction create", "gc.faction.create", ItemStack.of(Material.NETHER_STAR)));
-        // todo: rename
+        this.childCommands.put("rename", new gcFactionRename(this, "rename", "/gc faction rename", "gc.faction.rename", ItemStack.of(Material.NAME_TAG)));
         this.childCommands.put("invite", new gcFactionInvite(this, "invite", "/gc faction invite", "gc.faction.invite", ItemStack.of(Material.TOTEM_OF_UNDYING)));
         this.childCommands.put("uninvite", new gcFactionUninvite(this, "uninvite", "/gc faction uninvite", "gc.faction.uninvite", ItemStack.of(Material.CARROT_ON_A_STICK)));
         this.childCommands.put("members", new gcFactionMembers(this, "members", "/gc faction members", "gc.faction.members", ItemStack.of(Material.PLAYER_HEAD)));

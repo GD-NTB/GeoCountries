@@ -44,6 +44,7 @@ gc.group.player:
     gc.faction.decline
     gc.faction.members
     gc.faction.leave
+    gc.faction.rename
 
 gc.group.admin:
     gc.purge
