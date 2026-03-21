@@ -29,12 +29,12 @@ public class gc extends GeoCommand implements TabExecutor  {
     public gc(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(null, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "The base command for GeoCountries. Opens the plugin's visual GUI menu.";
+        this.childCommands.put("player", new gcPlayer(this, "player", "/gc player", "gc.player", ItemStack.of(Material.DEBUG_STICK))); // debug stick -> skull of player
+        this.childCommands.put("citizenship", new gcCitizenship(this, "citizenship", "/gc citizenship", "gc.citizenship", ItemStack.of(Material.WRITABLE_BOOK)));
         this.childCommands.put("country", new gcCountry(this, "country", "/gc country", "gc.country", ItemStack.of(Material.FILLED_MAP)));
         this.childCommands.put("claim", new gcClaim(this, "claim", "/gc claim", "gc.claim", ItemStack.of(Material.GOLDEN_SHOVEL)));
         this.childCommands.put("unclaim", new gcUnclaim(this, "unclaim", "/gc unclaim", "gc.claim.unclaim", null));
-        this.childCommands.put("player", new gcPlayer(this, "player", "/gc player", "gc.player", ItemStack.of(Material.DEBUG_STICK))); // debug stick -> skull of player
         this.childCommands.put("faction", new gcFaction(this, "faction", "/gc faction", "gc.faction", ItemStack.of(Material.DIAMOND_CHESTPLATE)));
-        this.childCommands.put("citizenship", new gcCitizenship(this, "citizenship", "/gc citizenship", "gc.citizenship", ItemStack.of(Material.WRITABLE_BOOK)));
         this.childCommands.put("help", new gcHelp(this, "help", "/gc help", "gc.help", ItemStack.of(Material.KNOWLEDGE_BOOK)));
         this.childCommands.put("admin", new gcAdmin(this, "admin", "/gc admin", "gc.admin", ItemStack.of(Material.DIAMOND_BLOCK)));
         this.childCommands.put("debug", new gcDebug(this, "debug", "/gc debug", "gc.debug", ItemStack.of(Material.REDSTONE)));
