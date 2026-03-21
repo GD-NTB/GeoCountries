@@ -29,8 +29,8 @@ public class gcCountryList extends GeoCommand {
                 int citizens = country.getCitizenCount();
                 sb.append("§f> §a%s§f (§eLeader§f: %s, §eCitizens§f: %s§f)\n"
                           .formatted(country.getNameAndFaction(),
-                                     leader != null ? country.getLeaderPlayerProfile().getUsername() : "§cNone",
-                                     citizens != 0 ? citizens : "§c0"));
+                                     leader != null ? country.getLeaderPlayerProfile().getUsername() : "§cNone§f",
+                                     citizens != 0 ? citizens : "§c0§f"));
             }
         }
         sb.append("§6================================");

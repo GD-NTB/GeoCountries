@@ -159,11 +159,22 @@ public class ClaimChunk extends DataCollection {
         return Country.get(owner);
     }
 
-    public ClaimChunk(long key, UUID world, int x, int z, UUID owner) {
+    public ClaimChunk(long key, UUID world, UUID owner) {
         this.key = key;
+        int[] xz = unpackFromKey(key);
+        this.x = xz[0];
+        this.z = xz[1];
+
         this.world = world;
+        this.owner = owner;
+    }
+
+    public ClaimChunk(int x, int z, UUID world, UUID owner) {
         this.x = x;
         this.z = z;
+        this.key = packToKey(x, z);
+
+        this.world = world;
         this.owner = owner;
     }
 

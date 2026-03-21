@@ -38,7 +38,7 @@ public class gcClaimOne extends GeoCommand {
             return;
         }
 
-        claimChunk = new ClaimChunk(chunk.getChunkKey(), chunk.getWorld().getUID(), chunk.getX(), chunk.getZ(), country.getUUID());
+        claimChunk = new ClaimChunk(chunk.getX(), chunk.getZ(), chunk.getWorld().getUID(), country.getUUID());
         claimChunk.register();
 
         ChatUtil.sendPrefixedMessage(sender, "§aClaimed the chunk! " + playerProfile.getChunkString());

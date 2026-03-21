@@ -1,6 +1,8 @@
 package me.rntb.geoCountries.listener;
 
 import me.rntb.geoCountries.data.ClaimChunk;
+import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.PlayerProfile;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,18 +26,34 @@ public class PlayerChunkEnterListener implements Listener {
         ClaimChunk toClaimChunk = ClaimChunk.get(toX, toZ);
 
         Player player = event.getPlayer();
-//        Country playerCountry = PlayerProfile.get(player).getCitizenshipCountry();
+        Country playerCountry = PlayerProfile.get(player).getCitizenshipCountry();
 
         // [...] -> claimed
         if (toClaimChunk != null) {
+            // get chat colour
+            String colour;
+            if (playerCountry != null)
+                colour = playerCountry.getChatColourBetweenOtherCountry(toClaimChunk.getOwnerCountry());
+            else
+                colour = "§f";
+
+            // send actionbar
             // unclaimed -> claimed or claimed -> claimed
             if (fromClaimChunk == null || !fromClaimChunk.getOwnerCountry().equals(toClaimChunk.getOwnerCountry()))
-                player.sendActionBar(Component.text("§fYou are now in the territory of §6" + toClaimChunk.getOwnerCountry().getName() + "§f."));
+                player.sendActionBar(Component.text(colour + "You are now in the territory of §6" + toClaimChunk.getOwnerCountry().getNameAndFaction() + colour + "."));
         }
 
         // claimed -> unclaimed
-        else if (fromClaimChunk != null)
-            player.sendActionBar(Component.text("§fYou are no longer in the territory of §6" + fromClaimChunk.getOwnerCountry().getName() + "§f."));
+        else if (fromClaimChunk != null) {
+            // get chat colour
+            String colour;
+            if (playerCountry != null)
+                colour = playerCountry.getChatColourBetweenOtherCountry(fromClaimChunk.getOwnerCountry());
+            else
+                colour = "§f";
 
+            // send actionbar
+            player.sendActionBar(Component.text(colour + "You are no longer in the territory of §6" + fromClaimChunk.getOwnerCountry().getNameAndFaction() + colour + "."));
+        }
     }
 }

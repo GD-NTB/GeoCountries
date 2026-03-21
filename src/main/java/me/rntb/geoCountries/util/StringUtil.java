@@ -30,11 +30,15 @@ public class StringUtil {
         return s != null && s.endsWith("§r") ? s.substring(0, s.length() - 2) : s;
     }
 
+    // todo: put these in their own thing
     // ---------- string validation ----------
 
     // ----- response -----
     // response should be trimmed beforehand
     public static String validateResponse(String response) {
+        if (response.equalsIgnoreCase("null") || response.equalsIgnoreCase("none"))
+            return "§cChat message cannot be 'null' or 'none'!§r";
+
         if (!(ConfigState.chatResponseMin <= response.length() && response.length() <= ConfigState.chatResponseMax))
             return "§cChat message must be between §f%d and %d§c characters!§r"
                     .formatted(ConfigState.chatResponseMin, ConfigState.chatResponseMax);
@@ -56,6 +60,9 @@ public class StringUtil {
     // ----- country name -----
     // country name should be trimmed beforehand
     public static String validateCountryName(String countryName, boolean alreadyExistsInvalid) {
+        if (countryName.equalsIgnoreCase("null") || countryName.equalsIgnoreCase("none"))
+            return "§cCountry name cannot be 'null' or 'none'!§r";
+
         if (!(ConfigState.countryNameMin <= countryName.length() && countryName.length() <= ConfigState.countryNameMax))
             return "§cCountry name must be between §f%d and %d§c characters!§r"
                    .formatted(ConfigState.countryNameMin, ConfigState.countryNameMax);
@@ -79,6 +86,9 @@ public class StringUtil {
     // ----- country prefix -----
     // country prefix should be trimmed beforehand
     public static String validateCountryPrefix(String prefix) {
+        if (prefix.equalsIgnoreCase("null") || prefix.equalsIgnoreCase("none"))
+            return "§cPrefix cannot be 'null' or 'none'!§r"; // todo: this might cause error blyat
+
         if (!(ConfigState.countryPrefixMin <= prefix.length() && prefix.length() <= ConfigState.countryPrefixMax))
             return "§cCountry prefix must be between §f%d and %d§c characters!§r"
                    .formatted(ConfigState.countryPrefixMin, ConfigState.countryPrefixMax);
@@ -100,6 +110,9 @@ public class StringUtil {
     // ----- country motto -----
     // country motto should be trimmed beforehand
     public static String validateCountryMotto(String motto) {
+        if (motto.equalsIgnoreCase("null") || motto.equalsIgnoreCase("none"))
+            return "§cCountry motto cannot be 'null' or 'none'!§r"; // todo: this might cause error blyat
+
         if (!(ConfigState.countryMottoMin <= motto.length() && motto.length() <= ConfigState.countryMottoMax))
             return "§cCountry motto must be between §f%d and %d§c characters!§r"
                     .formatted(ConfigState.countryMottoMin, ConfigState.countryMottoMax);
@@ -121,6 +134,9 @@ public class StringUtil {
     // ----- faction name -----
     // faction name should be trimmed beforehand
     public static String validateFactionName(String factionName, boolean alreadyExistsInvalid) {
+        if (factionName.equalsIgnoreCase("null") || factionName.equalsIgnoreCase("none"))
+            return "§cCFaction name cannot be 'null' or 'none'!§r";
+
         if (!(ConfigState.factionNameMin <= factionName.length() && factionName.length() <= ConfigState.factionNameMax))
             return "§cFaction name must be between §f%d and %d§c characters!§r"
                     .formatted(ConfigState.factionNameMin, ConfigState.factionNameMax);

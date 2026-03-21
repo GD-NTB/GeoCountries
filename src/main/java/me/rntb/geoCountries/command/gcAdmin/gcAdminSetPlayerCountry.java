@@ -42,9 +42,10 @@ public class gcAdminSetPlayerCountry extends GeoCommand {
         String countryName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
         // set country
+        if (playerProfile.getPosition() == Position.LEADER)
+            ChatUtil.sendPrefixedMessage(sender, "§aSet new leader to random citizen or dissolved.");
+
         if (countryName.equals("null")) {
-            if (playerProfile.getPosition() == Position.LEADER)
-                ChatUtil.sendPrefixedMessage(sender, "§aSet new leader to random citizen or dissolved.");
             CountryService.leaveCountry(playerProfile);
         }
         else {

@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.service.FactionInviteService;
-import me.rntb.geoCountries.service.FactionService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 
@@ -96,7 +95,7 @@ public class Faction extends DataCollection {
     public void deregister() {
         // remove members
         for (UUID memberUUID : new ArrayList<>(members)) {
-            FactionService.leaveFaction(Country.get(memberUUID));
+            Country.get(memberUUID).setFactionInternal(null);
         }
 
         // delete all sent faction invites

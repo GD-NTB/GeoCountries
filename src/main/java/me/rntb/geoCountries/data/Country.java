@@ -109,7 +109,7 @@ public class Country extends DataCollection {
         }
 
         // delete claimed chunks
-        for (Long claimChunkKey : claimChunks) {
+        for (Long claimChunkKey : new ArrayList<>(claimChunks)) {
             ClaimChunk.get(claimChunkKey).deregister();
         }
 
@@ -144,7 +144,7 @@ public class Country extends DataCollection {
     }
     public String getNameAndFaction() {
         if (hasFaction())
-            return "§f%s (§3%s§f)"
+            return "%s (§3%s§f)"
                    .formatted(getName(),
                               getFactionFaction().getName());
         else
@@ -277,6 +277,18 @@ public class Country extends DataCollection {
             return List.of();
         return cApplications.stream()
                             .map(ca -> ca.getApplicantPlayerProfile().getUsername()).toList();
+    }
+
+    // same faction = dark green
+    // else white
+    public String getChatColourBetweenOtherCountry(Country otherCountry) {
+        // if in same faction, dark green
+        Faction factionA = getFactionFaction();
+        Faction factionB = otherCountry.getFactionFaction();
+        if (factionA != null && (factionA.equals(factionB))) // Faction.equals checks for null
+            return "§2";
+
+        return "§f";
     }
 
     // gson constructor

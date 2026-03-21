@@ -30,10 +30,10 @@ public class gcFactionList extends GeoCommand {
                 PlayerProfile leaderOfLeader = null;
                 if (leader != null)
                     leaderOfLeader = leader.getLeaderPlayerProfile();
-                sb.append("§f> §3%s§f (§eLeader§f: %s §f(%s), §eMembers§f: %s§f)\n"
+                sb.append("§f> §3%s§f (§eLeader§f: %s (§e%s§f), §eMembers§f: %s§f)\n"
                           .formatted(faction.getName(),
-                                     leader != null ? leader.getName() : "§cNone",
-                                     leaderOfLeader != null ? leaderOfLeader.getUsername() : "§cNone",
+                                     leader != null ? leader.getName() : "§cNone§f",
+                                     leaderOfLeader != null ? leaderOfLeader.getUsername() : "§cNone§f",
                                      faction.getMemberCount()));
             }
         }

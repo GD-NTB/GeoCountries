@@ -16,7 +16,6 @@ import java.util.UUID;
 
 import static org.bukkit.Bukkit.getServer;
 
-// todo: some sort of error on check which can simplify a lot of errors for commands
 public class ChatUtil {
 
     public static final MiniMessage mm = MiniMessage.miniMessage();
