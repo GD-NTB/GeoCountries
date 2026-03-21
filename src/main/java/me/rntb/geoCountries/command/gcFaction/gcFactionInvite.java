@@ -130,10 +130,6 @@ public class gcFactionInvite extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
-        if (playerProfile.getPosition() != PlayerProfile.Position.LEADER)
-            return false;
-        Faction faction = playerProfile.getFaction();
-        return faction != null && faction.getLeader().equals(playerProfile.getCitizenship());
+        return PlayerProfile.get(sender).isFactionLeader();
     }
 }

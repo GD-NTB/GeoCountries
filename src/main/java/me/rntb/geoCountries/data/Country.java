@@ -270,6 +270,9 @@ public class Country extends DataCollection {
     public boolean hasFaction() {
         return faction != null;
     }
+    public boolean isFactionLeader() {
+        return hasFaction() && getFactionFaction().getLeader().equals(uuid);
+    }
 
     public List<String> getReceivedCitizenshipApplicationsAsUsernames() {
         List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(uuid);

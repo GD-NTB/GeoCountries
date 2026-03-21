@@ -129,12 +129,10 @@ public class gcFactionUninvite extends GeoCommand {
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        if (playerProfile.getPosition() != PlayerProfile.Position.LEADER)
+        if (!playerProfile.isFactionLeader())
             return false;
 
         Faction faction = playerProfile.getFaction();
-        if (faction == null || !faction.getLeader().equals(playerProfile.getCitizenship()))
-            return false;
 
         List<FactionInvite> fInvites = FactionInvite.byFromFaction.get(faction.getUUID());
         return fInvites != null && !fInvites.isEmpty();

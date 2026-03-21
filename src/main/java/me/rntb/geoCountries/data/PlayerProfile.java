@@ -208,6 +208,9 @@ public class PlayerProfile extends DataCollection {
             return false;
         return getCitizenshipCountry().hasFaction();
     }
+    public boolean isFactionLeader() {
+        return position == Position.LEADER && hasCitizenship() && getCitizenshipCountry().isFactionLeader();
+    }
 
     @Expose
     private LinkedHashMap<String, String> settings = new LinkedHashMap<>();

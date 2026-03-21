@@ -46,6 +46,7 @@ gc.group.player:
     gc.faction.leave
     gc.faction.rename
     gc.faction.list
+    gc.faction.disband
 
 gc.group.admin:
     gc.purge
