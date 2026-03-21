@@ -68,12 +68,12 @@ public class gcCountryInfo extends GeoCommand {
                          §6========== COUNTRY INFO ==========
                          §a%s§f
                          §f> §eMotto§f: %s
-                         §f> §eFaction§f: %s
+                         §f> §eFaction§f: §3%s
                          §f> §eLeader§f: %s
                          §f> §eCitizens§f: %s
                          §f> Created on §2%s §8(%s day%s ago)
                          §6================================="""
-                         .formatted(country.getFullDisplayName(),
+                         .formatted(country.getNameAndFaction(),
                                     !countryMotto.equals("null") ? countryMotto : "§cNone",
                                     factionString,
                                     leader != null ? leader.getUsername() : "§cNone",

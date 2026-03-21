@@ -57,20 +57,20 @@ public class gcFactionReceived extends GeoCommand {
                 String fromCountryName = fInvite.getFromCountryCountry().getName();
                 long daysAgo = TimeUtil.daysAgo(fInvite.getTimeCreated());
 
-                message.append(Component.text("§f> §aFrom faction§f: §e" + fromFactionName + " §8(" + daysAgo + " day" + StringUtil.leadingS(daysAgo) + " ago)"))
+                message.append(Component.text("§f> §aFrom faction§f: §3" + fromFactionName + " §8(" + daysAgo + " day" + StringUtil.leadingS(daysAgo) + " ago)"))
                        .append(Component.newline())
                        .append(Component.text("§f> §aBy country§f: " + fromCountryName))
                        .append(Component.newline())
 
                        // [Accept] button
                        .append(ChatUtil.mm.deserialize("<click:run_command:'/gc faction accept " + fromFactionName + "'>" +
-                                                       "<hover:show_text:'<white>Click to join " + fromFactionName + "\\'s faction.</white>'>" +
+                                                       "<hover:show_text:'<white>Click to join " + fromFactionName + ".</white>'>" +
                                                        "<green><bold>[Accept]</bold></green>" +
                                                        "</hover></click>"))
                        .append(Component.text("  "))
                        // [Decline] button
                        .append(ChatUtil.mm.deserialize("<click:run_command:'/gc faction decline " + fromFactionName + "'>" +
-                                                       "<hover:show_text:'<white>Click to decline " + fromFactionName + "\\'s faction invite.</white>'>" +
+                                                       "<hover:show_text:'<white>Click to decline " + fromFactionName + ".</white>'>" +
                                                        "<red><bold>[Decline]</bold></red>" +
                                                        "</hover></click>"))
                        .append(Component.newline());

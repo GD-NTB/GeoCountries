@@ -122,8 +122,9 @@ public class Faction extends DataCollection {
         return name;
     }
     public void setName(String value) {
+        byName.remove(name);
         name = value;
-        byName.put(value, this);
+        byName.put(name, this);
     }
 
     @Expose

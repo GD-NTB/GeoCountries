@@ -70,7 +70,7 @@ public class gcFactionInvite extends GeoCommand {
             // if sent too many applications, escape
             int cApplicationsCount = fInvites.size();
             if (ConfigState.maxFactionInvites != -1 && cApplicationsCount >= ConfigState.maxFactionInvites) {
-                ChatUtil.sendPrefixedMessage(sender, "§cYou've already sent too many §f(" + cApplicationsCount + "/" + ConfigState.maxFactionInvites + ")§c faction invites! Unsend one by doing §f/gc faction unsend [country]");
+                ChatUtil.sendPrefixedMessage(sender, "§cYou've already sent too many §f(" + cApplicationsCount + "/" + ConfigState.maxFactionInvites + ")§c faction invites! Unsend one by doing §f/gc faction uninvite [country]");
                 return;
             }
             // if already sent application to this country, escape

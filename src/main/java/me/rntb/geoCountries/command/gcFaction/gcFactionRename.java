@@ -1,7 +1,6 @@
 package me.rntb.geoCountries.command.gcFaction;
 
 import me.rntb.geoCountries.command.GeoCommand;
-import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.Faction;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
@@ -70,16 +69,16 @@ public class gcFactionRename extends GeoCommand {
     private void onConfirm(CommandSender sender, String[] args) {
         String factionName = args[0];
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Country country = playerProfile.getCitizenshipCountry();
+        Faction faction = playerProfile.getFaction();
 
-        ChatUtil.sendPrefixedNotificationMessage(sender, "§aRenamed faction to §f" + factionName + "§a!");
+        ChatUtil.sendPrefixedNotificationMessage(sender, "§aRenamed faction to §3" + factionName + "§a!");
 
-        ChatUtil.broadcastPrefixedMessage("§6The faction §f" + country.getName() + "§6 has been renamed to §f" + factionName + "§6!");
+        ChatUtil.broadcastPrefixedMessage("§6The faction §3" + faction.getName() + "§6 has been renamed to §3" + factionName + "§6!");
 
         // broadcast notif to country
-        ChatUtil.broadcastPrefixedMessageToCountry(country, "§6Your faction has now been renamed to §f" + factionName + "§6!", true);
+        ChatUtil.broadcastPrefixedMessageToFaction(faction, "§6Your faction has now been renamed to §3" + factionName + "§6!", true);
 
-        country.setName(factionName);
+        faction.setName(factionName);
     }
 
     @Override

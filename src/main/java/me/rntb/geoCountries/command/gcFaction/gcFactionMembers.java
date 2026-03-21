@@ -81,8 +81,9 @@ public class gcFactionMembers extends GeoCommand {
             message.append(Component.text("§cThere are no members of this faction.\n"));
         }
         else {
-            message.append(Component.text("§e%s§f has §e%d§f member%s:\n"
-                                          .formatted(faction.getName(), memberCount, StringUtil.leadingS(memberCount))));
+            message.append(Component.text("§3%s§f has §e%d§f member%s:\n"
+                                          .formatted(faction.getName(),
+                                                     memberCount, StringUtil.leadingS(memberCount))));
             StringBuilder membersText = new StringBuilder();
             for (Country member : faction.getMembersSorted()) {
                 membersText.append("§f> §a%s§f (§e%s§f)\n"

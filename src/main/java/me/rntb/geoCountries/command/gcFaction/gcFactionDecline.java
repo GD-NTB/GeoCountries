@@ -41,14 +41,14 @@ public class gcFactionDecline extends GeoCommand {
         String factionName = String.join(" ", args);
         Faction faction = Faction.get(factionName);
         if (faction == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cFaction §f" + factionName + "§c could not be found!");
+            ChatUtil.sendPrefixedMessage(sender, "§cFaction §3" + factionName + "§c could not be found!");
             return;
         }
 
         // get faction invites sent by other player
         List<FactionInvite> fInvites = FactionInvite.byToCountry.get(country.getUUID());
         if (fInvites == null || fInvites.isEmpty()) {
-            ChatUtil.sendPrefixedMessage(sender, "§cFaction §f" + factionName + "§c has not sent a faction invite to your country!");
+            ChatUtil.sendPrefixedMessage(sender, "§cFaction §3" + factionName + "§c has not sent a faction invite to your country!");
             return;
         }
 
@@ -57,14 +57,14 @@ public class gcFactionDecline extends GeoCommand {
                                          .filter(fi -> fi.getToCountry().equals(country.getUUID()))
                                          .findFirst().orElse(null);
         if (fInvite == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cFaction §f" + factionName + "§c has not sent a faction invite to your country!");
+            ChatUtil.sendPrefixedMessage(sender, "§cFaction §3" + factionName + "§c has not sent a faction invite to your country!");
             return;
         }
 
         // accept the application
         FactionInviteService.decline(fInvite, true);
 
-        ChatUtil.sendPrefixedMessage(sender, "§aDeclined §f" + factionName + "§a's citizenship application.");
+        ChatUtil.sendPrefixedMessage(sender, "§aDeclined §3" + factionName + "§a's citizenship application.");
     }
 
     @Override

@@ -41,10 +41,10 @@ public class gcFactionCreate extends GeoCommand {
         if (country.hasFaction()) {
             // must transfer ownership then leave
             if (playerProfile.getPosition() == Position.LEADER)
-                ChatUtil.sendPrefixedMessage(sender, "§cYou must first transfer leadership of your current faction §f" + country.getFactionFaction().getName() + "§c using §f/gc faction transfer§c, then leave it using §f/gc faction leave§c before you can create a faction!");
+                ChatUtil.sendPrefixedMessage(sender, "§cYou must first transfer leadership of your current faction §3" + country.getFactionFaction().getName() + "§c using §f/gc faction transfer§c, then leave it using §f/gc faction leave§c before you can create a faction!");
             // must leave faction
             else
-                ChatUtil.sendPrefixedMessage(sender, "§cYou must first leave your current faction §f" + country.getFactionFaction().getName() + "§c §c/gc faction leave§f before you can create a faction!");
+                ChatUtil.sendPrefixedMessage(sender, "§cYou must first leave your current faction §3" + country.getFactionFaction().getName() + "§c §c/gc faction leave§f before you can create a faction!");
             return;
         }
 
@@ -81,9 +81,9 @@ public class gcFactionCreate extends GeoCommand {
         FactionService.joinFaction(country, newFaction);
         FactionService.promoteToLeader(country);
 
-        ChatUtil.sendPrefixedNotificationMessage(sender, "§aCreated faction §f" + factionName + "§a!");
+        ChatUtil.sendPrefixedNotificationMessage(sender, "§aCreated faction §3" + factionName + "§a!");
 
-        ChatUtil.broadcastPrefixedMessage("§6A new faction §f" + factionName + "§6 has just been created!");
+        ChatUtil.broadcastPrefixedMessage("§6A new faction §3" + factionName + "§6 has just been created!");
     }
 
     @Override

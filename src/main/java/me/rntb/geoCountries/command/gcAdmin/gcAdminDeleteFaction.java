@@ -1,7 +1,7 @@
 package me.rntb.geoCountries.command.gcAdmin;
 
 import me.rntb.geoCountries.command.GeoCommand;
-import me.rntb.geoCountries.data.Country;
+import me.rntb.geoCountries.data.Faction;
 import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
@@ -10,25 +10,25 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class gcAdminDeleteCountry extends GeoCommand {
+public class gcAdminDeleteFaction extends GeoCommand {
 
-    public gcAdminDeleteCountry(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
+    public gcAdminDeleteFaction(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Deletes a country from the server.";
+        this.helpString = "Deletes a faction from the server.";
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            ChatUtil.sendPrefixedMessage(sender, "§cYou must be put the name of the country you want to delete!");
+            ChatUtil.sendPrefixedMessage(sender, "§cYou must be put the name of the faction you want to delete!");
             return;
         }
 
-        String countryName = String.join(" ", args).trim();
+        String factionName = String.join(" ", args).trim();
 
-        Country country = Country.get(countryName);
-        if (country == null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c does not exist!");
+        Faction faction = Faction.get(factionName);
+        if (faction == null) {
+            ChatUtil.sendPrefixedMessage(sender, "§cFaction §f" + factionName + "§c does not exist!");
             return;
         }
 
@@ -36,15 +36,15 @@ public class gcAdminDeleteCountry extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                           sender,
-                                          new String[] { countryName }),
+                                          new String[] { factionName }),
                                   true);
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        Country country = Country.get(args[0]);
-        country.deregister();
+        Faction faction = Faction.get(args[0]);
+        faction.deregister();
 
-        ChatUtil.sendPrefixedMessage(sender, "§aDeleted country!");
+        ChatUtil.sendPrefixedMessage(sender, "§aDeleted faction!");
     }
 
     @Override

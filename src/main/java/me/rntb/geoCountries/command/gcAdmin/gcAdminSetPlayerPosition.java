@@ -5,7 +5,6 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.CountryService;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.EnumUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -68,10 +67,6 @@ public class gcAdminSetPlayerPosition extends GeoCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return switch (args.length) {
-            case 1 -> PlayerProfile.allAsUsernames(true);
-            case 2 -> EnumUtil.enumToStringList(Position.class);
-            default -> List.of();
-        };
+        return List.of();
     }
 }

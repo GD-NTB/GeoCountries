@@ -17,12 +17,12 @@ public class gcFaction extends GeoCommand {
         this.childCommands.put("uninvite", new gcFactionUninvite(this, "uninvite", "/gc faction uninvite", "gc.faction.uninvite", ItemStack.of(Material.CARROT_ON_A_STICK)));
         this.childCommands.put("members", new gcFactionMembers(this, "members", "/gc faction members", "gc.faction.members", ItemStack.of(Material.PLAYER_HEAD)));
         this.childCommands.put("info", new gcFactionInfo(this, "info", "/gc faction info", "gc.faction.info", ItemStack.of(Material.JUNGLE_HANGING_SIGN)));
+        this.childCommands.put("list", new gcFactionList(this, "list", "/gc faction list", "gc.faction.list", ItemStack.of(Material.MAP)));
         this.childCommands.put("received", new gcFactionReceived(this, "received", "/gc faction received", "gc.faction.received", ItemStack.of(Material.CHEST)));
         this.childCommands.put("sent", new gcFactionSent(this, "sent", "/gc faction sent", "gc.faction.sent", ItemStack.of(Material.BOOK)));
         this.childCommands.put("accept", new gcFactionAccept(this, "accept", "/gc faction accept", "gc.faction.accept", null));
         this.childCommands.put("decline", new gcFactionDecline(this, "decline", "/gc faction decline", "gc.faction.decline", null));
-         this.childCommands.put("leave", new gcFactionLeave(this, "leave", "/gc faction leave", "gc.faction.leave", ItemStack.of(Material.OAK_DOOR)));
-        // todo: /gc faction list
+        this.childCommands.put("leave", new gcFactionLeave(this, "leave", "/gc faction leave", "gc.faction.leave", ItemStack.of(Material.OAK_DOOR)));
         // todo: /gc faction settings
     }
 

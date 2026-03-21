@@ -138,12 +138,13 @@ public class Country extends DataCollection {
         return name;
     }
     public void setName(String value) {
+        byName.remove(name);
         name = value;
-        byName.put(value, this);
+        byName.put(name, this);
     }
-    public String getFullDisplayName() {
+    public String getNameAndFaction() {
         if (hasFaction())
-            return "%s §3(%s)§f"
+            return "§f%s (§3%s§f)"
                    .formatted(getName(),
                               getFactionFaction().getName());
         else

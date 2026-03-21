@@ -20,7 +20,7 @@ public class gcFactionUninvite extends GeoCommand {
 
     public gcFactionUninvite(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Uninvites a previously invited country to your faction.";
+        this.helpString = "Uninvites a previously invited country from your faction.";
     }
 
     @Override

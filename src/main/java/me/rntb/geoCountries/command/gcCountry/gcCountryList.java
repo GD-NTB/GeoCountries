@@ -27,8 +27,8 @@ public class gcCountryList extends GeoCommand {
             for (Country country : Country.all) {
                 PlayerProfile leader = country.getLeaderPlayerProfile();
                 int citizens = country.getCitizenCount();
-                sb.append("§a%s§f (§eLeader§f: %s, §eCitizens§f: %s§f)\n"
-                          .formatted(country.getName(),
+                sb.append("§f> §a%s§f (§eLeader§f: %s, §eCitizens§f: %s§f)\n"
+                          .formatted(country.getNameAndFaction(),
                                      leader != null ? country.getLeaderPlayerProfile().getUsername() : "§cNone",
                                      citizens != 0 ? citizens : "§c0"));
             }
