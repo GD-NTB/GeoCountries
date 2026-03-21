@@ -144,7 +144,7 @@ public class Country extends DataCollection {
     }
     public String getNameAndFaction() {
         if (hasFaction())
-            return "%s (§3%s§f)"
+            return "%s §f(§3%s§f)"
                    .formatted(getName(),
                               getFactionFaction().getName());
         else
