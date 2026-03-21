@@ -210,7 +210,7 @@ public class Country extends DataCollection {
         return settings;
     }
     public static final LinkedHashMap<String, SettingData> settingsData = new LinkedHashMap<>() {{
-        put("mapcolour", new SettingData("#FF0000",
+        put("mapcolour", new SettingData("#05CF02",
                                          SettingData.Type.COLOUR,
                                          "Map Colour",
                                          "The colour of the country's claims on map plugins."));
@@ -218,11 +218,6 @@ public class Country extends DataCollection {
                                      SettingData.Type.COUNTRY_MOTTO,
                                      "Motto",
                                      "The motto of the country"));
-        // todo: delete this setting
-        put("prefixenabled", new SettingData("true",
-                                             SettingData.Type.BOOL,
-                                             "Prefix Enabled",
-                                             "Whether or not to show the country prefix in chat messages"));
         put("prefix", new SettingData("null",
                                       SettingData.Type.COUNTRY_PREFIX,
                                       "Prefix",

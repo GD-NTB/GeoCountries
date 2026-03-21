@@ -181,7 +181,7 @@ public class SettingData {
             case STRING, COUNTRY_PREFIX, COUNTRY_MOTTO -> List.of("null");
             case CHAT_COLOUR -> EnumUtil.enumToStringList(ChatUtil.ChatColour.class);
             case INT -> List.of();
-            case COLOUR -> List.of("#000000", "#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF", "#FFFFFF");
+            case COLOUR -> List.of("#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff", "#ffffff");
         };
     }
 
