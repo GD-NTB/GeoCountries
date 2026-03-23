@@ -73,21 +73,11 @@ public class FactionInviteService {
         // remove from byUUID
         FactionInvite.byUUID.remove(fInvite.getUUID());
         // remove from byFromFaction
-        List<FactionInvite> fInvites = FactionInvite.byFromFaction.get(fInvite.getFromFaction());
-        if (fInvites != null) {
-            fInvites.remove(fInvite);
-            // delete entry if list is now empty
-            if (fInvites.isEmpty())
-                FactionInvite.byFromFaction.remove(fInvite.getFromFaction());
-        }
+        FactionInvite.byFromFaction.computeIfPresent(fInvite.getFromFaction(),
+                (k, v) -> { v.remove(fInvite); return v.isEmpty() ? null : v; });
         // remove from byToCountry
-        fInvites = FactionInvite.byToCountry.get(fInvite.getToCountry());
-        if (fInvites != null) {
-            fInvites.remove(fInvite);
-            // delete entry if list is now empty
-            if (fInvites.isEmpty())
-                FactionInvite.byToCountry.remove(fInvite.getToCountry());
-        }
+        FactionInvite.byToCountry.computeIfPresent(fInvite.getToCountry(),
+                (k, v) -> { v.remove(fInvite); return v.isEmpty() ? null : v; });
 
         FactionInvite.delete(fInvite, FactionInvite.all, FactionInvite.DISPLAY_NAME);
 

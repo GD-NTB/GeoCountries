@@ -42,6 +42,7 @@ public class Faction extends DataCollection {
         }
 
         // reset and populate hashmaps
+        byUUID.clear();
         byName.clear();
         for (Faction faction : all) {
             byUUID.put(faction.uuid, faction);

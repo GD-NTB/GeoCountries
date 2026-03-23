@@ -12,10 +12,7 @@ import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class ClaimChunk extends DataCollection {
 
@@ -36,6 +33,11 @@ public class ClaimChunk extends DataCollection {
         return get(bukkitChunk.getChunkKey());
     }
 
+    private static final Map<UUID, List<ClaimChunk>> byCountry = new HashMap<>();
+    public static List<ClaimChunk> get(Country country) {
+        return byCountry.get(country.getUUID());
+    }
+
     public static Long packToKey(int x, int z) {
         return (long) x & 4294967295L | ((long) z & 4294967295L) << 32; // Chunk.getChunkKey(x, z)
     }
@@ -54,11 +56,12 @@ public class ClaimChunk extends DataCollection {
 
         // reset and populate hashmaps
         byKey.clear();
+        byCountry.clear();
         for (ClaimChunk claimChunk : all) {
+            // add to byKey
             byKey.put(claimChunk.key, claimChunk);
-
-            // add claimchunk to country
-            claimChunk.getOwnerObject().getClaimChunks().add(claimChunk.key);
+            // add to byCountry
+            byCountry.computeIfAbsent(claimChunk.owner, v -> new ArrayList<>()).add(claimChunk);
 
             // unpack key into coordinates
             int[] coords = unpackFromKey(claimChunk.key);
@@ -92,23 +95,25 @@ public class ClaimChunk extends DataCollection {
 
     public void register() {
         add(this, all, DISPLAY_NAME);
-        byKey.put(key, this);
 
-        // add this claimchunk to country
-        getOwnerObject().getClaimChunks().add(key);
+        // add to byKey
+        byKey.put(key, this);
+        // add to byCountry
+        byCountry.computeIfAbsent(owner, v -> new ArrayList<>()).add(this);
 
 //        // update maps
 //        Pl3xMapIntegration.addClaim(this);
     }
 
     public void deregister() {
-        // remove this claimchunk from country
-        getOwnerObject().getClaimChunks().remove(key);
-
 //        // update maps
 //        Pl3xMapIntegration.clearClaim(this);
 
+        // remove from byKey
         byKey.remove(key);
+        // remove from byCountry
+        ClaimChunk.byCountry.computeIfPresent(getOwner(),
+                (k, v) -> { v.remove(this); return v.isEmpty() ? null : v; });
 
         delete(this, all, DISPLAY_NAME);
     }
@@ -137,6 +142,7 @@ public class ClaimChunk extends DataCollection {
         return Pl3xMapIntegration.api.getWorldRegistry().get(getBukkitWorld().getName());
     }
 
+    // todo: do we need these no serialise annotations?
     @Expose(serialize = false, deserialize = false)
     private int x;
     public int getX() {

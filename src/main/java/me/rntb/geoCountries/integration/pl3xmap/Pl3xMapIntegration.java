@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.integration.pl3xmap;
 
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.data.ClaimChunk;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.Faction;
 import me.rntb.geoCountries.data.PlayerProfile;
@@ -11,15 +12,18 @@ import me.rntb.geoCountries.util.StringUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.layer.SimpleLayer;
-import net.pl3x.map.core.markers.marker.MultiPolygon;
 import net.pl3x.map.core.markers.marker.Polygon;
+import net.pl3x.map.core.markers.marker.Polyline;
 import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.registry.Registry;
 import net.pl3x.map.core.util.Colors;
 import net.pl3x.map.core.world.World;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Pl3xMapIntegration {
 
@@ -71,12 +75,13 @@ public class Pl3xMapIntegration {
         }
     }
 
+    // todo: should prob display a total chunk count and a chunk count of the selection, so we should pass in a rendercluster or smthn
     private static Options buildMarkerSettings(Country country) {
         int colour = Colors.fromHex(country.getSettings().get("mapcolour"));
         String motto = country.getSettings().get("motto");
         PlayerProfile leader = country.getLeaderObject();
         Faction faction = country.getFactionObject();
-        int size = country.getClaimChunksCount();
+        int size = ClaimChunk.get(country).size();
         return Options.builder()
                       .tooltipContent("""
                                       <span style="font-size:20px"><b>%s</b></span><br>
@@ -100,105 +105,117 @@ public class Pl3xMapIntegration {
                       .build();
     }
 
-    private static void renderCountry(Country country) {
+    public static void renderCountry(Country country) {
         RenderCountry rCountry = RenderCountry.from(country);
-
         if (!rCountry.hasAnyWorldChunks())
             return;
 
-        for (Map.Entry<String, List<RenderClaimChunk>> worldChunkEntry : rCountry.getWorldChunks().entrySet()) {
+        int id = 0;
+        for (Map.Entry<String, List<RenderClaimChunk>> entry : rCountry.getWorldChunks().entrySet()) {
             // get layer
-            String worldName = worldChunkEntry.getKey();
+            String worldName = entry.getKey();
             World world = api.getWorldRegistry().get(worldName);
             SimpleLayer layer = layers.get(world);
             if (layer == null)
                 continue;
 
-            // get chunks
-            List<RenderClaimChunk> rClaimChunks = worldChunkEntry.getValue();
+            List<RenderClaimChunk> chunks = entry.getValue();
 
-            // convert chunks to clusters
-            List<RenderCluster> clusters = RenderCluster.find(rClaimChunks);
+            // find chunk clusters
+            List<RenderCluster> clusters = RenderCluster.find(chunks);
 
-            List<MultiPolygonPart> polygonParts = new ArrayList<>();
-
-            // convert clusters to polygons
+            // build each polygon for each cluster
             for (RenderCluster cluster : clusters) {
-                // calculate negative space
-                List<RenderClaimChunk> holeChunks = cluster.findNegativeSpace();
+                List<PolygonPart> parts = buildPolygonParts(cluster);
+                for (PolygonPart part : parts) {
+                    List<Polyline> lines = new ArrayList<>();
 
-                // convert holes to polygons
-                List<List<Point>> holesPolygons = new ArrayList<>();
-                if (!holeChunks.isEmpty()) {
-                    List<RenderCluster> holeClusters = RenderCluster.find(holeChunks);
+                    // add outer
+                    lines.add(Polyline.of("outer_" + id, part.outer()));
 
-                    holesPolygons = holeClusters.stream()
-                                                .map(Pl3xMapIntegration::buildPolygonFromCluster)
-                                                .filter(Objects::nonNull)
-                                                .map(Pl3xMapIntegration::mergeCollinearPoints).toList();
+                    // add "hollow" holes
+                    for (List<Point> hole : part.holes()) {
+                        lines.add(Polyline.of("hole_" + id++, hole));
+                    }
+
+                    Polygon polygon = Polygon.of("country_" + country.getName() + "_" + id++, lines);
+                    polygon.setOptions(buildMarkerSettings(country));
+
+                    layer.addMarker(polygon);
                 }
-
-                List<Point> mainPolygon = buildPolygonFromCluster(cluster);
-                if (mainPolygon == null) {
-                    ChatUtil.sendPrefixedLogErrorMessage("Pl3xMapIntegration: Error drawing polygon of country " + country.getName());
-                    continue;
-                }
-
-                int before = mainPolygon.size();
-                mainPolygon = mergeCollinearPoints(mainPolygon);
-                int after = mainPolygon.size();
-
-                if (ConfigState.debugLogging)
-                    ChatUtil.sendPrefixedLogMessage("Pl3xMapIntegration: Polygon simplified: " + before + " -> " + after);
-
-                polygonParts.add(new MultiPolygonPart(mainPolygon, holesPolygons));
             }
-
-            // if there is no polygon, don't try to draw anything
-            if (polygonParts.isEmpty())
-                continue;
-
-            // assemble polygons into final multipolygons
-            List<Polygon> polygons = MultiPolygonPart.toPolygons(polygonParts);
-            MultiPolygon multiPolygon = MultiPolygon.of("MultiPolygon(" + country.getName() + ")", polygons);
-
-            multiPolygon.setOptions(buildMarkerSettings(country));
-
-            // FINALLY draw the multipolygons
-            layer.addMarker(multiPolygon);
         }
     }
 
-    private static List<Point> buildPolygonFromCluster(RenderCluster cluster) {
-        Map<Point,List<Point>> graph = RenderEdge.buildEdgeGraphFromCluster(cluster);
+    public static List<PolygonPart> buildPolygonParts(RenderCluster cluster) {
+        Map<Point, List<Point>> graph = RenderEdge.buildEdgeGraphFromCluster(cluster);
+        List<List<Point>> loops = RenderEdge.extractPolygonsFromEdgeGraph(graph);
 
-        List<List<Point>> polygons = RenderEdge.extractPolygonsFromEdgeGraph(graph);
+        List<List<Point>> outers = new ArrayList<>();
+        List<List<Point>> holes = new ArrayList<>();
+        for (List<Point> loop : loops) {
+            loop = mergeCollinearPoints(loop);
+            if (polygonArea(loop) > 0)
+                outers.add(loop);
+            else
+                holes.add(loop);
+        }
 
-        // largest polygon will be outer boundary
-        polygons.sort((a, b) -> Integer.compare(b.size(), a.size()));
+        List<PolygonPart> parts = new ArrayList<>();
+        for (List<Point> outer : outers) {
+            List<List<Point>> inner = new ArrayList<>();
 
-        return polygons.isEmpty() ? Collections.emptyList() : polygons.getFirst();
+            for (List<Point> hole : holes) {
+                if (pointInside(outer, hole.getFirst()))
+                    inner.add(hole);
+            }
+
+            parts.add(new PolygonPart(outer, inner));
+        }
+
+        return parts;
     }
+
+    public static double polygonArea(List<Point> poly) {
+        double sum = 0;
+        for (int i = 0; i < poly.size(); i++) {
+            Point a = poly.get(i);
+            Point b = poly.get((i + 1) % poly.size());
+
+            sum += (a.x() * b.z()) - (b.x() * a.z());
+        }
+        return sum * 0.5;
+    }
+
+    public static boolean pointInside(List<Point> poly, Point p) {
+        boolean inside = false;
+
+        for (int i = 0, j = poly.size() - 1; i < poly.size(); j = i++) {
+            Point a = poly.get(i);
+            Point b = poly.get(j);
+            // blyat
+            if ((a.z() > p.z()) != (b.z() > p.z()) && (p.x() < (b.x() - a.x()) * (p.z() - a.z()) / (b.z() - a.z()) + a.x()))
+                inside = !inside;
+        }
+
+        return inside;
+}
 
     public static List<Point> mergeCollinearPoints(List<Point> points) {
         int size = points.size();
-
-        // can't merge if less than 3 points
         if (size < 3)
             return points;
 
         List<Point> result = new ArrayList<>(size);
-
         for (int i = 0; i < size; i++) {
-            Point previous = points.get((i - 1 + size) % size);
-            Point current = points.get(i);
+            Point prev = points.get((i - 1 + size) % size);
+            Point curr = points.get(i);
             Point next = points.get((i + 1) % size);
 
-            boolean horizontal = previous.x() == current.x() && current.x() == next.x();
-            boolean vertical = previous.z() == current.z() && current.z() == next.z();
-
-            if (!horizontal && !vertical)
-                result.add(current);
+            boolean vertical = prev.x() == curr.x() && curr.x() == next.x();
+            boolean horizontal = prev.z() == curr.z() && curr.z() == next.z();
+            if (!vertical && !horizontal)
+                result.add(curr);
         }
 
         return result;

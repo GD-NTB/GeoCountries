@@ -119,21 +119,11 @@ public class CitizenshipApplicationService {
         // remove from sentByUUID
         CitizenshipApplication.sentByUUID.remove(cApplication.getUUID());
         // remove from sentByApplicant
-        List<CitizenshipApplication> cApplicationsSent = CitizenshipApplication.sentByApplicant.get(cApplication.getApplicant());
-        if (cApplicationsSent != null) {
-            cApplicationsSent.remove(cApplication);
-            // delete entry if list is now empty
-            if (cApplicationsSent.isEmpty())
-                CitizenshipApplication.sentByApplicant.remove(cApplication.getApplicant());
-        }
+        CitizenshipApplication.sentByApplicant.computeIfPresent(cApplication.getApplicant(),
+                (k, v) -> { v.remove(cApplication); return v.isEmpty() ? null : v; });
         // remove from sentByToCountry
-        cApplicationsSent = CitizenshipApplication.sentByToCountry.get(cApplication.getToCountry());
-        if (cApplicationsSent != null) {
-            cApplicationsSent.remove(cApplication);
-            // delete entry if list is now empty
-            if (cApplicationsSent.isEmpty())
-                CitizenshipApplication.sentByApplicant.remove(cApplication.getToCountry());
-        }
+        CitizenshipApplication.sentByToCountry.computeIfPresent(cApplication.getToCountry(),
+                (k, v) -> { v.remove(cApplication); return v.isEmpty() ? null : v; });
 
         CitizenshipApplication.delete(cApplication, CitizenshipApplication.sentAll, CitizenshipApplication.DISPLAY_NAME);
 

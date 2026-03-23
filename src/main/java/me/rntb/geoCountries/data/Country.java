@@ -109,8 +109,11 @@ public class Country extends DataCollection {
         }
 
         // delete claimed chunks
-        for (Long claimChunkKey : new ArrayList<>(claimChunks)) {
-            ClaimChunk.get(claimChunkKey).deregister();
+        List<ClaimChunk> claimChunks = getClaimChunks();
+        if (claimChunks != null && !claimChunks.isEmpty()) {
+            for (ClaimChunk cc : new ArrayList<>(ClaimChunk.get(this))) {
+                cc.deregister();
+            }
         }
 
         // delete any associated applications
@@ -240,14 +243,8 @@ public class Country extends DataCollection {
                                                LinkedHashMap::putAll);
     }
 
-    // loaded in ClaimChunk.init
-    @Expose(serialize = false, deserialize = false)
-    private List<Long> claimChunks;
-    public List<Long> getClaimChunks() {
-        return claimChunks;
-    }
-    public int getClaimChunksCount() {
-        return claimChunks.size();
+    public List<ClaimChunk> getClaimChunks() {
+        return ClaimChunk.get(this);
     }
 
     // loaded in Faction.init
@@ -290,10 +287,9 @@ public class Country extends DataCollection {
     }
 
     // gson constructor
-    public Country() {
-        claimChunks = new ArrayList<>();
-    }
+    public Country() { }
 
+    // todo: generate
     public Country(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;

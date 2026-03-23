@@ -3,10 +3,7 @@ package me.rntb.geoCountries.integration.pl3xmap.type;
 import me.rntb.geoCountries.data.ClaimChunk;
 import me.rntb.geoCountries.data.Country;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RenderCountry {
@@ -24,14 +21,19 @@ public class RenderCountry {
         return !worldChunks.isEmpty();
     }
 
-    public static RenderCountry from(Country country) {
-        return new RenderCountry(country.getUUID(), country.getClaimChunks());
+    private final Country country;
+    public Country getCountry() {
+        return country;
     }
 
-    public RenderCountry(UUID uuid, List<Long> claimChunks) {
+    public static RenderCountry from(Country country) {
+        return new RenderCountry(country.getUUID(), country);
+    }
+
+    public RenderCountry(UUID uuid, Country country) {
         this.uuid = uuid;
-        this.worldChunks = buildWorldChunksHashMap(claimChunks.stream()
-                                                              .map(ClaimChunk::get).toList());
+        this.country = country;
+        this.worldChunks = buildWorldChunksHashMap(ClaimChunk.get(country));
     }
 
     private static Map<String, List<RenderClaimChunk>> buildWorldChunksHashMap(List<ClaimChunk> claimChunks) {
