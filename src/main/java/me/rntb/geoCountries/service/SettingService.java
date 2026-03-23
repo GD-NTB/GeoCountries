@@ -98,6 +98,7 @@ public class SettingService {
 
         settingsRef.put(key, toValueTrimmed);
 
-        ChatUtil.sendPrefixedMessage(sender, "§aSet §e" + key + "§a to §f" + toValueTrimmed + "§a!");
+        String colourFormatter = settingData.getValueChatColour(toValueTrimmed);
+        ChatUtil.sendPrefixedMessage(sender, "§aSet §e" + key + "§a to " + colourFormatter + toValueTrimmed + "§a!");
     }
 }

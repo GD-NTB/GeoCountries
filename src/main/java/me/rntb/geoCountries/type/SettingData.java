@@ -44,7 +44,7 @@ public class SettingData {
     public String toString(String value) {
         return "§e%s: %s"
                .formatted(name,
-                          getValueChatColour(value, type) + value);
+                          getValueChatColour(value) + value);
     }
 
     public String toStringFull(String key, String value) {
@@ -52,10 +52,10 @@ public class SettingData {
                .formatted(name,
                           key,
                           description,
-                          getValueChatColour(value, type) + value);
+                          getValueChatColour(value) + value);
     }
 
-    public String getValueChatColour(String value, Type type) {
+    public String getValueChatColour(String value) {
         return switch (type) {
             case Type.BOOL -> {
                 if (value.equals("true"))
@@ -76,7 +76,7 @@ public class SettingData {
                 }
                 yield ChatUtil.getChatColourByEnum(chatColour);
             }
-            case COLOUR -> ChatUtil.getColouredString("", Integer.parseInt(value.replace("#", ""), 16));
+            case COLOUR -> ChatUtil.getColouredString(value);
         };
     }
 

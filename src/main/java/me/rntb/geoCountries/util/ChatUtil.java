@@ -5,7 +5,6 @@ import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.Faction;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
@@ -60,9 +59,12 @@ public class ChatUtil {
         };
     }
 
-    public static String getColouredString(String string, int hexCode) {
-        TextColor textColour = TextColor.color(hexCode);
-        return legacySerialisation.serialize(Component.text(string, textColour));
+    public static String getColouredString(String string) {
+        StringBuilder formatter = new StringBuilder("§x");
+        for(char c : string.replace("#", "").toCharArray()) {
+            formatter.append('§').append(c);
+        }
+        return formatter.toString();
     }
 
     // not centred automatically, you will need to prepend whitespace before appending these buttons

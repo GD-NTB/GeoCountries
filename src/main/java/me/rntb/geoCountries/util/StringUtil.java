@@ -86,9 +86,6 @@ public class StringUtil {
     // ----- country prefix -----
     // country prefix should be trimmed beforehand
     public static String validateCountryPrefix(String prefix) {
-        if (prefix.equalsIgnoreCase("null") || prefix.equalsIgnoreCase("none"))
-            return "§cPrefix cannot be 'null' or 'none'!§r"; // todo: this might cause error blyat
-
         if (!(ConfigState.countryPrefixMin <= prefix.length() && prefix.length() <= ConfigState.countryPrefixMax))
             return "§cCountry prefix must be between §f%d and %d§c characters!§r"
                    .formatted(ConfigState.countryPrefixMin, ConfigState.countryPrefixMax);
@@ -110,9 +107,6 @@ public class StringUtil {
     // ----- country motto -----
     // country motto should be trimmed beforehand
     public static String validateCountryMotto(String motto) {
-        if (motto.equalsIgnoreCase("null") || motto.equalsIgnoreCase("none"))
-            return "§cCountry motto cannot be 'null' or 'none'!§r"; // todo: this might cause error blyat
-
         if (!(ConfigState.countryMottoMin <= motto.length() && motto.length() <= ConfigState.countryMottoMax))
             return "§cCountry motto must be between §f%d and %d§c characters!§r"
                     .formatted(ConfigState.countryMottoMin, ConfigState.countryMottoMax);

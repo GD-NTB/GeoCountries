@@ -294,10 +294,21 @@ public class Country extends DataCollection {
         return "§f";
     }
 
+//    // same faction = dark green
+//    // else white
+//    public String getChatColourBetweenOtherCountry(Country otherCountry) {
+//        // if in same faction, dark green
+//        Faction factionA = getFactionObject();
+//        Faction factionB = otherCountry.getFactionObject();
+//        if (factionA != null && (factionA.equals(factionB))) // Faction.equals checks for null
+//            return "§2";
+//
+//        return "§f";
+//    }
+
     // gson constructor
     public Country() { }
 
-    // todo: generate
     public Country(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
