@@ -17,7 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Path;
 import java.util.Objects;
 
-// todo: factions
+// todo: do todo's
 // todo: javadocs eventually
 public class GeoCountries extends JavaPlugin {
 
