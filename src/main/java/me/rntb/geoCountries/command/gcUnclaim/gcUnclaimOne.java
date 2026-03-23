@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.command.gcUnclaim;
 
 import me.rntb.geoCountries.command.GeoCommand;
+import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.ClaimChunk;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
@@ -22,7 +23,13 @@ public class gcUnclaimOne extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         PlayerProfile playerProfile = PlayerProfile.get(player);
+
         Chunk chunk = player.getChunk();
+        if (!chunk.getWorld().getName().equals(ConfigState.claimWorld)) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou cannot unclaim here! " + playerProfile.getChunkString());
+            return;
+        }
+
         long chunkKey = chunk.getChunkKey();
 
         if (playerProfile.getPosition() != Position.LEADER) {

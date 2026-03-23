@@ -173,7 +173,7 @@ public class Country extends DataCollection {
 
     @Expose(serialize = false, deserialize = false)
     private final ArrayList<UUID> citizens = new ArrayList<>();
-    public ArrayList<UUID> getCitizens() {
+    public List<UUID> getCitizens() {
         return citizens;
     }
     public List<Player> getOnlineCitizens() {

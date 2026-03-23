@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.command.gcClaim;
 
 import me.rntb.geoCountries.command.GeoCommand;
+import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.ClaimChunk;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
@@ -22,23 +23,31 @@ public class gcClaimOne extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         PlayerProfile playerProfile = PlayerProfile.get(player);
-        Country country = playerProfile.getCitizenshipObject();
+        Country senderCountry = playerProfile.getCitizenshipObject();
 
-        if (country == null || playerProfile.getPosition() != Position.LEADER) {
+        if (senderCountry == null || playerProfile.getPosition() != Position.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to claim chunks! " + playerProfile.getChunkString());
             return;
         }
 
         Chunk chunk = player.getChunk();
+        if (!chunk.getWorld().getName().equals(ConfigState.claimWorld)) {
+            ChatUtil.sendPrefixedMessage(sender, "§cYou cannot claim here! " + playerProfile.getChunkString());
+            return;
+        }
 
         long chunkKey = chunk.getChunkKey();
         ClaimChunk claimChunk = ClaimChunk.get(chunkKey);
         if (claimChunk != null) {
-            ChatUtil.sendPrefixedMessage(sender, "§cThis chunk has already been claimed by §f" + Country.get(claimChunk.getOwner()).getName() + "§c! " + playerProfile.getChunkString());
+            Country owner = claimChunk.getOwnerObject();
+            if (owner.equals(senderCountry))
+                ChatUtil.sendPrefixedMessage(sender, "§cThis chunk has already been claimed by your country! " + playerProfile.getChunkString());
+            else
+                ChatUtil.sendPrefixedMessage(sender, "§cThis chunk has already been claimed by §f" + owner.getName() + "§c! " + playerProfile.getChunkString());
             return;
         }
 
-        claimChunk = new ClaimChunk(chunk.getX(), chunk.getZ(), chunk.getWorld().getUID(), country.getUUID());
+        claimChunk = new ClaimChunk(chunk.getX(), chunk.getZ(), chunk.getWorld().getUID(), senderCountry.getUUID());
         claimChunk.register();
 
         ChatUtil.sendPrefixedMessage(sender, "§aClaimed the chunk! " + playerProfile.getChunkString());

@@ -16,7 +16,6 @@ public class gcClaim extends GeoCommand {
         this.childCommands.put("unclaim", new gcUnclaim(this, "unclaim", "/gc claim unclaim", "gc.unclaim", ItemStack.of(Material.COPPER_SHOVEL)));
         this.childCommands.put("map", new gcClaimMap(this, "map", "/gc claim map", "gc.claim.map", ItemStack.of(Material.FILLED_MAP)));
         this.childCommands.put("info", new gcClaimInfo(this, "info", "/gc claim info", "gc.claim.info", ItemStack.of(Material.JUNGLE_HANGING_SIGN)));
-        this.childCommands.put("reloadmap", new gcClaimReloadMap(this, "reloadmap", "/gc claim reloadmap", "gc.claim.reloadmap", ItemStack.of(Material.BELL)));
     }
 
     @Override

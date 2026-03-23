@@ -54,61 +54,81 @@ public class ConfigManager {
     }
 
     private static void readStateFromFile() {
-        ConfigState.enableGcConfirm = config.getBoolean("enable-Pl3xMap");
+        // claiming
+        ConfigState.claimWorld = config.getString("claim-world");
 
-        ConfigState.debugMode = config.getBoolean("debug-mode");
-        ConfigState.debugLogging = config.getBoolean("debug-logging");
+        // map plugins
+        ConfigState.enablePl3xMap = config.getBoolean("enable-Pl3xMap");
 
+        // commands
         ConfigState.enableGcConfirm = config.getBoolean("enable-gc-confirm");
 
+        // chat
+        ConfigState.countryPrefixEnabled = config.getBoolean("country-prefix-enabled");
         ConfigState.chatPrefix = StringUtil.appendTrailingResetFormatter(config.getString("chat-prefix"));
         ConfigState.chatPrefixComponent = ChatUtil.legacySerialisation.deserialize(ConfigState.chatPrefix);
-
-        ConfigState.countryPrefixEnabled = config.getBoolean("country-prefix-enabled");
         ConfigState.countryPrefixFormat = config.getString("country-prefix-format") + "§r";
-        ConfigState.countryPrefixMin = config.getInt("country-prefix-min");
-        ConfigState.countryPrefixMax = config.getInt("country-prefix-max");
 
+        // sound
         ConfigState.soundEffects = config.getBoolean("sound-effects");
 
+        // invites
         ConfigState.maxCitizenshipApplications = config.getInt("max-citizenship-applications");
+        ConfigState.maxFactionInvites = config.getInt("max-faction-invites");
 
+        // string lengths
         ConfigState.chatResponseMin = config.getInt("chat-response-min");
         ConfigState.chatResponseMax = config.getInt("chat-response-max");
         ConfigState.countryNameMin = config.getInt("country-name-min");
         ConfigState.countryNameMax = config.getInt("country-name-max");
         ConfigState.countryMottoMin = config.getInt("country-motto-min");
         ConfigState.countryMottoMax = config.getInt("country-motto-max");
+        ConfigState.countryPrefixMin = config.getInt("country-prefix-min");
+        ConfigState.countryPrefixMax = config.getInt("country-prefix-max");
         ConfigState.factionNameMin = config.getInt("faction-name-min");
         ConfigState.factionNameMax = config.getInt("faction-name-max");
+
+        // debug
+        ConfigState.debugLogging = config.getBoolean("debug-logging");
+        ConfigState.debugMode = config.getBoolean("debug-mode");
     }
 
     private static void writeStateToFile() {
+        // claiming
+        config.set("claim-world", ConfigState.claimWorld);
+
+        // map plugins
         config.set("enable-Pl3xMap", ConfigState.enablePl3xMap);
 
-        config.set("debug-mode", ConfigState.debugMode);
-        config.set("debug-logging", ConfigState.debugLogging);
-
+        // commands
         config.set("enable-gc-confirm", ConfigState.enableGcConfirm);
 
-        config.set("chat-prefix", StringUtil.stripTrailingResetFormatter(ConfigState.chatPrefix));
-
+        // chat
         config.set("country-prefix-enabled", ConfigState.countryPrefixEnabled);
+        config.set("chat-prefix", StringUtil.stripTrailingResetFormatter(ConfigState.chatPrefix));
         config.set("country-prefix-format", StringUtil.stripTrailingResetFormatter(ConfigState.countryPrefixFormat));
-        config.set("country-prefix-min", ConfigState.countryPrefixMin);
-        config.set("country-prefix-max", ConfigState.countryPrefixMax);
 
+        // sound
         config.set("sound-effects", ConfigState.soundEffects);
 
+        // invites
         config.set("max-citizenship-applications", ConfigState.maxCitizenshipApplications);
+        config.set("max-faction-invites", ConfigState.maxFactionInvites);
 
+        // string lengths
         config.set("chat-response-min", ConfigState.chatResponseMin);
         config.set("chat-response-max", ConfigState.chatResponseMax);
         config.set("country-name-min", ConfigState.countryNameMin);
         config.set("country-name-max", ConfigState.countryNameMax);
         config.set("country-motto-min", ConfigState.countryMottoMin);
         config.set("country-motto-max", ConfigState.countryMottoMax);
+        config.set("country-prefix-min", ConfigState.countryPrefixMin);
+        config.set("country-prefix-max", ConfigState.countryPrefixMax);
         config.set("faction-name-min", ConfigState.factionNameMin);
         config.set("faction-name-max", ConfigState.factionNameMax);
+
+        // debug
+        config.set("debug-logging", ConfigState.debugLogging);
+        config.set("debug-mode", ConfigState.debugMode);
     }
 }

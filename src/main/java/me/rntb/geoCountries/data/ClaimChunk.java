@@ -101,13 +101,13 @@ public class ClaimChunk extends DataCollection {
         // add to byCountry
         byCountry.computeIfAbsent(owner, v -> new ArrayList<>()).add(this);
 
-//        // update maps
-//        Pl3xMapIntegration.addClaim(this);
+        // update maps
+        Pl3xMapIntegration.onClaim(getOwnerObject(), getX(), getZ());
     }
 
     public void deregister() {
-//        // update maps
-//        Pl3xMapIntegration.clearClaim(this);
+        // update maps
+        Pl3xMapIntegration.onUnclaim(getOwnerObject(), getX(), getZ());
 
         // remove from byKey
         byKey.remove(key);

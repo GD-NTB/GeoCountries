@@ -33,7 +33,6 @@ gc.group.player:
     gc.player.settings
     gc.claim.one
     gc.claim.map
-    gc.claim.reloadmap
     gc.unclaim
     gc.unclaim.one
     gc.faction.create

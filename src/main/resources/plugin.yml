@@ -63,7 +63,6 @@ permissions:
       gc.player.settings: true
       gc.claim.one: true
       gc.claim.map: true
-      gc.claim.reloadmap: true
       gc.unclaim: true
       gc.unclaim.one: true
       gc.faction.create: true
