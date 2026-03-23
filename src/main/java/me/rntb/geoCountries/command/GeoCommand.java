@@ -112,7 +112,6 @@ public abstract class GeoCommand {
         return command.getTabCompletion(sender, Arrays.copyOfRange(args, 1, args.length));
     }
 
-    // todo: use this more instead of abusing Response
     public ItemStack[] getMenuButtons(CommandSender sender) {
         if (childCommands.isEmpty())
             return null;

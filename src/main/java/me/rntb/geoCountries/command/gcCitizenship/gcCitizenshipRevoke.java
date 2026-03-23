@@ -4,6 +4,7 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
+import me.rntb.geoCountries.menu.MenuPage;
 import me.rntb.geoCountries.service.CountryService;
 import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -11,6 +12,7 @@ import me.rntb.geoCountries.util.UuidUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class gcCitizenshipRevoke extends GeoCommand {
@@ -78,6 +80,26 @@ public class gcCitizenshipRevoke extends GeoCommand {
 
         // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.getUsername() + "§6 is no longer a citizen of §f" + country.getName() + "§6!", true);
+    }
+
+    @Override
+    public ItemStack[] getMenuButtons(CommandSender sender) {
+        PlayerProfile playerProfile = PlayerProfile.get(sender);
+        Country country = playerProfile.getCitizenshipCountry();
+        // should never trigger!
+        if (country == null)
+            return null;
+
+        List<PlayerProfile> citizens = country.getCitizens().stream()
+                                                            .filter(uuid -> !uuid.equals(playerProfile.getUUID()))
+                                                            .map(PlayerProfile::get)
+                                                            .sorted(Comparator.comparing(PlayerProfile::getPositionLevel))
+                                                            .toList().reversed();
+
+        return MenuPage.createSkullMenuButtons(citizens, PlayerProfile::getOfflinePlayer,
+                                                         citizen -> "§a" + citizen.getUsername(),
+                                                         citizen -> "Revoke §6" + citizen.getUsername() + "§f's citizenship",
+                                                         citizen -> "gc citizenship revoke " + citizen.getUsername());
     }
 
     @Override

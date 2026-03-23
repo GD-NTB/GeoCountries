@@ -63,8 +63,7 @@ public class gcFactionLeave extends GeoCommand {
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
-        PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Faction faction = playerProfile.getFaction();
-        return faction != null && !playerProfile.isFactionLeader();
+        return !PlayerProfile.get(sender).isFactionLeader();
+
     }
 }
