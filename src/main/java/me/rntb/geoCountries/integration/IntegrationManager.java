@@ -1,7 +1,10 @@
 package me.rntb.geoCountries.integration;
 
 import me.rntb.geoCountries.GeoCountries;
+import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.integration.pl3xmap.Pl3xMapIntegration;
+import me.rntb.geoCountries.util.ChatUtil;
 
 public class IntegrationManager {
 
@@ -9,8 +12,7 @@ public class IntegrationManager {
     public static void init() {
         detectPlugins();
 
-        if (IntegrationState.isPl3xMapEnabled)
-            Pl3xMapIntegration.init();
+        Pl3xMapIntegration.init();
     }
 
     private static void detectPlugins() {
@@ -19,7 +21,43 @@ public class IntegrationManager {
     }
 
     public static void disable() {
-        if (IntegrationState.isPl3xMapEnabled)
-            Pl3xMapIntegration.clearAllClaims();
+        clearAll();
+
+        IntegrationState.isPl3xMapEnabled = false;
+    }
+
+    public static void onClaim(Country country, int x, int z) {
+        Pl3xMapIntegration.onClaim(country, x, z);
+
+        if (ConfigState.debugLogging)
+            ChatUtil.sendPrefixedLogMessage("IntegrationManager.onClaim");
+    }
+
+    public static void onUnclaim(Country country, int x, int z) {
+        Pl3xMapIntegration.onUnclaim(country, x, z);
+
+        if (ConfigState.debugLogging)
+            ChatUtil.sendPrefixedLogMessage("IntegrationManager.onUnclaim");
+    }
+
+    public static void onStyleUpdate(Country country) {
+        Pl3xMapIntegration.onStyleUpdate(country);
+
+        if (ConfigState.debugLogging)
+            ChatUtil.sendPrefixedLogMessage("IntegrationManager.onStyleUpdate");
+    }
+
+    public static void clearCountry(Country country) {
+        Pl3xMapIntegration.clearCountry(country);
+
+        if (ConfigState.debugLogging)
+            ChatUtil.sendPrefixedLogMessage("IntegrationManager.clearCountry");
+    }
+
+    public static void clearAll() {
+        Pl3xMapIntegration.clearAll();
+
+        if (ConfigState.debugLogging)
+            ChatUtil.sendPrefixedLogMessage("IntegrationManager.clearAll");
     }
 }

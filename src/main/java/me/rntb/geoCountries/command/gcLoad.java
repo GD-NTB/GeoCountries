@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.command;
 
 import me.rntb.geoCountries.data.DataCollectionManager;
+import me.rntb.geoCountries.integration.IntegrationManager;
 import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.UuidUtil;
@@ -28,6 +29,11 @@ public class gcLoad extends GeoCommand {
         // load data collections
         ChatUtil.sendPrefixedMessage(sender, "§eLoading all data collections...");
         DataCollectionManager.init();
+
+        ChatUtil.sendPrefixedMessage(sender, "§eTriggering integration init...");
+        // tooltips and colours and stuff could have changed, so we need to redo
+        IntegrationManager.init();
+
         ChatUtil.sendPrefixedMessage(sender, "§aLoaded all data!");
     }
 }

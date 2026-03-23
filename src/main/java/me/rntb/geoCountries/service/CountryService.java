@@ -4,6 +4,7 @@ import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
+import me.rntb.geoCountries.integration.IntegrationManager;
 import me.rntb.geoCountries.util.ChatUtil;
 
 public class CountryService {
@@ -19,10 +20,11 @@ public class CountryService {
 
         // remove all pending citizenship applications
         CitizenshipApplicationService.deleteAllSentByApplicant(playerProfile);
+
+        IntegrationManager.onStyleUpdate(country);
     }
 
     // if was leader, sets new leader to random citizen, so make sure to demote first!
-    // todo: inheritance message
     public static void leaveCountry(PlayerProfile playerProfile) {
         Country currentCountry = playerProfile.getCitizenshipObject();
         if (currentCountry == null)
@@ -35,6 +37,8 @@ public class CountryService {
 
         playerProfile.setCitizenshipInternal(null);
         playerProfile.setPositionInternal(Position.NONE);
+
+        IntegrationManager.onStyleUpdate(currentCountry);
     }
 
     public static void promoteToLeader(PlayerProfile playerProfile) {
@@ -60,9 +64,13 @@ public class CountryService {
 
         country.setLeaderInternal(playerProfile.getUUID());
         playerProfile.setPositionInternal(PlayerProfile.Position.LEADER);
+
+        IntegrationManager.onStyleUpdate(country);
     }
 
+    // this should pretty much never be called without a specific reason
     // if newLeader = null, a random other citizen is chosen to be the new leader
+    // does not update maps
     public static void demoteFromLeader(PlayerProfile playerProfile, PlayerProfile newLeader) {
         Country country = playerProfile.getCitizenshipObject();
         if (country == null)

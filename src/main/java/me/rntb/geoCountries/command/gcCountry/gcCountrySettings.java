@@ -4,6 +4,8 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
+import me.rntb.geoCountries.integration.IntegrationManager;
+import me.rntb.geoCountries.service.SettingService;
 import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
@@ -43,7 +45,18 @@ public class gcCountrySettings extends GeoCommand {
                 return;
             }
             String toValue = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-            SettingData.setSetting(sender, args[0], toValue, Country.settingsData, country.getSettings());
+
+            String key = args[0];
+            SettingService.setSetting(sender, key, toValue, Country.settingsData, country.getSettings());
+
+            // update map style if we did
+            // note: should really do some listener here, but in the end isnt it strange how these things never really mattered?
+            switch (key) {
+                case "mapcolour", "motto":
+                    IntegrationManager.onStyleUpdate(country);
+                    break;
+            }
+
             return;
         }
         // else list all/specific setting

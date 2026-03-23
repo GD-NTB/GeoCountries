@@ -3,6 +3,7 @@ package me.rntb.geoCountries.service;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.Faction;
+import me.rntb.geoCountries.integration.IntegrationManager;
 import me.rntb.geoCountries.util.ChatUtil;
 
 public class FactionService {
@@ -17,6 +18,8 @@ public class FactionService {
 
         // remove all pending faction invites
         FactionInviteService.deleteAllSentToCountry(country);
+
+        IntegrationManager.onStyleUpdate(country);
     }
 
     // if was leader, sets new leader to random member, so make sure to demote first!
@@ -30,6 +33,8 @@ public class FactionService {
 
         currentFaction.getMembers().remove(country.getUUID());
         country.setFactionInternal(null);
+
+        IntegrationManager.onStyleUpdate(country);
     }
 
     public static void promoteToLeader(Country country) {
@@ -49,6 +54,8 @@ public class FactionService {
         }
 
         faction.setLeaderInternal(country.getUUID());
+
+        IntegrationManager.onStyleUpdate(country);
     }
 
     // if newLeader = null, a random other member is chosen to be the new leader

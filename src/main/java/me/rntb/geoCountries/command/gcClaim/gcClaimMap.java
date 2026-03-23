@@ -60,6 +60,7 @@ public class gcClaimMap extends GeoCommand {
         int halfWidth = (int) (width*0.5);
         int halfHeight = (int) (height*0.5);
 
+        // todo: self = #, allies = @, enemies = X, others = O maybe?
         for (int off_z = -halfHeight; off_z < halfHeight + 1; off_z++) {
             for (int off_x = -halfWidth; off_x < halfWidth + 1; off_x++) {
                 int x = chunk.getX() + off_x;

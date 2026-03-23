@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
 import me.rntb.geoCountries.data.PlayerProfile.Position;
+import me.rntb.geoCountries.integration.IntegrationManager;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.service.FactionInviteService;
 import me.rntb.geoCountries.service.FactionService;
@@ -111,8 +112,9 @@ public class Country extends DataCollection {
         // delete claimed chunks
         List<ClaimChunk> claimChunks = getClaimChunks();
         if (claimChunks != null && !claimChunks.isEmpty()) {
+            IntegrationManager.clearCountry(this);
             for (ClaimChunk cc : new ArrayList<>(ClaimChunk.get(this))) {
-                cc.deregister();
+                cc.deregister(false);
             }
         }
 

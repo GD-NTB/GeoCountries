@@ -58,8 +58,6 @@ public class gcCitizenshipRevoke extends GeoCommand {
             return;
         }
 
-        // todo: check if we are revoking leader inheritor citizenship, that shouldnt happen!
-
         // start waiting for confirm
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,

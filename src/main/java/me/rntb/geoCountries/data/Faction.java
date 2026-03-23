@@ -3,6 +3,7 @@ package me.rntb.geoCountries.data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.integration.IntegrationManager;
 import me.rntb.geoCountries.service.FactionInviteService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
@@ -94,9 +95,11 @@ public class Faction extends DataCollection {
     }
 
     public void deregister() {
-        // remove members
+        // remove members and update maps of their country
         for (UUID memberUUID : new ArrayList<>(members)) {
-            Country.get(memberUUID).setFactionInternal(null);
+            Country member = Country.get(memberUUID);
+            member.setFactionInternal(null);
+            IntegrationManager.onStyleUpdate(member);
         }
 
         // delete all sent faction invites

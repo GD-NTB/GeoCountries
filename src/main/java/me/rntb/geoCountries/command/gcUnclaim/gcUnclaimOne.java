@@ -44,7 +44,7 @@ public class gcUnclaimOne extends GeoCommand {
             return;
         }
 
-        claimChunk.deregister();
+        claimChunk.deregister(true);
 
         ChatUtil.sendPrefixedMessage(sender, "§aUnclaimed the chunk! " + playerProfile.getChunkString());
     }

@@ -54,8 +54,9 @@ public class Pl3xMapIntegration {
             ChatUtil.sendPrefixedLogMessage("Finished Pl3xMapIntegration: " + (endTime - startTime) * 0.000001 + "ms");
     }
 
+    // --- init ---
     private static void clearAndDrawAll() {
-        clearAllClaims();
+        clearAll();
 
         for (Country country : Country.all) {
             initCountry(country);
@@ -63,7 +64,7 @@ public class Pl3xMapIntegration {
         }
     }
 
-    public static void clearAllClaims() {
+    public static void clearAll() {
         if (!IntegrationState.isPl3xMapEnabled)
             return;
 
@@ -99,6 +100,7 @@ public class Pl3xMapIntegration {
         return true;
     }
 
+    // --- style ---
     private static Options buildMarkerSettings(Country country) {
         int colour = Colors.fromHex(country.getSettings().get("mapcolour"));
 
@@ -137,32 +139,45 @@ public class Pl3xMapIntegration {
                       .build();
     }
 
-    private static void addChunk(CountryRenderData crData, int x, int z) {
-        crData.getChunks().add(ClaimChunk.packToKey(x, z));
-        toggleNeighbours(crData, x, z);
-    }
+    // --- build and draw ---
+    private static void drawCountry(Country country) {
+        CountryRenderData crData = CountryRenderData.get(country);
+        if (crData == null)
+            return;
 
-    private static void removeChunk(CountryRenderData crData, int x, int z) {
-        crData.getChunks().remove(ClaimChunk.packToKey(x, z));
-        toggleNeighbours(crData, x, z);
-    }
+        for (Polygon poly : crData.getMarkers()) {
+            claimLayer.removeMarker(poly.getKey());
+        }
+        crData.getMarkers().clear();
 
-    private static void toggleNeighbours(CountryRenderData crData, int x, int z) {
-        checkEdge(crData, p(x+1, z),   p(x+1, z+1));
-        checkEdge(crData, p(x, z+1),   p(x, z));
-        checkEdge(crData, p(x+1, z+1), p(x, z+1));
-        checkEdge(crData, p(x, z),     p(x+1, z));
-    }
+        Map<Point,List<Point>> graph = buildGraph(crData.getEdges());
+        List<List<Point>> loops = extractLoops(graph);
+        List<PolygonPart> parts = buildParts(loops);
 
-    private static Point p(int x, int z) {
-        return Point.of(x * 16, z * 16);
-    }
+        crData.getMarkers().clear();
 
-    private static void checkEdge(CountryRenderData crData, Point a, Point b) {
-        Edge edge = new Edge(a, b);
+        int i = 0;
+        for (PolygonPart part : parts) {
+            List<Polyline> lines = new ArrayList<>();
 
-        if (!crData.getEdges().add(edge))
-            crData.getEdges().remove(edge);
+            // add outer
+            lines.add(Polyline.of("outer_" + i, part.outer()));
+
+            // add holes
+            for (List<Point> hole : part.holes()) {
+                lines.add(Polyline.of("hole_" + i, hole));
+                i++;
+            }
+
+            // build into polygon
+            String key = "country_" + country.getName() + "_" + i++;
+            Polygon polygon = Polygon.of(key, lines);
+            polygon.setOptions(buildMarkerSettings(country));
+
+            claimLayer.addMarker(polygon);
+
+            crData.getMarkers().add(polygon);
+        }
     }
 
     private static Map<Point,List<Point>> buildGraph(Set<Edge> edges) {
@@ -226,21 +241,6 @@ public class Pl3xMapIntegration {
         return loops;
     }
 
-    private static String edgeKey(Point a, Point b) {
-        if (compare(a, b) > 0) {
-            Point tmp = a;
-            a = b;
-            b = tmp;
-        }
-        return a.x() + "," + a.z() + "|" + b.x() + "," + b.z();
-    }
-
-    private static int compare(Point p1, Point p2) {
-        int cmp = Double.compare(p1.x(), p2.x());
-        if (cmp != 0) return cmp;
-        return Double.compare(p1.z(), p2.z());
-    }
-
     private static List<PolygonPart> buildParts(List<List<Point>> loops) {
         List<List<Point>> outers = new ArrayList<>();
         List<List<Point>> holes = new ArrayList<>();
@@ -275,47 +275,97 @@ public class Pl3xMapIntegration {
         return parts;
     }
 
-    private static void drawCountry(Country country) {
-        CountryRenderData crData = CountryRenderData.get(country);
-        if (crData == null)
-            return;
+    // --- helpers ---
+    private static String edgeKey(Point a, Point b) {
+        if (compare(a, b) > 0) {
+            Point tmp = a;
+            a = b;
+            b = tmp;
+        }
+        return a.x() + "," + a.z() + "|" + b.x() + "," + b.z();
+    }
 
-        for (String markerID : crData.getMarkerIDs()) {
-            claimLayer.removeMarker(markerID);
+    private static int compare(Point p1, Point p2) {
+        int cmp = Double.compare(p1.x(), p2.x());
+        if (cmp != 0) return cmp;
+        return Double.compare(p1.z(), p2.z());
+    }
+
+    private static boolean pointInside(List<Point> polygon, Point p) {
+        boolean inside = false;
+
+        for (int i = 0, j = polygon.size() - 1; i < polygon.size(); j = i++) {
+            Point a = polygon.get(i);
+            Point b = polygon.get(j);
+            // blyat
+            if ((a.z() > p.z()) != (b.z() > p.z()) && (p.x() < (b.x() - a.x()) * (p.z() - a.z()) / (b.z() - a.z()) + a.x()))
+                inside = !inside;
         }
 
-        crData.getMarkerIDs().clear();
+        return inside;
+    }
 
-        Map<Point,List<Point>> graph = buildGraph(crData.getEdges());
-        List<List<Point>> loops = extractLoops(graph);
-        List<PolygonPart> parts = buildParts(loops);
+    // --- controls ---
+    private static void addChunk(CountryRenderData crData, int x, int z) {
+        crData.getChunks().add(ClaimChunk.packToKey(x, z));
+        toggleNeighbours(crData, x, z);
+    }
 
-        int id = 0;
+    private static void removeChunk(CountryRenderData crData, int x, int z) {
+        crData.getChunks().remove(ClaimChunk.packToKey(x, z));
+        toggleNeighbours(crData, x, z);
+    }
 
-        crData.getMarkerIDs().clear();
+    private static void toggleNeighbours(CountryRenderData crData, int x, int z) {
+        checkEdge(crData, p(x+1, z),   p(x+1, z+1));
+        checkEdge(crData, p(x, z+1),   p(x, z));
+        checkEdge(crData, p(x+1, z+1), p(x, z+1));
+        checkEdge(crData, p(x, z),     p(x+1, z));
+    }
+    private static void checkEdge(CountryRenderData crData, Point a, Point b) {
+        Edge edge = new Edge(a, b);
+        if (!crData.getEdges().add(edge))
+            crData.getEdges().remove(edge);
+    }
+    private static Point p(int x, int z) {
+        return Point.of(x * 16, z * 16);
+    }
 
-        for (PolygonPart part : parts) {
-            List<Polyline> lines = new ArrayList<>();
+    public static void clearCountry(Country country) {
+        if (!IntegrationState.isPl3xMapEnabled)
+            return;
 
-            // add outer
-            lines.add(Polyline.of("outer_" + id, part.outer()));
+        CountryRenderData data = CountryRenderData.get(country);
+        if (data == null)
+            return;
 
-            // add holes
-            for (List<Point> hole : part.holes()) {
-                lines.add(Polyline.of("hole_" + id++, hole));
-            }
+        for (Polygon poly : data.getMarkers()) {
+            claimLayer.removeMarker(poly.getKey());
+        }
 
-            // build into polygon
-            String markerId = "country_" + country.getName() + "_" + id++;
-            Polygon poly = Polygon.of(markerId, lines);
-            poly.setOptions(buildMarkerSettings(country));
+        data.getMarkers().clear();
 
-            claimLayer.addMarker(poly);
+        data.getEdges().clear();
+        data.getChunks().clear();
 
-            crData.getMarkerIDs().add(markerId);
+        CountryRenderData.map.remove(country);
+    }
+
+    public static void updateCountryStyle(Country country) {
+        if (!IntegrationState.isPl3xMapEnabled)
+            return;
+
+        CountryRenderData data = CountryRenderData.get(country);
+        if (data == null)
+            return;
+
+        Options newOptions = buildMarkerSettings(country);
+        for (Polygon polygon : data.getMarkers()) {
+            polygon.setOptions(newOptions); // update requires page refresh :(
         }
     }
 
+    // --- events ---
     public static void onClaim(Country country, int x, int z) {
         if (!IntegrationState.isPl3xMapEnabled)
             return;
@@ -339,17 +389,10 @@ public class Pl3xMapIntegration {
         drawCountry(country);
     }
 
-    private static boolean pointInside(List<Point> polygon, Point p) {
-        boolean inside = false;
+    public static void onStyleUpdate(Country country) {
+        if (!IntegrationState.isPl3xMapEnabled)
+            return;
 
-        for (int i = 0, j = polygon.size() - 1; i < polygon.size(); j = i++) {
-            Point a = polygon.get(i);
-            Point b = polygon.get(j);
-            // blyat
-            if ((a.z() > p.z()) != (b.z() > p.z()) && (p.x() < (b.x() - a.x()) * (p.z() - a.z()) / (b.z() - a.z()) + a.x()))
-                inside = !inside;
-        }
-
-        return inside;
+        updateCountryStyle(country);
     }
 }

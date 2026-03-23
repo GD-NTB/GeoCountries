@@ -2,6 +2,7 @@ package me.rntb.geoCountries.command.gcPlayer;
 
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.service.SettingService;
 import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
@@ -27,7 +28,7 @@ public class gcPlayerSettings extends GeoCommand {
         // if setting a setting, set and escape
         if (args.length >= 2) {
             String toValue = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-            SettingData.setSetting(sender, args[0], toValue, PlayerProfile.settingsData, playerProfile.getSettings());
+            SettingService.setSetting(sender, args[0], toValue, PlayerProfile.settingsData, playerProfile.getSettings());
             return;
         }
         // else list all/specific setting

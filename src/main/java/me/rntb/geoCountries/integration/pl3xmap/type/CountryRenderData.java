@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.integration.pl3xmap.type;
 
 import me.rntb.geoCountries.data.Country;
+import net.pl3x.map.core.markers.marker.Polygon;
 
 import java.util.*;
 
@@ -23,8 +24,8 @@ public class CountryRenderData {
         return edges;
     }
 
-    private List<String> markerIDs = new ArrayList<>();
-    public List<String> getMarkerIDs() {
-        return markerIDs;
+    private final List<Polygon> markers = new ArrayList<>();
+    public List<Polygon> getMarkers() {
+        return markers;
     }
 }

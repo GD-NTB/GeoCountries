@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.config.ConfigState;
+import me.rntb.geoCountries.integration.IntegrationManager;
 import me.rntb.geoCountries.integration.IntegrationState;
 import me.rntb.geoCountries.integration.pl3xmap.Pl3xMapIntegration;
 import me.rntb.geoCountries.util.ChatUtil;
@@ -85,9 +86,10 @@ public class ClaimChunk extends DataCollection {
     }
 
     public static int purge() {
+        IntegrationManager.clearAll();
         int count = 0;
         for (ClaimChunk c : new ArrayList<>(all)) {
-            c.deregister();
+            c.deregister(false);
             count++;
         }
         return count;
@@ -102,12 +104,12 @@ public class ClaimChunk extends DataCollection {
         byCountry.computeIfAbsent(owner, v -> new ArrayList<>()).add(this);
 
         // update maps
-        Pl3xMapIntegration.onClaim(getOwnerObject(), getX(), getZ());
+        IntegrationManager.onClaim(getOwnerObject(), getX(), getZ());
     }
 
-    public void deregister() {
-        // update maps
-        Pl3xMapIntegration.onUnclaim(getOwnerObject(), getX(), getZ());
+    public void deregister(boolean updateMaps) {
+        if (updateMaps)
+            IntegrationManager.onUnclaim(getOwnerObject(), getX(), getZ());
 
         // remove from byKey
         byKey.remove(key);
