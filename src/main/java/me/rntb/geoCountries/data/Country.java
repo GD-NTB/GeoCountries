@@ -282,29 +282,27 @@ public class Country extends DataCollection {
                             .map(ca -> ca.getApplicantPlayerProfile().getUsername()).toList();
     }
 
-    // same faction = dark green
-    // else white
-    public String getChatColourBetweenOtherCountry(Country otherCountry) {
-        // if in same faction, dark green
+    // self = #, faction = @, war = X, others = O
+    public String getMapCharOfOtherCountry(Country otherCountry) {
+        if (otherCountry.equals(this))
+            return "#";
+
+        // if in same faction, @
         Faction factionA = getFactionObject();
         Faction factionB = otherCountry.getFactionObject();
         if (factionA != null && (factionA.equals(factionB))) // Faction.equals checks for null
-            return "§2";
+            return "@";
 
-        return "§f";
+        return "O";
     }
-
-//    // same faction = dark green
-//    // else white
-//    public String getChatColourBetweenOtherCountry(Country otherCountry) {
-//        // if in same faction, dark green
-//        Faction factionA = getFactionObject();
-//        Faction factionB = otherCountry.getFactionObject();
-//        if (factionA != null && (factionA.equals(factionB))) // Faction.equals checks for null
-//            return "§2";
-//
-//        return "§f";
-//    }
+    public String getMapCharString(String mapChar) {
+        return switch (mapChar) {
+            case "#" -> getName();
+            case "@" -> getFactionObject().getName();
+            case "O" -> "Other";
+            default -> "idk";
+        };
+    }
 
     // gson constructor
     public Country() { }

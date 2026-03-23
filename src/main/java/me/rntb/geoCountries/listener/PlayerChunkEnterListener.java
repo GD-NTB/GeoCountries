@@ -30,30 +30,14 @@ public class PlayerChunkEnterListener implements Listener {
 
         // [...] -> claimed
         if (toClaimChunk != null) {
-            // get chat colour
-            String colour;
-            if (playerCountry != null)
-                colour = playerCountry.getChatColourBetweenOtherCountry(toClaimChunk.getOwnerObject());
-            else
-                colour = "§f";
-
-            // send actionbar
             // unclaimed -> claimed or claimed -> claimed
             if (fromClaimChunk == null || !fromClaimChunk.getOwnerObject().equals(toClaimChunk.getOwnerObject()))
-                player.sendActionBar(Component.text(colour + "You are now in the territory of §6" + toClaimChunk.getOwnerObject().getNameAndFaction() + colour + "."));
+                player.sendActionBar(Component.text("You are now in the territory of §6" + toClaimChunk.getOwnerObject().getNameAndFaction() + "§f."));
         }
 
         // claimed -> unclaimed
         else if (fromClaimChunk != null) {
-            // get chat colour
-            String colour;
-            if (playerCountry != null)
-                colour = playerCountry.getChatColourBetweenOtherCountry(fromClaimChunk.getOwnerObject());
-            else
-                colour = "§f";
-
-            // send actionbar
-            player.sendActionBar(Component.text(colour + "You are no longer in the territory of §6" + fromClaimChunk.getOwnerObject().getNameAndFaction() + colour + "."));
+            player.sendActionBar(Component.text( "You are no longer in the territory of §6" + fromClaimChunk.getOwnerObject().getNameAndFaction() + "§f."));
         }
     }
 }

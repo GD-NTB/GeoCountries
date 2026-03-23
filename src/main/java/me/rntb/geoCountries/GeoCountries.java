@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 // todo: do todo's
+// todo: markers
 // todo: javadocs eventually
 public class GeoCountries extends JavaPlugin {
 

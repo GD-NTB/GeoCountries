@@ -5,6 +5,7 @@ import me.rntb.geoCountries.data.ClaimChunk;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
+import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -59,8 +60,6 @@ public class gcClaimMap extends GeoCommand {
         // draw shite
         int halfWidth = (int) (width*0.5);
         int halfHeight = (int) (height*0.5);
-
-        // todo: self = #, allies = @, enemies = X, others = O maybe?
         for (int off_z = -halfHeight; off_z < halfHeight + 1; off_z++) {
             for (int off_x = -halfWidth; off_x < halfWidth + 1; off_x++) {
                 int x = chunk.getX() + off_x;
@@ -69,7 +68,7 @@ public class gcClaimMap extends GeoCommand {
 
                 // player marker
                 if (off_x == 0 && off_z == 0) {
-                    message.append("§e+");
+                    message.append("§e").append(StringUtil.yawAngleToArrow(player.getYaw()));
                     continue;
                 }
 
@@ -80,15 +79,30 @@ public class gcClaimMap extends GeoCommand {
                 }
 
                 // claim
-                if (playerCountry != null && claim.getOwner().equals(playerCountry.getUUID()))
+                if (playerCountry == null)
                     message.append("§a#");
-                else
-                    message.append("§f#");
+                else {
+                    Country otherCountry = claim.getOwnerObject();
+                    String otherColour = ChatUtil.getColouredString(otherCountry.getSettings().get("mapcolour"));
+                    String otherChar = playerCountry.getMapCharOfOtherCountry(otherCountry);
+
+                    message.append(otherColour).append(otherChar);
+                }
             }
-            message.append("\n");
+            message.append("\n§r");
         }
 
-        message.append("§6===============================");
+        message.append("§6===============================\n");
+
+        // draw key
+        // this is gonna be ordered basically randomly, oh well
+        if (playerCountry != null) {
+            String ownColour = ChatUtil.getColouredString(playerCountry.getSettings().get("mapcolour"));
+            message.append(ownColour).append("#: ").append(playerCountry.getName()).append("   ");
+            if (playerCountry.hasFaction())
+                message.append("§f@: Allies   ");
+        }
+        message.append("§7O: Other countries");
 
         ChatUtil.sendPrefixedMessage(sender, String.valueOf(message));
     }
