@@ -104,7 +104,7 @@ public class gcFactionUninvite extends GeoCommand {
 
         return MenuPage.createSkullMenuButtons(validCountries, country -> country.getLeaderPlayerProfile().getOfflinePlayer(),
                                                                country -> "§a" + country.getName(),
-                                                               country -> "Uninvite §6" + country.getName(),
+                                                               country -> "Uninvite §6" + country.getName() + "§f from your faction",
                                                                country -> "gc faction uninvite " + country.getName());
     }
 

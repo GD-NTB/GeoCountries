@@ -50,14 +50,14 @@ public class FactionInviteService {
                    .append(Component.newline())
                    // [Accept] button
                    .append(ChatUtil.mm.deserialize("<click:run_command:'/gc faction accept " + faction.getName() + "'>" +
-                                                   "<hover:show_text:'<white>Click to accept the faction invite to " + faction.getName() + ".</white>'>" +
+                                                   "<hover:show_text:'<white>Click to accept the faction invite to §3" + faction.getName() + "§f.</white>'>" +
                                                    "<green><bold>[Accept]</bold></green>" +
                                                    "</hover></click>"
                    ))
                    .append(Component.text("  "))
                    // [Decline] button
                    .append(ChatUtil.mm.deserialize("<click:run_command:'/gc faction decline " + faction.getName() + "'>" +
-                                                   "<hover:show_text:'<white>Click to decline the faction invite to " + faction.getName() + ".</white>'>" +
+                                                   "<hover:show_text:'<white>Click to decline the faction invite to §3" + faction.getName() + "§f.</white>'>" +
                                                    "<red><bold>[Decline]</bold></red>" +
                                                    "</hover></click>"));
             // send message to leader
@@ -123,7 +123,7 @@ public class FactionInviteService {
                 return;
             ChatUtil.sendPrefixedNotificationMessage(fromCountryLeader, """
                                                                         §6Your faction invite was §aaccepted§6.
-                                                                        §f""" + toCountry.getName() + "§6 is now a member of your faction §f" + faction.getName() + "§6!");
+                                                                        §f""" + toCountry.getName() + "§6 is now a member of your faction §3" + faction.getName() + "§6!");
         }
     }
 

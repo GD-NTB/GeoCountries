@@ -55,7 +55,7 @@ public class gcFactionLeave extends GeoCommand {
         else {
             ChatUtil.sendPrefixedNotificationMessage(sender, "§aLeft the faction §3" + faction.getName() + "§a!");
 
-            ChatUtil.broadcastPrefixedMessageToFaction(faction, "§f" + playerProfile.getUsername() + "§6 is no longer a member of §f" + faction.getName() + "§6!", false);
+            ChatUtil.broadcastPrefixedMessageToFaction(faction, "§f" + playerProfile.getUsername() + "§6 is no longer a member of §3" + faction.getName() + "§6!", false);
         }
 
         FactionService.leaveFaction(playerProfile.getCitizenshipCountry());
@@ -64,6 +64,5 @@ public class gcFactionLeave extends GeoCommand {
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
         return !PlayerProfile.get(sender).isFactionLeader();
-
     }
 }

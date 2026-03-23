@@ -106,7 +106,7 @@ public class gcFactionInvite extends GeoCommand {
 
         return MenuPage.createSkullMenuButtons(countries, country -> country.getLeaderPlayerProfile().getOfflinePlayer(),
                                                           country -> "§a" + country.getName(),
-                                                          country -> "Invite §6" + country.getName(),
+                                                          country -> "Invite §6" + country.getName() + "§f to your faction",
                                                           country -> "gc faction invite " + country.getName());
     }
 

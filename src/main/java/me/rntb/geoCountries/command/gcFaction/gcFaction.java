@@ -23,7 +23,10 @@ public class gcFaction extends GeoCommand {
         this.childCommands.put("accept", new gcFactionAccept(this, "accept", "/gc faction accept", "gc.faction.accept", null));
         this.childCommands.put("decline", new gcFactionDecline(this, "decline", "/gc faction decline", "gc.faction.decline", null));
         this.childCommands.put("disband", new gcFactionDisband(this, "disband", "/gc faction disband", "gc.faction.disband", ItemStack.of(Material.FLINT_AND_STEEL)));
+        this.childCommands.put("transfer", new gcFactionTransfer(this, "transfer", "/gc faction transfer", "gc.faction.transfer", ItemStack.of(Material.ENDER_PEARL)));
         this.childCommands.put("leave", new gcFactionLeave(this, "leave", "/gc faction leave", "gc.faction.leave", ItemStack.of(Material.DARK_OAK_DOOR)));
+
+        // todo: /gc faction kick
         // todo: /gc faction settings
     }
 

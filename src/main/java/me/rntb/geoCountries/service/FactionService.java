@@ -85,7 +85,7 @@ public class FactionService {
     }
 
     public static void disband(Faction faction) {
-        ChatUtil.broadcastPrefixedMessage("§6The faction §f" + faction.getName() + "§6 has just been disbanded!");
+        ChatUtil.broadcastPrefixedMessage("§6The faction §3" + faction.getName() + "§6 has just been disbanded!");
 
         // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToFaction(faction, "§6Your faction has just been disbanded! §cYou are no longer a member of any faction.", true);

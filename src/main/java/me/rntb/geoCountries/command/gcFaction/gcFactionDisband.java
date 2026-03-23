@@ -54,7 +54,7 @@ public class gcFactionDisband extends GeoCommand {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
         Faction faction = playerProfile.getFaction();
 
-        ChatUtil.sendPrefixedMessage(sender, "§aDisbanded faction §f" + faction.getName() + "§a!");
+        ChatUtil.sendPrefixedMessage(sender, "§aDisbanded faction §3" + faction.getName() + "§a!");
 
         FactionService.disband(faction);
     }

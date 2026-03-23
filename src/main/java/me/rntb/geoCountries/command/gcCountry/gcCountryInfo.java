@@ -53,8 +53,8 @@ public class gcCountryInfo extends GeoCommand {
         if (country.hasFaction()) {
             Faction faction = country.getFactionFaction();
             factionString = "%s §f(§e%s§f)"
-                    .formatted(faction.getName(),
-                               faction.getLeader().equals(country.getUUID()) ? "LEADER" : "Member");
+                            .formatted(faction.getName(),
+                                       faction.getLeader().equals(country.getUUID()) ? "LEADER" : "Member");
         }
         else
             factionString = "§cNone";

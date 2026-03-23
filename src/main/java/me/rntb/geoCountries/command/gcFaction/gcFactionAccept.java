@@ -68,7 +68,7 @@ public class gcFactionAccept extends GeoCommand {
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aAccepted the faction invite!");
 
         // broadcast notif to country
-        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + country.getName() + "§6 is now a member of your faction §f" + faction.getName() + "§6!", false);
+        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + country.getName() + "§6 is now a member of your faction §3" + faction.getName() + "§6!", false);
     }
 
     @Override

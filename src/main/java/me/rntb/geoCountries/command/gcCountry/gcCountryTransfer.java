@@ -26,8 +26,9 @@ public class gcCountryTransfer extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile senderProfile = PlayerProfile.get(sender);
 
+        Country senderCountry = senderProfile.getCitizenshipCountry();
         // if doesnt have citizenship or isn't leader, escape
-        if (!senderProfile.hasCitizenship() || senderProfile.getPosition() != Position.LEADER) {
+        if (senderCountry == null || senderProfile.getPosition() != Position.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to transfer leadership!");
             return;
         }
@@ -45,16 +46,16 @@ public class gcCountryTransfer extends GeoCommand {
             return;
         }
 
-        PlayerProfile playerProfile = PlayerProfile.get(playerName);
+        PlayerProfile newLeader = PlayerProfile.get(playerName);
         // if player not exist, escape
-        if (playerProfile == null) {
+        if (newLeader == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + playerName + "§c could not be found!");
             return;
         }
 
         // if player is not citizen of sender's country, escape
-        if (!playerProfile.getCitizenship().equals(senderProfile.getCitizenship())) {
-            ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + playerProfile.getUsername() + "§c must be a citizen of your country before you can transfer leadership to them!");
+        if (newLeader.getCitizenship() != null || !newLeader.getCitizenship().equals(senderCountry.getUUID())) {
+            ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + playerName + "§c must be a citizen of your country before you can transfer leadership to them!");
             return;
         }
 
@@ -62,7 +63,7 @@ public class gcCountryTransfer extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                                    sender,
-                                                   new String[] { playerProfile.getUsername() }),
+                                                   new String[] { playerName }),
                                   true);
 
     }
@@ -74,7 +75,7 @@ public class gcCountryTransfer extends GeoCommand {
 
         CountryService.promoteToLeader(newLeader);
 
-        ChatUtil.sendPrefixedMessage(sender, "§aTransferred leadership to §f" + newLeader.getUsername() + "§a! §cYou are no longer the leader.");
+        ChatUtil.sendPrefixedMessage(sender, "§aTransferred country leadership to §f" + newLeader.getUsername() + "§a! §cYou are no longer the leader.");
 
         // broadcast notif to country
         ChatUtil.broadcastPrefixedMessageToCountry(country, "§6The leadership of your country has changed, the new leader of §f" + country.getName() + "§6 is §f" + newLeader.getUsername() + "§6!", true);
