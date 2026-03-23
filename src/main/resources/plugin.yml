@@ -78,6 +78,7 @@ permissions:
       gc.faction.list: true
       gc.faction.disband: true
       gc.faction.transfer: true
+      gc.faction.kick: true
 
   # -------------------- ADMIN --------------------
   gc.group.admin:

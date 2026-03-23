@@ -48,6 +48,7 @@ gc.group.player:
     gc.faction.list
     gc.faction.disband
     gc.faction.transfer
+    gc.faction.kick
 
 gc.group.admin:
     gc.purge

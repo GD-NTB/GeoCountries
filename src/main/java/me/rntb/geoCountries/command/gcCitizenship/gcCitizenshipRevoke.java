@@ -64,7 +64,6 @@ public class gcCitizenshipRevoke extends GeoCommand {
                                                    sender,
                                                    new String[] { playerProfile.getUsername() }),
                                   true);
-
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
@@ -77,7 +76,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
         ChatUtil.sendPrefixedMessage(sender, "§aRevoked the citizenship of §f" + country.getName() + "§a!");
 
         // broadcast notif to country
-        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.getUsername() + "§6 is no longer a citizen of §f" + country.getName() + "§6!", true);
+        ChatUtil.broadcastPrefixedMessageToCountry(country, "§f" + playerProfile.getUsername() + "§6 is no longer a citizen of §f" + country.getName() + "§6!", false);
     }
 
     @Override
