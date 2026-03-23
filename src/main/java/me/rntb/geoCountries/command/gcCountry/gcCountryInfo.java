@@ -25,7 +25,7 @@ public class gcCountryInfo extends GeoCommand {
         // if no args, get player country
         if (args.length == 0) {
             PlayerProfile playerProfile = PlayerProfile.get(sender);
-            country = playerProfile.getCitizenshipCountry();
+            country = playerProfile.getCitizenshipObject();
             if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
                                                      """
@@ -47,11 +47,11 @@ public class gcCountryInfo extends GeoCommand {
             }
         }
 
-        PlayerProfile leader = country.getLeaderPlayerProfile();
+        PlayerProfile leader = country.getLeaderObject();
 
         String factionString;
         if (country.hasFaction()) {
-            Faction faction = country.getFactionFaction();
+            Faction faction = country.getFactionObject();
             factionString = "%s §f(§e%s§f)"
                             .formatted(faction.getName(),
                                        faction.getLeader().equals(country.getUUID()) ? "LEADER" : "Member");

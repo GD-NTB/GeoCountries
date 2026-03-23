@@ -77,7 +77,7 @@ public class CitizenshipApplicationService {
             ChatUtil.sendPrefixedMessage(applicant.getOnlinePlayer(), "§aSent citizenship application to country §f" + cApplication.getToCountryCountry().getName() + "§a!");
 
             // send notif to leader
-            PlayerProfile leaderProfile = cApplication.getToCountryCountry().getLeaderPlayerProfile();
+            PlayerProfile leaderProfile = cApplication.getToCountryCountry().getLeaderObject();
             if (leaderProfile == null)
                 return;
             Player leader = leaderProfile.getOnlinePlayer();

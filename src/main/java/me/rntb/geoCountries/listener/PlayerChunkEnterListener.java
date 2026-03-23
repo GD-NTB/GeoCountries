@@ -26,21 +26,21 @@ public class PlayerChunkEnterListener implements Listener {
         ClaimChunk toClaimChunk = ClaimChunk.get(toX, toZ);
 
         Player player = event.getPlayer();
-        Country playerCountry = PlayerProfile.get(player).getCitizenshipCountry();
+        Country playerCountry = PlayerProfile.get(player).getCitizenshipObject();
 
         // [...] -> claimed
         if (toClaimChunk != null) {
             // get chat colour
             String colour;
             if (playerCountry != null)
-                colour = playerCountry.getChatColourBetweenOtherCountry(toClaimChunk.getOwnerCountry());
+                colour = playerCountry.getChatColourBetweenOtherCountry(toClaimChunk.getOwnerObject());
             else
                 colour = "§f";
 
             // send actionbar
             // unclaimed -> claimed or claimed -> claimed
-            if (fromClaimChunk == null || !fromClaimChunk.getOwnerCountry().equals(toClaimChunk.getOwnerCountry()))
-                player.sendActionBar(Component.text(colour + "You are now in the territory of §6" + toClaimChunk.getOwnerCountry().getNameAndFaction() + colour + "."));
+            if (fromClaimChunk == null || !fromClaimChunk.getOwnerObject().equals(toClaimChunk.getOwnerObject()))
+                player.sendActionBar(Component.text(colour + "You are now in the territory of §6" + toClaimChunk.getOwnerObject().getNameAndFaction() + colour + "."));
         }
 
         // claimed -> unclaimed
@@ -48,12 +48,12 @@ public class PlayerChunkEnterListener implements Listener {
             // get chat colour
             String colour;
             if (playerCountry != null)
-                colour = playerCountry.getChatColourBetweenOtherCountry(fromClaimChunk.getOwnerCountry());
+                colour = playerCountry.getChatColourBetweenOtherCountry(fromClaimChunk.getOwnerObject());
             else
                 colour = "§f";
 
             // send actionbar
-            player.sendActionBar(Component.text(colour + "You are no longer in the territory of §6" + fromClaimChunk.getOwnerCountry().getNameAndFaction() + colour + "."));
+            player.sendActionBar(Component.text(colour + "You are no longer in the territory of §6" + fromClaimChunk.getOwnerObject().getNameAndFaction() + colour + "."));
         }
     }
 }

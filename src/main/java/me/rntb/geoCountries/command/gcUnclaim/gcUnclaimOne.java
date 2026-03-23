@@ -30,7 +30,7 @@ public class gcUnclaimOne extends GeoCommand {
             return;
         }
 
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         ClaimChunk claimChunk = ClaimChunk.get(chunkKey);
         if (claimChunk == null || !claimChunk.getOwner().equals(country.getUUID())) {
             ChatUtil.sendPrefixedMessage(sender, "§cThis chunk is not part of your country's claim! " + playerProfile.getChunkString());

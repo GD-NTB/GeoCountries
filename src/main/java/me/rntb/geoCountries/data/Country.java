@@ -146,7 +146,7 @@ public class Country extends DataCollection {
         if (hasFaction())
             return "%s §f(§3%s§f)"
                    .formatted(getName(),
-                              getFactionFaction().getName());
+                              getFactionObject().getName());
         else
             return getName();
     }
@@ -156,7 +156,7 @@ public class Country extends DataCollection {
     public UUID getLeader() {
       return leader;
     }
-    public PlayerProfile getLeaderPlayerProfile() {
+    public PlayerProfile getLeaderObject() {
         return PlayerProfile.get(leader);
     }
     public void setLeaderInternal(UUID value) {
@@ -190,7 +190,7 @@ public class Country extends DataCollection {
 
         return players;
     }
-    public List<String> getCitizensAsStrings() {
+    public List<String> getCitizensAsUsernames() {
         return citizens.stream()
                        .map(uuid -> PlayerProfile.get(uuid).getUsername()).toList();
     }
@@ -256,7 +256,7 @@ public class Country extends DataCollection {
     public UUID getFaction() {
         return faction;
     }
-    public Faction getFactionFaction() {
+    public Faction getFactionObject() {
         return Faction.get(faction);
     }
     public void setFactionInternal(UUID value) {
@@ -266,7 +266,7 @@ public class Country extends DataCollection {
         return faction != null;
     }
     public boolean isFactionLeader() {
-        return hasFaction() && getFactionFaction().getLeader().equals(uuid);
+        return hasFaction() && getFactionObject().getLeader().equals(uuid);
     }
 
     public List<String> getReceivedCitizenshipApplicationsAsUsernames() {
@@ -281,8 +281,8 @@ public class Country extends DataCollection {
     // else white
     public String getChatColourBetweenOtherCountry(Country otherCountry) {
         // if in same faction, dark green
-        Faction factionA = getFactionFaction();
-        Faction factionB = otherCountry.getFactionFaction();
+        Faction factionA = getFactionObject();
+        Faction factionB = otherCountry.getFactionObject();
         if (factionA != null && (factionA.equals(factionB))) // Faction.equals checks for null
             return "§2";
 
@@ -317,6 +317,6 @@ public class Country extends DataCollection {
     @Override
     public String toString() {
         return "Country(name=%s, leader=%s, citizens=%d)"
-               .formatted(name, getLeaderPlayerProfile().getUsername(), getCitizenCount());
+               .formatted(name, getLeaderObject().getUsername(), getCitizenCount());
     }
 }

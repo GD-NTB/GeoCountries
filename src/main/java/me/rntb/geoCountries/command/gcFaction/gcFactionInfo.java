@@ -25,7 +25,7 @@ public class gcFactionInfo extends GeoCommand {
         // if no args, get player faction
         if (args.length == 0) {
             PlayerProfile playerProfile = PlayerProfile.get(sender);
-            faction = playerProfile.getFaction();
+            faction = playerProfile.getFactionObject();
             if (faction == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
                                                      """
@@ -46,10 +46,10 @@ public class gcFactionInfo extends GeoCommand {
             }
         }
 
-        Country leader = faction.getLeaderCountry();
+        Country leader = faction.getLeaderObject();
         PlayerProfile leaderOfLeader = null;
         if (leader != null)
-            leaderOfLeader = leader.getLeaderPlayerProfile();
+            leaderOfLeader = leader.getLeaderObject();
         long daysAgo = TimeUtil.daysAgo(faction.getTimeCreated());
 
         String message = ChatUtil.newlineIfPrefixIsEmpty() +

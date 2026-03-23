@@ -21,7 +21,7 @@ public class FactionService {
 
     // if was leader, sets new leader to random member, so make sure to demote first!
     public static void leaveFaction(Country country) {
-        Faction currentFaction = country.getFactionFaction();
+        Faction currentFaction = country.getFactionObject();
         if (currentFaction == null)
             return;
 
@@ -33,7 +33,7 @@ public class FactionService {
     }
 
     public static void promoteToLeader(Country country) {
-        Faction faction = country.getFactionFaction();
+        Faction faction = country.getFactionObject();
         if (faction == null)
             return;
 
@@ -53,7 +53,7 @@ public class FactionService {
 
     // if newLeader = null, a random other member is chosen to be the new leader
     public static void demoteFromLeader(Country country, Country newLeader) {
-        Faction faction = country.getFactionFaction();
+        Faction faction = country.getFactionObject();
         if (faction == null)
             return;
 

@@ -22,7 +22,7 @@ public class gcFactionLeave extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
 
-        Faction faction = playerProfile.getFaction();
+        Faction faction = playerProfile.getFactionObject();
         // if doesnt have faction, escape
         if (faction == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be in a faction in order to leave it!");
@@ -44,7 +44,7 @@ public class gcFactionLeave extends GeoCommand {
     private void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
 
-        Faction faction = playerProfile.getFaction();
+        Faction faction = playerProfile.getFactionObject();
 
         // if leader of faction, disband faction
         if (faction.getLeader().equals(playerProfile.getCitizenship()) && playerProfile.getPosition() == Position.LEADER) {
@@ -58,7 +58,7 @@ public class gcFactionLeave extends GeoCommand {
             ChatUtil.broadcastPrefixedMessageToFaction(faction, "§f" + playerProfile.getUsername() + "§6 is no longer a member of §3" + faction.getName() + "§6!", false);
         }
 
-        FactionService.leaveFaction(playerProfile.getCitizenshipCountry());
+        FactionService.leaveFaction(playerProfile.getCitizenshipObject());
     }
 
     @Override

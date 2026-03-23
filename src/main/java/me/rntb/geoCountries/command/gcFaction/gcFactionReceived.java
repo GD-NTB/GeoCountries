@@ -33,7 +33,7 @@ public class gcFactionReceived extends GeoCommand {
             return;
         }
 
-        Country country = senderProfile.getCitizenshipCountry();
+        Country country = senderProfile.getCitizenshipObject();
         if (country.hasFaction()) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou already have a faction!");
             return;
@@ -53,8 +53,8 @@ public class gcFactionReceived extends GeoCommand {
         }
         else {
             for (FactionInvite fInvite : fInvites) {
-                String fromFactionName = fInvite.getFromFactionFaction().getName();
-                String fromCountryName = fInvite.getFromCountryCountry().getName();
+                String fromFactionName = fInvite.getFromFactionObject().getName();
+                String fromCountryName = fInvite.getFromCountryObject().getName();
                 long daysAgo = TimeUtil.daysAgo(fInvite.getTimeCreated());
 
                 message.append(Component.text("§f> §aFrom faction§f: §3" + fromFactionName + " §8(" + daysAgo + " day" + StringUtil.leadingS(daysAgo) + " ago)"))
@@ -92,12 +92,12 @@ public class gcFactionReceived extends GeoCommand {
         if (playerProfile.getPosition() != Position.LEADER)
             return List.of();
 
-        List<FactionInvite> fInvites = FactionInvite.byToCountry.get(playerProfile.getCitizenshipCountry().getUUID());
+        List<FactionInvite> fInvites = FactionInvite.byToCountry.get(playerProfile.getCitizenshipObject().getUUID());
         if (fInvites == null || fInvites.isEmpty())
             return List.of();
 
         return fInvites.stream()
-                       .map(fi -> fi.getFromFactionFaction().getName()).toList();
+                       .map(fi -> fi.getFromFactionObject().getName()).toList();
     }
 
     @Override
@@ -106,7 +106,7 @@ public class gcFactionReceived extends GeoCommand {
         if (playerProfile.getPosition() != PlayerProfile.Position.LEADER)
             return false;
 
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         if (country == null)
             return false;
 

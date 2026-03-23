@@ -40,7 +40,7 @@ public class gcCountryCitizens extends GeoCommand {
                                                      §6=====================================""");
                 return;
             }
-            country = playerProfile.getCitizenshipCountry();
+            country = playerProfile.getCitizenshipObject();
         }
         else {
             // if greater than 2, we have a page number and country name

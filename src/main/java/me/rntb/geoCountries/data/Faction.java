@@ -131,7 +131,7 @@ public class Faction extends DataCollection {
     public UUID getLeader() {
         return leader;
     }
-    public Country getLeaderCountry() {
+    public Country getLeaderObject() {
         return Country.get(leader);
     }
     public void setLeaderInternal(UUID value) {
@@ -147,7 +147,7 @@ public class Faction extends DataCollection {
         return members.size();
     }
     public List<Country> getMembersSorted() {
-        return Stream.concat(Stream.of(getLeaderCountry()),
+        return Stream.concat(Stream.of(getLeaderObject()),
                              members.stream().filter(m -> !m.equals(leader))
                                              .map(Country::get))
                      .toList();

@@ -74,8 +74,8 @@ public class Pl3xMapIntegration {
     private static Options buildMarkerSettings(Country country) {
         int colour = Colors.fromHex(country.getSettings().get("mapcolour"));
         String motto = country.getSettings().get("motto");
-        PlayerProfile leader = country.getLeaderPlayerProfile();
-        Faction faction = country.getFactionFaction();
+        PlayerProfile leader = country.getLeaderObject();
+        Faction faction = country.getFactionObject();
         int size = country.getClaimChunksCount();
         return Options.builder()
                       .tooltipContent("""

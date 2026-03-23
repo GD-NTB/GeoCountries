@@ -25,7 +25,7 @@ public class gcFactionCreate extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
 
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         // doesn't have country
         if (country == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to create a faction!");
@@ -41,10 +41,10 @@ public class gcFactionCreate extends GeoCommand {
         if (country.hasFaction()) {
             // must transfer ownership then leave
             if (playerProfile.getPosition() == Position.LEADER)
-                ChatUtil.sendPrefixedMessage(sender, "§cYou must first transfer leadership of your current faction §3" + country.getFactionFaction().getName() + "§c using §f/gc faction transfer§c, then leave it using §f/gc faction leave§c before you can create a faction!");
+                ChatUtil.sendPrefixedMessage(sender, "§cYou must first transfer leadership of your current faction §3" + country.getFactionObject().getName() + "§c using §f/gc faction transfer§c, then leave it using §f/gc faction leave§c before you can create a faction!");
             // must leave faction
             else
-                ChatUtil.sendPrefixedMessage(sender, "§cYou must first leave your current faction §3" + country.getFactionFaction().getName() + "§c §c/gc faction leave§f before you can create a faction!");
+                ChatUtil.sendPrefixedMessage(sender, "§cYou must first leave your current faction §3" + country.getFactionObject().getName() + "§c §c/gc faction leave§f before you can create a faction!");
             return;
         }
 
@@ -73,7 +73,7 @@ public class gcFactionCreate extends GeoCommand {
             return;
         }
 
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         Faction newFaction = new Faction(UUID.randomUUID(), factionName, country.getUUID());
 
         // create faction

@@ -82,7 +82,7 @@ public class FactionInvite extends DataCollection {
     public UUID getFromFaction() {
         return fromFaction;
     }
-    public Faction getFromFactionFaction() {
+    public Faction getFromFactionObject() {
         return Faction.get(fromFaction);
     }
 
@@ -91,7 +91,7 @@ public class FactionInvite extends DataCollection {
     public UUID getFromCountry() {
         return fromCountry;
     }
-    public Country getFromCountryCountry() {
+    public Country getFromCountryObject() {
         return Country.get(fromCountry);
     }
 
@@ -100,7 +100,7 @@ public class FactionInvite extends DataCollection {
     public UUID getToCountry() {
         return toCountry;
     }
-    public Country getToCountryCountry() {
+    public Country getToCountryObject() {
         return Country.get(toCountry);
     }
 
@@ -129,7 +129,7 @@ public class FactionInvite extends DataCollection {
     @Override
     public String toString() {
         return "FactionInvite(fromCountry=%s, toCountry=%s)"
-               .formatted(fromFaction != null ? getFromFactionFaction().getName() : "null",
-                          toCountry != null ? getToCountryCountry().getName() : "null");
+               .formatted(fromFaction != null ? getFromFactionObject().getName() : "null",
+                          toCountry != null ? getToCountryObject().getName() : "null");
     }
 }

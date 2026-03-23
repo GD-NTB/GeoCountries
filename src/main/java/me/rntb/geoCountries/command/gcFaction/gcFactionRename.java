@@ -23,7 +23,7 @@ public class gcFactionRename extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
 
-        Faction faction = playerProfile.getFaction();
+        Faction faction = playerProfile.getFactionObject();
         // if doesnt have faction, escape
         if (faction == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a faction to rename it!");
@@ -69,7 +69,7 @@ public class gcFactionRename extends GeoCommand {
     private void onConfirm(CommandSender sender, String[] args) {
         String factionName = args[0];
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Faction faction = playerProfile.getFaction();
+        Faction faction = playerProfile.getFactionObject();
 
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aRenamed faction to §3" + factionName + "§a!");
 

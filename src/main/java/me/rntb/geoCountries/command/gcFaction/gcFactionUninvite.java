@@ -28,13 +28,13 @@ public class gcFactionUninvite extends GeoCommand {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if not in country, escape
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         if (country == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou are not the leader of a faction!");
             return;
         }
 
-        Faction faction = country.getFactionFaction();
+        Faction faction = country.getFactionObject();
         // if not in faction, escape
         if (faction == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou are not the leader of a faction!");
@@ -60,7 +60,7 @@ public class gcFactionUninvite extends GeoCommand {
             return;
         }
 
-        ArrayList<FactionInvite> fInvites = FactionInvite.byFromFaction.get(playerProfile.getCitizenshipCountry().getFaction());
+        ArrayList<FactionInvite> fInvites = FactionInvite.byFromFaction.get(playerProfile.getCitizenshipObject().getFaction());
 
         // if hasnt sent any pending faction invites, escape
         if (fInvites == null) {
@@ -89,7 +89,7 @@ public class gcFactionUninvite extends GeoCommand {
 
     @Override
     public ItemStack[] getMenuButtons(CommandSender sender) {
-        Faction faction = PlayerProfile.get(sender).getFaction();
+        Faction faction = PlayerProfile.get(sender).getFactionObject();
         // should never trigger!
         if (faction == null)
             return null;
@@ -100,9 +100,9 @@ public class gcFactionUninvite extends GeoCommand {
             validCountries = Country.all;
         else
             validCountries = fInvites.stream()
-                                     .map(FactionInvite::getToCountryCountry).toList();
+                                     .map(FactionInvite::getToCountryObject).toList();
 
-        return MenuPage.createSkullMenuButtons(validCountries, country -> country.getLeaderPlayerProfile().getOfflinePlayer(),
+        return MenuPage.createSkullMenuButtons(validCountries, country -> country.getLeaderObject().getOfflinePlayer(),
                                                                country -> "§a" + country.getName(),
                                                                country -> "Uninvite §6" + country.getName() + "§f from your faction",
                                                                country -> "gc faction uninvite " + country.getName());
@@ -116,7 +116,7 @@ public class gcFactionUninvite extends GeoCommand {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
         if (playerProfile.getCitizenship() == null)
             return List.of();
-        Faction faction = playerProfile.getFaction();
+        Faction faction = playerProfile.getFactionObject();
         if (faction == null)
             return List.of();
 
@@ -132,7 +132,7 @@ public class gcFactionUninvite extends GeoCommand {
         if (!playerProfile.isFactionLeader())
             return false;
 
-        Faction faction = playerProfile.getFaction();
+        Faction faction = playerProfile.getFactionObject();
 
         List<FactionInvite> fInvites = FactionInvite.byFromFaction.get(faction.getUUID());
         return fInvites != null && !fInvites.isEmpty();

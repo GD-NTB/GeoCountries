@@ -83,7 +83,7 @@ public class PlayerProfile extends DataCollection {
             playerProfile.settings = orderedSettings;
 
             // set Country fields
-            Country country = playerProfile.getCitizenshipCountry();
+            Country country = playerProfile.getCitizenshipObject();
             if (country != null) {
                 country.getCitizens().add(playerProfile.getUUID());
                 if (playerProfile.position == Position.LEADER) {
@@ -161,7 +161,7 @@ public class PlayerProfile extends DataCollection {
     public UUID getCitizenship() {
         return citizenship;
     }
-    public Country getCitizenshipCountry() {
+    public Country getCitizenshipObject() {
         return Country.get(citizenship);
     }
     public void setCitizenshipInternal(UUID value) {
@@ -195,21 +195,21 @@ public class PlayerProfile extends DataCollection {
         return position.ordinal();
     }
 
-    public Faction getFaction() {
+    public Faction getFactionObject() {
         if (!hasCitizenship())
             return null;
-        Country country = getCitizenshipCountry();
+        Country country = getCitizenshipObject();
         if (!country.hasFaction())
             return null;
-        return country.getFactionFaction();
+        return country.getFactionObject();
     }
     public boolean hasFaction() {
         if (!hasCitizenship())
             return false;
-        return getCitizenshipCountry().hasFaction();
+        return getCitizenshipObject().hasFaction();
     }
     public boolean isFactionLeader() {
-        return position == Position.LEADER && hasCitizenship() && getCitizenshipCountry().isFactionLeader();
+        return position == Position.LEADER && hasCitizenship() && getCitizenshipObject().isFactionLeader();
     }
 
     @Expose
@@ -264,10 +264,10 @@ public class PlayerProfile extends DataCollection {
         return player.getChunk();
     }
     public ClaimChunk getClaimChunk() {
-        Player player = getOnlinePlayer();
-        if (player == null)
+        Chunk chunk = getBukkitChunk();
+        if (chunk == null)
             return null;
-        return ClaimChunk.get(player.getChunk());
+        return ClaimChunk.get(chunk);
     }
     public String getChunkString() {
         Chunk chunk = getOnlinePlayer().getChunk();

@@ -35,7 +35,7 @@ public class gcFactionDecline extends GeoCommand {
             ChatUtil.sendPrefixedMessage(sender, "§cOnly a leader of a country can decline faction invites!");
             return;
         }
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
 
         // get faction
         String factionName = String.join(" ", args);
@@ -76,10 +76,10 @@ public class gcFactionDecline extends GeoCommand {
         if (playerProfile.getPosition() != Position.LEADER)
             return List.of();
 
-        List<FactionInvite> fInvites = FactionInvite.byToCountry.get(playerProfile.getCitizenshipCountry().getUUID());
+        List<FactionInvite> fInvites = FactionInvite.byToCountry.get(playerProfile.getCitizenshipObject().getUUID());
         if (fInvites == null)
             return List.of();
         return fInvites.stream()
-                       .map(fi -> fi.getFromFactionFaction().getName()).toList();
+                       .map(fi -> fi.getFromFactionObject().getName()).toList();
     }
 }

@@ -15,7 +15,7 @@ public class PrefixChatListener implements Listener {
     public void onPlayerChat(AsyncChatEvent event) {
         PlayerProfile playerProfile = PlayerProfile.get(event.getPlayer());
 
-        Country playerCountry = playerProfile.getCitizenshipCountry();
+        Country playerCountry = playerProfile.getCitizenshipObject();
         // if not enabled in config, player doesnt have country, or country prefix is null, escape
         if (!ConfigState.countryPrefixEnabled || playerCountry == null || playerCountry.getSettings().get("prefix").equals("null"))
             return;

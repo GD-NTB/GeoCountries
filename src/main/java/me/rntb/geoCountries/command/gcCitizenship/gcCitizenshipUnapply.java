@@ -70,7 +70,7 @@ public class gcCitizenshipUnapply extends GeoCommand {
         List<Country> validCountries = cApplications.stream()
                                                     .map(CitizenshipApplication::getToCountryCountry).toList();
 
-        return MenuPage.createSkullMenuButtons(validCountries, country -> country.getLeaderPlayerProfile().getOfflinePlayer(),
+        return MenuPage.createSkullMenuButtons(validCountries, country -> country.getLeaderObject().getOfflinePlayer(),
                                                                country -> "§a" + country.getName(),
                                                                country -> "Unapply from §6" + country.getName(),
                                                                country -> "gc citizenship unapply " + country.getName());

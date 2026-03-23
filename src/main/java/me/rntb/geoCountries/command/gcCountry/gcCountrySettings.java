@@ -32,7 +32,7 @@ public class gcCountrySettings extends GeoCommand {
             return;
         }
 
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
 
         // if setting a setting, set and escape
         boolean isLeader = playerProfile.getPosition() == Position.LEADER;
@@ -102,7 +102,7 @@ public class gcCountrySettings extends GeoCommand {
         if (args.length > 2)
             return List.of();
 
-        Country playerCountry = PlayerProfile.get(sender).getCitizenshipCountry();
+        Country playerCountry = PlayerProfile.get(sender).getCitizenshipObject();
         if (playerCountry == null)
             return List.of();
 

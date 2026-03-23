@@ -32,7 +32,7 @@ public class gcFactionAccept extends GeoCommand {
             ChatUtil.sendPrefixedMessage(sender, "§cOnly a leader of a country can accept faction invites!");
             return;
         }
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         if (country.hasFaction()) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou are already in a faction!");
             return;
@@ -80,10 +80,10 @@ public class gcFactionAccept extends GeoCommand {
         if (playerProfile.getPosition() != Position.LEADER)
             return List.of();
 
-        List<FactionInvite> fInvites = FactionInvite.byToCountry.get(playerProfile.getCitizenshipCountry().getUUID());
+        List<FactionInvite> fInvites = FactionInvite.byToCountry.get(playerProfile.getCitizenshipObject().getUUID());
         if (fInvites == null)
             return List.of();
         return fInvites.stream()
-                       .map(fi -> fi.getFromFactionFaction().getName()).toList();
+                       .map(fi -> fi.getFromFactionObject().getName()).toList();
     }
 }

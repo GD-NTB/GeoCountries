@@ -22,7 +22,7 @@ public class gcClaimOne extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         PlayerProfile playerProfile = PlayerProfile.get(player);
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
 
         if (country == null || playerProfile.getPosition() != Position.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the country to claim chunks! " + playerProfile.getChunkString());

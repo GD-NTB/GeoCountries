@@ -32,16 +32,16 @@ public class FactionInviteService {
             ChatUtil.sendPrefixedLogMessage("Sent FactionInvite");
 
         if (sendMessage) {
-            Faction faction = fInvite.getFromFactionFaction();
+            Faction faction = fInvite.getFromFactionObject();
 
             // send message to invite sender
-            Country fromCountry = fInvite.getFromCountryCountry();
-            Country toCountry = fInvite.getToCountryCountry();
+            Country fromCountry = fInvite.getFromCountryObject();
+            Country toCountry = fInvite.getToCountryObject();
 
-            ChatUtil.sendPrefixedMessage(fromCountry.getLeaderPlayerProfile().getOnlinePlayer(), "§aSent faction invite to country §f" + toCountry.getName() + "§a!");
+            ChatUtil.sendPrefixedMessage(fromCountry.getLeaderObject().getOnlinePlayer(), "§aSent faction invite to country §f" + toCountry.getName() + "§a!");
 
             // send notif to recipient country leader
-            Country factionLeader = faction.getLeaderCountry();
+            Country factionLeader = faction.getLeaderObject();
 
             // build message
             TextComponent.Builder message = Component.text();
@@ -61,7 +61,7 @@ public class FactionInviteService {
                                                    "<red><bold>[Decline]</bold></red>" +
                                                    "</hover></click>"));
             // send message to leader
-            ChatUtil.sendPrefixedNotificationMessage(toCountry.getLeaderPlayerProfile().getOnlinePlayer(), message.build());
+            ChatUtil.sendPrefixedNotificationMessage(toCountry.getLeaderObject().getOnlinePlayer(), message.build());
         }
     }
 
@@ -100,7 +100,7 @@ public class FactionInviteService {
         if (fInvite == null)
             return;
 
-        Country toCountry = fInvite.getToCountryCountry();
+        Country toCountry = fInvite.getToCountryObject();
 
         unsend(fInvite);
 
@@ -108,7 +108,7 @@ public class FactionInviteService {
         if (toCountry.hasFaction())
             return;
 
-        Faction faction = fInvite.getFromFactionFaction();
+        Faction faction = fInvite.getFromFactionObject();
         if (faction == null)
             return;
 
@@ -118,7 +118,7 @@ public class FactionInviteService {
             ChatUtil.sendPrefixedLogMessage("Accepted sent FactionInvite");
 
         if (sendMessage) {
-            Player fromCountryLeader = fInvite.getFromCountryCountry().getLeaderPlayerProfile().getOnlinePlayer();
+            Player fromCountryLeader = fInvite.getFromCountryObject().getLeaderObject().getOnlinePlayer();
             if (fromCountryLeader == null)
                 return;
             ChatUtil.sendPrefixedNotificationMessage(fromCountryLeader, """
@@ -132,7 +132,7 @@ public class FactionInviteService {
         if (fInvite == null)
             return;
 
-        Country toCountry = fInvite.getToCountryCountry();
+        Country toCountry = fInvite.getToCountryObject();
 
         unsend(fInvite);
 
@@ -140,7 +140,7 @@ public class FactionInviteService {
             ChatUtil.sendPrefixedLogMessage("Declined sent FactionInvite");
 
         if (sendMessage) {
-            Player fromCountryLeader = fInvite.getFromCountryCountry().getLeaderPlayerProfile().getOnlinePlayer();
+            Player fromCountryLeader = fInvite.getFromCountryObject().getLeaderObject().getOnlinePlayer();
             if (fromCountryLeader == null)
                 return;
             ChatUtil.sendPrefixedNotificationMessage(fromCountryLeader, "§6Your faction invite to country §f" + toCountry.getName() + "§6 was §cdeclined§6.");

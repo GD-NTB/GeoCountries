@@ -58,7 +58,7 @@ public class ClaimChunk extends DataCollection {
             byKey.put(claimChunk.key, claimChunk);
 
             // add claimchunk to country
-            claimChunk.getOwnerCountry().getClaimChunks().add(claimChunk.key);
+            claimChunk.getOwnerObject().getClaimChunks().add(claimChunk.key);
 
             // unpack key into coordinates
             int[] coords = unpackFromKey(claimChunk.key);
@@ -95,7 +95,7 @@ public class ClaimChunk extends DataCollection {
         byKey.put(key, this);
 
         // add this claimchunk to country
-        getOwnerCountry().getClaimChunks().add(key);
+        getOwnerObject().getClaimChunks().add(key);
 
 //        // update maps
 //        Pl3xMapIntegration.addClaim(this);
@@ -103,7 +103,7 @@ public class ClaimChunk extends DataCollection {
 
     public void deregister() {
         // remove this claimchunk from country
-        getOwnerCountry().getClaimChunks().remove(key);
+        getOwnerObject().getClaimChunks().remove(key);
 
 //        // update maps
 //        Pl3xMapIntegration.clearClaim(this);
@@ -155,7 +155,7 @@ public class ClaimChunk extends DataCollection {
     public UUID getOwner() {
         return owner;
     }
-    public Country getOwnerCountry() {
+    public Country getOwnerObject() {
         return Country.get(owner);
     }
 

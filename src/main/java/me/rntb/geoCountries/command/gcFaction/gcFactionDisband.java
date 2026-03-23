@@ -24,13 +24,13 @@ public class gcFactionDisband extends GeoCommand {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if not in country, escape
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         if (country == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou are not the leader of a faction!");
             return;
         }
 
-        Faction faction = country.getFactionFaction();
+        Faction faction = country.getFactionObject();
         // if not in faction, escape
         if (faction == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou are not the leader of a faction!");
@@ -52,7 +52,7 @@ public class gcFactionDisband extends GeoCommand {
 
     private void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Faction faction = playerProfile.getFaction();
+        Faction faction = playerProfile.getFactionObject();
 
         ChatUtil.sendPrefixedMessage(sender, "§aDisbanded faction §3" + faction.getName() + "§a!");
 

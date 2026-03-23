@@ -24,7 +24,7 @@ public class CountryService {
     // if was leader, sets new leader to random citizen, so make sure to demote first!
     // todo: inheritance message
     public static void leaveCountry(PlayerProfile playerProfile) {
-        Country currentCountry = playerProfile.getCitizenshipCountry();
+        Country currentCountry = playerProfile.getCitizenshipObject();
         if (currentCountry == null)
             return;
 
@@ -38,7 +38,7 @@ public class CountryService {
     }
 
     public static void promoteToLeader(PlayerProfile playerProfile) {
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         if (country == null)
             return;
 
@@ -54,7 +54,7 @@ public class CountryService {
         }
 
         // demote old leader
-        PlayerProfile oldLeader = country.getLeaderPlayerProfile();
+        PlayerProfile oldLeader = country.getLeaderObject();
         if (oldLeader != null)
             oldLeader.setPositionInternal(PlayerProfile.Position.CITIZEN);
 
@@ -64,7 +64,7 @@ public class CountryService {
 
     // if newLeader = null, a random other citizen is chosen to be the new leader
     public static void demoteFromLeader(PlayerProfile playerProfile, PlayerProfile newLeader) {
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         if (country == null)
             return;
 

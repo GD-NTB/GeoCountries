@@ -72,7 +72,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
     private void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.get(args[0]);
 
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
 
         CountryService.leaveCountry(playerProfile);
 
@@ -85,7 +85,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
     @Override
     public ItemStack[] getMenuButtons(CommandSender sender) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         // should never trigger!
         if (country == null)
             return null;
@@ -107,16 +107,16 @@ public class gcCitizenshipRevoke extends GeoCommand {
         if (args.length != 1)
             return List.of();
 
-        Country country = PlayerProfile.get(sender).getCitizenshipCountry();
+        Country country = PlayerProfile.get(sender).getCitizenshipObject();
         if (country == null)
             return List.of();
 
-        return country.getCitizensAsStrings();
+        return country.getCitizensAsUsernames();
     }
 
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        return playerProfile.getPosition() == Position.LEADER && playerProfile.getCitizenshipCountry().getCitizenCount() > 1; // if 1, leader is the only citizen
+        return playerProfile.getPosition() == Position.LEADER && playerProfile.getCitizenshipObject().getCitizenCount() > 1; // if 1, leader is the only citizen
     }
 }

@@ -22,7 +22,7 @@ public class gcClaimMap extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Country playerCountry = playerProfile.getCitizenshipCountry();
+        Country playerCountry = playerProfile.getCitizenshipObject();
 
         StringBuilder message = new StringBuilder(ChatUtil.newlineIfPrefixIsEmpty() +
                                                   "§6========== CLAIMS MAP ==========\n");

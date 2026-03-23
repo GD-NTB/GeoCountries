@@ -135,7 +135,7 @@ public class gcCitizenshipApply extends GeoCommand {
         List<Country> validCountries = Country.all.stream()
                                                   .filter(c -> !invalidCountries.contains(c)).toList();
 
-        return MenuPage.createSkullMenuButtons(validCountries, country -> country.getLeaderPlayerProfile().getOfflinePlayer(),
+        return MenuPage.createSkullMenuButtons(validCountries, country -> country.getLeaderObject().getOfflinePlayer(),
                                                                country -> "§a" + country.getName(),
                                                                country -> "Apply to §6" + country.getName(),
                                                                country -> "gc citizenship apply " + country.getName());

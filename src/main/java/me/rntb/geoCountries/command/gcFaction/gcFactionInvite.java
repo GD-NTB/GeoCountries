@@ -34,13 +34,13 @@ public class gcFactionInvite extends GeoCommand {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         // if not in country, escape
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         if (country == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou are not the leader of a faction!");
             return;
         }
 
-        Faction faction = country.getFactionFaction();
+        Faction faction = country.getFactionObject();
         // if not in faction, escape
         if (faction == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou are not the leader of a faction!");
@@ -61,7 +61,7 @@ public class gcFactionInvite extends GeoCommand {
         }
         // if country is already in faction
         if (toCountry.hasFaction()) {
-            ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c is already in faction §f" + toCountry.getFactionFaction().getName() + "§c!");
+            ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c is already in faction §f" + toCountry.getFactionObject().getName() + "§c!");
             return;
         }
 
@@ -83,7 +83,7 @@ public class gcFactionInvite extends GeoCommand {
         // create new invite and send
         FactionInvite factionInvite = new FactionInvite(UUID.randomUUID(),
                                                         faction.getUUID(),
-                                                        playerProfile.getCitizenshipCountry().getUUID(),
+                                                        playerProfile.getCitizenshipObject().getUUID(),
                                                         toCountry.getUUID());
         FactionInviteService.send(factionInvite, true);
 
@@ -93,7 +93,7 @@ public class gcFactionInvite extends GeoCommand {
 
     @Override
     public ItemStack[] getMenuButtons(CommandSender sender) {
-        Faction faction = PlayerProfile.get(sender).getFaction();
+        Faction faction = PlayerProfile.get(sender).getFactionObject();
         // should never trigger!
         if (faction == null)
             return null;
@@ -104,7 +104,7 @@ public class gcFactionInvite extends GeoCommand {
                                                             !faction.getMembers().contains(c.getUUID()))
                                              .toList();
 
-        return MenuPage.createSkullMenuButtons(countries, country -> country.getLeaderPlayerProfile().getOfflinePlayer(),
+        return MenuPage.createSkullMenuButtons(countries, country -> country.getLeaderObject().getOfflinePlayer(),
                                                           country -> "§a" + country.getName(),
                                                           country -> "Invite §6" + country.getName() + "§f to your faction",
                                                           country -> "gc faction invite " + country.getName());
@@ -116,7 +116,7 @@ public class gcFactionInvite extends GeoCommand {
             return List.of();
 
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Faction faction = playerProfile.getFaction();
+        Faction faction = playerProfile.getFactionObject();
         if (faction == null)
             return List.of();
 

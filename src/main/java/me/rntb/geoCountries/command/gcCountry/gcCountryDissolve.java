@@ -44,7 +44,7 @@ public class gcCountryDissolve extends GeoCommand {
 
     private void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
 
         ChatUtil.sendPrefixedMessage(sender, "§aDissolved country §f" + country.getName() + "§a!");
 

@@ -26,14 +26,14 @@ public class gcFactionTransfer extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
 
-        Faction faction = playerProfile.getFaction();
+        Faction faction = playerProfile.getFactionObject();
         // if doesnt have faction, escape
         if (faction == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a faction to transfer its leadership!");
             return;
         }
 
-        Country senderCountry = playerProfile.getCitizenshipCountry();
+        Country senderCountry = playerProfile.getCitizenshipObject();
         // if not leader of faction, escape
         if (!senderCountry.isFactionLeader()) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of the faction to transfer leadership!");
@@ -74,7 +74,7 @@ public class gcFactionTransfer extends GeoCommand {
     private void onConfirm(CommandSender sender, String[] args) {
         Country newLeader = Country.get(args[0]);
 
-        Faction faction = newLeader.getFactionFaction();
+        Faction faction = newLeader.getFactionObject();
 
         FactionService.promoteToLeader(newLeader);
 
@@ -84,7 +84,7 @@ public class gcFactionTransfer extends GeoCommand {
         ChatUtil.broadcastPrefixedMessageToFaction(faction, "§6The leadership of your faction has changed, the new leader of §3" + faction.getName() + "§6 is §f" + newLeader.getName() + "§6!", true);
 
         // send notif to new leader
-        PlayerProfile newLeaderPlayerProfile = newLeader.getLeaderPlayerProfile();
+        PlayerProfile newLeaderPlayerProfile = newLeader.getLeaderObject();
         if (newLeaderPlayerProfile == null)
             return;
         ChatUtil.sendPrefixedMessage(newLeaderPlayerProfile.getOnlinePlayer(), "§6Your country is now the new leader of §3" + faction.getName() + "§6!");
@@ -93,16 +93,16 @@ public class gcFactionTransfer extends GeoCommand {
     @Override
     public ItemStack[] getMenuButtons(CommandSender sender) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Faction faction = playerProfile.getFaction();
+        Faction faction = playerProfile.getFactionObject();
         // should never trigger!
         if (faction == null)
             return null;
 
         List<Country> members = faction.getMembers().stream()
-                                                    .filter(uuid -> !uuid.equals(playerProfile.getCitizenshipCountry().getUUID()))
+                                                    .filter(uuid -> !uuid.equals(playerProfile.getCitizenshipObject().getUUID()))
                                                     .map(Country::get).toList();
 
-        return MenuPage.createSkullMenuButtons(members, member -> member.getLeaderPlayerProfile().getOfflinePlayer(),
+        return MenuPage.createSkullMenuButtons(members, member -> member.getLeaderObject().getOfflinePlayer(),
                                                         member -> "§a" + member.getName(),
                                                         member -> "Transfer leadership to §6" + member.getName(),
                                                         member -> "gc faction transfer " + member.getName());
@@ -114,10 +114,10 @@ public class gcFactionTransfer extends GeoCommand {
             return List.of();
 
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Faction faction = playerProfile.getFaction();
+        Faction faction = playerProfile.getFactionObject();
         if (faction == null)
             return List.of();
-        Country country = faction.getLeaderCountry();
+        Country country = faction.getLeaderObject();
         if (country == null)
             return List.of();
         // goo goo ga ga
@@ -129,10 +129,10 @@ public class gcFactionTransfer extends GeoCommand {
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         if (country == null)
             return false;
-        Faction faction = country.getFactionFaction();
+        Faction faction = country.getFactionObject();
         if (faction == null)
             return false;
         return playerProfile.getPosition() == Position.LEADER && country.isFactionLeader() && faction.getMemberCount() > 1; // if 1, leader is the only member

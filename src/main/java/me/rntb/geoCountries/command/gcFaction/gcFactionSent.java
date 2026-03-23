@@ -28,12 +28,12 @@ public class gcFactionSent extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile senderProfile = PlayerProfile.get(sender);
 
-        Country country = senderProfile.getCitizenshipCountry();
+        Country country = senderProfile.getCitizenshipObject();
         if (country == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cOnly the leader of a faction can see sent faction invites!");
             return;
         }
-        Faction faction = country.getFactionFaction();
+        Faction faction = country.getFactionObject();
         if (faction == null || !faction.getLeader().equals(country.getUUID())) {
             ChatUtil.sendPrefixedMessage(sender, "§cOnly the leader of a faction can see sent faction invites!");
             return;
@@ -58,7 +58,7 @@ public class gcFactionSent extends GeoCommand {
         }
         else {
             for (FactionInvite fInvite : fInvites) {
-                String toCountryName = fInvite.getToCountryCountry().getName();
+                String toCountryName = fInvite.getToCountryObject().getName();
                 long daysAgo = TimeUtil.daysAgo(fInvite.getTimeCreated());
 
                 message.append(Component.text("§a" + toCountryName + "§f §8(" + daysAgo + " day" + StringUtil.leadingS(daysAgo) + " ago)  "))
@@ -81,7 +81,7 @@ public class gcFactionSent extends GeoCommand {
         if (args.length != 1)
             return List.of();
 
-        Country country = PlayerProfile.get(sender).getCitizenshipCountry();
+        Country country = PlayerProfile.get(sender).getCitizenshipObject();
         if (country == null)
             return List.of();
         UUID factionUUID = country.getFaction();
@@ -93,7 +93,7 @@ public class gcFactionSent extends GeoCommand {
             return List.of();
 
         return fInvitesSent.stream()
-                           .map(fi -> fi.getToCountryCountry().getName()).toList();
+                           .map(fi -> fi.getToCountryObject().getName()).toList();
     }
 
     @Override

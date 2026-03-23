@@ -26,7 +26,7 @@ public class gcCountryTransfer extends GeoCommand {
     public void onCommand(CommandSender sender, String[] args) {
         PlayerProfile senderProfile = PlayerProfile.get(sender);
 
-        Country senderCountry = senderProfile.getCitizenshipCountry();
+        Country senderCountry = senderProfile.getCitizenshipObject();
         // if doesnt have citizenship or isn't leader, escape
         if (senderCountry == null || senderProfile.getPosition() != Position.LEADER) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou must be the leader of a country to transfer leadership!");
@@ -71,7 +71,7 @@ public class gcCountryTransfer extends GeoCommand {
     private void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile newLeader = PlayerProfile.get(args[0]);
 
-        Country country = newLeader.getCitizenshipCountry();
+        Country country = newLeader.getCitizenshipObject();
 
         CountryService.promoteToLeader(newLeader);
 
@@ -87,7 +87,7 @@ public class gcCountryTransfer extends GeoCommand {
     @Override
     public ItemStack[] getMenuButtons(CommandSender sender) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         // should never trigger!
         if (country == null)
             return null;
@@ -110,7 +110,7 @@ public class gcCountryTransfer extends GeoCommand {
             return List.of();
 
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        Country country = playerProfile.getCitizenshipCountry();
+        Country country = playerProfile.getCitizenshipObject();
         if (country == null)
             return List.of();
 
@@ -126,6 +126,6 @@ public class gcCountryTransfer extends GeoCommand {
     @Override
     public boolean isVisibleOnMenu(CommandSender sender) {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
-        return playerProfile.getPosition() == Position.LEADER && playerProfile.getCitizenshipCountry().getCitizenCount() > 1; // if 1, leader is the only citizen
+        return playerProfile.getPosition() == Position.LEADER && playerProfile.getCitizenshipObject().getCitizenCount() > 1; // if 1, leader is the only citizen
     }
 }

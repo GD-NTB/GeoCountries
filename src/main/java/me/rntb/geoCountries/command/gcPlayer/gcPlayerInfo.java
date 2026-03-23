@@ -37,7 +37,7 @@ public class gcPlayerInfo extends GeoCommand {
         if (playerProfile.hasCitizenship())
             positionAndCountryString = "§e%s§f of §e%s"
                                        .formatted(playerProfile.getPositionString(),
-                                                  playerProfile.getCitizenshipCountry().getNameAndFaction());
+                                                  playerProfile.getCitizenshipObject().getNameAndFaction());
         else
             positionAndCountryString = "§cStateless";
 

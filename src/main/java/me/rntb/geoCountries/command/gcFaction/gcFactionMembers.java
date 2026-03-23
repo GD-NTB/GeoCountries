@@ -31,7 +31,7 @@ public class gcFactionMembers extends GeoCommand {
         // if no args, faction = player's faction
         if (args.length == 0) {
             PlayerProfile playerProfile = PlayerProfile.get(sender);
-            faction = playerProfile.getFaction();
+            faction = playerProfile.getFactionObject();
             if (faction == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
                                                      """

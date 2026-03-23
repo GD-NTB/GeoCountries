@@ -49,7 +49,7 @@ public class gcCitizenshipReceived extends GeoCommand {
             }
 
             // get country
-            Country country = senderProfile.getCitizenshipCountry();
+            Country country = senderProfile.getCitizenshipObject();
             if (otherPlayer.getCitizenship() != null && otherPlayer.getCitizenship().equals(country.getUUID())) {
                 ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + otherPlayerName + "§c is already a citizen of your country!");
                 return;
@@ -177,7 +177,7 @@ public class gcCitizenshipReceived extends GeoCommand {
         if (playerProfile.getPosition() != Position.LEADER)
             return List.of();
 
-        return playerProfile.getCitizenshipCountry().getReceivedCitizenshipApplicationsAsUsernames();
+        return playerProfile.getCitizenshipObject().getReceivedCitizenshipApplicationsAsUsernames();
     }
 
     @Override
