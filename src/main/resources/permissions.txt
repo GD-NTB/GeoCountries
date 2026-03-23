@@ -20,6 +20,7 @@ gc.group.player:
     gc.country.rename
     gc.country.dissolve
     gc.country.settings
+    gc.country.transfer
     gc.citizenship
     gc.citizenship.apply
     gc.citizenship.sent

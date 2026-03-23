@@ -10,7 +10,7 @@ public class gcCitizenship extends GeoCommand {
         super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
         this.helpString = "Manages your citizenship and your citizens.";
         this.childCommands.put("apply", new gcCitizenshipApply(this, "apply", "/gc citizenship apply", "gc.citizenship.apply", ItemStack.of(Material.WRITABLE_BOOK)));
-        this.childCommands.put("renounce", new gcCitizenshipRenounce(this, "renounce", "/gc citizenship renounce", "gc.citizenship.renounce", ItemStack.of(Material.OAK_DOOR)));
+        this.childCommands.put("renounce", new gcCitizenshipRenounce(this, "renounce", "/gc citizenship renounce", "gc.citizenship.renounce", ItemStack.of(Material.DARK_OAK_DOOR)));
         this.childCommands.put("revoke", new gcCitizenshipRevoke(this, "revoke", "/gc citizenship revoke", "gc.citizenship.revoke", ItemStack.of(Material.GRINDSTONE)));
         this.childCommands.put("received", new gcCitizenshipReceived(this, "received", "/gc citizenship received", "gc.citizenship.received", ItemStack.of(Material.CHEST)));
         this.childCommands.put("sent", new gcCitizenshipSent(this, "sent", "/gc citizenship sent", "gc.citizenship.sent", ItemStack.of(Material.BOOK)));

@@ -50,6 +50,7 @@ permissions:
       gc.country.rename: true
       gc.country.dissolve: true
       gc.country.settings: true
+      gc.country.transfer: true
       gc.citizenship: true
       gc.citizenship.apply: true
       gc.citizenship.sent: true
