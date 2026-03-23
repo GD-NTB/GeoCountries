@@ -246,6 +246,12 @@ public class Country extends DataCollection {
     public List<ClaimChunk> getClaimChunks() {
         return ClaimChunk.get(this);
     }
+    public int getClaimChunksCount() {
+        List<ClaimChunk> claimChunks = ClaimChunk.get(this);
+        if (claimChunks == null)
+            return 0;
+        return claimChunks.size();
+    }
 
     // loaded in Faction.init
     @Expose(serialize = false, deserialize = false)

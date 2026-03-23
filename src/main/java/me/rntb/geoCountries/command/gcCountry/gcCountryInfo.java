@@ -1,6 +1,7 @@
 package me.rntb.geoCountries.command.gcCountry;
 
 import me.rntb.geoCountries.command.GeoCommand;
+import me.rntb.geoCountries.data.ClaimChunk;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.Faction;
 import me.rntb.geoCountries.data.PlayerProfile;
@@ -47,6 +48,8 @@ public class gcCountryInfo extends GeoCommand {
             }
         }
 
+        String countryMotto = country.getSettings().get("motto");
+
         PlayerProfile leader = country.getLeaderObject();
 
         String factionString;
@@ -59,9 +62,14 @@ public class gcCountryInfo extends GeoCommand {
         else
             factionString = "§cNone";
 
-        long daysAgo = TimeUtil.daysAgo(country.getTimeCreated());
+        int size = country.getClaimChunksCount();
+        float sizePercent;
+        if (size == 0 || ClaimChunk.all.isEmpty())
+            sizePercent = 0;
+        else
+            sizePercent = ((float) size / ClaimChunk.all.size())*100;
 
-        String countryMotto = country.getSettings().get("motto");
+        long daysAgo = TimeUtil.daysAgo(country.getTimeCreated());
 
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
                          """
@@ -71,6 +79,7 @@ public class gcCountryInfo extends GeoCommand {
                          §f> §eFaction§f: §3%s
                          §f> §eLeader§f: %s
                          §f> §eCitizens§f: %s
+                         §f> §eSize§f: %d chunk%s (%.1f%%)
                          §f> Created on §2%s §8(%s day%s ago)
                          §6================================="""
                          .formatted(country.getNameAndFaction(),
@@ -78,6 +87,7 @@ public class gcCountryInfo extends GeoCommand {
                                     factionString,
                                     leader != null ? leader.getUsername() : "§cNone",
                                     country.getCitizenCount(),
+                                    size, StringUtil.leadingS(size), sizePercent,
                                     country.getTimeCreatedAsString(), daysAgo, StringUtil.leadingS(daysAgo));
 
         ChatUtil.sendPrefixedMessage(sender, message);

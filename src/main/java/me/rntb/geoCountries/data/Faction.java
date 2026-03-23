@@ -154,6 +154,14 @@ public class Faction extends DataCollection {
                      .toList();
     }
 
+    public int getTotalClaimChunks() {
+        int count = 0;
+        for (UUID memberUUID : members) {
+            count += Country.get(memberUUID).getClaimChunksCount();
+        }
+        return count;
+    }
+
     public Faction(UUID uuid, String name, UUID leader) {
         this.uuid = uuid;
         this.name = name;

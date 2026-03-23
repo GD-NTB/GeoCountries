@@ -101,10 +101,19 @@ public class Pl3xMapIntegration {
 
     private static Options buildMarkerSettings(Country country) {
         int colour = Colors.fromHex(country.getSettings().get("mapcolour"));
+
         String motto = country.getSettings().get("motto");
-        PlayerProfile leader = country.getLeaderObject();
+
         Faction faction = country.getFactionObject();
-        int size = ClaimChunk.get(country).size();
+        PlayerProfile leader = country.getLeaderObject();
+
+        int size = country.getClaimChunksCount();
+        float sizePercent;
+        if (size == 0 || ClaimChunk.all.isEmpty())
+            sizePercent = 0;
+        else
+            sizePercent = ((float) size / ClaimChunk.all.size())*100;
+
         return Options.builder()
                       .tooltipContent("""
                                       <span style="font-size:20px"><b>%s</b></span><br>
@@ -113,13 +122,13 @@ public class Pl3xMapIntegration {
                                       <b>Faction</b>: %s<br>
                                       <b>Leader</b>: %s<br>
                                       <b>Citizens</b>: %d<br>
-                                      <b>Size</b>: %d chunk%s"""
+                                      <b>Size</b>: %d chunk%s (%.1f%%)"""
                                       .formatted(country.getName(),
                                                  motto.equals("null") ? "No motto" : motto,
                                                  faction == null ? "None" : faction.getName(),
                                                  leader == null ? "None" : leader.getUsername(),
                                                  country.getCitizenCount(),
-                                                 size, StringUtil.leadingS(size)))
+                                                 size, StringUtil.leadingS(size), sizePercent))
                       .stroke(true)
                       .strokeColor(Colors.setAlpha(255, colour))
                       .strokeWeight(4)
