@@ -8,7 +8,7 @@ import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.service.FactionService;
 import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.StringUtil;
+import me.rntb.geoCountries.util.ValidationUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -67,7 +67,7 @@ public class gcFactionCreate extends GeoCommand {
 
         factionName = factionName.trim();
         // validation check
-        String validationString = StringUtil.validateFactionName(factionName, true);
+        String validationString = ValidationUtil.validateFactionName(factionName, true);
         if (validationString != null) { // validation.OK -> null
             ChatUtil.sendPrefixedMessage(sender, validationString);
             return;

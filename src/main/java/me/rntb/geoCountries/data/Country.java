@@ -295,14 +295,6 @@ public class Country extends DataCollection {
 
         return "O";
     }
-    public String getMapCharString(String mapChar) {
-        return switch (mapChar) {
-            case "#" -> getName();
-            case "@" -> getFactionObject().getName();
-            case "O" -> "Other";
-            default -> "idk";
-        };
-    }
 
     // gson constructor
     public Country() { }

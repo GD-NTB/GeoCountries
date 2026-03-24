@@ -9,8 +9,8 @@ import me.rntb.geoCountries.menu.MenuPage;
 import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import me.rntb.geoCountries.util.ValidationUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -107,7 +107,7 @@ public class gcCitizenshipApply extends GeoCommand {
         CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(((Player) sender).getUniqueId());
 
         // validate response
-        String validation = StringUtil.validateResponse(responseClean);
+        String validation = ValidationUtil.validateResponse(responseClean);
         if (validation != null) {
             CitizenshipApplicationService.cancel(cApplication, true);
             ChatUtil.sendPrefixedMessage(sender, validation);

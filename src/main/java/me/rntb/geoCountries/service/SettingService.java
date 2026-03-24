@@ -3,7 +3,7 @@ package me.rntb.geoCountries.service;
 import me.rntb.geoCountries.type.SettingData;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.EnumUtil;
-import me.rntb.geoCountries.util.StringUtil;
+import me.rntb.geoCountries.util.ValidationUtil;
 import org.bukkit.command.CommandSender;
 
 import java.util.Map;
@@ -55,7 +55,7 @@ public class SettingService {
                 break;
 
             case COUNTRY_PREFIX:
-                validationString = StringUtil.validateCountryPrefix(toValueTrimmed);
+                validationString = ValidationUtil.validateCountryPrefix(toValueTrimmed);
                 if (validationString != null) {
                     ChatUtil.sendPrefixedMessage(sender, validationString);
                     return;
@@ -70,7 +70,7 @@ public class SettingService {
                 break;
 
             case COUNTRY_MOTTO:
-                validationString = StringUtil.validateCountryMotto(toValueTrimmed);
+                validationString = ValidationUtil.validateCountryMotto(toValueTrimmed);
                 if (validationString != null) {
                     ChatUtil.sendPrefixedMessage(sender, validationString);
                     return;

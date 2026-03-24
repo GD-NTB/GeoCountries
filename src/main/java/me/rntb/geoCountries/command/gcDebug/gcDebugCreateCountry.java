@@ -3,7 +3,7 @@ package me.rntb.geoCountries.command.gcDebug;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.StringUtil;
+import me.rntb.geoCountries.util.ValidationUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -21,7 +21,7 @@ public class gcDebugCreateCountry extends GeoCommand {
         String countryName = String.join(" ", args).trim();
 
         // validation check
-        String validationString = StringUtil.validateCountryName(countryName, true);
+        String validationString = ValidationUtil.validateCountryName(countryName, true);
         if (validationString != null) { // validation.OK -> null
             ChatUtil.sendPrefixedMessage(sender, validationString);
             return;

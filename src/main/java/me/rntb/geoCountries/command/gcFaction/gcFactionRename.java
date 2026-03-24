@@ -7,8 +7,8 @@ import me.rntb.geoCountries.data.PlayerProfile.Position;
 import me.rntb.geoCountries.type.Confirmation;
 import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import me.rntb.geoCountries.util.ValidationUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -52,7 +52,7 @@ public class gcFactionRename extends GeoCommand {
 
     private void onResponse(CommandSender sender, String factionName) {
         // validation check
-        String validationString = StringUtil.validateFactionName(factionName, true);
+        String validationString = ValidationUtil.validateFactionName(factionName, true);
         if (validationString != null) {
             ChatUtil.sendPrefixedMessage(sender, validationString);
             return;

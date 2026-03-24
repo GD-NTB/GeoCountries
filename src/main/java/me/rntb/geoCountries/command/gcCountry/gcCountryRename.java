@@ -9,6 +9,7 @@ import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.UuidUtil;
+import me.rntb.geoCountries.util.ValidationUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -51,7 +52,7 @@ public class gcCountryRename extends GeoCommand {
 
     private void onResponse(CommandSender sender, String countryName) {
         // validation check
-        String validationString = StringUtil.validateCountryName(countryName, true);
+        String validationString = ValidationUtil.validateCountryName(countryName, true);
         if (validationString != null) {
             ChatUtil.sendPrefixedMessage(sender, validationString);
             return;
