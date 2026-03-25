@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public abstract class GeoCommand {
     
@@ -38,7 +39,7 @@ public abstract class GeoCommand {
     }
 
     public LinkedHashMap<String, GeoCommand> childCommands = new LinkedHashMap<>();
-    // todo: implement childCommandsAliases
+    public Map<String, String> childCommandsAliases = new HashMap<>();
 
     public GeoCommand(GeoCommand parentCommand, String name, String command, String permission, ItemStack menuButtonItem) {
         this.parentCommand = parentCommand;
@@ -80,18 +81,23 @@ public abstract class GeoCommand {
         if (childCommands.isEmpty())
             return;
 
-        String mode = args[0].toLowerCase();
-        GeoCommand childCommand = childCommands.get(mode);
+        String childCommandName = args[0].toLowerCase();
+        // replace with alias if needed
+        String childCommandNameAlias = childCommandsAliases.get(childCommandName);
+        if (childCommandNameAlias != null)
+            childCommandName = childCommandNameAlias;
+
+        GeoCommand childCommand = childCommands.get(childCommandName);
         if (childCommand == null) {
             ChatUtil.sendPrefixedMessage(sender, """
                                                  §c§f%s§c is not a valid command for §f%s§c!
                                                  Usage: §f%s [...]"""
-                                                 .formatted(mode, command, command));
+                                                 .formatted(childCommandName, command, command));
             return;
         }
 
         if (permission != null && !sender.hasPermission(permission)) {
-            ChatUtil.sendNoPermissionMessage(sender, command + " " + mode, permission);
+            ChatUtil.sendNoPermissionMessage(sender, command + " " + childCommandName, permission);
             return;
         }
 
@@ -105,7 +111,13 @@ public abstract class GeoCommand {
         if (args.length == 1)
             return allowedChildCommandsAsStrings(sender);
 
-        GeoCommand command = childCommands.get(args[0]);
+        String commandName = args[0];
+        // convert alias to childCommand
+        String childCommandNameAlias = this.childCommandsAliases.get(commandName);
+        if (childCommandNameAlias != null)
+            commandName = childCommandNameAlias;
+        // find childCommand
+        GeoCommand command = childCommands.get(commandName);
         if (command == null || (command.permission != null && !sender.hasPermission(command.permission)))
             return List.of();
 
@@ -157,10 +169,13 @@ public abstract class GeoCommand {
         if (!(sender instanceof Player) || childCommands.isEmpty())
             return List.of();
 
-        return this.childCommands.sequencedValues().stream()
-                                                   .filter(c -> c.permission == null || sender.hasPermission(c.permission))
-                                                   .map(c -> c.name)
-                                                   .sorted().toList();
+        return Stream.concat(childCommands.values().stream()
+                                                   .filter(sc -> sender.hasPermission(sc.permission))
+                                                   .map(sc -> sc.name),
+                             childCommandsAliases.entrySet().stream()
+                                                            .filter(sca -> sender.hasPermission(childCommands.get(sca.getValue()).permission))
+                                                            .map(Map.Entry::getKey))
+                     .sorted().toList();
     }
 
     public final boolean isAdminCommand() {

@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class gc extends GeoCommand implements TabExecutor  {
+public class gc extends GeoCommand implements TabExecutor {
 
     public gc(String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
         super(null, name, displayName, requiredPermission, menuButtonItem);
