@@ -144,14 +144,13 @@ public class ClaimChunk extends DataCollection {
         return Pl3xMapIntegration.api.getWorldRegistry().get(getBukkitWorld().getName());
     }
 
-    // todo: do we need these no serialise annotations?
-    @Expose(serialize = false, deserialize = false)
+    // not serialised
     private int x;
     public int getX() {
         return x;
     }
 
-    @Expose(serialize = false, deserialize = false)
+    // not serialised
     private int z;
     public int getZ() {
         return z;

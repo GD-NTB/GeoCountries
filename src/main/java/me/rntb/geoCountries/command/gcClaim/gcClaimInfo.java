@@ -37,7 +37,7 @@ public class gcClaimInfo extends GeoCommand {
                          §f> Claimed §2%s day%s ago
                          §6================================"""
                         .formatted(claimChunk.getX(), claimChunk.getZ(),
-                                   claimChunk.getOwnerObject().getName(),
+                                   claimChunk.getOwnerObject().getNameAndFaction(),
                                    daysAgo, StringUtil.leadingS(daysAgo));
         ChatUtil.sendPrefixedMessage(sender, message);
     }

@@ -156,7 +156,7 @@ public class Country extends DataCollection {
             return getName();
     }
 
-    @Expose(serialize = false, deserialize = false)
+    // not serialised
     private UUID leader = null;
     public UUID getLeader() {
       return leader;
@@ -173,7 +173,7 @@ public class Country extends DataCollection {
         return Bukkit.getPlayer(PlayerProfile.get(leader).getUsername()) != null;
     }
 
-    @Expose(serialize = false, deserialize = false)
+    // not serialised
     private final ArrayList<UUID> citizens = new ArrayList<>();
     public List<UUID> getCitizens() {
         return citizens;
@@ -255,8 +255,7 @@ public class Country extends DataCollection {
         return claimChunks.size();
     }
 
-    // loaded in Faction.init
-    @Expose(serialize = false, deserialize = false)
+    // not serialised
     private UUID faction;
     public UUID getFaction() {
         return faction;
