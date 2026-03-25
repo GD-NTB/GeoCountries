@@ -7,6 +7,8 @@ import me.rntb.geoCountries.config.ConfigManager;
 import me.rntb.geoCountries.data.DataCollectionManager;
 import me.rntb.geoCountries.integration.IntegrationManager;
 import me.rntb.geoCountries.listener.*;
+import me.rntb.geoCountries.service.CitizenshipApplicationService;
+import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
@@ -72,6 +74,9 @@ public class GeoCountries extends JavaPlugin {
 
         // set up integrations
         IntegrationManager.init();
+
+        // add response on failure methods (is this the best way to do this?)
+        Response.onFailMethods.add(CitizenshipApplicationService::onResponseFail);
 
         // done
         ChatUtil.sendPrefixedLogMessage("Plugin enabled!");

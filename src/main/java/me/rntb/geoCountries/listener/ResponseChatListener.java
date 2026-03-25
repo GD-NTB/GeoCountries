@@ -31,6 +31,6 @@ public class ResponseChatListener implements Listener {
 
         // execute
         String message = PlainTextComponentSerializer.plainText().serialize(event.message());
-        response.function.accept(response.sender, message);
+        response.onSuccessMethod.accept(response.sender, message);
     }
 }

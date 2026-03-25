@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CitizenshipApplicationService {
 
@@ -44,6 +45,9 @@ public class CitizenshipApplicationService {
 
         if (sendMessage)
             ChatUtil.sendPrefixedMessage(cApplication.getApplicantPlayerProfile().getOnlinePlayer(), "§aCancelled the citizenship application.");
+    }
+    public static void onResponseFail(UUID uuid) {
+        cancel(CitizenshipApplication.openByApplicant.get(uuid), true);
     }
 
     // send an OPEN application

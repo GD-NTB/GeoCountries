@@ -2,8 +2,6 @@ package me.rntb.geoCountries.type;
 
 import me.rntb.geoCountries.GeoCountries;
 import me.rntb.geoCountries.config.ConfigState;
-import me.rntb.geoCountries.data.CitizenshipApplication;
-import me.rntb.geoCountries.service.CitizenshipApplicationService;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import org.bukkit.Bukkit;
@@ -11,13 +9,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
-// when using a response, make sure whatever uses it gets cancelled by updating stopWaiting method
 public class Response {
+
+    public static List<Consumer<UUID>> onFailMethods = new ArrayList<>(); // executed when response ends without a player chat message
 
     private static final Map<UUID, Response> pendingResponses = new HashMap<>();
     private static final Map<UUID, BukkitTask> timeoutTasks = new HashMap<>();
@@ -31,6 +29,7 @@ public class Response {
     }
 
     public static void startWaiting(UUID uuid, Response response, boolean sendMessage) {
+        // stop waiting if we were already waiting
         stopWaiting(uuid, StopWaitingEvent.CANCELLED, true);
 
         pendingResponses.put(uuid, response);
@@ -79,14 +78,15 @@ public class Response {
                     if (response.timeoutMessage != null)
                         ChatUtil.sendPrefixedMessage(player, response.timeoutMessage);
                     break;
-
             }
         }
 
         // cancel whatever was going to use the response
-        // todo: this is retarded: make a onstopwaiting field or something
-        if (stopWaitingEvent != StopWaitingEvent.PLAYER_SENT_MESSAGE)
-            CitizenshipApplicationService.cancel(CitizenshipApplication.openByApplicant.get(uuid), true);
+        if (stopWaitingEvent != StopWaitingEvent.PLAYER_SENT_MESSAGE && onFailMethods != null && !onFailMethods.isEmpty()) {
+            for (Consumer<UUID> method : onFailMethods) {
+                method.accept(uuid);
+            }
+        }
 
         if (ConfigState.debugLogging && player != null)
             ChatUtil.sendPrefixedLogMessage("Stopped pending Response from " + player.getName() + " (" + stopWaitingEvent.name() + ").");
@@ -94,16 +94,17 @@ public class Response {
 
     // ---
 
-    public BiConsumer<CommandSender, String> function; // on response function, String=chat message
-    public CommandSender sender; // sender argument for Function
+    // todo: getters and setters :(
+    public BiConsumer<CommandSender, String> onSuccessMethod; // on response method, String=chat message
+    public CommandSender sender; // sender argument for method
     public long timeoutAfterSeconds = 30;
     public String startWaitingMessage;
     public String playerSentMessageMessage;
     public String cancelMessage;
     public String timeoutMessage;
 
-    public Response(BiConsumer<CommandSender, String> function, CommandSender sender) {
-        this.function = function;
+    public Response(BiConsumer<CommandSender, String> onSuccessMethod, CommandSender sender) {
+        this.onSuccessMethod = onSuccessMethod;
         this.sender = sender;
 
         this.startWaitingMessage = "§6Type in chat, or do §f/gc cancel§6 to cancel.";

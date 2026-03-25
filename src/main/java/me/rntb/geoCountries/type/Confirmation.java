@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-// when using a confirmation, make sure whatever uses it gets cancelled by updating stopWaiting method
 public class Confirmation {
 
     private static final Map<UUID, Confirmation> pendingConfirmations = new HashMap<>();
