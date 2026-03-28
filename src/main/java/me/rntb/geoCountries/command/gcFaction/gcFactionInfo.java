@@ -15,8 +15,8 @@ import java.util.List;
 
 public class gcFactionInfo extends GeoCommand {
 
-    public gcFactionInfo(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcFactionInfo(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Displays info about your/any faction.";
     }
 

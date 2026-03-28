@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcDump extends GeoCommand {
 
-    public gcDump(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcDump(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Prints some debug shite in the chat for debugging.";
     }
 

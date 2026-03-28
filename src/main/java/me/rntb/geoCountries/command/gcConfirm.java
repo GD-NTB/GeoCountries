@@ -10,8 +10,8 @@ import java.util.UUID;
 
 public class gcConfirm extends GeoCommand {
 
-    public gcConfirm(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcConfirm(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Confirms a pending command/action.";
     }
 

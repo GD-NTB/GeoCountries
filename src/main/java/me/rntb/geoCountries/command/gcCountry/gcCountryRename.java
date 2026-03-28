@@ -15,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcCountryRename extends GeoCommand {
 
-    public gcCountryRename(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcCountryRename(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Renames your country.";
     }
 

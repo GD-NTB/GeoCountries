@@ -13,8 +13,8 @@ import java.util.List;
 
 public class gcClaimInfo extends GeoCommand {
 
-    public gcClaimInfo(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcClaimInfo(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Displays info about the chunk you're standing on.";
     }
 
@@ -40,10 +40,5 @@ public class gcClaimInfo extends GeoCommand {
                                    claimChunk.getOwnerObject().getNameAndFaction(),
                                    daysAgo, StringUtil.leadingS(daysAgo));
         ChatUtil.sendPrefixedMessage(sender, message);
-    }
-
-    @Override
-    public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return args.length == 1 ? PlayerProfile.allAsUsernames(true) : List.of();
     }
 }

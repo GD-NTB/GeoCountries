@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcPurgeClaimChunk extends GeoCommand {
 
-    public gcPurgeClaimChunk(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcPurgeClaimChunk(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Purges all ClaimChunk data collections.";
     }
 
@@ -22,7 +22,7 @@ public class gcPurgeClaimChunk extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                                    sender,
-                                                   new String[] { }),
+                                                   new String[0]),
                                   true);
     }
 

@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcPurgeAll extends GeoCommand {
 
-    public gcPurgeAll(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcPurgeAll(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Purges all data collections.";
     }
 
@@ -21,7 +21,7 @@ public class gcPurgeAll extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                                    sender,
-                                                   new String[] { }),
+                                                   new String[0]),
                                   true);
     }
 

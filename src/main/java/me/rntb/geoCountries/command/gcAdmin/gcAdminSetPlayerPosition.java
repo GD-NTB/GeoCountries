@@ -14,8 +14,8 @@ import java.util.List;
 
 public class gcAdminSetPlayerPosition extends GeoCommand {
 
-    public gcAdminSetPlayerPosition(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcAdminSetPlayerPosition(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Sets a player's position.";
     }
 

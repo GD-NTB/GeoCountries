@@ -15,8 +15,8 @@ import java.util.List;
 
 public class gcCitizenshipSent extends GeoCommand {
 
-    public gcCitizenshipSent(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcCitizenshipSent(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Lists citizenship applications that you have sent.";
     }
 
@@ -34,9 +34,9 @@ public class gcCitizenshipSent extends GeoCommand {
                .append(Component.newline());
 
         List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(((Player) sender).getUniqueId());
-        if (cApplications == null || cApplications.isEmpty()) {
-            message.append(Component.text("§cYou have not sent any citizenship applications.\n"));
-        }
+        if (cApplications == null || cApplications.isEmpty())
+            message.append(Component.text("§cYou have not sent any citizenship applications."))
+                   .append(Component.newline());
         else {
             for (CitizenshipApplication cApplication : cApplications) {
                 Country otherCountry = cApplication.getToCountryCountry();

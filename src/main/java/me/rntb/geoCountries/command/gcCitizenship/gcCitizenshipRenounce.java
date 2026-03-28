@@ -13,8 +13,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcCitizenshipRenounce extends GeoCommand {
 
-    public gcCitizenshipRenounce(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcCitizenshipRenounce(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Renounces (gives up) citizenship of your country.";
     }
 
@@ -38,7 +38,7 @@ public class gcCitizenshipRenounce extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                                    sender,
-                                                   new String[] { }),
+                                                   new String[0]),
                                   true);
     }
 

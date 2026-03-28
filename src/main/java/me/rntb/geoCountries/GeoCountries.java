@@ -20,6 +20,8 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 // todo: do todo's
+// todo: standardise the length of bottom ===== because this shit is annoying
+// todo: banners as flags
 // todo: markers
 // todo: javadocs eventually
 public class GeoCountries extends JavaPlugin {
@@ -61,8 +63,10 @@ public class GeoCountries extends JavaPlugin {
         pluginManager.registerEvents(new ResponseChatListener(), this);
 
         // initialise base command
-        GeoCommand.baseCommand = new gc("gc", "/gc", null, null);
-        Objects.requireNonNull(getCommand("gc")).setExecutor((CommandExecutor) GeoCommand.baseCommand);
+        GeoCommand.baseCommand = new gc("gc", "gc", null);
+
+        // register base command
+        Objects.requireNonNull(getCommand(GeoCommand.baseCommand.name)).setExecutor((CommandExecutor) GeoCommand.baseCommand);
 
         GeoCommand.adminPermissionGroup = "gc.group.admin";
 

@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcPurgeFactionInvite extends GeoCommand {
 
-    public gcPurgeFactionInvite(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcPurgeFactionInvite(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Purges all FactionInvite data collections.";
     }
 
@@ -22,7 +22,7 @@ public class gcPurgeFactionInvite extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                                    sender,
-                                                   new String[] { }),
+                                                   new String[0]),
                                   true);
     }
 

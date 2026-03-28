@@ -1,10 +1,11 @@
 package me.rntb.geoCountries.listener;
 
 import me.rntb.geoCountries.command.GeoCommand;
+import me.rntb.geoCountries.menu.MenuPage;
 import me.rntb.geoCountries.metadata.ItemMetadata;
 import me.rntb.geoCountries.metadata.PlayerMetadata;
-import me.rntb.geoCountries.menu.MenuPage;
 import me.rntb.geoCountries.util.SoundUtil;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,8 +20,9 @@ public class InventoryGUIListener implements Listener {
         Player player = (Player) event.getWhoClicked();
 
         // if this wasn't our menu, escape
-        boolean isMenuOpen = PlayerMetadata.isMenuOpen.get(player.getUniqueId());
-        if (!isMenuOpen)
+        // for some reason the map sometimes returns null, use Boolean instead of boolean
+        Boolean isMenuOpen = PlayerMetadata.isMenuOpen.get(player.getUniqueId());
+        if (isMenuOpen == null || !isMenuOpen)
             return;
 
         event.setCancelled(true);
@@ -49,8 +51,8 @@ public class InventoryGUIListener implements Listener {
             return;
         }
 
-        GeoCommand command = GeoCommand.getByCommandString.get(commandString);
-
+        Pair<GeoCommand, String[]> commandPair = GeoCommand.get(commandString);
+        GeoCommand command = commandPair.getLeft();
         if (command == null)
             return;
 
@@ -58,11 +60,11 @@ public class InventoryGUIListener implements Listener {
         ItemStack[] commandButtons = command.getMenuButtons(player);
         if (commandButtons == null) {
             MenuPage.closeMenuPage(player);
-            command.onCommandEntered(player, new String[] { });
+            command.onCommandEntered(player, new String[0]);
         }
         else {
-            MenuPage.openMenuPage(command.getMenuButtons(player), command, player, commandString.equals(GeoCommand.baseCommand.command));
-            PlayerMetadata.previousPage.put(player.getUniqueId(), command.command);
+            MenuPage.openMenuPage(command.getMenuButtons(player), command, player);
+            PlayerMetadata.previousPage.put(player.getUniqueId(), command.getCommandString());
         }
 
         // play click sound

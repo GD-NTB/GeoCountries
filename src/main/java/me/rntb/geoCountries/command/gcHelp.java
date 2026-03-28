@@ -1,23 +1,25 @@
 package me.rntb.geoCountries.command;
 
+import me.rntb.geoCountries.type.PageNumberAndArgs;
 import me.rntb.geoCountries.type.Pagination;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
-// todo: rewrite using new Command.getHelpPage
+// todo: components to be able to click on a command to see its help
 public class gcHelp extends GeoCommand {
 
-    public gcHelp(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Lists all info about all/any command.";
+    public gcHelp(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
+        this.helpString = "Lists all info about all/any commands.";
     }
+
+    private static final int ENTRIES_PER_PAGE = 15;
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
@@ -27,118 +29,66 @@ public class gcHelp extends GeoCommand {
                .append(Component.text("§6========== HELP =========="))
                .append(Component.newline());
 
-        int effectiveIndex = 0, pageCount = 0;
-        String commandForPrevious, commandForNext;
+        // parse args
+        PageNumberAndArgs pageNumberAndArgs = PageNumberAndArgs.parse(args);
+        int wantedPage = pageNumberAndArgs.pageNumber();
+        String[] commandNameArgs = pageNumberAndArgs.args();
 
-        // /gc help
-        if (args.length == 0) {
-            Pagination page = getHelpAll(sender, 0);
-            message.append(Component.text(page.text))
-                   .append(Component.newline());
-            pageCount = page.pageCount;
-            effectiveIndex = page.index;
-            commandForPrevious = "/gc help 1";
-            commandForNext = "/gc help 2";
+        // get command name
+        String fullCommandName = GeoCommand.baseCommand.getCommandString();
+        String commandName = null;
+        // if command specified, append it to fullCommandName
+        if (commandNameArgs != null) {
+            commandName = String.join(" ", pageNumberAndArgs.args());
+            fullCommandName += " " + commandName;
         }
-        // /gc help [page/command] [...]
+
+        // pagination fields
+        int pageIndex = 0, pageCount = 0;
+
+        // get command
+        Pair<GeoCommand, String[]> commandPair = GeoCommand.get(fullCommandName);
+        GeoCommand command = commandPair.getLeft();
+        if (command == null)
+            message.append(Component.text("§cCommand §f" + fullCommandName + "§c could not be found!"));
         else {
-            // /gc help [page/command]
-            if (args.length == 1) {
-                // /gc help [page]
-                try {
-                    Pagination page = getHelpAll(sender, Integer.parseInt(args[0])); // won't return null cos page is clamped 0 to max
-                    message.append(Component.text(page.text))
-                           .append(Component.newline());
-                    pageCount = page.pageCount;
-                    effectiveIndex = page.index;
-                    commandForPrevious = "/gc help " + (effectiveIndex-1);
-                    commandForNext = "/gc help " + (effectiveIndex+1);
-                }
-                // /gc help [command]
-                catch (NumberFormatException e) {
-                    Pagination page = getHelpSpecific(sender, args[0], 0);
-                    // if command=null or no permission
-                    if (page == null)
-                        message.append(Component.text("§cNo help page found for the command §f/gc " + args[0] + "§c!"))
-                               .append(Component.newline());
-                    else {
-                        message.append(Component.text(page.text))
-                               .append(Component.newline());
-                        pageCount = page.pageCount;
-                        effectiveIndex = page.index;
-                    }
-                    commandForPrevious = "/gc help " + args[0] + " 1";
-                    commandForNext = "/gc help " + args[0] + " 2";
-                }
-            }
-            // /gc help [page/command] [page?]
-            else {
-                int index = 0;
-                try {
-                    index = Integer.parseInt(args[1]);
-                } catch (NumberFormatException ignored) { }
-                Pagination page = getHelpSpecific(sender, args[0], index);
-                if (page == null) // if command=null or no permission
-                    message.append(Component.text("§cNo help page found for the command §f/gc " + args[0] + "§c!"))
-                           .append(Component.newline());
-                else {
-                    message.append(Component.text(page.text))
-                           .append(Component.newline());
-                    pageCount = page.pageCount;
-                    effectiveIndex = page.index;
-                }
-                commandForPrevious = "/gc help " + args[0] + " " + (effectiveIndex-1);
-                commandForNext = "/gc help " + args[0] + " " + (effectiveIndex+1);
-            }
+            String helpPage = command.getHelpPage(sender);
+            if (helpPage == null) // no permission
+                helpPage = "§cCommand §f" + fullCommandName + "§c could not be found!";
+
+            // calculate required page of helpPage
+            Pagination pagination = Pagination.paginate(helpPage, "\n", wantedPage, ENTRIES_PER_PAGE);
+            String paginatedHelpPage = (String) pagination.content();
+            pageIndex = pagination.pageIndex();
+            pageCount = pagination.pageCount();
+
+            // append
+            message.append(Component.text(paginatedHelpPage));
         }
 
-        message.append(Component.text("§6========================="))
+        // append footer
+        message.append(Component.newline())
+               .append(Component.text("§6========================="))
                .append(Component.newline())
-               .append(Component.text("      "));
-
-        // append chat page control buttons
-        message.append(ChatUtil.chatPageControlButtons(commandForPrevious, commandForNext, effectiveIndex, pageCount));
+               .append(Component.text("      "))
+               .append(ChatUtil.getPaginationButtons("gc help " + (pageIndex - 1) + (commandName != null ? " " + commandName : ""),
+                                                     "gc help " + (pageIndex + 1) + (commandName != null ? " " + commandName : ""),
+                                                     pageIndex, pageCount));
 
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
 
-    private Pagination getHelpAll(CommandSender sender, int index) {
-        StringBuilder sb = new StringBuilder();
-        List<GeoCommand> childCommands;
-        if (sender instanceof Player player)
-            childCommands = GeoCommand.baseCommand.allowedChildCommands(player);
-        else
-            childCommands = new ArrayList<>(GeoCommand.baseCommand.childCommands.values());
-
-        // append help for each command
-        for (GeoCommand command : childCommands) {
-            sb.append("§f%s: §a%s§f\n"
-                      .formatted(command.command, command.helpString));
-        }
-
-        // split into pages and return
-        return Pagination.paginate(String.valueOf(sb), "\n", index, 10);
-    }
-
-    private Pagination getHelpSpecific(CommandSender sender, String commandName, int index) {
-        StringBuilder sb = new StringBuilder();
-        // replace with alias if needed
-        String commandAlias = ((gc) GeoCommand.baseCommand).childCommandsAliases.get(commandName);
-        if (commandAlias != null)
-            commandName = commandAlias;
-        GeoCommand command = GeoCommand.baseCommand.childCommands.get(commandName);
-        // if command doesnt exist or no permission, escape
-        if (command == null || !sender.hasPermission(command.permission))
-            return null;
-        // append help for this command
-        sb.append(command.getHelpPage()).append("\n");
-
-        // split into pages and return
-        return Pagination.paginate(String.valueOf(sb), "\n", index, 10);
-    }
-
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return args.length == 1 ? GeoCommand.baseCommand.getTabCompletion(sender, new String[] { }) : List.of();
+        String commandName = gc.baseCommand.getCommandString();
+        if (args.length != 0)
+            commandName += " " + String.join(" ", args);
+
+        Pair<GeoCommand, String[]> commandPair = GeoCommand.get(commandName);
+        GeoCommand command = commandPair.getLeft();
+        if (command == null)
+            return List.of();
+
+        return command.allowedChildCommandsAsStrings(sender);
     }
 }

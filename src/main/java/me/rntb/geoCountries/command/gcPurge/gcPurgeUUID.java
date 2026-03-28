@@ -12,8 +12,8 @@ import java.util.List;
 
 public class gcPurgeUUID extends GeoCommand {
 
-    public gcPurgeUUID(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcPurgeUUID(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Purges a PlayerProfile by UUID.";
     }
 

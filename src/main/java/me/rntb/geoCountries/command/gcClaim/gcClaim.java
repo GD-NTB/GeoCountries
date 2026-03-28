@@ -9,21 +9,21 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcClaim extends GeoCommand {
 
-    public gcClaim(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcClaim(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Manages your country's claims.";
-        this.childCommands.put("one", new gcClaimOne(this, "one", "/gc claim one", "gc.claim.one", ItemUtil.getSkull(ItemUtil.Skull.ONE)));
-        this.childCommands.put("unclaim", new gcUnclaim(this, "unclaim", "/gc claim unclaim", "gc.unclaim", ItemStack.of(Material.COPPER_SHOVEL)));
-        this.childCommands.put("map", new gcClaimMap(this, "map", "/gc claim map", "gc.claim.map", ItemStack.of(Material.FILLED_MAP)));
-        this.childCommands.put("info", new gcClaimInfo(this, "info", "/gc claim info", "gc.claim.info", ItemStack.of(Material.JUNGLE_HANGING_SIGN)));
+        addChild(new gcClaimOne("one", "gc.claim.one", ItemUtil.getSkull(ItemUtil.Skull.ONE)));
+        addChild(new gcUnclaim("unclaim", "gc.unclaim", ItemStack.of(Material.COPPER_SHOVEL)));
+        addChild(new gcClaimMap("map", "gc.claim.map", ItemStack.of(Material.FILLED_MAP)));
+        addChild(new gcClaimInfo("info", "gc.claim.info", ItemStack.of(Material.JUNGLE_HANGING_SIGN)));
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            childCommands.get("one").onCommand(sender, args);
+            childLookup.get("one").onCommand(sender, args);
             return;
         }
-        findAndExecuteChildCommand(sender, args);
+        doChildCommand(sender, args);
     }
 }

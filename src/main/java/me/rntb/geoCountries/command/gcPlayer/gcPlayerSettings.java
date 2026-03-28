@@ -14,10 +14,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// todo: needs rewrite
 public class gcPlayerSettings extends GeoCommand {
 
-    public gcPlayerSettings(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcPlayerSettings(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Lists/manages your settings.";
     }
 
@@ -63,8 +64,8 @@ public class gcPlayerSettings extends GeoCommand {
             if (settingData == null)
                 continue;
             message.append(Component.text("§f> " + settingData.toString(playerProfile.getSettings().get(key)) + "  "))
-                   .append(SettingData.getEditButtonComponents("/gc player settings " + key + " ",
-                                                               "/gc player settings " + key + " " + settingData.defaultValue))
+                   .append(ChatUtil.getSettingsButtons("gc player settings " + key + " ",
+                                                       "gc player settings " + key + " " + settingData.defaultValue))
                    .append(Component.newline());
         }
         return message;
@@ -75,8 +76,8 @@ public class gcPlayerSettings extends GeoCommand {
         if (settingData == null)
             return null;
         return Component.text().append(Component.text(settingData.toStringFull(key, playerProfile.getSettings().get(key)) + "  "))
-                               .append(SettingData.getEditButtonComponents("/gc player settings " + key + " ",
-                                                                           "/gc player settings " + key + " " + settingData.defaultValue));
+                               .append(ChatUtil.getSettingsButtons("gc player settings " + key + " ",
+                                                                   "gc player settings " + key + " " + settingData.defaultValue));
     }
 
     @Override

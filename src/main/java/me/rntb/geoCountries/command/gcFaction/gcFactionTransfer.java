@@ -17,8 +17,8 @@ import java.util.List;
 
 public class gcFactionTransfer extends GeoCommand {
 
-    public gcFactionTransfer(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcFactionTransfer(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Transfers the leadership of your faction to a member country.";
     }
 

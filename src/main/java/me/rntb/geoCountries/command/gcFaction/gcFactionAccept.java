@@ -13,8 +13,8 @@ import java.util.List;
 
 public class gcFactionAccept extends GeoCommand {
 
-    public gcFactionAccept(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcFactionAccept(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Accepts a player's invite to their faction.";
     }
 

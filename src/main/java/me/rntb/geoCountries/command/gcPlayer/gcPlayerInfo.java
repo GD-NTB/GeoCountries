@@ -13,8 +13,8 @@ import java.util.List;
 
 public class gcPlayerInfo extends GeoCommand {
 
-    public gcPlayerInfo(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcPlayerInfo(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Displays info about a particular player.";
     }
 

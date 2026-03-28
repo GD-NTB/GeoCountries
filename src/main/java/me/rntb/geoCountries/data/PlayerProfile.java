@@ -284,10 +284,10 @@ public class PlayerProfile extends DataCollection {
 
         PlayerProfile other = (PlayerProfile) otherObject;
 
-        if (this.uuid == null || other.uuid == null)
+        if (uuid == null || other.uuid == null)
             return false;
 
-        return this.uuid.equals(other.uuid);
+        return uuid.equals(other.uuid);
     }
 
     @Override

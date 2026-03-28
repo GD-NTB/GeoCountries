@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcLoad extends GeoCommand {
 
-    public gcLoad(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcLoad(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Loads all plugin data from the disk to memory.";
     }
 
@@ -21,7 +21,7 @@ public class gcLoad extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                                   sender,
-                                                  new String[] { }),
+                                                  new String[0]),
                                   true);
     }
 

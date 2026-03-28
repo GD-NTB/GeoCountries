@@ -8,9 +8,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcGui extends GeoCommand {
 
-    public gcGui(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
-        this.helpString = "Opens the GeoCountries visual GUI menu.";
+    public gcGui(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
+        this.helpString = "Opens the GeoCountries command GUI menu.";
     }
 
     @Override
@@ -20,8 +20,7 @@ public class gcGui extends GeoCommand {
         player.closeInventory(); // close any inventory already open
 
         // open base menu page
-        PlayerMetadata.previousPage.put(player.getUniqueId(), GeoCommand.baseCommand.command);
-        MenuPage.openMenuPage(GeoCommand.baseCommand.getMenuButtons(player), GeoCommand.baseCommand, player, true);
-
+        PlayerMetadata.previousPage.put(player.getUniqueId(), GeoCommand.baseCommand.getCommandString());
+        MenuPage.openMenuPage(GeoCommand.baseCommand.getMenuButtons(player), GeoCommand.baseCommand, player);
     }
 }

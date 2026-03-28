@@ -68,12 +68,12 @@ public class ChatUtil {
     }
 
     // not centred automatically, you will need to prepend whitespace before appending these buttons
-    public static TextComponent.Builder chatPageControlButtons(String commandForPrevious, String commandForNext, int effectiveIndex, int pageCount) {
+    public static TextComponent.Builder getPaginationButtons(String commandForPrevious, String commandForNext, int currentPage, int pageCount) {
         TextComponent.Builder message = Component.text();
 
-        if (effectiveIndex > 1) {
+        if (currentPage > 1) {
             // [<<<] button
-            message.append(mm.deserialize("<click:run_command:'" + commandForPrevious + "'>" +
+            message.append(mm.deserialize("<click:run_command:'/" + commandForPrevious + "'>" +
                                           "<hover:show_text:'<white>Click to go to previous page.</white>'>" +
                                           "<dark_gray><bold>[<<<]</bold></dark_gray>" +
                                           "</hover></click>"))
@@ -84,17 +84,36 @@ public class ChatUtil {
         }
         // (page/pages) text
         message.append(Component.text("§8(%d/%d)"
-                                      .formatted(effectiveIndex, pageCount)))
+                                      .formatted(currentPage, pageCount)))
                .append(Component.text("  "));
-        if (effectiveIndex < pageCount) {
+        if (currentPage < pageCount) {
             // [>>>] button
-            message.append(mm.deserialize("<click:run_command:'" + commandForNext + "'>" +
+            message.append(mm.deserialize("<click:run_command:'/" + commandForNext + "'>" +
                                           "<hover:show_text:'<white>Click to go to next page.</white>'>" +
                                           "<dark_gray><bold>[>>>]</bold></dark_gray>" +
                                           "</hover></click>"));
         }
 
         return message;
+    }
+
+    public static TextComponent.Builder getSettingsButtons(String editCommand, String defaultCommand) {
+        return Component.text()
+                        // [Edit] button
+                        .append(ChatUtil.mm.deserialize(
+                                "<click:suggest_command:'/" + editCommand + "'>" +
+                                "<hover:show_text:\"<white>Click to edit the setting's value.</white>\">" +
+                                "<dark_gray><bold>[Edit]</bold></dark_gray>" +
+                                "</hover></click>"
+                        ))
+                        .append(Component.text(" "))
+                        // [Default] button
+                        .append(ChatUtil.mm.deserialize(
+                                "<click:suggest_command:'/" + defaultCommand + "'>" +
+                                "<hover:show_text:\"<white>Click to set to default value.</white>\">" +
+                                "<dark_gray><bold>[Default]</bold></dark_gray>" +
+                                "</hover></click>"
+                        ));
     }
 
     public static String newlineIfPrefixIsEmpty() {

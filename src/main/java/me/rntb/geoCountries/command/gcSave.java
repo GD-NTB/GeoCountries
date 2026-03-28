@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcSave extends GeoCommand {
 
-    public gcSave(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcSave(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Saves all plugin data in memory to the disk.";
     }
 
@@ -20,7 +20,7 @@ public class gcSave extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                                   sender,
-                                                  new String[] { }),
+                                                  new String[0]),
                                   true);
     }
 

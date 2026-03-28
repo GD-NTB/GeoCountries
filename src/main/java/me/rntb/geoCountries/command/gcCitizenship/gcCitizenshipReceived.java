@@ -18,8 +18,8 @@ import java.util.List;
 
 public class gcCitizenshipReceived extends GeoCommand {
 
-    public gcCitizenshipReceived(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcCitizenshipReceived(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Lists received citizenship applications to your country.";
     }
 
@@ -33,7 +33,6 @@ public class gcCitizenshipReceived extends GeoCommand {
             return;
         }
 
-        // we must use components as we have clickable elements
         TextComponent.Builder message;
         // no args -> list all applications
         if (args.length == 0)

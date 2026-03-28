@@ -15,8 +15,8 @@ import java.util.List;
 
 public class gcCountryInfo extends GeoCommand {
 
-    public gcCountryInfo(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcCountryInfo(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Displays info about your/any country.";
     }
 

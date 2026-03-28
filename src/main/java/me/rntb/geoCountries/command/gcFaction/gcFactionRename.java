@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcFactionRename extends GeoCommand {
 
-    public gcFactionRename(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcFactionRename(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Renames your faction.";
     }
 

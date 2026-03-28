@@ -17,8 +17,8 @@ import java.util.List;
 
 public class gcCountryTransfer extends GeoCommand {
 
-    public gcCountryTransfer(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcCountryTransfer(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Transfers the leadership of your country to a citizen.";
     }
 

@@ -4,6 +4,7 @@ import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.Faction;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.type.PageNumberAndArgs;
 import me.rntb.geoCountries.type.Pagination;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
@@ -12,24 +13,28 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class gcFactionMembers extends GeoCommand {
 
-    public gcFactionMembers(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcFactionMembers(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Lists all faction of your/any country.";
     }
 
+    private static final int ENTRIES_PER_PAGE = 15;
+
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        Faction faction;
-        int index = 1;
-        String factionName;
+        // parse args
+        PageNumberAndArgs pageNumberAndArgs = PageNumberAndArgs.parse(args);
+        int wantedPage = pageNumberAndArgs.pageNumber();
+        String[] factionNameArgs = pageNumberAndArgs.args();
 
-        // if no args, faction = player's faction
-        if (args.length == 0) {
+        // get faction object
+        Faction faction;
+        // if no faction specified, use sender's faction
+        if (factionNameArgs == null) {
             PlayerProfile playerProfile = PlayerProfile.get(sender);
             faction = playerProfile.getFactionObject();
             if (faction == null) {
@@ -42,70 +47,58 @@ public class gcFactionMembers extends GeoCommand {
                 return;
             }
         }
+        // else use specified faction
         else {
-            // if greater than 2, we have a page number and faction name
-            // /gc faction members [pagenumber] [factionname]
-            String[] factionNameArgs;
-            if (args.length >= 2) {
-                try {
-                    index = Integer.parseInt(args[0]);
-                    factionNameArgs = Arrays.copyOfRange(args, 1, args.length);
-                } catch (NumberFormatException ignored) {
-                    factionNameArgs = args;
-                }
-            }
-            // /gc faction members [factionname]
-            else
-                factionNameArgs = args;
-
-            factionName = String.join(" ", factionNameArgs);
-
+            String factionName = String.join(" ", pageNumberAndArgs.args());
             faction = Faction.get(factionName);
             if (faction == null) {
-                ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + factionName + "§c does not exist!");
+                ChatUtil.sendPrefixedMessage(sender, "§cFaction §f" + factionName + "§c does not exist!");
                 return;
             }
         }
 
+        // build text
         TextComponent.Builder message = Component.text();
 
         message.append(ChatUtil.newlineIfPrefixIsEmptyComponent())
                .append(Component.text("§6========== FACTION CITIZENS =========="))
                .append(Component.newline());
 
-        int effectiveIndex = 0, pageCount = 0;
-        String commandForPrevious = "", commandForNext = "";
+        // pagination fields
+        int pageIndex = 0, pageCount = 0;
 
         int memberCount = faction.getMemberCount();
-        if (memberCount == 0) {
-            message.append(Component.text("§cThere are no members of this faction.\n"));
-        }
-        else {
-            message.append(Component.text("§3%s§f has §e%d§f member%s:\n"
-                                          .formatted(faction.getName(),
-                                                     memberCount, StringUtil.leadingS(memberCount))));
-            StringBuilder membersText = new StringBuilder();
-            for (Country member : faction.getMembersSorted()) {
-                membersText.append("§f> §a%s§f (§e%s§f)\n"
-                                    .formatted(member.getName(),
-                                               member.getUUID().equals(faction.getLeader()) ? "LEADER" : "Member"));
-            }
-            // calculate page
-            Pagination page = Pagination.paginate(String.valueOf(membersText), "\n", index, 20);
-            message.append(Component.text(page.text))
+        if (memberCount == 0)
+            message.append(Component.text("§cThere are no members of this faction."))
                    .append(Component.newline());
-            pageCount = page.pageCount;
-            effectiveIndex = page.index;
-            commandForPrevious = "/gc faction members " + (effectiveIndex-1) + " " + faction.getName();
-            commandForNext = "/gc faction members " + (effectiveIndex+1) + " " + faction.getName();
+        else {
+            // append title
+            message.append(Component.text("§3%s§f has §e%d§f member%s:"
+                                          .formatted(faction.getName(),
+                                                     memberCount, StringUtil.leadingS(memberCount))))
+                   .append(Component.newline());
+
+            // calculate required page of faction.getMembersSorted
+            Pagination pagination = Pagination.paginate(faction.getMembersSorted(), wantedPage, ENTRIES_PER_PAGE);
+            List<Country> members = (List<Country>) pagination.content();
+            pageIndex = pagination.pageIndex();
+            pageCount = pagination.pageCount();
+
+            for (Country member : members) {
+                message.append(Component.text("§f> §a%s§f (§e%s§f)"
+                                    .formatted(member.getName(),
+                                               member.isFactionLeader() ? "Leader" : "Member")))
+                       .append(Component.newline());
+            }
         }
 
         message.append(Component.text("§6===================================="))
                .append(Component.newline())
-               .append(Component.text("               "));
-
-        // append chat page control buttons
-        message.append(ChatUtil.chatPageControlButtons(commandForPrevious, commandForNext, effectiveIndex, pageCount));
+               .append(Component.text("               "))
+               // append chat page control buttons
+               .append(ChatUtil.getPaginationButtons("gc faction members " + (pageIndex - 1) + " " + faction.getName(),
+                                                     "gc faction members " + (pageIndex + 1) + " " + faction.getName(),
+                                                     pageIndex, pageCount));
 
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }

@@ -12,8 +12,8 @@ import java.util.List;
 
 public class gcAdminDeleteFaction extends GeoCommand {
 
-    public gcAdminDeleteFaction(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcAdminDeleteFaction(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Deletes a faction from the server.";
     }
 

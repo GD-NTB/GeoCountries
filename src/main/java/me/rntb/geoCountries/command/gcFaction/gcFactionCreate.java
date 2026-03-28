@@ -16,8 +16,8 @@ import java.util.UUID;
 
 public class gcFactionCreate extends GeoCommand {
 
-    public gcFactionCreate(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcFactionCreate(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Creates a new faction.";
     }
 

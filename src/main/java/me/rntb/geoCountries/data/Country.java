@@ -199,7 +199,7 @@ public class Country extends DataCollection {
         return citizens.stream()
                        .map(uuid -> PlayerProfile.get(uuid).getUsername()).toList();
     }
-    public List<PlayerProfile> getCitizensSortedByPosition() {
+    public List<PlayerProfile> getCitizensSorted() {
         return citizens.stream()
                        .map(PlayerProfile::get)
                        .sorted(Comparator.comparing(PlayerProfile::getPositionLevel))

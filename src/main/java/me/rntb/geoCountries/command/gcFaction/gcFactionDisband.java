@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcFactionDisband extends GeoCommand {
 
-    public gcFactionDisband(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcFactionDisband(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Disbands (deletes) your faction.";
     }
 
@@ -46,7 +46,7 @@ public class gcFactionDisband extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                                    sender,
-                                                   new String[] { }),
+                                                   new String[0]),
                                   true);
     }
 

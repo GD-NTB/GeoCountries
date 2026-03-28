@@ -17,10 +17,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// todo: needs rewrite
 public class gcCountrySettings extends GeoCommand {
 
-    public gcCountrySettings(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcCountrySettings(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Lists/manages your country's settings.";
     }
 
@@ -92,8 +93,8 @@ public class gcCountrySettings extends GeoCommand {
                 continue;
             message.append(Component.text("§f> " + settingData.toString(country.getSettings().get(key)) + "  "));
             if (isLeader)
-                message.append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
-                                                                   "/gc country settings " + key + " " + settingData.defaultValue));
+                message.append(ChatUtil.getSettingsButtons("gc country settings " + key + " ",
+                                                           "gc country settings " + key + " " + settingData.defaultValue));
             message.append(Component.newline());
         }
         return message;
@@ -105,8 +106,8 @@ public class gcCountrySettings extends GeoCommand {
             return null;
         TextComponent.Builder message = Component.text().append(Component.text(settingData.toStringFull(key, country.getSettings().get(key)) + "  "));
         if (isLeader)
-            message.append(SettingData.getEditButtonComponents("/gc country settings " + key + " ",
-                                                               "/gc country settings " + key + " " + settingData.defaultValue));
+            message.append(ChatUtil.getSettingsButtons("gc country settings " + key + " ",
+                                                       "gc country settings " + key + " " + settingData.defaultValue));
         return message;
     }
 

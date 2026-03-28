@@ -7,7 +7,7 @@ description: Countries, geopolitics, and more!
 
 commands:
   gc:
-    description: "The base command for GeoCountries. To see all commands, do /gc help"
+    description: "The base command for GeoCountries. Opens the command GUI menu. To see all commands, do /gc help"
     usage: "/gc"
     aliases: [ geocountries ]
 

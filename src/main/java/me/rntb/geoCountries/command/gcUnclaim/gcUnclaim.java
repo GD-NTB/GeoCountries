@@ -9,19 +9,19 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcUnclaim extends GeoCommand {
 
-    public gcUnclaim(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcUnclaim(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Unclaims your country's chunks.";
-        this.childCommands.put("one", new gcUnclaimOne(this, "one", "/gc unclaim one", "gc.unclaim.one", ItemUtil.getSkull(ItemUtil.Skull.RED_ONE)));
+        addChild(new gcUnclaimOne("one", "/gc unclaim one", ItemUtil.getSkull(ItemUtil.Skull.RED_ONE)));
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            childCommands.get("one").onCommand(sender, args);
+            childLookup.get("one").onCommand(sender, args);
             return;
         }
-        findAndExecuteChildCommand(sender, args);
+        doChildCommand(sender, args);
     }
 
     @Override

@@ -15,8 +15,8 @@ import java.util.UUID;
 
 public class gcCountryCreate extends GeoCommand {
 
-    public gcCountryCreate(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcCountryCreate(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Creates a new country.";
     }
 

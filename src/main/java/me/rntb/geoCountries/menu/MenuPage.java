@@ -20,13 +20,14 @@ import java.util.function.Function;
 
 public class MenuPage {
 
-    public static Inventory createPage(ItemStack[] buttons, GeoCommand command, Player player, boolean isBasePage)  {
+    public static Inventory createPage(ItemStack[] buttons, GeoCommand command, Player player)  {
+        boolean isBasePage = command.equals(GeoCommand.baseCommand);
         int buttonCount = buttons.length;
 
         int rows = 2 + (Math.ceilDiv(buttonCount, 7));
         int slots = 9 * rows;
 
-        Inventory inventory = Bukkit.createInventory(player, slots, Component.text("§8" + command.command));
+        Inventory inventory = Bukkit.createInventory(player, slots, Component.text("§8" + command.getCommandString()));
 
         // 6 commands per row, padded left and right
         int childCommandIndex = 0;
@@ -54,7 +55,7 @@ public class MenuPage {
                             inventory.setItem(flatIndex, createButton(ItemStack.of(Material.BARRIER), "§cClose", null, "GUI_CLOSE", false));
                         // set back button
                         else
-                            inventory.setItem(flatIndex, createButton(ItemStack.of(Material.ARROW), "§fGo Back", null, command.parentCommand.command, false));
+                            inventory.setItem(flatIndex, createButton(ItemStack.of(Material.ARROW), "§fGo Back", null, command.parentCommand.getCommandString(), false));
                         continue;
                     }
 
@@ -112,8 +113,8 @@ public class MenuPage {
         return newItem;
     }
 
-    public static void openMenuPage(ItemStack[] buttons, GeoCommand command, Player player, boolean isBasePage)  {
-        player.openInventory(createPage(buttons, command, player, isBasePage));
+    public static void openMenuPage(ItemStack[] buttons, GeoCommand command, Player player)  {
+        player.openInventory(createPage(buttons, command, player));
         PlayerMetadata.isMenuOpen.put(player.getUniqueId(), true);
     }
 
@@ -127,7 +128,7 @@ public class MenuPage {
     public static <T> ItemStack[] createSkullMenuButtons(List<T> list, Function<T, OfflinePlayer> player,
                                                                        Function<T, String> name,
                                                                        Function<T, String> description,
-                                                                       Function<T, String> command) {
+                                                                       Function<T, String> runCommand) {
         ItemStack[] buttons = new ItemStack[list.size()];
         int i = 0;
         for (T item : list) {
@@ -135,7 +136,7 @@ public class MenuPage {
                 buttons[i] = MenuPage.createButtonOfPlayerSkull(player.apply(item),
                                                                 name.apply(item),
                                                                 description.apply(item),
-                                                                "GUI_RUN_COMMAND:" + command.apply(item),
+                                                                "GUI_RUN_COMMAND:" + runCommand.apply(item),
                                                                 false);
             } catch (Exception e) {
                 buttons[i] = MenuPage.createButton(ItemStack.of(Material.BARRIER),

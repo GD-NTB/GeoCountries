@@ -19,8 +19,8 @@ import java.util.UUID;
 
 public class gcFactionInvite extends GeoCommand {
 
-    public gcFactionInvite(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcFactionInvite(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Invites a country to your faction.";
     }
 

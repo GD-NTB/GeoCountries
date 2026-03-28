@@ -2,8 +2,6 @@ package me.rntb.geoCountries.type;
 
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.EnumUtil;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 
 import java.util.List;
 
@@ -81,31 +79,12 @@ public class SettingData {
     }
 
     public List<String> getTabCompletion() {
-        return switch (this.type) {
+        return switch (type) {
             case BOOL -> List.of("true", "false");
             case STRING, COUNTRY_PREFIX, COUNTRY_MOTTO -> List.of("null");
             case CHAT_COLOUR -> EnumUtil.enumToStringList(ChatUtil.ChatColour.class);
             case INT -> List.of();
             case COLOUR -> List.of("#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff", "#ffffff");
         };
-    }
-
-    public static TextComponent.Builder getEditButtonComponents(String editCommand, String defaultCommand) {
-        return Component.text()
-                        // [Edit] button
-                        .append(ChatUtil.mm.deserialize(
-                                "<click:suggest_command:'" + editCommand + "'>" +
-                                "<hover:show_text:\"<white>Click to edit the setting's value.</white>\">" +
-                                "<dark_gray><bold>[Edit]</bold></dark_gray>" +
-                                "</hover></click>"
-                        ))
-                        .append(Component.text(" "))
-                        // [Default] button
-                        .append(ChatUtil.mm.deserialize(
-                                "<click:suggest_command:'" + defaultCommand + "'>" +
-                                "<hover:show_text:\"<white>Click to set to default value.</white>\">" +
-                                "<dark_gray><bold>[Default]</bold></dark_gray>" +
-                                "</hover></click>"
-                        ));
     }
 }

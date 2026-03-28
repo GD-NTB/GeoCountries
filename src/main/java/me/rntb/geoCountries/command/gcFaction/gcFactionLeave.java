@@ -13,8 +13,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcFactionLeave extends GeoCommand {
 
-    public gcFactionLeave(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcFactionLeave(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Leaves your current faction.";
     }
 
@@ -37,7 +37,7 @@ public class gcFactionLeave extends GeoCommand {
         Confirmation.startWaiting(UuidUtil.getUUIDOfCommandSender(sender),
                                   new Confirmation(this::onConfirm,
                                                    sender,
-                                                   new String[] { }),
+                                                   new String[0]),
                                   true);
     }
 

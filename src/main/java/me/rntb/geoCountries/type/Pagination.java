@@ -3,37 +3,44 @@ package me.rntb.geoCountries.type;
 import java.util.Arrays;
 import java.util.List;
 
-public class Pagination {
+public record Pagination (Object content, int pageCount, int pageIndex) {
 
-    public String text;
-    public int index;
-    public int pageCount;
+    private static final Pagination EMPTY = new Pagination(null, 0, 0);
 
-    public Pagination(String text, int index, int pageCount) {
-        this.text = text;
-        this.index = index;
-        this.pageCount = pageCount;
+    // content is returned as null on empty or null list
+    public static <T> Pagination paginate(List<T> list, int wantedPage, int perPage) {
+        if (list == null || list.isEmpty())
+            return EMPTY;
+
+        int pageCount = getPageCount(list.size(), perPage);
+        int pageIndex = getPageIndex(wantedPage, pageCount);
+
+        int from = (pageIndex - 1) * perPage;
+        int to = Math.min(from + perPage, list.size());
+        List<T> content = list.subList(from, to); // so much easier
+
+        return new Pagination(content, pageIndex, pageCount);
     }
 
-    public static Pagination paginate(String text, String delimiter, int index, int linesPerPage) {
-        if (text == null)
-            return null;
+    public static Pagination paginate(String text, String delimiter, int wantedPage, int perPage) {
+        if (text == null || text.isEmpty())
+            return EMPTY;
 
-        // split string by newlines
-        List<String> lines = Arrays.stream(text.split(delimiter)).toList();
-        int lineCount = lines.size();
+        List<String> splitText = Arrays.stream(text.split(delimiter)).toList();
+        Pagination pagination = paginate(splitText, wantedPage, perPage);
+        String pageText = String.join(delimiter, (List<String>) pagination.content);
 
-        // split into pages
-        int pageCount = Math.ceilDiv(lineCount, linesPerPage);
-        int effectiveIndex = Math.clamp(index, 1, pageCount);
+        return new Pagination(pageText, pagination.pageIndex, pagination.pageCount);
+    }
 
-        int from = (effectiveIndex - 1) * linesPerPage;
-        int to = Math.min(from + linesPerPage, lineCount);
+    private static int getPageCount(int listSize, int perPage) {
+        return (int) Math.ceil((double) listSize / perPage);
+    }
 
-        List<String> pageList = lines.subList(from, to);
-
-        // convert back to string
-        String pageString = String.join(delimiter, pageList);
-        return new Pagination(pageString, effectiveIndex, pageCount);
+    private static int getPageIndex(int currentPage, int pageCount) {
+        if (pageCount < 1)
+            return 1;
+        else
+            return Math.clamp(currentPage, 1, pageCount);
     }
 }

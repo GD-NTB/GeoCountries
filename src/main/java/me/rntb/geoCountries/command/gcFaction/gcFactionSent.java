@@ -19,8 +19,8 @@ import java.util.UUID;
 
 public class gcFactionSent extends GeoCommand {
 
-    public gcFactionSent(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcFactionSent(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Lists sent faction invites from your country.";
     }
 
@@ -44,7 +44,6 @@ public class gcFactionSent extends GeoCommand {
             return;
         }
 
-        // we must use components as we have clickable elements
         TextComponent.Builder message = Component.text();
 
         message.append(ChatUtil.newlineIfPrefixIsEmptyComponent())

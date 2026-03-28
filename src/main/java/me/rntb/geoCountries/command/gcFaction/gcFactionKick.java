@@ -17,8 +17,8 @@ import java.util.List;
 
 public class gcFactionKick extends GeoCommand {
 
-    public gcFactionKick(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcFactionKick(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Kicks a member country out of your faction.";
     }
 

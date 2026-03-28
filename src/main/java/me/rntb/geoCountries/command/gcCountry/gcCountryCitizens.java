@@ -3,6 +3,7 @@ package me.rntb.geoCountries.command.gcCountry;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.type.PageNumberAndArgs;
 import me.rntb.geoCountries.type.Pagination;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
@@ -11,55 +12,45 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.List;
 
 // todo: display time last online
 public class gcCountryCitizens extends GeoCommand {
 
-    public gcCountryCitizens(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcCountryCitizens(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Lists all citizens of your/any country.";
+        addAlias("members");
     }
+
+    private static final int ENTRIES_PER_PAGE = 15;
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        Country country;
-        int index = 1;
-        String countryName;
+        // parse args
+        PageNumberAndArgs pageNumberAndArgs = PageNumberAndArgs.parse(args);
+        int wantedPage = pageNumberAndArgs.pageNumber();
+        String[] countryNameArgs = pageNumberAndArgs.args();
 
-        // if no args, country = player's country
-        if (args.length == 0) {
+        // get country object
+        Country country;
+        // if no country specified, use sender's country
+        if (countryNameArgs == null) {
             PlayerProfile playerProfile = PlayerProfile.get(sender);
-            if (!playerProfile.hasCitizenship()) {
+            country = playerProfile.getCitizenshipObject();
+            if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, ChatUtil.newlineIfPrefixIsEmpty() +
                                                      """
                                                      §6========== COUNTRY CITIZENS ==========
-                                                     §cYou do not have citizenship of any country.
+                                                     §cYou are not a citizen of any country.
                                                      §cDo §f/gc country citizens [country]§c to get a list of a country's citizens.
                                                      §6=====================================""");
                 return;
             }
-            country = playerProfile.getCitizenshipObject();
         }
+        // else use specified country
         else {
-            // if greater than 2, we have a page number and country name
-            // /gc country citizens [pagenumber] [countryname]
-            String[] countryNameArgs;
-            if (args.length >= 2) {
-                try {
-                    index = Integer.parseInt(args[0]);
-                    countryNameArgs = Arrays.copyOfRange(args, 1, args.length);
-                } catch (NumberFormatException ignored) {
-                    countryNameArgs = args;
-                }
-            }
-            // /gc country citizens [countryname]
-            else
-                countryNameArgs = args;
-
-            countryName = String.join(" ", countryNameArgs);
-
+            String countryName = String.join(" ", pageNumberAndArgs.args());
             country = Country.get(countryName);
             if (country == null) {
                 ChatUtil.sendPrefixedMessage(sender, "§cCountry §f" + countryName + "§c does not exist!");
@@ -67,43 +58,48 @@ public class gcCountryCitizens extends GeoCommand {
             }
         }
 
+        // build text
         TextComponent.Builder message = Component.text();
 
         message.append(ChatUtil.newlineIfPrefixIsEmptyComponent())
                .append(Component.text("§6========== COUNTRY CITIZENS =========="))
                .append(Component.newline());
 
-        int effectiveIndex = 0, pageCount = 0;
-        String commandForPrevious = "", commandForNext = "";
+        // pagination fields
+        int pageIndex = 0, pageCount = 0;
 
         int citizenCount = country.getCitizenCount();
-        if (citizenCount == 0) {
-            message.append(Component.text("§cThere are no citizens of this country.\n"));
-        }
-        else {
-            message.append(Component.text("§e%s§f has §e%d§f citizen%s:\n"
-                                          .formatted(country.getName(), citizenCount, StringUtil.leadingS(citizenCount))));
-            StringBuilder citizensText = new StringBuilder();
-            for (PlayerProfile citizen : country.getCitizensSortedByPosition()) {
-                citizensText.append("§f> §a%s§f (§e%s§f)\n"
-                                    .formatted(citizen.getUsername(), citizen.getPositionString()));
-            }
-            // calculate page
-            Pagination page = Pagination.paginate(String.valueOf(citizensText), "\n", index, 20);
-            message.append(Component.text(page.text))
+        if (citizenCount == 0)
+            message.append(Component.text("§cThere are no citizens of this country."))
                    .append(Component.newline());
-            pageCount = page.pageCount;
-            effectiveIndex = page.index;
-            commandForPrevious = "/gc country citizens " + (effectiveIndex-1) + " " + country.getName();
-            commandForNext = "/gc country citizens " + (effectiveIndex+1) + " " + country.getName();
+        else {
+            // append title
+            message.append(Component.text("§e%s§f has §e%d§f citizen%s:"
+                                          .formatted(country.getName(),
+                                                     citizenCount, StringUtil.leadingS(citizenCount))))
+                   .append(Component.newline());
+
+            // calculate required page of country.getCitizensSorted
+            Pagination pagination = Pagination.paginate(country.getCitizensSorted(), wantedPage, ENTRIES_PER_PAGE);
+            List<PlayerProfile> citizens = (List<PlayerProfile>) pagination.content();
+            pageIndex = pagination.pageIndex();
+            pageCount = pagination.pageCount();
+
+            // iterate through page
+            for (PlayerProfile citizen : citizens) {
+                message.append(Component.text("§f> §a%s§f (§e%s§f)"
+                                              .formatted(citizen.getUsername(), citizen.getPositionString())))
+                       .append(Component.newline());
+            }
         }
 
         message.append(Component.text("§6====================================="))
                .append(Component.newline())
-               .append(Component.text("               "));
-
-        // append chat page control buttons
-        message.append(ChatUtil.chatPageControlButtons(commandForPrevious, commandForNext, effectiveIndex, pageCount));
+               .append(Component.text("               "))
+               // append chat page control buttons
+               .append(ChatUtil.getPaginationButtons("gc country citizens " + (pageIndex - 1) + " " + country.getName(),
+                                                     "gc country citizens " + (pageIndex + 1) + " " + country.getName(),
+                                                     pageIndex, pageCount));
 
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }

@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcUnclaimOne extends GeoCommand {
 
-    public gcUnclaimOne(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcUnclaimOne(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Unclaims the chunk where you are standing.";
     }
 

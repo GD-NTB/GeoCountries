@@ -8,27 +8,27 @@ import org.bukkit.inventory.ItemStack;
 
 public class gcCountry extends GeoCommand {
 
-    public gcCountry(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcCountry(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Manages and views info about countries.";
-        this.childCommands.put("create", new gcCountryCreate(this, "create", "/gc country create", "gc.country.create", ItemStack.of(Material.NETHER_STAR)));
-        this.childCommands.put("rename", new gcCountryRename(this, "rename", "/gc country rename", "gc.country.rename", ItemStack.of(Material.NAME_TAG)));
-        this.childCommands.put("citizens", new gcCountryCitizens(this, "citizens", "/gc country citizens", "gc.country.citizens", ItemStack.of(Material.PLAYER_HEAD)));
-        this.childCommands.put("info", new gcCountryInfo(this, "info", "/gc country info", "gc.country.info", ItemStack.of(Material.JUNGLE_HANGING_SIGN)));
-        this.childCommands.put("list", new gcCountryList(this, "list", "/gc country list", "gc.country.list", ItemStack.of(Material.MAP)));
-        this.childCommands.put("settings", new gcCountrySettings(this, "settings", "/gc country settings", "gc.country.settings", ItemStack.of(Material.WRITABLE_BOOK)));
-        this.childCommands.put("dissolve", new gcCountryDissolve(this, "dissolve", "/gc country dissolve", "gc.country.dissolve", ItemStack.of(Material.FLINT_AND_STEEL)));
-        this.childCommands.put("transfer", new gcCountryTransfer(this, "transfer", "/gc country transfer", "gc.country.transfer", ItemStack.of(Material.ENDER_PEARL)));
-        this.childCommands.put("leave", new gcCitizenshipRenounce(this, "leave", "/gc citizenship renounce", "gc.citizenship.renounce", ItemStack.of(Material.DARK_OAK_DOOR)));
-        this.childCommandsAliases.put("members", "citizens");
+        addChild(new gcCountryCreate("create", "gc.country.create", ItemStack.of(Material.NETHER_STAR)));
+        addChild(new gcCountryRename("rename", "gc.country.rename", ItemStack.of(Material.NAME_TAG)));
+        addChild(new gcCountryCitizens("citizens", "gc.country.citizens", ItemStack.of(Material.PLAYER_HEAD)));
+        addChild(new gcCountryInfo("info", "gc.country.info", ItemStack.of(Material.JUNGLE_HANGING_SIGN)));
+        addChild(new gcCountryList("list", "gc.country.list", ItemStack.of(Material.MAP)));
+        addChild(new gcCountrySettings("settings", "gc.country.settings", ItemStack.of(Material.WRITABLE_BOOK)));
+        addChild(new gcCountryDissolve("dissolve", "gc.country.dissolve", ItemStack.of(Material.FLINT_AND_STEEL)));
+        addChild(new gcCountryTransfer("transfer", "gc.country.transfer", ItemStack.of(Material.ENDER_PEARL)));
+        addChild(new gcCitizenshipRenounce("leave", "gc.citizenship.renounce", ItemStack.of(Material.DARK_OAK_DOOR)));
+        addAlias("c");
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            childCommands.get("info").onCommandEntered(sender, args);
+            childLookup.get("info").onCommandEntered(sender, args);
             return;
         }
-        findAndExecuteChildCommand(sender, args);
+        doChildCommand(sender, args);
     }
 }

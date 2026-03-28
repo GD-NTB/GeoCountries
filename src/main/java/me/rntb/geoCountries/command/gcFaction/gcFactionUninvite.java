@@ -18,8 +18,8 @@ import java.util.function.Predicate;
 
 public class gcFactionUninvite extends GeoCommand {
 
-    public gcFactionUninvite(GeoCommand parentCommand, String name, String displayName, String requiredPermission, ItemStack menuButtonItem) {
-        super(parentCommand, name, displayName, requiredPermission, menuButtonItem);
+    public gcFactionUninvite(String name, String requiredPermission, ItemStack menuButtonItem) {
+        super(name, requiredPermission, menuButtonItem);
         this.helpString = "Uninvites a previously invited country from your faction.";
     }
 
