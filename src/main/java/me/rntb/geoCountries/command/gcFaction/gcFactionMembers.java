@@ -105,7 +105,7 @@ public class gcFactionMembers extends GeoCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return args.length == 1 ? Faction.allAsNames(true) : List.of();
+        return args.length == 1 ? Faction.getAllAsNames(true) : List.of();
     }
 
     @Override

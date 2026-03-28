@@ -18,15 +18,41 @@ public class CitizenshipApplication extends DataCollection {
     public static final String DISPLAY_NAME = "CitizenshipApplication";
 
     // list of sent applications
-    public static ArrayList<CitizenshipApplication> sentAll = null;
-    public static final Map<UUID, CitizenshipApplication> sentByUUID = new HashMap<>();
-    public static final Map<UUID, ArrayList<CitizenshipApplication>> sentByApplicant = new HashMap<>();
-    public static final Map<UUID, ArrayList<CitizenshipApplication>> sentByToCountry = new HashMap<>();
+    private static ArrayList<CitizenshipApplication> sentAll = null;
+    public static ArrayList<CitizenshipApplication> getAllSent() {
+        return sentAll;
+    }
+
+    private static final Map<UUID, CitizenshipApplication> sentByUUID = new HashMap<>();
+    public static Map<UUID, CitizenshipApplication> getSentByUUID() {
+        return sentByUUID;
+    }
+
+    private static final Map<UUID, ArrayList<CitizenshipApplication>> sentByApplicant = new HashMap<>();
+    public static Map<UUID, ArrayList<CitizenshipApplication>> getSentByApplicant() {
+        return sentByApplicant;
+    }
+
+    private static final Map<UUID, ArrayList<CitizenshipApplication>> sentByToCountry = new HashMap<>();
+    public static Map<UUID, ArrayList<CitizenshipApplication>> getSentByToCountry() {
+        return sentByToCountry;
+    }
 
     // list of all applications currently being written
-    public static final ArrayList<CitizenshipApplication> openAll = new ArrayList<>();
-    public static final Map<UUID, CitizenshipApplication> openByUUID = new HashMap<>();
-    public static final Map<UUID, CitizenshipApplication> openByApplicant = new HashMap<>();
+    private static final ArrayList<CitizenshipApplication> openAll = new ArrayList<>();
+    public static ArrayList<CitizenshipApplication> getOpenAll() {
+        return openAll;
+    }
+
+    private static final Map<UUID, CitizenshipApplication> openByUUID = new HashMap<>();
+    public static Map<UUID, CitizenshipApplication> getOpenByUUID() {
+        return openByUUID;
+    }
+
+    private static final Map<UUID, CitizenshipApplication> openByApplicant = new HashMap<>();
+    public static Map<UUID, CitizenshipApplication> getOpenByApplicant() {
+        return openByApplicant;
+    }
 
     public static void init() {
         sentAll = readFromFile(CitizenshipApplication.FILE_PATH, DISPLAY_NAME, new TypeToken<ArrayList<CitizenshipApplication>>() { }.getType());

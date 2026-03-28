@@ -65,6 +65,6 @@ public class gcPlayerInfo extends GeoCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return args.length == 1 ? PlayerProfile.allAsUsernames(true) : List.of();
+        return args.length == 1 ? PlayerProfile.getAllAsUsernames(true) : List.of();
     }
 }

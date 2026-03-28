@@ -20,9 +20,9 @@ public class CitizenshipApplicationService {
         if (cApplication == null)
             return;
 
-        CitizenshipApplication.openAll.add(cApplication);
-        CitizenshipApplication.openByUUID.put(cApplication.getUUID(), cApplication);
-        CitizenshipApplication.openByApplicant.put(cApplication.getApplicant(), cApplication);
+        CitizenshipApplication.getOpenAll().add(cApplication);
+        CitizenshipApplication.getOpenByUUID().put(cApplication.getUUID(), cApplication);
+        CitizenshipApplication.getOpenByApplicant().put(cApplication.getApplicant(), cApplication);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Created new open CitizenshipApplication");
@@ -36,9 +36,9 @@ public class CitizenshipApplicationService {
         if (cApplication == null)
             return;
 
-        CitizenshipApplication.openAll.remove(cApplication);
-        CitizenshipApplication.openByUUID.remove(cApplication.getUUID());
-        CitizenshipApplication.openByApplicant.remove(cApplication.getApplicant());
+        CitizenshipApplication.getOpenAll().remove(cApplication);
+        CitizenshipApplication.getOpenByUUID().remove(cApplication.getUUID());
+        CitizenshipApplication.getOpenByApplicant().remove(cApplication.getApplicant());
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Cancelled open CitizenshipApplication");
@@ -47,7 +47,7 @@ public class CitizenshipApplicationService {
             ChatUtil.sendPrefixedMessage(cApplication.getApplicantPlayerProfile().getOnlinePlayer(), "§aCancelled the citizenship application.");
     }
     public static void onResponseFail(UUID uuid) {
-        cancel(CitizenshipApplication.openByApplicant.get(uuid), true);
+        cancel(CitizenshipApplication.getOpenByApplicant().get(uuid), true);
     }
 
     // send an OPEN application
@@ -64,14 +64,14 @@ public class CitizenshipApplicationService {
             return;
         }
 
-        CitizenshipApplication.add(cApplication, CitizenshipApplication.sentAll, CitizenshipApplication.DISPLAY_NAME);
+        CitizenshipApplication.add(cApplication, CitizenshipApplication.getAllSent(), CitizenshipApplication.DISPLAY_NAME);
 
         // add to sentByUUID
-        CitizenshipApplication.sentByUUID.put(cApplication.getUUID(), cApplication);
+        CitizenshipApplication.getSentByUUID().put(cApplication.getUUID(), cApplication);
         // add to sentByApplicant
-        CitizenshipApplication.sentByApplicant.computeIfAbsent(cApplication.getApplicant(), v -> new ArrayList<>()).add(cApplication);
+        CitizenshipApplication.getSentByApplicant().computeIfAbsent(cApplication.getApplicant(), v -> new ArrayList<>()).add(cApplication);
         // add to sentByToCountry
-        CitizenshipApplication.sentByToCountry.computeIfAbsent(cApplication.getToCountry(), v -> new ArrayList<>()).add(cApplication);
+        CitizenshipApplication.getSentByToCountry().computeIfAbsent(cApplication.getToCountry(), v -> new ArrayList<>()).add(cApplication);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Sent open CitizenshipApplication");
@@ -121,15 +121,15 @@ public class CitizenshipApplicationService {
             return;
 
         // remove from sentByUUID
-        CitizenshipApplication.sentByUUID.remove(cApplication.getUUID());
+        CitizenshipApplication.getSentByUUID().remove(cApplication.getUUID());
         // remove from sentByApplicant
-        CitizenshipApplication.sentByApplicant.computeIfPresent(cApplication.getApplicant(),
+        CitizenshipApplication.getSentByApplicant().computeIfPresent(cApplication.getApplicant(),
                 (k, v) -> { v.remove(cApplication); return v.isEmpty() ? null : v; });
         // remove from sentByToCountry
-        CitizenshipApplication.sentByToCountry.computeIfPresent(cApplication.getToCountry(),
+        CitizenshipApplication.getSentByToCountry().computeIfPresent(cApplication.getToCountry(),
                 (k, v) -> { v.remove(cApplication); return v.isEmpty() ? null : v; });
 
-        CitizenshipApplication.delete(cApplication, CitizenshipApplication.sentAll, CitizenshipApplication.DISPLAY_NAME);
+        CitizenshipApplication.delete(cApplication, CitizenshipApplication.getAllSent(), CitizenshipApplication.DISPLAY_NAME);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Deleted sent CitizenshipApplication");
@@ -188,7 +188,7 @@ public class CitizenshipApplicationService {
         if (playerProfile == null)
             return;
 
-        List<CitizenshipApplication> cApplicationsSent = CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID());
+        List<CitizenshipApplication> cApplicationsSent = CitizenshipApplication.getSentByApplicant().get(playerProfile.getUUID());
         if (cApplicationsSent == null)
             return;
         for (CitizenshipApplication cApplication : new ArrayList<>(cApplicationsSent)) {
@@ -201,7 +201,7 @@ public class CitizenshipApplicationService {
         if (country == null)
             return;
 
-        List<CitizenshipApplication> cApplicationsReceived = CitizenshipApplication.sentByToCountry.get(country.getUUID());
+        List<CitizenshipApplication> cApplicationsReceived = CitizenshipApplication.getSentByToCountry().get(country.getUUID());
         if (cApplicationsReceived == null)
             return;
         for (CitizenshipApplication cApplication : new ArrayList<>(cApplicationsReceived)) {

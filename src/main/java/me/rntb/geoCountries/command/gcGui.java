@@ -20,7 +20,7 @@ public class gcGui extends GeoCommand {
         player.closeInventory(); // close any inventory already open
 
         // open base menu page
-        PlayerMetadata.previousPage.put(player.getUniqueId(), GeoCommand.baseCommand.getCommandString());
-        MenuPage.openMenuPage(GeoCommand.baseCommand.getMenuButtons(player), GeoCommand.baseCommand, player);
+        PlayerMetadata.previousPage.put(player.getUniqueId(), GeoCommand.getBaseCommand().getCommandString());
+        MenuPage.openMenuPage(GeoCommand.getBaseCommand().getMenuButtons(player), GeoCommand.getBaseCommand(), player);
     }
 }

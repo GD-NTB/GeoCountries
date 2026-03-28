@@ -64,10 +64,10 @@ public class gcCountryInfo extends GeoCommand {
 
         int size = country.getClaimChunksCount();
         float sizePercent;
-        if (size == 0 || ClaimChunk.all.isEmpty())
+        if (size == 0 || ClaimChunk.getAll().isEmpty())
             sizePercent = 0;
         else
-            sizePercent = ((float) size / ClaimChunk.all.size())*100;
+            sizePercent = ((float) size / ClaimChunk.getAll().size())*100;
 
         long daysAgo = TimeUtil.daysAgo(country.getTimeCreated());
 
@@ -95,7 +95,7 @@ public class gcCountryInfo extends GeoCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return args.length == 1 ? Country.allAsNames(true) : List.of();
+        return args.length == 1 ? Country.getAllAsNames(true) : List.of();
     }
 
     @Override

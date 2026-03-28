@@ -9,12 +9,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class Confirmation {
+
+    private static final List<Consumer<UUID>> onFailMethods = new ArrayList<>(); // executed when response ends without a player chat message
+    public static List<Consumer<UUID>> getOnFailMethods() {
+        return onFailMethods;
+    }
 
     private static final Map<UUID, Confirmation> pendingConfirmations = new HashMap<>();
     private static final Map<UUID, BukkitTask> timeoutTasks = new HashMap<>();
@@ -67,7 +71,11 @@ public class Confirmation {
         timeoutTasks.remove(uuid);
 
         // cancel whatever was going to use the confirmation
-        // ---
+        if (stopWaitingEvent != StopWaitingEvent.CONFIRMED && !onFailMethods.isEmpty()) {
+            for (Consumer<UUID> method : onFailMethods) {
+                method.accept(uuid);
+            }
+        }
 
         // send appropriate message
         Player player = Bukkit.getPlayer(uuid);

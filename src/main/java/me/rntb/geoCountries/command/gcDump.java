@@ -19,18 +19,18 @@ public class gcDump extends GeoCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         ChatUtil.sendPrefixedMessage(sender, """
-                                             %sPlayerProfile.all(%s)
+                                             %sPlayerProfile.getAll(%s)
                                              ----------
                                              CitizenshipApplication.sentByApplicant(%s)
                                              ----------
-                                             Country.all(%s)
+                                             Country.getAll(%s)
                                              ----------
                                              Player.isMenuOpen(%s)
                                              """
                                              .formatted(ChatUtil.newlineIfPrefixIsEmpty(),
-                                                        PlayerProfile.all.size(),
-                                                        CitizenshipApplication.sentByApplicant.size(),
-                                                        Country.all.size(),
+                                                        PlayerProfile.getAll().size(),
+                                                        CitizenshipApplication.getSentByApplicant().size(),
+                                                        Country.getAll().size(),
                                                         PlayerMetadata.isMenuOpen.get(UuidUtil.getUUIDOfCommandSender(sender))));
     }
 }

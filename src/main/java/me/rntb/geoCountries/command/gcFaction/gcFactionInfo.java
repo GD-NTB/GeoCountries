@@ -54,10 +54,10 @@ public class gcFactionInfo extends GeoCommand {
 
         int totalSize = faction.getTotalClaimChunks();
         float totalSizePercent;
-        if (totalSize == 0 || ClaimChunk.all.isEmpty())
+        if (totalSize == 0 || ClaimChunk.getAll().isEmpty())
             totalSizePercent = 0;
         else
-            totalSizePercent = ((float) totalSize / ClaimChunk.all.size())*100;
+            totalSizePercent = ((float) totalSize / ClaimChunk.getAll().size())*100;
 
         long daysAgo = TimeUtil.daysAgo(faction.getTimeCreated());
         String message = ChatUtil.newlineIfPrefixIsEmpty() +
@@ -81,7 +81,7 @@ public class gcFactionInfo extends GeoCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return args.length == 1 ? Faction.allAsNames(true) : List.of();
+        return args.length == 1 ? Faction.getAllAsNames(true) : List.of();
     }
 
     @Override

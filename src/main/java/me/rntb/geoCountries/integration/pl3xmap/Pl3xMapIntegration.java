@@ -58,7 +58,7 @@ public class Pl3xMapIntegration {
     private static void clearAndDrawAll() {
         clearAll();
 
-        for (Country country : Country.all) {
+        for (Country country : Country.getAll()) {
             initCountry(country);
             drawCountry(country);
         }
@@ -111,10 +111,10 @@ public class Pl3xMapIntegration {
 
         int size = country.getClaimChunksCount();
         float sizePercent;
-        if (size == 0 || ClaimChunk.all.isEmpty())
+        if (size == 0 || ClaimChunk.getAll().isEmpty())
             sizePercent = 0;
         else
-            sizePercent = ((float) size / ClaimChunk.all.size())*100;
+            sizePercent = ((float) size / ClaimChunk.getAll().size())*100;
 
         return Options.builder()
                       .tooltipContent("""

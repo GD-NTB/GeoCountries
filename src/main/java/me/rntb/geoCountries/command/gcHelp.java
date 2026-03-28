@@ -35,7 +35,7 @@ public class gcHelp extends GeoCommand {
         String[] commandNameArgs = pageNumberAndArgs.args();
 
         // get command name
-        String fullCommandName = GeoCommand.baseCommand.getCommandString();
+        String fullCommandName = GeoCommand.getBaseCommand().getCommandString();
         String commandName = null;
         // if command specified, append it to fullCommandName
         if (commandNameArgs != null) {
@@ -80,7 +80,7 @@ public class gcHelp extends GeoCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        String commandName = gc.baseCommand.getCommandString();
+        String commandName = gc.getBaseCommand().getCommandString();
         if (args.length != 0)
             commandName += " " + String.join(" ", args);
 

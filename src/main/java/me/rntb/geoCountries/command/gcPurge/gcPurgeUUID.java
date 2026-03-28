@@ -26,7 +26,7 @@ public class gcPurgeUUID extends GeoCommand {
 
         String uuidString = args[0];
 
-        PlayerProfile playerProfile = PlayerProfile.byUUIDString(uuidString);
+        PlayerProfile playerProfile = PlayerProfile.getByUUIDString(uuidString);
         if (playerProfile == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cUUID §f" + uuidString + "§c could not be found!");
             return;
@@ -41,7 +41,7 @@ public class gcPurgeUUID extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        PlayerProfile playerProfile = PlayerProfile.byUUIDString(args[0]);
+        PlayerProfile playerProfile = PlayerProfile.getByUUIDString(args[0]);
         assert playerProfile != null;
 
         playerProfile.deregister();
@@ -51,6 +51,6 @@ public class gcPurgeUUID extends GeoCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return args.length == 1 ? PlayerProfile.allAsUUIDStrings() : List.of();
+        return args.length == 1 ? PlayerProfile.getAllAsUUIDStrings() : List.of();
     }
 }

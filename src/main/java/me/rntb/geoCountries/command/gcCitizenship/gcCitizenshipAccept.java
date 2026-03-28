@@ -51,7 +51,7 @@ public class gcCitizenshipAccept extends GeoCommand {
         }
 
         // get citizenship applications sent by other player
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(otherPlayer.getUUID());
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByApplicant().get(otherPlayer.getUUID());
         if (cApplications == null || cApplications.isEmpty()) {
             ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + otherPlayerName + "§c has not sent a citizen application to your country!");
             return;

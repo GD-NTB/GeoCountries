@@ -23,8 +23,12 @@ public class Country extends DataCollection {
     public static final String DISPLAY_NAME = "Country";
 
     // list of all countries existing
-    public static ArrayList<Country> all = null;
-    public static List<String> allAsNames(boolean alphabetical) {
+    private static ArrayList<Country> all = null;
+    public static ArrayList<Country> getAll() {
+        return all;
+    }
+
+    public static List<String> getAllAsNames(boolean alphabetical) {
         Stream<String> countries = byName.keySet().stream();
         if (!alphabetical)
             return countries.toList();
@@ -35,6 +39,7 @@ public class Country extends DataCollection {
     public static Country get(UUID uuid) {
         return byUUID.get(uuid);
     }
+
     private static final Map<String, Country> byName = new HashMap<>();
     public static Country get(String name) {
         return byName.get(name);
@@ -274,7 +279,7 @@ public class Country extends DataCollection {
     }
 
     public List<String> getReceivedCitizenshipApplicationsAsUsernames() {
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(uuid);
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByToCountry().get(uuid);
         if (cApplications == null)
             return List.of();
         return cApplications.stream()

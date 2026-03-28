@@ -52,14 +52,14 @@ public class gcCitizenshipApply extends GeoCommand {
         }
 
         // if already has open application, escape
-        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(playerProfile.getUUID());
+        CitizenshipApplication cApplication = CitizenshipApplication.getOpenByApplicant().get(playerProfile.getUUID());
         if (cApplication != null) {
             ChatUtil.sendPrefixedMessage(sender, "§cYou're already writing a citizenship application to §f" + cApplication.getToCountryCountry().getName() + "§c!");
             ChatUtil.sendPrefixedMessage(sender, "§aCancelled the citizenship application!");
             return;
         }
 
-        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID());
+        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByApplicant().get(playerProfile.getUUID());
         if (cApplications != null) {
             // if sent too many applications, escape
             int cApplicationsCount = cApplications.size();
@@ -104,7 +104,7 @@ public class gcCitizenshipApply extends GeoCommand {
     private void onResponseReason(CommandSender sender, String response) {
         String responseClean = response.trim();
 
-        CitizenshipApplication cApplication = CitizenshipApplication.openByApplicant.get(((Player) sender).getUniqueId());
+        CitizenshipApplication cApplication = CitizenshipApplication.getOpenByApplicant().get(((Player) sender).getUniqueId());
 
         // validate response
         String validation = ValidationUtil.validateResponse(responseClean);
@@ -123,7 +123,7 @@ public class gcCitizenshipApply extends GeoCommand {
     @Override
     public ItemStack[] getMenuButtons(CommandSender sender) {
         List<Country> invalidCountries;
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(UuidUtil.getUUIDOfCommandSender(sender));
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByApplicant().get(UuidUtil.getUUIDOfCommandSender(sender));
         // if sent no applications, no invalid countries
         if (cApplications == null || cApplications.isEmpty())
             invalidCountries = List.of();
@@ -132,7 +132,7 @@ public class gcCitizenshipApply extends GeoCommand {
             invalidCountries = cApplications.stream()
                                             .map(CitizenshipApplication::getToCountryCountry).toList();
         // negate
-        List<Country> validCountries = Country.all.stream()
+        List<Country> validCountries = Country.getAll().stream()
                                                   .filter(c -> !invalidCountries.contains(c)).toList();
 
         return MenuPage.createSkullMenuButtons(validCountries, country -> country.getLeaderObject().getOfflinePlayer(),
@@ -143,7 +143,7 @@ public class gcCitizenshipApply extends GeoCommand {
 
     @Override
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
-        return args.length == 1 ? Country.allAsNames(true) : List.of();
+        return args.length == 1 ? Country.getAllAsNames(true) : List.of();
     }
 
     @Override
@@ -152,6 +152,6 @@ public class gcCitizenshipApply extends GeoCommand {
         if (playerProfile.hasCitizenship())
             return false;
 
-        return CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID()) == null;
+        return CitizenshipApplication.getSentByApplicant().get(playerProfile.getUUID()) == null;
     }
 }

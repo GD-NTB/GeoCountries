@@ -33,7 +33,7 @@ public class gcCitizenshipSent extends GeoCommand {
                .append(Component.text("§6========== CITIZENSHIP APPLICATIONS =========="))
                .append(Component.newline());
 
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(((Player) sender).getUniqueId());
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByApplicant().get(((Player) sender).getUniqueId());
         if (cApplications == null || cApplications.isEmpty())
             message.append(Component.text("§cYou have not sent any citizenship applications."))
                    .append(Component.newline());
@@ -65,7 +65,7 @@ public class gcCitizenshipSent extends GeoCommand {
         if (playerProfile.hasCitizenship())
             return false;
 
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID());
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByApplicant().get(playerProfile.getUUID());
         return cApplications != null && !cApplications.isEmpty();
     }
 }

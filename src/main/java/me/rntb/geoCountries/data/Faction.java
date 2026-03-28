@@ -13,12 +13,12 @@ import java.util.stream.Stream;
 
 public class Faction extends DataCollection {
 
-    public static String FILE_PATH = "data/factions";
-    public static String DISPLAY_NAME = "Faction";
+    public static final String FILE_PATH = "data/factions";
+    public static final String DISPLAY_NAME = "Faction";
 
     // list of all factions existing
     public static ArrayList<Faction> all = null;
-    public static List<String> allAsNames(boolean alphabetical) {
+    public static List<String> getAllAsNames(boolean alphabetical) {
         Stream<String> countries = byName.keySet().stream();
         if (!alphabetical)
             return countries.toList();
@@ -29,6 +29,7 @@ public class Faction extends DataCollection {
     public static Faction get(UUID uuid) {
         return byUUID.get(uuid);
     }
+
     private static final Map<String, Faction> byName = new HashMap<>();
     public static Faction get(String name) {
         return byName.get(name);

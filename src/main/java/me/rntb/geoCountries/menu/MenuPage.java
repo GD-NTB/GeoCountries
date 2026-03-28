@@ -21,7 +21,7 @@ import java.util.function.Function;
 public class MenuPage {
 
     public static Inventory createPage(ItemStack[] buttons, GeoCommand command, Player player)  {
-        boolean isBasePage = command.equals(GeoCommand.baseCommand);
+        boolean isBasePage = command.equals(GeoCommand.getBaseCommand());
         int buttonCount = buttons.length;
 
         int rows = 2 + (Math.ceilDiv(buttonCount, 7));

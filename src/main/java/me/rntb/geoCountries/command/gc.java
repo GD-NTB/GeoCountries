@@ -63,7 +63,6 @@ public class gc extends GeoCommand implements TabExecutor {
         return true;
     }
 
-    // todo: refactor this too?
     private void onCommandArgs(CommandSender sender, String[] args) {
         // find childCommand
         String childCommandName = args[0];
@@ -74,12 +73,10 @@ public class gc extends GeoCommand implements TabExecutor {
             return;
         }
 
-        // todo: make confirmation failure thing just like Response
         // if we are waiting for sender to confirm a command, but they sent a different command, cancel waiting
         UUID senderUuid = UuidUtil.getUUIDOfCommandSender(sender);
-        if (Confirmation.isWaiting(senderUuid))
-            if (!(args.length == 1 && (args[0].equals("confirm") || args[0].equals("cancel"))))
-                Confirmation.stopWaiting(senderUuid, Confirmation.StopWaitingEvent.CANCELLED, true);
+        if (Confirmation.isWaiting(senderUuid) && (!(args.length == 1 && (args[0].equals("confirm") || args[0].equals("cancel")))))
+            Confirmation.stopWaiting(senderUuid, Confirmation.StopWaitingEvent.CANCELLED, true);
 
         // get subargs (the [...] in /gc [childCommand] [...])
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);

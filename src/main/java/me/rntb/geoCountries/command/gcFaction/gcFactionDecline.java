@@ -46,7 +46,7 @@ public class gcFactionDecline extends GeoCommand {
         }
 
         // get faction invites sent by other player
-        List<FactionInvite> fInvites = FactionInvite.byToCountry.get(country.getUUID());
+        List<FactionInvite> fInvites = FactionInvite.getByToCountry().get(country.getUUID());
         if (fInvites == null || fInvites.isEmpty()) {
             ChatUtil.sendPrefixedMessage(sender, "§cFaction §3" + factionName + "§c has not sent a faction invite to your country!");
             return;
@@ -76,7 +76,7 @@ public class gcFactionDecline extends GeoCommand {
         if (playerProfile.getPosition() != Position.LEADER)
             return List.of();
 
-        List<FactionInvite> fInvites = FactionInvite.byToCountry.get(playerProfile.getCitizenshipObject().getUUID());
+        List<FactionInvite> fInvites = FactionInvite.getByToCountry().get(playerProfile.getCitizenshipObject().getUUID());
         if (fInvites == null)
             return List.of();
         return fInvites.stream()

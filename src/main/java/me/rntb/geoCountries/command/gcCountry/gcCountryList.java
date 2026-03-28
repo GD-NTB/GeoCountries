@@ -41,12 +41,12 @@ public class gcCountryList extends GeoCommand {
                .append(Component.text("§6========== COUNTRY LIST =========="))
                .append(Component.newline());
 
-        if (Country.all.isEmpty())
+        if (Country.getAll().isEmpty())
             message.append(Component.text("§cThere are no countries."))
                    .append(Component.newline());
         else {
             // calculate required page of Country.all
-            Pagination pagination = Pagination.paginate(Country.all, wantedPage, ENTRIES_PER_PAGE);
+            Pagination pagination = Pagination.paginate(Country.getAll(), wantedPage, ENTRIES_PER_PAGE);
             List<Country> countries = (List<Country>) pagination.content();
             pageIndex = pagination.pageIndex();
             pageCount = pagination.pageCount();

@@ -63,12 +63,12 @@ public class GeoCountries extends JavaPlugin {
         pluginManager.registerEvents(new ResponseChatListener(), this);
 
         // initialise base command
-        GeoCommand.baseCommand = new gc("gc", "gc", null);
+        GeoCommand.setBaseCommand(new gc("gc", "gc", null));
 
         // register base command
-        Objects.requireNonNull(getCommand(GeoCommand.baseCommand.getName())).setExecutor((CommandExecutor) GeoCommand.baseCommand);
+        Objects.requireNonNull(getCommand(GeoCommand.getBaseCommand().getName())).setExecutor((CommandExecutor) GeoCommand.getBaseCommand());
 
-        GeoCommand.adminPermissionGroup = "gc.group.admin";
+        GeoCommand.setAdminPermissionGroup("gc.group.admin");
 
         // initialise data collections
         DataCollectionManager.init();
@@ -80,7 +80,7 @@ public class GeoCountries extends JavaPlugin {
         IntegrationManager.init();
 
         // add response on failure methods (is this the best way to do this?)
-        Response.onFailMethods.add(CitizenshipApplicationService::onResponseFail);
+        Response.getOnFailMethods().add(CitizenshipApplicationService::onResponseFail);
 
         // done
         ChatUtil.sendPrefixedLogMessage("Plugin enabled!");

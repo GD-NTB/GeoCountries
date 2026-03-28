@@ -46,7 +46,7 @@ public class gcFactionReceived extends GeoCommand {
                .append(Component.text("§6========== FACTION INVITES =========="))
                .append(Component.newline());
 
-        List<FactionInvite> fInvites = FactionInvite.byToCountry.get(country.getUUID());
+        List<FactionInvite> fInvites = FactionInvite.getByToCountry().get(country.getUUID());
         if (fInvites == null || fInvites.isEmpty()) {
             message.append(Component.text("§cYou have not received any faction invites."))
                    .append(Component.newline());
@@ -92,7 +92,7 @@ public class gcFactionReceived extends GeoCommand {
         if (playerProfile.getPosition() != Position.LEADER)
             return List.of();
 
-        List<FactionInvite> fInvites = FactionInvite.byToCountry.get(playerProfile.getCitizenshipObject().getUUID());
+        List<FactionInvite> fInvites = FactionInvite.getByToCountry().get(playerProfile.getCitizenshipObject().getUUID());
         if (fInvites == null || fInvites.isEmpty())
             return List.of();
 
@@ -110,7 +110,7 @@ public class gcFactionReceived extends GeoCommand {
         if (country == null)
             return false;
 
-        List<FactionInvite> fInvites = FactionInvite.byToCountry.get(country.getUUID());
+        List<FactionInvite> fInvites = FactionInvite.getByToCountry().get(country.getUUID());
         return fInvites != null && !fInvites.isEmpty();
     }
 }

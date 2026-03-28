@@ -23,12 +23,16 @@ public class PlayerProfile extends DataCollection {
     public static final String DISPLAY_NAME = "PlayerProfile";
 
     // list of every player to have ever joined the server
-    public static ArrayList<PlayerProfile> all = null;
-    public static List<String> allAsUUIDStrings() {
+    private static ArrayList<PlayerProfile> all = null;
+    public static ArrayList<PlayerProfile> getAll() {
+        return all;
+    }
+
+    public static List<String> getAllAsUUIDStrings() {
         return byUUID.keySet().stream()
                               .map(UUID::toString).toList();
     }
-    public static List<String> allAsUsernames(boolean alphabetical) {
+    public static List<String> getAllAsUsernames(boolean alphabetical) {
         Stream<String> usernames = byUsername.keySet().stream();
         if (alphabetical) return usernames.sorted().toList();
         return usernames.toList();
@@ -38,12 +42,13 @@ public class PlayerProfile extends DataCollection {
     public static PlayerProfile get(UUID uuid) {
         return byUUID.get(uuid);
     }
+
     private static final Map<String, PlayerProfile> byUsername = new HashMap<>();
     public static PlayerProfile get(String username) {
         return byUsername.get(username);
     }
 
-    public static PlayerProfile byUUIDString(String uuid) {
+    public static PlayerProfile getByUUIDString(String uuid) {
         try {
             return byUUID.get(UUID.fromString(uuid));
         } catch (IllegalArgumentException e) {
@@ -235,7 +240,7 @@ public class PlayerProfile extends DataCollection {
     }
 
     public List<String> getSentCitizenshipApplicationsAsNames() {
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(uuid);
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByApplicant().get(uuid);
         if (cApplications == null)
             return List.of();
         return cApplications.stream()

@@ -65,7 +65,7 @@ public class gcFactionInvite extends GeoCommand {
             return;
         }
 
-        ArrayList<FactionInvite> fInvites = FactionInvite.byFromFaction.get(faction.getUUID());
+        ArrayList<FactionInvite> fInvites = FactionInvite.getByFromFaction().get(faction.getUUID());
         if (fInvites != null) {
             // if sent too many applications, escape
             int cApplicationsCount = fInvites.size();
@@ -98,11 +98,11 @@ public class gcFactionInvite extends GeoCommand {
         if (faction == null)
             return null;
 
-        List<Country> countries = Country.all.stream()
-                                             .filter((c) -> !c.hasFaction() &&
-                                                            !FactionInviteService.countryHasFactionInviteFromFaction(faction, c) &&
-                                                            !faction.getMembers().contains(c.getUUID()))
-                                             .toList();
+        List<Country> countries = Country.getAll().stream()
+                                                  .filter((c) -> !c.hasFaction() &&
+                                                                 !FactionInviteService.countryHasFactionInviteFromFaction(faction, c) &&
+                                                                 !faction.getMembers().contains(c.getUUID()))
+                                                  .toList();
 
         return MenuPage.createSkullMenuButtons(countries, country -> country.getLeaderObject().getOfflinePlayer(),
                                                           country -> "§a" + country.getName(),
@@ -120,12 +120,12 @@ public class gcFactionInvite extends GeoCommand {
         if (faction == null)
             return List.of();
 
-        return Country.all.stream()
-                          .filter((c) -> !c.hasFaction() &&
-                                         !FactionInviteService.countryHasFactionInviteFromFaction(faction, c) &&
-                                         !faction.getMembers().contains(c.getUUID()))
-                          .map(Country::getName)
-                          .toList();
+        return Country.getAll().stream()
+                               .filter((c) -> !c.hasFaction() &&
+                                              !FactionInviteService.countryHasFactionInviteFromFaction(faction, c) &&
+                                              !faction.getMembers().contains(c.getUUID()))
+                               .map(Country::getName)
+                               .toList();
     }
 
     @Override

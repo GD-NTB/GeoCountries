@@ -15,7 +15,10 @@ import java.util.function.Consumer;
 
 public class Response {
 
-    public static List<Consumer<UUID>> onFailMethods = new ArrayList<>(); // executed when response ends without a player chat message
+    private static final List<Consumer<UUID>> onFailMethods = new ArrayList<>(); // executed when response ends without a player chat message
+    public static List<Consumer<UUID>> getOnFailMethods() {
+        return onFailMethods;
+    }
 
     private static final Map<UUID, Response> pendingResponses = new HashMap<>();
     private static final Map<UUID, BukkitTask> timeoutTasks = new HashMap<>();
@@ -82,7 +85,7 @@ public class Response {
         }
 
         // cancel whatever was going to use the response
-        if (stopWaitingEvent != StopWaitingEvent.PLAYER_SENT_MESSAGE && onFailMethods != null && !onFailMethods.isEmpty()) {
+        if (stopWaitingEvent != StopWaitingEvent.PLAYER_SENT_MESSAGE && !onFailMethods.isEmpty()) {
             for (Consumer<UUID> method : onFailMethods) {
                 method.accept(uuid);
             }

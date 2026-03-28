@@ -50,7 +50,7 @@ public class gcFactionSent extends GeoCommand {
                .append(Component.text("§6========== FACTION INVITES =========="))
                .append(Component.newline());
 
-        List<FactionInvite> fInvites = FactionInvite.byFromFaction.get(faction.getUUID());
+        List<FactionInvite> fInvites = FactionInvite.getByFromFaction().get(faction.getUUID());
         if (fInvites == null || fInvites.isEmpty()) {
             message.append(Component.text("§cYou have not sent any faction invites."))
                    .append(Component.newline());
@@ -87,7 +87,7 @@ public class gcFactionSent extends GeoCommand {
         if (factionUUID == null)
             return List.of();
 
-        List<FactionInvite> fInvitesSent = FactionInvite.byFromFaction.get(factionUUID);
+        List<FactionInvite> fInvitesSent = FactionInvite.getByFromFaction().get(factionUUID);
         if (fInvitesSent == null)
             return List.of();
 

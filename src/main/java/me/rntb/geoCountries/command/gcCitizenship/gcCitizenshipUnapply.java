@@ -40,7 +40,7 @@ public class gcCitizenshipUnapply extends GeoCommand {
             return;
         }
 
-        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID());
+        ArrayList<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByApplicant().get(playerProfile.getUUID());
 
         // if doesnt have any pending applications, escape
         if (cApplications == null) {
@@ -65,7 +65,7 @@ public class gcCitizenshipUnapply extends GeoCommand {
 
     @Override
     public ItemStack[] getMenuButtons(CommandSender sender) {
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(UuidUtil.getUUIDOfCommandSender(sender));
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByApplicant().get(UuidUtil.getUUIDOfCommandSender(sender));
 
         List<Country> validCountries = cApplications.stream()
                                                     .map(CitizenshipApplication::getToCountryCountry).toList();
@@ -94,7 +94,7 @@ public class gcCitizenshipUnapply extends GeoCommand {
         if (playerProfile.hasCitizenship())
             return false;
 
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(playerProfile.getUUID());
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByApplicant().get(playerProfile.getUUID());
         return cApplications != null && !cApplications.isEmpty();
     }
 }

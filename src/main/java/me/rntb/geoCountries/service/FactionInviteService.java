@@ -19,14 +19,14 @@ public class FactionInviteService {
         if (fInvite == null)
             return;
 
-        FactionInvite.add(fInvite, FactionInvite.all, FactionInvite.DISPLAY_NAME);
+        FactionInvite.add(fInvite, FactionInvite.getAll(), FactionInvite.DISPLAY_NAME);
 
         // add to byUUID
-        FactionInvite.byUUID.put(fInvite.getUUID(), fInvite);
+        FactionInvite.getByUUID().put(fInvite.getUUID(), fInvite);
         // add to byFromFaction
-        FactionInvite.byFromFaction.computeIfAbsent(fInvite.getFromFaction(), v -> new ArrayList<>()).add(fInvite);
+        FactionInvite.getByFromFaction().computeIfAbsent(fInvite.getFromFaction(), v -> new ArrayList<>()).add(fInvite);
         // add to byToCountry
-        FactionInvite.byToCountry.computeIfAbsent(fInvite.getToCountry(), v -> new ArrayList<>()).add(fInvite);
+        FactionInvite.getByToCountry().computeIfAbsent(fInvite.getToCountry(), v -> new ArrayList<>()).add(fInvite);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Sent FactionInvite");
@@ -71,15 +71,15 @@ public class FactionInviteService {
             return;
 
         // remove from byUUID
-        FactionInvite.byUUID.remove(fInvite.getUUID());
+        FactionInvite.getByUUID().remove(fInvite.getUUID());
         // remove from byFromFaction
-        FactionInvite.byFromFaction.computeIfPresent(fInvite.getFromFaction(),
+        FactionInvite.getByFromFaction().computeIfPresent(fInvite.getFromFaction(),
                 (k, v) -> { v.remove(fInvite); return v.isEmpty() ? null : v; });
         // remove from byToCountry
-        FactionInvite.byToCountry.computeIfPresent(fInvite.getToCountry(),
+        FactionInvite.getByToCountry().computeIfPresent(fInvite.getToCountry(),
                 (k, v) -> { v.remove(fInvite); return v.isEmpty() ? null : v; });
 
-        FactionInvite.delete(fInvite, FactionInvite.all, FactionInvite.DISPLAY_NAME);
+        FactionInvite.delete(fInvite, FactionInvite.getAll(), FactionInvite.DISPLAY_NAME);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Unsent sent FactionInvite");
@@ -142,7 +142,7 @@ public class FactionInviteService {
         if (byFaction == null)
             return;
 
-        List<FactionInvite> fInvitesSent = FactionInvite.byFromFaction.get(byFaction.getUUID());
+        List<FactionInvite> fInvitesSent = FactionInvite.getByFromFaction().get(byFaction.getUUID());
         if (fInvitesSent == null)
             return;
         for (FactionInvite fInvite : new ArrayList<>(fInvitesSent)) {
@@ -155,7 +155,7 @@ public class FactionInviteService {
         if (toCountry == null)
             return;
 
-        List<FactionInvite> fInvitesSent = FactionInvite.byToCountry.get(toCountry.getUUID());
+        List<FactionInvite> fInvitesSent = FactionInvite.getByToCountry().get(toCountry.getUUID());
         if (fInvitesSent == null)
             return;
         for (FactionInvite fInvite : new ArrayList<>(fInvitesSent)) {
@@ -167,7 +167,7 @@ public class FactionInviteService {
         if (fromFaction == null || toCountry == null)
             return false;
 
-        List<FactionInvite> fInvites = FactionInvite.byFromFaction.get(fromFaction.getUUID());
+        List<FactionInvite> fInvites = FactionInvite.getByFromFaction().get(fromFaction.getUUID());
         if (fInvites == null || fInvites.isEmpty())
             return false;
 

@@ -16,8 +16,21 @@ import java.util.stream.Stream;
 
 public class GeoCommand {
 
-    public static GeoCommand baseCommand;
-    public static String adminPermissionGroup;
+    private static GeoCommand baseCommand;
+    public static GeoCommand getBaseCommand() {
+        return baseCommand;
+    }
+    public static void setBaseCommand(GeoCommand value) {
+        GeoCommand.baseCommand = value;
+    }
+
+    private static String adminPermissionGroup;
+    public static String getAdminPermissionGroup() {
+        return adminPermissionGroup;
+    }
+    public static void setAdminPermissionGroup(String value) {
+        GeoCommand.adminPermissionGroup = value;
+    }
 
     public static Pair<GeoCommand, String[]> get(String input) {
         if (input == null || input.isEmpty())
@@ -138,7 +151,6 @@ public class GeoCommand {
             parentCommand.childMap.put(alias, this);
     }
 
-    // todo: rename constructor arguments in all command files
     public GeoCommand(String name, String permission, ItemStack menuButtonItem) {
         this.name = name;
         this.permission = permission;

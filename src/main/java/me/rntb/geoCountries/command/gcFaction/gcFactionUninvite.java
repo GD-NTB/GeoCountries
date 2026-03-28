@@ -60,7 +60,7 @@ public class gcFactionUninvite extends GeoCommand {
             return;
         }
 
-        ArrayList<FactionInvite> fInvites = FactionInvite.byFromFaction.get(playerProfile.getCitizenshipObject().getFaction());
+        ArrayList<FactionInvite> fInvites = FactionInvite.getByFromFaction().get(playerProfile.getCitizenshipObject().getFaction());
 
         // if hasnt sent any pending faction invites, escape
         if (fInvites == null) {
@@ -95,9 +95,9 @@ public class gcFactionUninvite extends GeoCommand {
             return null;
 
         List<Country> validCountries;
-        List<FactionInvite> fInvites = FactionInvite.byFromFaction.get(faction.getUUID());
+        List<FactionInvite> fInvites = FactionInvite.getByFromFaction().get(faction.getUUID());
         if (fInvites == null || fInvites.isEmpty())
-            validCountries = Country.all;
+            validCountries = Country.getAll();
         else
             validCountries = fInvites.stream()
                                      .map(FactionInvite::getToCountryObject).toList();
@@ -120,10 +120,10 @@ public class gcFactionUninvite extends GeoCommand {
         if (faction == null)
             return List.of();
 
-        return Country.all.stream()
-                          .filter(includeCountryPredicate(faction))
-                          .map(Country::getName)
-                          .toList();
+        return Country.getAll().stream()
+                               .filter(includeCountryPredicate(faction))
+                               .map(Country::getName)
+                               .toList();
     }
 
     @Override
@@ -134,7 +134,7 @@ public class gcFactionUninvite extends GeoCommand {
 
         Faction faction = playerProfile.getFactionObject();
 
-        List<FactionInvite> fInvites = FactionInvite.byFromFaction.get(faction.getUUID());
+        List<FactionInvite> fInvites = FactionInvite.getByFromFaction().get(faction.getUUID());
         return fInvites != null && !fInvites.isEmpty();
     }
 }

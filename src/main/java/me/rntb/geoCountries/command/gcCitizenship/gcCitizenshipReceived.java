@@ -55,7 +55,7 @@ public class gcCitizenshipReceived extends GeoCommand {
             }
 
             // get citizenship applications sent by other player
-            List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByApplicant.get(otherPlayer.getUUID());
+            List<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByApplicant().get(otherPlayer.getUUID());
             if (cApplications == null || cApplications.isEmpty()) {
                 ChatUtil.sendPrefixedMessage(sender, "§cPlayer §f" + otherPlayerName + "§c has not sent a citizen application to your country!");
                 return;
@@ -83,7 +83,7 @@ public class gcCitizenshipReceived extends GeoCommand {
                .append(Component.text("§6========== CITIZENSHIP APPLICATIONS =========="))
                .append(Component.newline());
 
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(senderProfile.getCitizenship());
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByToCountry().get(senderProfile.getCitizenship());
         if (cApplications == null || cApplications.isEmpty()) {
             message.append(Component.text("§cYou have not received any citizenship applications."))
                    .append(Component.newline());
@@ -185,7 +185,7 @@ public class gcCitizenshipReceived extends GeoCommand {
         if (!playerProfile.hasCitizenship() || playerProfile.getPosition() != Position.LEADER)
             return false;
 
-        List<CitizenshipApplication> cApplications = CitizenshipApplication.sentByToCountry.get(playerProfile.getCitizenship());
+        List<CitizenshipApplication> cApplications = CitizenshipApplication.getSentByToCountry().get(playerProfile.getCitizenship());
         return cApplications != null && !cApplications.isEmpty();
     }
 }

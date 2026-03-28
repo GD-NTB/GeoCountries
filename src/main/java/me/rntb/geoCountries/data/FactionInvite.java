@@ -18,10 +18,25 @@ public class FactionInvite extends DataCollection {
     public static final String DISPLAY_NAME = "FactionInvite";
 
     // list of all pending faction invites sent
-    public static ArrayList<FactionInvite> all = null;
-    public static final Map<UUID, FactionInvite> byUUID = new HashMap<>();
-    public static final Map<UUID, ArrayList<FactionInvite>> byFromFaction = new HashMap<>();
-    public static final Map<UUID, ArrayList<FactionInvite>> byToCountry = new HashMap<>();
+    private static ArrayList<FactionInvite> all = null;
+    public static ArrayList<FactionInvite> getAll() {
+        return all;
+    }
+
+    private static final Map<UUID, FactionInvite> byUUID = new HashMap<>();
+    public static Map<UUID, FactionInvite> getByUUID() {
+        return byUUID;
+    }
+
+    private static final Map<UUID, ArrayList<FactionInvite>> byFromFaction = new HashMap<>();
+    public static Map<UUID, ArrayList<FactionInvite>> getByFromFaction() {
+        return byFromFaction;
+    }
+
+    private static final Map<UUID, ArrayList<FactionInvite>> byToCountry = new HashMap<>();
+    public static Map<UUID, ArrayList<FactionInvite>> getByToCountry() {
+        return byToCountry;
+    }
 
     public static void init() {
         all = readFromFile(FactionInvite.FILE_PATH, DISPLAY_NAME, new TypeToken<ArrayList<FactionInvite>>() { }.getType());

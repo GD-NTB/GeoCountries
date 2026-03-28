@@ -17,11 +17,14 @@ import java.util.*;
 
 public class ClaimChunk extends DataCollection {
 
-    public static String FILE_PATH = "data/claimchunks";
-    public static String DISPLAY_NAME = "ClaimChunk";
+    public static final String FILE_PATH = "data/claimchunks";
+    public static final String DISPLAY_NAME = "ClaimChunk";
 
     // list of all claimchunks existing
-    public static ArrayList<ClaimChunk> all = null;
+    private static ArrayList<ClaimChunk> all = null;
+    public static ArrayList<ClaimChunk> getAll() {
+        return all;
+    }
 
     private static final Map<Long, ClaimChunk> byKey = new HashMap<>();
     public static ClaimChunk get(Long key) {
