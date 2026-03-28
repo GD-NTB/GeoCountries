@@ -18,7 +18,7 @@ public class gcFactionDecline extends GeoCommand {
 
     public gcFactionDecline(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Declines a player's invite to their faction.";
+        setHelpString("Declines a player's invite to their faction.");
     }
 
     @Override

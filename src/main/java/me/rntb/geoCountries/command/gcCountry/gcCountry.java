@@ -10,7 +10,7 @@ public class gcCountry extends GeoCommand {
 
     public gcCountry(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Manages and views info about countries.";
+        setHelpString("Manages and views info about countries.");
         addChild(new gcCountryCreate("create", "gc.country.create", ItemStack.of(Material.NETHER_STAR)));
         addChild(new gcCountryRename("rename", "gc.country.rename", ItemStack.of(Material.NAME_TAG)));
         addChild(new gcCountryCitizens("citizens", "gc.country.citizens", ItemStack.of(Material.PLAYER_HEAD)));
@@ -26,7 +26,7 @@ public class gcCountry extends GeoCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            childLookup.get("info").onCommandEntered(sender, args);
+            getChild("info").onCommandEntered(sender, args);
             return;
         }
         doChildCommand(sender, args);

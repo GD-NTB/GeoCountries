@@ -19,7 +19,7 @@ public class gcCitizenshipUnapply extends GeoCommand {
 
     public gcCitizenshipUnapply(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Unsends a citizenship application that you previously sent.";
+        setHelpString("Unsends a citizenship application that you previously sent.");
     }
 
     @Override

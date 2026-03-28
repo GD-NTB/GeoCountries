@@ -16,7 +16,7 @@ public class gcFactionRename extends GeoCommand {
 
     public gcFactionRename(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Renames your faction.";
+        setHelpString("Renames your faction.");
     }
 
     @Override

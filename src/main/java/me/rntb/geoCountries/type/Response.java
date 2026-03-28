@@ -94,14 +94,55 @@ public class Response {
 
     // ---
 
-    // todo: getters and setters :(
-    public BiConsumer<CommandSender, String> onSuccessMethod; // on response method, String=chat message
-    public CommandSender sender; // sender argument for method
-    public long timeoutAfterSeconds = 30;
-    public String startWaitingMessage;
-    public String playerSentMessageMessage;
-    public String cancelMessage;
-    public String timeoutMessage;
+    private final BiConsumer<CommandSender, String> onSuccessMethod; // on response method, String=chat message
+    public  BiConsumer<CommandSender, String> getOnSuccessMethod() {
+        return onSuccessMethod;
+    }
+
+    private final CommandSender sender; // sender argument for method
+    public CommandSender getSender() {
+        return sender;
+    }
+
+    private long timeoutAfterSeconds = 30;
+    public long getTimeoutAfterSeconds() {
+        return timeoutAfterSeconds;
+    }
+    public void setTimeoutAfterSeconds(long value) {
+        timeoutAfterSeconds = value;
+    }
+
+    private String startWaitingMessage;
+    public String getStartWaitingMessage() {
+        return startWaitingMessage;
+    }
+    public void setStartWaitingMessage(String value) {
+        startWaitingMessage = value;
+    }
+
+    private String playerSentMessageMessage;
+    public String getPlayerSentMessageMessage() {
+        return playerSentMessageMessage;
+    }
+    public void setPlayerSentMessageMessage(String value) {
+        playerSentMessageMessage = value;
+    }
+
+    private String cancelMessage;
+    public String getCancelMessage() {
+        return cancelMessage;
+    }
+    public void setCancelMessage(String value) {
+        cancelMessage = value;
+    }
+
+    private String timeoutMessage;
+    public String getTimeoutMessage() {
+        return timeoutMessage;
+    }
+    public void setTimeoutMessage(String value) {
+        timeoutMessage = value;
+    }
 
     public Response(BiConsumer<CommandSender, String> onSuccessMethod, CommandSender sender) {
         this.onSuccessMethod = onSuccessMethod;

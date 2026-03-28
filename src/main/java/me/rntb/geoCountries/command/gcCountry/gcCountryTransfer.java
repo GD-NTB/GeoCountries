@@ -19,7 +19,7 @@ public class gcCountryTransfer extends GeoCommand {
 
     public gcCountryTransfer(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Transfers the leadership of your country to a citizen.";
+        setHelpString("Transfers the leadership of your country to a citizen.");
     }
 
     @Override

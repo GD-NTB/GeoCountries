@@ -55,7 +55,7 @@ public class MenuPage {
                             inventory.setItem(flatIndex, createButton(ItemStack.of(Material.BARRIER), "§cClose", null, "GUI_CLOSE", false));
                         // set back button
                         else
-                            inventory.setItem(flatIndex, createButton(ItemStack.of(Material.ARROW), "§fGo Back", null, command.parentCommand.getCommandString(), false));
+                            inventory.setItem(flatIndex, createButton(ItemStack.of(Material.ARROW), "§fGo Back", null, command.getParentCommand().getCommandString(), false));
                         continue;
                     }
 

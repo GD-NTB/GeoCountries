@@ -13,7 +13,7 @@ public class gcPurgeFaction extends GeoCommand {
 
     public gcPurgeFaction(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Purges all Faction data collections.";
+        setHelpString("Purges all Faction data collections.");
     }
 
     @Override

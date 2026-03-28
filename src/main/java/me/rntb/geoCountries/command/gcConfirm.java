@@ -12,7 +12,7 @@ public class gcConfirm extends GeoCommand {
 
     public gcConfirm(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Confirms a pending command/action.";
+        setHelpString("Confirms a pending command/action.");
     }
 
     @Override
@@ -27,7 +27,7 @@ public class gcConfirm extends GeoCommand {
 
         // execute
         Confirmation confirmation = Confirmation.get(uuid);
-        confirmation.function.accept(confirmation.sender, confirmation.args);
+        confirmation.getFunction().accept(confirmation.getSender(), confirmation.getArgs());
 
         // remove sender from waiting list
         Confirmation.stopWaiting(uuid, Confirmation.StopWaitingEvent.CONFIRMED, false);

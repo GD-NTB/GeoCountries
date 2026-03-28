@@ -23,7 +23,7 @@ public class gcCitizenshipApply extends GeoCommand {
 
     public gcCitizenshipApply(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Applies for citizenship to a country.";
+        setHelpString("Applies for citizenship to a country.");
     }
 
     @Override

@@ -16,7 +16,7 @@ public class gcAdminSetPlayerCountry extends GeoCommand {
 
     public gcAdminSetPlayerCountry(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Sets a player's country";
+        setHelpString("Sets a player's country");
     }
 
     @Override

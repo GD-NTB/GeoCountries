@@ -9,7 +9,7 @@ public class gcDebugSoundTest extends GeoCommand {
 
     public gcDebugSoundTest(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Plays a sound effect.";
+        setHelpString("Plays a sound effect.");
     }
 
     @Override

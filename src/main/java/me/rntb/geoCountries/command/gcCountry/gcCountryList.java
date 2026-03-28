@@ -16,7 +16,7 @@ public class gcCountryList extends GeoCommand {
 
     public gcCountryList(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Lists all countries on the server.";
+        setHelpString("Lists all countries on the server.");
     }
 
     private static final int ENTRIES_PER_PAGE = 15;

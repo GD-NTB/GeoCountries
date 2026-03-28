@@ -15,7 +15,7 @@ public class gcFactionLeave extends GeoCommand {
 
     public gcFactionLeave(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Leaves your current faction.";
+        setHelpString("Leaves your current faction.");
     }
 
     @Override

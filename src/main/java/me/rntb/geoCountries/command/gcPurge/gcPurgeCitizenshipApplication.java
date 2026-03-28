@@ -13,7 +13,7 @@ public class gcPurgeCitizenshipApplication extends GeoCommand {
 
     public gcPurgeCitizenshipApplication(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Purges all citizenship applications in memory.";
+        setHelpString("Purges all citizenship applications in memory.");
     }
 
     @Override

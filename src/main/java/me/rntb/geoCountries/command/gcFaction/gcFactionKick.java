@@ -19,7 +19,7 @@ public class gcFactionKick extends GeoCommand {
 
     public gcFactionKick(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Kicks a member country out of your faction.";
+        setHelpString("Kicks a member country out of your faction.");
     }
 
     @Override

@@ -15,7 +15,7 @@ public class gcClaimInfo extends GeoCommand {
 
     public gcClaimInfo(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Displays info about the chunk you're standing on.";
+        setHelpString("Displays info about the chunk you're standing on.");
     }
 
     @Override

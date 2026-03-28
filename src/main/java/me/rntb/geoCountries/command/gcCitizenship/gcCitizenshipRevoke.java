@@ -19,7 +19,7 @@ public class gcCitizenshipRevoke extends GeoCommand {
 
     public gcCitizenshipRevoke(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Removes the citizenship of a player of your country.";
+        setHelpString("Removes the citizenship of a player of your country.");
     }
 
     @Override

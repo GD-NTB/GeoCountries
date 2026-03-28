@@ -19,7 +19,7 @@ public class gcFactionTransfer extends GeoCommand {
 
     public gcFactionTransfer(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Transfers the leadership of your faction to a member country.";
+        setHelpString("Transfers the leadership of your faction to a member country.");
     }
 
     @Override

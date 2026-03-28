@@ -10,7 +10,7 @@ public class gcGui extends GeoCommand {
 
     public gcGui(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Opens the GeoCountries command GUI menu.";
+        setHelpString("Opens the GeoCountries command GUI menu.");
     }
 
     @Override

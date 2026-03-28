@@ -8,7 +8,7 @@ public class gcCitizenship extends GeoCommand {
 
     public gcCitizenship(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Manages your citizenship and your citizens.";
+        setHelpString("Manages your citizenship and your citizens.");
         addChild(new gcCitizenshipApply("apply", "gc.citizenship.apply", ItemStack.of(Material.WRITABLE_BOOK)));
         addChild(new gcCitizenshipRenounce("renounce", "gc.citizenship.renounce", ItemStack.of(Material.DARK_OAK_DOOR)));
         addChild(new gcCitizenshipRevoke("revoke", "gc.citizenship.revoke", ItemStack.of(Material.GRINDSTONE)));

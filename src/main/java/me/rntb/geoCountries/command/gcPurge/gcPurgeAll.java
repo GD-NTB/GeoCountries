@@ -12,7 +12,7 @@ public class gcPurgeAll extends GeoCommand {
 
     public gcPurgeAll(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Purges all data collections.";
+        setHelpString("Purges all data collections.");
     }
 
     @Override

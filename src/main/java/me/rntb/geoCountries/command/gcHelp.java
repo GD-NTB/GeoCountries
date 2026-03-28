@@ -16,7 +16,7 @@ public class gcHelp extends GeoCommand {
 
     public gcHelp(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Lists all info about all/any commands.";
+        setHelpString("Lists all info about all/any commands.");
     }
 
     private static final int ENTRIES_PER_PAGE = 15;

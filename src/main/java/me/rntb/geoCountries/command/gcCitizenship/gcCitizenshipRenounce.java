@@ -15,7 +15,7 @@ public class gcCitizenshipRenounce extends GeoCommand {
 
     public gcCitizenshipRenounce(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Renounces (gives up) citizenship of your country.";
+        setHelpString("Renounces (gives up) citizenship of your country.");
     }
 
     @Override

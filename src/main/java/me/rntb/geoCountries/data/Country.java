@@ -59,7 +59,7 @@ public class Country extends DataCollection {
             if (country.settings == null)
                 country.settings = new LinkedHashMap<>();
             LinkedHashMap<String, String> orderedSettings = new LinkedHashMap<>();
-            settingsData.forEach((key, settingData) -> orderedSettings.put(key, country.settings.getOrDefault(key, settingData.defaultValue)));
+            settingsData.forEach((key, settingData) -> orderedSettings.put(key, country.settings.getOrDefault(key, settingData.getDefaultValue())));
             country.settings = orderedSettings;
         }
 
@@ -241,7 +241,7 @@ public class Country extends DataCollection {
     public static LinkedHashMap<String, String> buildDefaultSettings() {
         return settingsData.entrySet().stream()
                                       .collect(LinkedHashMap::new,
-                                               (m, e) -> m.put(e.getKey(), e.getValue().defaultValue),
+                                               (m, e) -> m.put(e.getKey(), e.getValue().getDefaultValue()),
                                                LinkedHashMap::putAll);
     }
 

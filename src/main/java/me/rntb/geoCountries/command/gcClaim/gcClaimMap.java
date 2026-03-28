@@ -16,7 +16,7 @@ public class gcClaimMap extends GeoCommand {
 
     public gcClaimMap(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Claims the chunk where you are standing.";
+        setHelpString("Claims the chunk where you are standing.");
     }
 
     @Override

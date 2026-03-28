@@ -66,7 +66,7 @@ public class GeoCountries extends JavaPlugin {
         GeoCommand.baseCommand = new gc("gc", "gc", null);
 
         // register base command
-        Objects.requireNonNull(getCommand(GeoCommand.baseCommand.name)).setExecutor((CommandExecutor) GeoCommand.baseCommand);
+        Objects.requireNonNull(getCommand(GeoCommand.baseCommand.getName())).setExecutor((CommandExecutor) GeoCommand.baseCommand);
 
         GeoCommand.adminPermissionGroup = "gc.group.admin";
 

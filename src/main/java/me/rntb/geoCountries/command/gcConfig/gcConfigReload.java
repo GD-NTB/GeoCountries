@@ -10,7 +10,7 @@ public class gcConfigReload extends GeoCommand {
 
     public gcConfigReload(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Reloads the config from disk to memory.";
+        setHelpString("Reloads the config from disk to memory.");
     }
 
     @Override

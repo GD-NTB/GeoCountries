@@ -12,7 +12,7 @@ public class gcLoad extends GeoCommand {
 
     public gcLoad(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Loads all plugin data from the disk to memory.";
+        setHelpString("Loads all plugin data from the disk to memory.");
     }
 
     @Override

@@ -16,7 +16,7 @@ public class gcAdminSetPlayerPosition extends GeoCommand {
 
     public gcAdminSetPlayerPosition(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Sets a player's position.";
+        setHelpString("Sets a player's position.");
     }
 
     @Override

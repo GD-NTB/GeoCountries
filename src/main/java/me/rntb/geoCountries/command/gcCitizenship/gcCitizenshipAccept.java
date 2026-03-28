@@ -17,7 +17,7 @@ public class gcCitizenshipAccept extends GeoCommand {
 
     public gcCitizenshipAccept(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Accepts a player's citizenship application to your country.";
+        setHelpString("Accepts a player's citizenship application to your country.");
     }
 
     @Override

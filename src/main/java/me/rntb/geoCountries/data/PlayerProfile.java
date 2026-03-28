@@ -79,7 +79,7 @@ public class PlayerProfile extends DataCollection {
             if (playerProfile.settings == null)
                 playerProfile.settings = new LinkedHashMap<>();
             LinkedHashMap<String, String> orderedSettings = new LinkedHashMap<>();
-            settingsData.forEach((key, settingData) -> orderedSettings.put(key, playerProfile.settings.getOrDefault(key, settingData.defaultValue)));
+            settingsData.forEach((key, settingData) -> orderedSettings.put(key, playerProfile.settings.getOrDefault(key, settingData.getDefaultValue())));
             playerProfile.settings = orderedSettings;
 
             // set Country fields
@@ -230,7 +230,7 @@ public class PlayerProfile extends DataCollection {
     public static LinkedHashMap<String, String> buildDefaultSettings() {
         return settingsData.entrySet().stream()
                                       .collect(LinkedHashMap::new,
-                                              (m, e) -> m.put(e.getKey(), e.getValue().defaultValue),
+                                              (m, e) -> m.put(e.getKey(), e.getValue().getDefaultValue()),
                                               LinkedHashMap::putAll);
     }
 

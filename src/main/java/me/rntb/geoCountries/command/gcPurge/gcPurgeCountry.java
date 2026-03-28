@@ -12,7 +12,7 @@ public class gcPurgeCountry extends GeoCommand {
 
     public gcPurgeCountry(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Purges all Country data collections.";
+        setHelpString("Purges all Country data collections.");
     }
 
     @Override

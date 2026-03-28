@@ -15,7 +15,7 @@ public class gcPlayerInfo extends GeoCommand {
 
     public gcPlayerInfo(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Displays info about a particular player.";
+        setHelpString("Displays info about a particular player.");
     }
 
     @Override

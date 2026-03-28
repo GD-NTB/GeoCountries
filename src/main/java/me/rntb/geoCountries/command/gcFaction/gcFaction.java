@@ -10,7 +10,7 @@ public class gcFaction extends GeoCommand {
 
     public gcFaction(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Manages and views info about factions.";
+        setHelpString("Manages and views info about factions.");
         addChild(new gcFactionCreate("create", "gc.faction.create", ItemStack.of(Material.NETHER_STAR)));
         addChild(new gcFactionRename("rename", "gc.faction.rename", ItemStack.of(Material.NAME_TAG)));
         addChild(new gcFactionInvite("invite", "gc.faction.invite", ItemStack.of(Material.TOTEM_OF_UNDYING)));
@@ -33,7 +33,7 @@ public class gcFaction extends GeoCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            childLookup.get("info").onCommand(sender, args);
+            getChild("info").onCommandEntered(sender, args);
             return;
         }
         doChildCommand(sender, args);

@@ -17,7 +17,7 @@ public class gcCitizenshipSent extends GeoCommand {
 
     public gcCitizenshipSent(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Lists citizenship applications that you have sent.";
+        setHelpString("Lists citizenship applications that you have sent.");
     }
 
     @Override

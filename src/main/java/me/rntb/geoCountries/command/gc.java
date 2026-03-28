@@ -28,7 +28,7 @@ public class gc extends GeoCommand implements TabExecutor {
 
     public gc(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "The base command for GeoCountries. Opens the command GUI menu.";
+        setHelpString("The base command for GeoCountries. Opens the command GUI menu.");
         addChild(new gcPlayer("player", "gc.player", ItemStack.of(Material.DEBUG_STICK))); // debug stick -> skull of player
         addChild(new gcCitizenship("citizenship", "gc.citizenship", ItemStack.of(Material.WRITABLE_BOOK)));
         addChild(new gcCountry("country", "gc.country", ItemStack.of(Material.FILLED_MAP)));
@@ -50,13 +50,13 @@ public class gc extends GeoCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args)  {
-        if (!sender.hasPermission(permission)) {
-            ChatUtil.sendNoPermissionMessage(sender, "/" + getCommandString(), name);
+        if (!sender.hasPermission(getPermission())) {
+            ChatUtil.sendNoPermissionMessage(sender, "/" + getCommandString(), getName());
             return true;
         }
 
         if (args.length == 0)
-            childLookup.get("gui").onCommandEntered(sender, new String[0]);
+            getChild("gui").onCommandEntered(sender, new String[0]);
         else
             onCommandArgs(sender, args);
 
@@ -67,7 +67,7 @@ public class gc extends GeoCommand implements TabExecutor {
     private void onCommandArgs(CommandSender sender, String[] args) {
         // find childCommand
         String childCommandName = args[0];
-        GeoCommand childCommand = childLookup.get(childCommandName);
+        GeoCommand childCommand = getChild(childCommandName);
         if (childCommand == null) {
             ChatUtil.sendPrefixedMessage(sender, "§cThe command §f%s %s§c doesn't exist!"
                                                  .formatted("/" + getCommandString(), childCommandName));

@@ -14,7 +14,7 @@ public class gcPurgeUUID extends GeoCommand {
 
     public gcPurgeUUID(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Purges a PlayerProfile by UUID.";
+        setHelpString("Purges a PlayerProfile by UUID.");
     }
 
     @Override

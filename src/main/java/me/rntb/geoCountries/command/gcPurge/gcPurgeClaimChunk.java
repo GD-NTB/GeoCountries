@@ -13,7 +13,7 @@ public class gcPurgeClaimChunk extends GeoCommand {
 
     public gcPurgeClaimChunk(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Purges all ClaimChunk data collections.";
+        setHelpString("Purges all ClaimChunk data collections.");
     }
 
     @Override

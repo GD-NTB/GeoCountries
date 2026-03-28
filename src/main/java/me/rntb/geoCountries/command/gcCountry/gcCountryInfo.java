@@ -17,7 +17,7 @@ public class gcCountryInfo extends GeoCommand {
 
     public gcCountryInfo(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Displays info about your/any country.";
+        setHelpString("Displays info about your/any country.");
     }
 
     @Override

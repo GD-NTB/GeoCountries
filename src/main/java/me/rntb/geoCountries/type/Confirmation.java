@@ -94,14 +94,57 @@ public class Confirmation {
 
     // ---
 
-    public BiConsumer<CommandSender, String[]> function; // on confirmation function
-    public CommandSender sender; // sender argument for function
-    public String[] args; // string args argument for function
-    public long timeoutAfterSeconds = 20;
-    public String startMessage;
-    public String confirmMessage;
-    public String cancelMessage;
-    public String timeoutMessage;
+    private final BiConsumer<CommandSender, String[]> function; // on confirmation function
+    public BiConsumer<CommandSender, String[]> getFunction() {
+        return function;
+    }
+
+    private final CommandSender sender; // sender argument for function
+    public CommandSender getSender() {
+        return sender;
+    }
+
+    private final String[] args; // string args argument for function
+    public String[] getArgs() {
+        return args;
+    }
+
+    private final long timeoutAfterSeconds = 20;
+    public long getTimeoutAfterSeconds() {
+        return timeoutAfterSeconds;
+    }
+
+    private String startMessage;
+    public String getStartMessage() {
+        return startMessage;
+    }
+    public void setStartMessage(String value) {
+        startMessage = value;
+    }
+
+    private String confirmMessage;
+    public String getConfirmMessage() {
+        return confirmMessage;
+    }
+    public void setConfirmMessage(String value) {
+        confirmMessage = value;
+    }
+
+    private String cancelMessage;
+    public String getCancelMessage() {
+        return cancelMessage;
+    }
+    public void setCancelMessage(String value) {
+        cancelMessage = value;
+    }
+
+    private String timeoutMessage;
+    public String getTimeoutMessage() {
+        return timeoutMessage;
+    }
+    public void setTimeoutMessage(String value) {
+        timeoutMessage = value;
+    }
 
     public Confirmation(BiConsumer<CommandSender, String[]> function, CommandSender sender, String[] args) {
         this.function = function;

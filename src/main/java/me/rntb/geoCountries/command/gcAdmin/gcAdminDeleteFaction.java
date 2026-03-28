@@ -14,7 +14,7 @@ public class gcAdminDeleteFaction extends GeoCommand {
 
     public gcAdminDeleteFaction(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Deletes a faction from the server.";
+        setHelpString("Deletes a faction from the server.");
     }
 
     @Override

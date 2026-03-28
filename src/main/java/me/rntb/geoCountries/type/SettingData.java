@@ -8,7 +8,11 @@ import java.util.List;
 // essentially a struct for the "metadata" of a setting
 public class SettingData {
 
-    public String defaultValue;
+    private final String defaultValue;
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
     public enum Type {
         BOOL,
         INT,
@@ -18,13 +22,32 @@ public class SettingData {
         COUNTRY_MOTTO,
         COLOUR
     }
-    public Type type;
-    public String name;
-    public String description;
+    private final Type type;
+    public Type getType() {
+        return type;
+    }
+
+    private final String name;
+    public String getName() {
+        return name;
+    }
+
+    private final String description;
+    public String getDescription() {
+        return description;
+    }
 
     // value for numbers, length for strings
-    public int min;
-    public int max;
+    private int min;
+    public int getMin() {
+        return min;
+    }
+
+    // value for numbers, length for strings
+    private int max;
+    public int getMax() {
+        return max;
+    }
 
     public SettingData(String defaultValue, Type type, String name, String description) {
         this.defaultValue = defaultValue;

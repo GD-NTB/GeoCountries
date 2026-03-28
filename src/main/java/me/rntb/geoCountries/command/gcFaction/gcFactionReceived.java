@@ -20,7 +20,7 @@ public class gcFactionReceived extends GeoCommand {
 
     public gcFactionReceived(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Lists received faction invites to your country.";
+        setHelpString("Lists received faction invites to your country.");
     }
 
     @Override

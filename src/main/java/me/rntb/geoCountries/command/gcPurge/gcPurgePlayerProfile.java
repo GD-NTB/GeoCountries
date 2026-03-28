@@ -13,7 +13,7 @@ public class gcPurgePlayerProfile extends GeoCommand {
 
     public gcPurgePlayerProfile(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Purges all PlayerProfile data collections.";
+        setHelpString("Purges all PlayerProfile data collections.");
     }
 
     @Override

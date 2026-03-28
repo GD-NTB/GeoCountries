@@ -17,7 +17,7 @@ public class gcCountryCreate extends GeoCommand {
 
     public gcCountryCreate(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Creates a new country.";
+        setHelpString("Creates a new country.");
     }
 
     @Override

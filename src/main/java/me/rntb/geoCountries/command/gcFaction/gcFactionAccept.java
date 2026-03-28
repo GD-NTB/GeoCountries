@@ -15,7 +15,7 @@ public class gcFactionAccept extends GeoCommand {
 
     public gcFactionAccept(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Accepts a player's invite to their faction.";
+        setHelpString("Accepts a player's invite to their faction.");
     }
 
     @Override

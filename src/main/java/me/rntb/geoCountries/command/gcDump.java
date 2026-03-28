@@ -13,7 +13,7 @@ public class gcDump extends GeoCommand {
 
     public gcDump(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Prints some debug shite in the chat for debugging.";
+        setHelpString("Prints some debug shite in the chat for debugging.");
     }
 
     @Override

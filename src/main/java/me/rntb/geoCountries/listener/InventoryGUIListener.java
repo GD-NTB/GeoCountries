@@ -60,7 +60,7 @@ public class InventoryGUIListener implements Listener {
         ItemStack[] commandButtons = command.getMenuButtons(player);
         if (commandButtons == null) {
             MenuPage.closeMenuPage(player);
-            command.onCommandEntered(player, new String[0]);
+            command.onCommand(player, new String[0]);
         }
         else {
             MenuPage.openMenuPage(command.getMenuButtons(player), command, player);

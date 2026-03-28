@@ -17,7 +17,7 @@ public class gcFactionInfo extends GeoCommand {
 
     public gcFactionInfo(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Displays info about your/any faction.";
+        setHelpString("Displays info about your/any faction.");
     }
 
     @Override

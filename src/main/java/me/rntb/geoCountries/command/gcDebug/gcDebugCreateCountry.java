@@ -13,7 +13,7 @@ public class gcDebugCreateCountry extends GeoCommand {
 
     public gcDebugCreateCountry(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Creates a test country.";
+        setHelpString("Creates a test country.");
     }
 
     @Override

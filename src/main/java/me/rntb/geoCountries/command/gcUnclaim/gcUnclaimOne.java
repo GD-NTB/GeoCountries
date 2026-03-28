@@ -16,7 +16,7 @@ public class gcUnclaimOne extends GeoCommand {
 
     public gcUnclaimOne(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Unclaims the chunk where you are standing.";
+        setHelpString("Unclaims the chunk where you are standing.");
     }
 
     @Override

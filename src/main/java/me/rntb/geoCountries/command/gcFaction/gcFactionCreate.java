@@ -18,7 +18,7 @@ public class gcFactionCreate extends GeoCommand {
 
     public gcFactionCreate(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Creates a new faction.";
+        setHelpString("Creates a new faction.");
     }
 
     @Override

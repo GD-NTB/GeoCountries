@@ -14,7 +14,7 @@ public class gcPurgeUsername extends GeoCommand {
 
     public gcPurgeUsername(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Purges a PlayerProfile by username.";
+        setHelpString("Purges a PlayerProfile by username.");
     }
 
     @Override

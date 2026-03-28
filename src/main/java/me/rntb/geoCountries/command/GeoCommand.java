@@ -14,7 +14,7 @@ import org.bukkit.permissions.Permission;
 import java.util.*;
 import java.util.stream.Stream;
 
-public abstract class GeoCommand {
+public class GeoCommand {
 
     public static GeoCommand baseCommand;
     public static String adminPermissionGroup;
@@ -32,7 +32,7 @@ public abstract class GeoCommand {
         GeoCommand command = baseCommand;
         int i = 1;
         while (i < args.length) {
-            GeoCommand childCommand = command.childLookup.get(args[i]);
+            GeoCommand childCommand = command.childMap.get(args[i]);
             if (childCommand == null)
                 break;
 
@@ -44,14 +44,33 @@ public abstract class GeoCommand {
         return Pair.of(command, remainingPart);
     }
 
-    // todo: getters and setters
-    public GeoCommand parentCommand;
+    private GeoCommand parentCommand;
+    public GeoCommand getParentCommand() {
+        return parentCommand;
+    }
 
-    public String name;
-    public String permission;
-    public ItemStack menuButtonItem; // ItemStack.of(Material.DEBUG_STICK) gives skull with player's skin
+    private final String name;
+    public String getName() {
+        return name;
+    }
 
-    public String helpString = "No help available."; // shown in /gc help
+    private final String permission;
+    public String getPermission() {
+        return permission;
+    }
+
+    private final ItemStack menuButtonItem; // ItemStack.of(Material.DEBUG_STICK) gives skull with player's skin
+    public ItemStack getMenuButtonItem() {
+        return menuButtonItem;
+    }
+
+    private String helpString = "No help available."; // shown in /gc help
+    public String getHelpString() {
+        return helpString;
+    }
+    public void setHelpString(String value) {
+        helpString = value;
+    }
     public final String getHelpPage(CommandSender sender) {
         boolean hasPermission = sender.hasPermission(permission);
         if (!hasPermission)
@@ -93,7 +112,12 @@ public abstract class GeoCommand {
         return getCommandString() + (children.isEmpty() ? "" : " [...]");
     }
 
-    public Map<String, GeoCommand> childLookup = new HashMap<>();
+    private final Map<String, GeoCommand> childMap = new HashMap<>();
+    public final GeoCommand getChild(String childCommandName) {
+        if (childCommandName == null)
+            return null;
+        return childMap.get(childCommandName);
+    }
 
     private final LinkedHashMap<String, GeoCommand> children = new LinkedHashMap<>();
     public void addChild(GeoCommand child) {
@@ -101,9 +125,9 @@ public abstract class GeoCommand {
 
         children.put(child.name, child);
 
-        childLookup.put(child.name, child);
+        childMap.put(child.name, child);
         for (String alias : child.aliases) {
-            childLookup.put(alias, child);
+            childMap.put(alias, child);
         }
     }
 
@@ -111,7 +135,7 @@ public abstract class GeoCommand {
     public void addAlias(String alias) {
         aliases.add(alias);
         if (parentCommand != null)
-            parentCommand.childLookup.put(alias, this);
+            parentCommand.childMap.put(alias, this);
     }
 
     // todo: rename constructor arguments in all command files
@@ -152,7 +176,7 @@ public abstract class GeoCommand {
             return;
 
         String childCommandName = args[0];
-        GeoCommand childCommand = childLookup.get(childCommandName);
+        GeoCommand childCommand = childMap.get(childCommandName);
         if (childCommand == null) {
             ChatUtil.sendPrefixedMessage(sender, """
                                                  §c§f%s§c is not a valid command for §f%s§c!
@@ -180,7 +204,7 @@ public abstract class GeoCommand {
         while (i < args.length - 1) {
             String arg = args[i];
 
-            GeoCommand next = command.childLookup.get(arg);
+            GeoCommand next = command.childMap.get(arg);
             if (next == null)
                 break;
 
@@ -200,6 +224,24 @@ public abstract class GeoCommand {
 
     public List<String> getTabCompletion(CommandSender sender, String[] args) {
         return args.length == 1 ? allowedChildCommandsAsStrings(sender) : List.of();
+    }
+
+    public final List<GeoCommand> allowedChildCommands(CommandSender sender) {
+        if (!(sender instanceof Player) || children.isEmpty())
+            return List.of();
+
+        return children.sequencedValues().stream()
+                                         .filter(c -> c.permission == null || sender.hasPermission(c.permission)).toList();
+    }
+    public final List<String> allowedChildCommandsAsStrings(CommandSender sender) {
+        if (!(sender instanceof Player) || children.isEmpty())
+            return List.of();
+
+        return children.values().stream()
+                                .filter(sc -> sc.permission == null || sender.hasPermission(sc.permission))
+                                .flatMap(sc -> Stream.concat(Stream.of(sc.name), sc.aliases.stream()))
+                                .sorted()
+                                .toList();
     }
 
     public ItemStack[] getMenuButtons(CommandSender sender) {
@@ -234,24 +276,6 @@ public abstract class GeoCommand {
     // permission check not needed as based on allowedChildCommands
     public boolean isVisibleOnMenu(CommandSender sender) {
         return true;
-    }
-
-    public final List<GeoCommand> allowedChildCommands(CommandSender sender) {
-        if (!(sender instanceof Player) || children.isEmpty())
-            return List.of();
-
-        return children.sequencedValues().stream()
-                                         .filter(c -> c.permission == null || sender.hasPermission(c.permission)).toList();
-    }
-    public final List<String> allowedChildCommandsAsStrings(CommandSender sender) {
-        if (!(sender instanceof Player) || children.isEmpty())
-            return List.of();
-
-        return children.values().stream()
-                                .filter(sc -> sc.permission == null || sender.hasPermission(sc.permission))
-                                .flatMap(sc -> Stream.concat(Stream.of(sc.name), sc.aliases.stream()))
-                                .sorted()
-                                .toList();
     }
 
     public final boolean isAdminCommand() {

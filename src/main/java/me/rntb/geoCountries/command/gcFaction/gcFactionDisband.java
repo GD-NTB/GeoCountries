@@ -16,7 +16,7 @@ public class gcFactionDisband extends GeoCommand {
 
     public gcFactionDisband(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Disbands (deletes) your faction.";
+        setHelpString("Disbands (deletes) your faction.");
     }
 
     @Override

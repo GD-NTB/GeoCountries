@@ -12,7 +12,7 @@ public class gcFactionList extends GeoCommand {
 
     public gcFactionList(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Lists all factions on the server.";
+        setHelpString("Lists all factions on the server.");
     }
 
     @Override

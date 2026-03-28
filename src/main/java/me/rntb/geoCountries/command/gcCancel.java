@@ -13,7 +13,7 @@ public class gcCancel extends GeoCommand {
 
     public gcCancel(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Cancels a pending command/action.";
+        setHelpString("Cancels a pending command/action.");
     }
 
     @Override

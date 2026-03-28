@@ -22,7 +22,7 @@ public class SettingService {
         String validationString; // java stop being homosexual
 
         // validate value
-        switch (settingData.type) {
+        switch (settingData.getType()) {
             case BOOL:
                 if (!toValueTrimmed.equals("true") && !toValueTrimmed.equals("false")) {
                     ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (boolean) must either be §ftrue§c or §ffalse§c!");
@@ -38,18 +38,18 @@ public class SettingService {
                     ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (integer) must be a whole number!");
                     return;
                 }
-                if (!(settingData.min <= toValueInt && toValueInt <= settingData.max)) {
+                if (!(settingData.getMin() <= toValueInt && toValueInt <= settingData.getMax())) {
                     ChatUtil.sendPrefixedMessage(sender, "§cThe value for this setting (integer) must be between §f%d and %d§c!"
-                                                         .formatted(settingData.min, settingData.max));
+                                                         .formatted(settingData.getMin(), settingData.getMax()));
                     return;
                 }
                 break;
 
             case STRING:
                 int toValueLength = toValueTrimmed.length();
-                if (!(settingData.min <= toValueLength && toValueLength <= settingData.max)) {
+                if (!(settingData.getMin() <= toValueLength && toValueLength <= settingData.getMax())) {
                     ChatUtil.sendPrefixedMessage(sender, "§cThe length of the value for this setting (string) must be between §f%d and %d§c!"
-                                                         .formatted(settingData.min, settingData.max));
+                                                         .formatted(settingData.getMin(), settingData.getMax()));
                     return;
                 }
                 break;

@@ -8,7 +8,7 @@ public class gcPurge extends GeoCommand {
 
     public gcPurge(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Purges (deletes) plugin data.";
+        setHelpString("Purges (deletes) plugin data.");
         addChild(new gcPurgeAll("all", "gc.purge", ItemStack.of(Material.TNT)));
         addChild(new gcPurgeCountry("country", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));
         addChild(new gcPurgePlayerProfile("playerprofile", "gc.purge", ItemStack.of(Material.FLINT_AND_STEEL)));

@@ -14,12 +14,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-// todo: needs rewrite
 public class gcPlayerSettings extends GeoCommand {
 
     public gcPlayerSettings(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Lists/manages your settings.";
+        setHelpString("Lists/manages your settings.");
     }
 
     @Override
@@ -65,7 +64,7 @@ public class gcPlayerSettings extends GeoCommand {
                 continue;
             message.append(Component.text("§f> " + settingData.toString(playerProfile.getSettings().get(key)) + "  "))
                    .append(ChatUtil.getSettingsButtons("gc player settings " + key + " ",
-                                                       "gc player settings " + key + " " + settingData.defaultValue))
+                                                       "gc player settings " + key + " " + settingData.getDefaultValue()))
                    .append(Component.newline());
         }
         return message;
@@ -77,7 +76,7 @@ public class gcPlayerSettings extends GeoCommand {
             return null;
         return Component.text().append(Component.text(settingData.toStringFull(key, playerProfile.getSettings().get(key)) + "  "))
                                .append(ChatUtil.getSettingsButtons("gc player settings " + key + " ",
-                                                                   "gc player settings " + key + " " + settingData.defaultValue));
+                                                                   "gc player settings " + key + " " + settingData.getDefaultValue()));
     }
 
     @Override

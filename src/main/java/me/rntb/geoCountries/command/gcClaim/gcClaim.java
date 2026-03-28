@@ -11,7 +11,7 @@ public class gcClaim extends GeoCommand {
 
     public gcClaim(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Manages your country's claims.";
+        setHelpString("Manages your country's claims.");
         addChild(new gcClaimOne("one", "gc.claim.one", ItemUtil.getSkull(ItemUtil.Skull.ONE)));
         addChild(new gcUnclaim("unclaim", "gc.unclaim", ItemStack.of(Material.COPPER_SHOVEL)));
         addChild(new gcClaimMap("map", "gc.claim.map", ItemStack.of(Material.FILLED_MAP)));
@@ -21,7 +21,7 @@ public class gcClaim extends GeoCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            childLookup.get("one").onCommand(sender, args);
+            getChild("one").onCommandEntered(sender, args);
             return;
         }
         doChildCommand(sender, args);

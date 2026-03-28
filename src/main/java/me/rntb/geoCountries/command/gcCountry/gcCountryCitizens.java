@@ -19,7 +19,7 @@ public class gcCountryCitizens extends GeoCommand {
 
     public gcCountryCitizens(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Lists all citizens of your/any country.";
+        setHelpString("Lists all citizens of your/any country.");
         addAlias("members");
     }
 

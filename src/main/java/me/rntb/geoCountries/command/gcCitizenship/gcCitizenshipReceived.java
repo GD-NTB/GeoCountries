@@ -20,7 +20,7 @@ public class gcCitizenshipReceived extends GeoCommand {
 
     public gcCitizenshipReceived(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Lists received citizenship applications to your country.";
+        setHelpString("Lists received citizenship applications to your country.");
     }
 
     @Override

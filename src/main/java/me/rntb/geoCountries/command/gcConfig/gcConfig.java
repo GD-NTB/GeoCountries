@@ -8,7 +8,7 @@ public class gcConfig extends GeoCommand {
 
     public gcConfig(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Manages the plugin's config.";
+        setHelpString("Manages the plugin's config.");
         addChild(new gcConfigReload("reload", "gc.config", ItemStack.of(Material.EMERALD)));
     }
 }

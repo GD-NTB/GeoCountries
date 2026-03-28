@@ -17,12 +17,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-// todo: needs rewrite
 public class gcCountrySettings extends GeoCommand {
 
     public gcCountrySettings(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Lists/manages your country's settings.";
+        setHelpString("Lists/manages your country's settings.");
     }
 
     @Override
@@ -94,7 +93,7 @@ public class gcCountrySettings extends GeoCommand {
             message.append(Component.text("§f> " + settingData.toString(country.getSettings().get(key)) + "  "));
             if (isLeader)
                 message.append(ChatUtil.getSettingsButtons("gc country settings " + key + " ",
-                                                           "gc country settings " + key + " " + settingData.defaultValue));
+                                                           "gc country settings " + key + " " + settingData.getDefaultValue()));
             message.append(Component.newline());
         }
         return message;
@@ -107,7 +106,7 @@ public class gcCountrySettings extends GeoCommand {
         TextComponent.Builder message = Component.text().append(Component.text(settingData.toStringFull(key, country.getSettings().get(key)) + "  "));
         if (isLeader)
             message.append(ChatUtil.getSettingsButtons("gc country settings " + key + " ",
-                                                       "gc country settings " + key + " " + settingData.defaultValue));
+                                                       "gc country settings " + key + " " + settingData.getDefaultValue()));
         return message;
     }
 

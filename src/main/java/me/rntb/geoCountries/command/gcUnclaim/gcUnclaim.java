@@ -11,14 +11,14 @@ public class gcUnclaim extends GeoCommand {
 
     public gcUnclaim(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Unclaims your country's chunks.";
+        setHelpString("Unclaims your country's chunks.");
         addChild(new gcUnclaimOne("one", "/gc unclaim one", ItemUtil.getSkull(ItemUtil.Skull.RED_ONE)));
     }
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            childLookup.get("one").onCommand(sender, args);
+            getChild("one").onCommandEntered(sender, args);
             return;
         }
         doChildCommand(sender, args);

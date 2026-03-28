@@ -11,7 +11,7 @@ public class gcSave extends GeoCommand {
 
     public gcSave(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Saves all plugin data in memory to the disk.";
+        setHelpString("Saves all plugin data in memory to the disk.");
     }
 
     @Override

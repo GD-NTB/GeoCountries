@@ -21,7 +21,7 @@ public class gcFactionInvite extends GeoCommand {
 
     public gcFactionInvite(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Invites a country to your faction.";
+        setHelpString("Invites a country to your faction.");
     }
 
     @Override

@@ -17,7 +17,7 @@ public class gcCountryRename extends GeoCommand {
 
     public gcCountryRename(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Renames your country.";
+        setHelpString("Renames your country.");
     }
 
     @Override

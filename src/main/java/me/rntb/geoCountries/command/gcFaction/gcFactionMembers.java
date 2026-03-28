@@ -19,7 +19,7 @@ public class gcFactionMembers extends GeoCommand {
 
     public gcFactionMembers(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Lists all faction of your/any country.";
+        setHelpString("Lists all faction of your/any country.");
     }
 
     private static final int ENTRIES_PER_PAGE = 15;

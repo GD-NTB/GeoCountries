@@ -15,7 +15,7 @@ public class gcCountryDissolve extends GeoCommand {
 
     public gcCountryDissolve(String name, String requiredPermission, ItemStack menuButtonItem) {
         super(name, requiredPermission, menuButtonItem);
-        this.helpString = "Dissolves (deletes) your country.";
+        setHelpString("Dissolves (deletes) your country.");
     }
 
     @Override
