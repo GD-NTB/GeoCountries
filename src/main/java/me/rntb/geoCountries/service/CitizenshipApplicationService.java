@@ -148,7 +148,7 @@ public class CitizenshipApplicationService {
         if (player.getPosition() != PlayerProfile.Position.NONE)
             return;
 
-        CountryService.joinCountry(player, Country.get(cApplication.getToCountry()));
+        CountryService.joinCountry(cApplication.getToCountryCountry(), player);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Accepted sent CitizenshipApplication");

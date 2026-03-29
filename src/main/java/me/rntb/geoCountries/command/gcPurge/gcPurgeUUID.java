@@ -42,8 +42,8 @@ public class gcPurgeUUID extends GeoCommand {
 
     private void onConfirm(CommandSender sender, String[] args) {
         PlayerProfile playerProfile = PlayerProfile.getByUUIDString(args[0]);
-        assert playerProfile != null;
 
+        assert playerProfile != null;
         playerProfile.deregister();
 
         ChatUtil.sendPrefixedMessage(sender, "§aPurged player §f" + playerProfile.getUsername() + "§a.");

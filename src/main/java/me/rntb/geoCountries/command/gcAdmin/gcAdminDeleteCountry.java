@@ -42,6 +42,9 @@ public class gcAdminDeleteCountry extends GeoCommand {
 
     private void onConfirm(CommandSender sender, String[] args) {
         Country country = Country.get(args[0]);
+        if (country == null)
+            return;
+
         country.deregister();
 
         ChatUtil.sendPrefixedMessage(sender, "§aDeleted country!");

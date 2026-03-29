@@ -132,7 +132,7 @@ public class PlayerProfile extends DataCollection {
 
     public void deregister() {
         // clear from countries
-        CountryService.leaveCountry(this);
+        CountryService.leaveCountry(getCitizenshipObject(), this);
 
         byUsername.remove(username);
         byUUID.remove(uuid);
@@ -167,6 +167,8 @@ public class PlayerProfile extends DataCollection {
         return citizenship;
     }
     public Country getCitizenshipObject() {
+        if (citizenship == null)
+            return null;
         return Country.get(citizenship);
     }
     public void setCitizenshipInternal(UUID value) {

@@ -42,6 +42,9 @@ public class gcAdminDeleteFaction extends GeoCommand {
 
     private void onConfirm(CommandSender sender, String[] args) {
         Faction faction = Faction.get(args[0]);
+        if (faction == null)
+            return;
+
         faction.deregister();
 
         ChatUtil.sendPrefixedMessage(sender, "§aDeleted faction!");

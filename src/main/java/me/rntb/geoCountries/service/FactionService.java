@@ -8,8 +8,11 @@ import me.rntb.geoCountries.util.ChatUtil;
 
 public class FactionService {
 
-    public static void joinFaction(Country country, Faction faction) {
-        leaveFaction(country);
+    public static void joinFaction(Faction faction, Country country) {
+        if (faction == null || country == null)
+            return;
+
+        leaveFaction(faction, country);
 
         // add to new country
         faction.getMembers().add(country.getUUID());
@@ -23,23 +26,21 @@ public class FactionService {
     }
 
     // if was leader, sets new leader to random member, so make sure to demote first!
-    public static void leaveFaction(Country country) {
-        Faction currentFaction = country.getFactionObject();
-        if (currentFaction == null)
+    public static void leaveFaction(Faction faction, Country country) {
+        if (faction == null || country == null || !country.hasFaction() || !country.getFactionObject().equals(faction))
             return;
 
-        if (country.getUUID().equals(currentFaction.getLeader()))
-            FactionService.demoteFromLeader(country, null);
+        if (country.getUUID().equals(faction.getLeader()))
+            FactionService.demoteFromLeader(faction, country, null);
 
-        currentFaction.getMembers().remove(country.getUUID());
+        faction.getMembers().remove(country.getUUID());
         country.setFactionInternal(null);
 
         IntegrationManager.onStyleUpdate(country);
     }
 
-    public static void promoteToLeader(Country country) {
-        Faction faction = country.getFactionObject();
-        if (faction == null)
+    public static void promoteToLeader(Faction faction, Country country) {
+        if (faction == null || country == null || !country.hasFaction() || !country.getFactionObject().equals(faction))
             return;
 
         // if already leader, dont do anything
@@ -59,9 +60,8 @@ public class FactionService {
     }
 
     // if newLeader = null, a random other member is chosen to be the new leader
-    public static void demoteFromLeader(Country country, Country newLeader) {
-        Faction faction = country.getFactionObject();
-        if (faction == null)
+    public static void demoteFromLeader(Faction faction, Country country, Country newLeader) {
+        if (faction == null || country == null || !country.hasFaction() || !country.getFactionObject().equals(faction))
             return;
 
         if (faction.getLeader() == null) {
@@ -85,13 +85,16 @@ public class FactionService {
             if (newRandomLeader == null)
                 disband(faction);
             else
-                promoteToLeader(newRandomLeader);
+                promoteToLeader(faction, newRandomLeader);
         }
         else
-            promoteToLeader(newLeader);
+            promoteToLeader(faction, newLeader);
     }
 
     public static void disband(Faction faction) {
+        if (faction == null)
+            return;
+
         ChatUtil.broadcastPrefixedMessage("§6The faction §3" + faction.getName() + "§6 has just been disbanded!");
 
         // broadcast notif to country

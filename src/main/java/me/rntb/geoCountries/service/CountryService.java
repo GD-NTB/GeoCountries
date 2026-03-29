@@ -9,8 +9,12 @@ import me.rntb.geoCountries.util.ChatUtil;
 
 public class CountryService {
 
-    public static void joinCountry(PlayerProfile playerProfile, Country country) {
-        leaveCountry(playerProfile);
+    public static void joinCountry(Country country, PlayerProfile playerProfile) {
+        if (country == null || playerProfile == null)
+            return;
+
+        if (playerProfile.hasCitizenship())
+            leaveCountry(playerProfile.getCitizenshipObject(), playerProfile);
 
         // add to new country
         country.getCitizens().add(playerProfile.getUUID());
@@ -25,25 +29,23 @@ public class CountryService {
     }
 
     // if was leader, sets new leader to random citizen, so make sure to demote first!
-    public static void leaveCountry(PlayerProfile playerProfile) {
-        Country currentCountry = playerProfile.getCitizenshipObject();
-        if (currentCountry == null)
+    public static void leaveCountry(Country country, PlayerProfile playerProfile) {
+        if (country == null || playerProfile == null || !playerProfile.hasCitizenship() || !playerProfile.getCitizenshipObject().equals(country))
             return;
 
-        if (playerProfile.getUUID().equals(currentCountry.getLeader()))
-            demoteFromLeader(playerProfile, null);
+        if (playerProfile.getUUID().equals(country.getLeader()))
+            demoteFromLeader(country, playerProfile, null);
 
-        currentCountry.getCitizens().remove(playerProfile.getUUID());
+        country.getCitizens().remove(playerProfile.getUUID());
 
         playerProfile.setCitizenshipInternal(null);
         playerProfile.setPositionInternal(Position.NONE);
 
-        IntegrationManager.onStyleUpdate(currentCountry);
+        IntegrationManager.onStyleUpdate(country);
     }
 
-    public static void promoteToLeader(PlayerProfile playerProfile) {
-        Country country = playerProfile.getCitizenshipObject();
-        if (country == null)
+    public static void promoteToLeader(Country country, PlayerProfile playerProfile) {
+        if (country == null || playerProfile == null || !playerProfile.hasCitizenship() || !playerProfile.getCitizenshipObject().equals(country))
             return;
 
         // if already leader, dont do anything
@@ -60,10 +62,10 @@ public class CountryService {
         // demote old leader
         PlayerProfile oldLeader = country.getLeaderObject();
         if (oldLeader != null)
-            oldLeader.setPositionInternal(PlayerProfile.Position.CITIZEN);
+            oldLeader.setPositionInternal(Position.CITIZEN);
 
         country.setLeaderInternal(playerProfile.getUUID());
-        playerProfile.setPositionInternal(PlayerProfile.Position.LEADER);
+        playerProfile.setPositionInternal(Position.LEADER);
 
         IntegrationManager.onStyleUpdate(country);
     }
@@ -71,9 +73,8 @@ public class CountryService {
     // this should pretty much never be called without a specific reason
     // if newLeader = null, a random other citizen is chosen to be the new leader
     // does not update maps
-    public static void demoteFromLeader(PlayerProfile playerProfile, PlayerProfile newLeader) {
-        Country country = playerProfile.getCitizenshipObject();
-        if (country == null)
+    public static void demoteFromLeader(Country country, PlayerProfile playerProfile, PlayerProfile newLeader) {
+        if (country == null || playerProfile == null || !playerProfile.hasCitizenship() || !playerProfile.getCitizenshipObject().equals(country))
             return;
 
         if (country.getLeader() == null) {
@@ -88,7 +89,7 @@ public class CountryService {
             return;
         }
 
-        playerProfile.setPositionInternal(PlayerProfile.Position.CITIZEN);
+        playerProfile.setPositionInternal(Position.CITIZEN);
 
         // if new leader null, set random other member country to new leader
         if (newLeader == null) {
@@ -99,13 +100,16 @@ public class CountryService {
             if (newRandomLeader == null)
                 dissolve(country);
             else
-                promoteToLeader(newRandomLeader);
+                promoteToLeader(country, newRandomLeader);
         }
         else
-            promoteToLeader(newLeader);
+            promoteToLeader(country, newLeader);
     }
 
     public static void dissolve(Country country) {
+        if (country == null)
+            return;
+        
         ChatUtil.broadcastPrefixedMessage("§6The country §f" + country.getName() + "§6 has just been dissolved!");
 
         // broadcast notif to country

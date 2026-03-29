@@ -70,13 +70,14 @@ public class gcFactionTransfer extends GeoCommand {
 
     }
 
-    // todo: theres bugs all over the place if the country/faction gets deleted before confirming, do null checks
     private void onConfirm(CommandSender sender, String[] args) {
         Country newLeader = Country.get(args[0]);
 
         Faction faction = newLeader.getFactionObject();
+        if (faction == null)
+            return;
 
-        FactionService.promoteToLeader(newLeader);
+        FactionService.promoteToLeader(faction, newLeader);
 
         ChatUtil.sendPrefixedMessage(sender, "§aTransferred faction leadership to §f" + newLeader.getName() + "§a! §cYour country is no longer the leader.");
 

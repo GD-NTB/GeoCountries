@@ -67,9 +67,12 @@ public class gcCountryRename extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        String countryName = args[0];
         PlayerProfile playerProfile = PlayerProfile.get(sender);
+        String countryName = args[0];
+
         Country country = playerProfile.getCitizenshipObject();
+        if (country == null)
+            return;
 
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aRenamed country to §f" + countryName + "§a!");
 

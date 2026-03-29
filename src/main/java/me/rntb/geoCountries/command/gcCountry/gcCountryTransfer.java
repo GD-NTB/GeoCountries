@@ -72,8 +72,10 @@ public class gcCountryTransfer extends GeoCommand {
         PlayerProfile newLeader = PlayerProfile.get(args[0]);
 
         Country country = newLeader.getCitizenshipObject();
+        if (country == null)
+            return;
 
-        CountryService.promoteToLeader(newLeader);
+        CountryService.promoteToLeader(country, newLeader);
 
         ChatUtil.sendPrefixedMessage(sender, "§aTransferred country leadership to §f" + newLeader.getUsername() + "§a! §cYou are no longer the leader.");
 

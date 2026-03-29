@@ -46,7 +46,10 @@ public class gcCitizenshipRenounce extends GeoCommand {
         PlayerProfile playerProfile = PlayerProfile.get(sender);
 
         Country country = playerProfile.getCitizenshipObject();
-        CountryService.leaveCountry(playerProfile);
+        if (country == null)
+            return;
+
+        CountryService.leaveCountry(country, playerProfile);
 
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aRenounced your citizenship of §f" + country.getName() + "§a!");
 

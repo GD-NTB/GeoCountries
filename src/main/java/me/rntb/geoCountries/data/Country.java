@@ -103,7 +103,7 @@ public class Country extends DataCollection {
 
     public void deregister() {
         // clear from factions
-        FactionService.leaveFaction(this);
+        FactionService.leaveFaction(getFactionObject(), this);
 
         // clear all citizen's citizenships
         for (UUID uuid : new ArrayList<>(citizens)) { // new arraylist while we're modifying

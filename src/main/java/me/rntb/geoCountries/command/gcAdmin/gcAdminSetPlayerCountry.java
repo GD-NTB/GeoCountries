@@ -45,9 +45,8 @@ public class gcAdminSetPlayerCountry extends GeoCommand {
         if (playerProfile.getPosition() == Position.LEADER)
             ChatUtil.sendPrefixedMessage(sender, "§aSet new leader to random citizen or dissolved.");
 
-        if (countryName.equals("null")) {
-            CountryService.leaveCountry(playerProfile);
-        }
+        if (countryName.equals("null"))
+            CountryService.leaveCountry(playerProfile.getCitizenshipObject(), playerProfile);
         else {
             Country country = Country.get(countryName);
             if (country == null) {
@@ -56,7 +55,7 @@ public class gcAdminSetPlayerCountry extends GeoCommand {
             }
 
             // set country
-            CountryService.joinCountry(playerProfile, country);
+            CountryService.joinCountry(country, playerProfile);
         }
 
         ChatUtil.sendPrefixedMessage(sender, "§aSet player country!");

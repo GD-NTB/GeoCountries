@@ -102,7 +102,7 @@ public class FactionInviteService {
         if (faction == null)
             return;
 
-        FactionService.joinFaction(toCountry, faction);
+        FactionService.joinFaction(faction, toCountry);
 
         if (ConfigState.debugLogging)
             ChatUtil.sendPrefixedLogMessage("Accepted sent FactionInvite");

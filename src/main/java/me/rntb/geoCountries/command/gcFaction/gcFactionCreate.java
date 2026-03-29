@@ -78,8 +78,8 @@ public class gcFactionCreate extends GeoCommand {
 
         // create faction
         newFaction.register();
-        FactionService.joinFaction(country, newFaction);
-        FactionService.promoteToLeader(country);
+        FactionService.joinFaction(newFaction, country);
+        FactionService.promoteToLeader(newFaction, country);
 
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aCreated faction §3" + factionName + "§a!");
 

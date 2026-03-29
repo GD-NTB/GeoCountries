@@ -6,7 +6,6 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.service.CountryService;
 import me.rntb.geoCountries.type.Response;
 import me.rntb.geoCountries.util.ChatUtil;
-import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.ValidationUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
@@ -61,8 +60,8 @@ public class gcCountryCreate extends GeoCommand {
         newCountry.register();
 
         // set player citizenship and position
-        CountryService.joinCountry(playerProfile, newCountry);
-        CountryService.promoteToLeader(playerProfile);
+        CountryService.joinCountry(newCountry, playerProfile);
+        CountryService.promoteToLeader(newCountry, playerProfile);
 
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aCreated country §f" + countryName + "§a!");
 

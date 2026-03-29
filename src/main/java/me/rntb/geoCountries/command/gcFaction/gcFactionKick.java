@@ -73,8 +73,10 @@ public class gcFactionKick extends GeoCommand {
         Country country = Country.get(args[0]);
 
         Faction faction = country.getFactionObject();
+        if (faction == null)
+            return;
 
-        FactionService.leaveFaction(country);
+        FactionService.leaveFaction(faction, country);
 
         ChatUtil.sendPrefixedMessage(sender, "§aKicked country §f" + country.getName() + "§a from faction!");
 

@@ -67,9 +67,12 @@ public class gcFactionRename extends GeoCommand {
     }
 
     private void onConfirm(CommandSender sender, String[] args) {
-        String factionName = args[0];
         PlayerProfile playerProfile = PlayerProfile.get(sender);
+        String factionName = args[0];
+
         Faction faction = playerProfile.getFactionObject();
+        if (faction == null)
+            return;
 
         ChatUtil.sendPrefixedNotificationMessage(sender, "§aRenamed faction to §3" + factionName + "§a!");
 

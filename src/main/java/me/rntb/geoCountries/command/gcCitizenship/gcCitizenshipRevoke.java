@@ -70,8 +70,10 @@ public class gcCitizenshipRevoke extends GeoCommand {
         PlayerProfile playerProfile = PlayerProfile.get(args[0]);
 
         Country country = playerProfile.getCitizenshipObject();
+        if (country == null)
+            return;
 
-        CountryService.leaveCountry(playerProfile);
+        CountryService.leaveCountry(country, playerProfile);
 
         ChatUtil.sendPrefixedMessage(sender, "§aRevoked the citizenship of §f" + country.getName() + "§a!");
 
