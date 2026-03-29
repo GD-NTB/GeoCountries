@@ -1,46 +1,86 @@
+<div align="center">
+
+![GeoCountries Banner](./readme-stuff/banner.png)
+
+</div>
+
 # GeoCountries (ALPHA 0.1)
 
-A Minecraft plugin for Paper servers built from the ground-up which helps players to simulate diplomacy, trade, wars, and more.
+<div align="center">
+
+[![Issues](https://img.shields.io/github/issues/GD-NTB/GeoCountries)](https://github.com/GD-NTB/GeoCountries/issues)
+[![Release](https://img.shields.io/github/release/GD-NTB/GeoCountries?include_prereleases=&sort=semver&color=%23FEDD58)](https://github.com/GD-NTB/GeoCountries/releases/)
+[![Stars](https://img.shields.io/github/stars/GD-NTB/GeoCountries?style=social)](https://github.com/GD-NTB/GeoCountries/stargazers)
+[![Forks](https://img.shields.io/github/forks/GD-NTB/GeoCountries?style=social)](https://github.com/GD-NTB/GeoCountries/forks)
+
+</div>
+
+## Table of Contents
+- [About](#about)
+- [Features](#features)
+- [Todo](#todo)
+- [Known Issues](#known-issues)
+- [License](#license)
+
+## About
+A Minecraft plugin for Paper servers human-written from the ground-up which helps players to simulate diplomacy, trade, wars, and more.
 It is intended to work in a similar way to many existing Factions plugins.
 
-### Tested on Minecraft Versions:
-- 1.21.11 (LATEST)
+The latest working version of each Minecraft version is:
+- 1.21.11: [ALPHA 0.1 (Latest)](https://github.com/GD-NTB/GeoCountries/releases/tag/ALPHA-0.1)
 
-## Current features:
+## Features
+- Countries\
+<img src="readme-stuff/featurecountries.png/" width="350" alt="Countries">
 
-* Visual GUI menu
 
-<img src="readme-stuff/commands-4.gif" width="250" alt="GIF showcasing /gc country commands">
+- Applying for citizenship of countries\
+<img src="readme-stuff/featurecitizenship.png/" width="350" alt="Citizenship applications">
 
-* Country management (`/gc country create`, `dissolve`, `rename`, etc)
+- Factions (alliances) between countries\
+<img src="readme-stuff/featurefactions.png/" width="350" alt="Factions between countries">
 
-<img src="readme-stuff/commands-1.gif" width="250" alt="GIF showcasing /gc country commands">
 
-* Citizenship system (applications, etc)
+- Basic land claiming\
+<img src="readme-stuff/featureclaims.png/" width="350" alt="Basic land claiming">
 
-<img src="readme-stuff/commands-2.gif" width="250" alt="GIF showcasing /gc country commands">
 
-* Help command + command help pages
+- [Pl3xMap](https://github.com/granny/Pl3xMap) integration\
+<img src="readme-stuff/featurepl3xmap.png/" width="350" alt="Pl3xMap Integration Feature">
 
-<img src="readme-stuff/commands-3.gif" width="250" alt="GIF showcasing /gc country commands">
 
-* Debug and admin commands
-* Command confirmation and player-plugin chat response system
-* Permission groups (`gc.group.essential`, `player`, `admin`)
-* Country and player settings
-* Config file (reload command, updating)
+- GUI command menu\
+<img src="readme-stuff/featuregui.png/" width="350" alt="GUI Command Menu Feature">
 
-## To-do:
 
-```
-// todo: in-country ranks
-// todo: promote command
-// todo: claiming
-```
+- Chat prefixes\
+<img src="readme-stuff/featureprefixes.png/" width="350" alt="Chat Prefix Feature">
 
-## Current bugs:
+## Todo
+The following are planned upcoming features that may or may not be scrapped in the future.
+- Banners for country flags (could show up on Pl3xMap).
+- Pl3xMap markers
+- Vassals and vassalization
+- Wars between countries
+- Auction house / some sort of trading
 
-* N/A - that I know of B)
-\
-\
-<img src="readme-stuff/globe.webp" width="150" height="150"/>
+## Known Issues
+- N/A
+
+If you encounter an issue or bug, please make sure to open an [issue](https://github.com/GD-NTB/GeoCountries/issues) to report it!
+
+## License
+
+This software is released under the [GNU License](LICENSE.txt).
+
+---
+
+<div align="center">
+
+Created by [NTB](https://github.com/GD-NTB)
+
+Contact me: [Discord](https://discord.com/users/322682667646582784), [Email](mailto:lkeat2006@gmail.com)
+
+[![Bstats](https://img.shields.io/badge/View-Bstats-blue?style=for-the-badge)](https://bstats.org/plugin/bukkit/GeoCountries/29384)
+
+</div>
