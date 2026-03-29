@@ -30,30 +30,25 @@ The latest working version of each Minecraft version is:
 - 1.21.11: [ALPHA 0.1 (Latest)](https://github.com/GD-NTB/GeoCountries/releases/tag/ALPHA-0.1)
 
 ## Features
-- Countries\
+- Countries (obviously)
 <img src="readme-stuff/featurecountries.png/" width="350" alt="Countries">
 
-
-- Applying for citizenship of countries\
+- Applying for citizenship of countries
 <img src="readme-stuff/featurecitizenship.png/" width="350" alt="Citizenship applications">
 
-- Factions (alliances) between countries\
+- Factions (alliances) between countries
 <img src="readme-stuff/featurefactions.png/" width="350" alt="Factions between countries">
 
-
-- Basic land claiming\
+- Basic land claiming
 <img src="readme-stuff/featureclaims.png/" width="350" alt="Basic land claiming">
 
-
-- [Pl3xMap](https://github.com/granny/Pl3xMap) integration\
+- [Pl3xMap](https://github.com/granny/Pl3xMap) integration
 <img src="readme-stuff/featurepl3xmap.png/" width="350" alt="Pl3xMap Integration Feature">
 
-
-- GUI command menu\
+- GUI command menu
 <img src="readme-stuff/featuregui.png/" width="350" alt="GUI Command Menu Feature">
 
-
-- Chat prefixes\
+- Chat prefixes
 <img src="readme-stuff/featureprefixes.png/" width="350" alt="Chat Prefix Feature">
 
 ## Todo
