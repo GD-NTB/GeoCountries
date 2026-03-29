@@ -3,6 +3,7 @@ package me.rntb.geoCountries.command.gcCountry;
 import me.rntb.geoCountries.command.GeoCommand;
 import me.rntb.geoCountries.data.Country;
 import me.rntb.geoCountries.data.PlayerProfile;
+import me.rntb.geoCountries.type.PageNumberAndArgs;
 import me.rntb.geoCountries.type.Pagination;
 import me.rntb.geoCountries.util.ChatUtil;
 import net.kyori.adventure.text.Component;
@@ -23,13 +24,9 @@ public class gcCountryList extends GeoCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        // get page number if specified
-        int wantedPage = 1;
-        if (args.length >= 1) {
-            try {
-                wantedPage = Integer.parseInt(args[0]);
-            } catch (NumberFormatException ignored) { }
-        }
+        // parse args
+        PageNumberAndArgs pageNumberAndArgs = PageNumberAndArgs.parse(args);
+        int wantedPage = pageNumberAndArgs.pageNumber();
 
         // pagination fields
         int pageIndex = 0, pageCount = 0;

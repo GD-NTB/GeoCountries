@@ -17,7 +17,10 @@ public class Faction extends DataCollection {
     public static final String DISPLAY_NAME = "Faction";
 
     // list of all factions existing
-    public static ArrayList<Faction> all = null;
+    private static ArrayList<Faction> all = null;
+    public static ArrayList<Faction> getAll() {
+        return all;
+    }
     public static List<String> getAllAsNames(boolean alphabetical) {
         Stream<String> countries = byName.keySet().stream();
         if (!alphabetical)
