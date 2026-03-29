@@ -64,8 +64,7 @@ public class gcFactionMembers extends GeoCommand {
                .append(Component.text("§6========== FACTION CITIZENS =========="))
                .append(Component.newline());
 
-        // pagination fields
-        int pageIndex = 0, pageCount = 0;
+        Pagination pagination = Pagination.EMPTY;
 
         int memberCount = faction.getMemberCount();
         if (memberCount == 0)
@@ -79,10 +78,8 @@ public class gcFactionMembers extends GeoCommand {
                    .append(Component.newline());
 
             // calculate required page of faction.getMembersSorted
-            Pagination pagination = Pagination.paginate(faction.getMembersSorted(), wantedPage, ENTRIES_PER_PAGE);
+            pagination = Pagination.paginate(faction.getMembersSorted(), wantedPage, ENTRIES_PER_PAGE);
             List<Country> members = (List<Country>) pagination.content();
-            pageIndex = pagination.pageIndex();
-            pageCount = pagination.pageCount();
 
             for (Country member : members) {
                 message.append(Component.text("§f> §a%s§f (§e%s§f)"
@@ -96,9 +93,9 @@ public class gcFactionMembers extends GeoCommand {
                .append(Component.newline())
                .append(Component.text("               "))
                // append chat page control buttons
-               .append(ChatUtil.getPaginationButtons("gc faction members " + (pageIndex - 1) + " " + faction.getName(),
-                                                     "gc faction members " + (pageIndex + 1) + " " + faction.getName(),
-                                                     pageIndex, pageCount));
+               .append(ChatUtil.getPaginationButtons("gc faction members " + (pagination.pageIndex() - 1) + " " + faction.getName(),
+                                                     "gc faction members " + (pagination.pageIndex() + 1) + " " + faction.getName(),
+                                                     pagination.pageIndex(), pagination.pageCount()));
 
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }

@@ -39,6 +39,8 @@ public class ClaimChunk extends DataCollection {
 
     private static final Map<UUID, List<ClaimChunk>> byCountry = new HashMap<>();
     public static List<ClaimChunk> get(Country country) {
+        if (country == null)
+            return null;
         return byCountry.get(country.getUUID());
     }
 

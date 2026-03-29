@@ -29,8 +29,7 @@ public class gcFactionList extends GeoCommand {
         PageNumberAndArgs pageNumberAndArgs = PageNumberAndArgs.parse(args);
         int wantedPage = pageNumberAndArgs.pageNumber();
 
-        // pagination fields
-        int pageIndex = 0, pageCount = 0;
+        Pagination pagination = Pagination.EMPTY;
 
         // build text
         TextComponent.Builder message = Component.text();
@@ -45,10 +44,8 @@ public class gcFactionList extends GeoCommand {
         }
         else {
             // calculate required page of Faction.all
-            Pagination pagination = Pagination.paginate(Faction.getAll(), wantedPage, ENTRIES_PER_PAGE);
+            pagination = Pagination.paginate(Faction.getAll(), wantedPage, ENTRIES_PER_PAGE);
             List<Faction> factions = (List<Faction>) pagination.content();
-            pageIndex = pagination.pageIndex();
-            pageCount = pagination.pageCount();
 
             // iterate through page
             for (Faction faction : factions) {
@@ -69,9 +66,9 @@ public class gcFactionList extends GeoCommand {
                .append(Component.newline())
                .append(Component.text("               "))
                // append chat page control buttons
-               .append(ChatUtil.getPaginationButtons("gc faction list " + (pageIndex - 1),
-                                                     "gc faction list " + (pageIndex + 1),
-                                                     pageIndex, pageCount));
+               .append(ChatUtil.getPaginationButtons("gc faction list " + (pagination.pageIndex() - 1),
+                                                     "gc faction list " + (pagination.pageIndex() + 1),
+                                                     pagination.pageIndex(), pagination.pageCount()));
 
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }

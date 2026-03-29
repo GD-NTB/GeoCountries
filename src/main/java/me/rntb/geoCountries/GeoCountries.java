@@ -19,8 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Path;
 import java.util.Objects;
 
-// todo: do todo's
-// todo: standardise the length of bottom ===== because this shit is annoying
 // todo: banners as flags
 // todo: markers
 // todo: javadocs eventually

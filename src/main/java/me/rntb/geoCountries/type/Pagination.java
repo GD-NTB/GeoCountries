@@ -3,9 +3,9 @@ package me.rntb.geoCountries.type;
 import java.util.Arrays;
 import java.util.List;
 
-public record Pagination (Object content, int pageCount, int pageIndex) {
+public record Pagination (Object content, int pageIndex, int pageCount) {
 
-    private static final Pagination EMPTY = new Pagination(null, 0, 0);
+    public static final Pagination EMPTY = new Pagination(null, 0, 0);
 
     // content is returned as null on empty or null list
     public static <T> Pagination paginate(List<T> list, int wantedPage, int perPage) {

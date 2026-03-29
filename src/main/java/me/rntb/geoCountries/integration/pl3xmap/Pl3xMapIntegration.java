@@ -76,8 +76,12 @@ public class Pl3xMapIntegration {
         CountryRenderData crData = new CountryRenderData();
 
         // load chunks
-        for (ClaimChunk cc : ClaimChunk.get(country)) {
-            addChunk(crData,  cc.getX(), cc.getZ());
+        List<ClaimChunk> claimChunks = ClaimChunk.get(country);
+        if (claimChunks == null)
+            return;
+
+        for (ClaimChunk cc : claimChunks) {
+            addChunk(crData, cc.getX(), cc.getZ());
         }
 
         CountryRenderData.map.put(country, crData);
@@ -86,7 +90,7 @@ public class Pl3xMapIntegration {
     private static boolean createClaimLayer() {
         claimWorld = api.getWorldRegistry().get(ConfigState.claimWorld);
         if (claimWorld == null) {
-            ChatUtil.sendPrefixedLogMessage("Couldn't find world by name of '" + ConfigState.claimWorld + "', aborting! (check the config)!");
+            ChatUtil.sendPrefixedLogErrorMessage("Couldn't find world by name of '" + ConfigState.claimWorld + "', aborting! (check the config)!");
             return false;
         }
 

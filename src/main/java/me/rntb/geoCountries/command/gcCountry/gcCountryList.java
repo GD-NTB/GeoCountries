@@ -28,8 +28,7 @@ public class gcCountryList extends GeoCommand {
         PageNumberAndArgs pageNumberAndArgs = PageNumberAndArgs.parse(args);
         int wantedPage = pageNumberAndArgs.pageNumber();
 
-        // pagination fields
-        int pageIndex = 0, pageCount = 0;
+        Pagination pagination = Pagination.EMPTY;
 
         // build text
         TextComponent.Builder message = Component.text();
@@ -43,10 +42,8 @@ public class gcCountryList extends GeoCommand {
                    .append(Component.newline());
         else {
             // calculate required page of Country.all
-            Pagination pagination = Pagination.paginate(Country.getAll(), wantedPage, ENTRIES_PER_PAGE);
+            pagination = Pagination.paginate(Country.getAll(), wantedPage, ENTRIES_PER_PAGE);
             List<Country> countries = (List<Country>) pagination.content();
-            pageIndex = pagination.pageIndex();
-            pageCount = pagination.pageCount();
 
             // iterate through page
             for (Country country : countries) {
@@ -65,9 +62,9 @@ public class gcCountryList extends GeoCommand {
                .append(Component.newline())
                .append(Component.text("               "))
                // append chat page control buttons
-               .append(ChatUtil.getPaginationButtons("gc country list " + (pageIndex - 1),
-                                                     "gc country list " + (pageIndex + 1),
-                                                     pageIndex, pageCount));
+               .append(ChatUtil.getPaginationButtons("gc country list " + (pagination.pageIndex() - 1),
+                                                     "gc country list " + (pagination.pageIndex() + 1),
+                                                     pagination.pageIndex(), pagination.pageCount()));
 
         ChatUtil.sendPrefixedMessage(sender, message.build());
     }
