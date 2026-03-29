@@ -7,6 +7,7 @@ import me.rntb.geoCountries.type.PageNumberAndArgs;
 import me.rntb.geoCountries.type.Pagination;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
+import me.rntb.geoCountries.util.TimeUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
@@ -14,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-// todo: display time last online
 public class gcCountryCitizens extends GeoCommand {
 
     public gcCountryCitizens(String name, String requiredPermission, ItemStack menuButtonItem) {
@@ -87,7 +87,13 @@ public class gcCountryCitizens extends GeoCommand {
 
             // iterate through page
             for (PlayerProfile citizen : citizens) {
-                message.append(Component.text("§f> §a%s§f (§e%s§f)"
+                String onlineString = "§aOnline";
+                if (!citizen.isOnline()) {
+                    long onlineDaysAgo = TimeUtil.daysAgo(citizen.getOfflinePlayer().getLastSeen());
+                    onlineString = "§c" + onlineDaysAgo + "§c day" + StringUtil.leadingS(onlineDaysAgo) + " ago";
+                }
+
+                message.append(Component.text(("§f> §a%s§f (§e%s§f) (" + onlineString + "§f)")
                                               .formatted(citizen.getUsername(), citizen.getPositionString())))
                        .append(Component.newline());
             }

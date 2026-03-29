@@ -5,7 +5,6 @@ import me.rntb.geoCountries.data.PlayerProfile;
 import me.rntb.geoCountries.util.ChatUtil;
 import me.rntb.geoCountries.util.StringUtil;
 import me.rntb.geoCountries.util.TimeUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -42,7 +41,7 @@ public class gcPlayerInfo extends GeoCommand {
             positionAndCountryString = "§cStateless";
 
         String onlineString = "§aOnline";
-        if (Bukkit.getPlayer(playerProfile.getUsername()) == null) {
+        if (!playerProfile.isOnline()) {
             long onlineDaysAgo = TimeUtil.daysAgo(playerProfile.getOfflinePlayer().getLastSeen());
             onlineString = "§cLast online §f" + onlineDaysAgo + "§c day" + StringUtil.leadingS(onlineDaysAgo) + " ago";
         }
