@@ -9,7 +9,7 @@
 <div align="center">
 
 [![Issues](https://img.shields.io/github/issues/GD-NTB/GeoCountries)](https://github.com/GD-NTB/GeoCountries/issues)
-[![Release](https://img.shields.io/github/release/GD-NTB/GeoCountries?include_prereleases=&sort=semver&color=%23FEDD58)](https://github.com/GD-NTB/GeoCountries/releases/)
+[![Release](https://img.shields.io/github/release/GD-NTB/GeoCountries?include_prereleases=&color=%23FEDD58)](https://github.com/GD-NTB/GeoCountries/releases/)
 [![Stars](https://img.shields.io/github/stars/GD-NTB/GeoCountries?style=social)](https://github.com/GD-NTB/GeoCountries/stargazers)
 [![Forks](https://img.shields.io/github/forks/GD-NTB/GeoCountries?style=social)](https://github.com/GD-NTB/GeoCountries/forks)
 
